@@ -67,67 +67,54 @@
       transform-origin: 960px 540px;
     }
     .f04-bascule-avant-layer,
-    .f04-bascule-scrub,
-    .f04-bascule-panels {
+    .f04-bascule-scrub {
       position: absolute;
       inset: 0;
     }
-    .f04-bascule-panels {
-      filter: blur(22px) brightness(0.6);
+    /* a Gaussian-blurred rect: zero-thickness element + box-shadow (blur 44 = sigma 22) */
+    .f04-bascule-soft {
+      position: absolute;
+      display: block;
+    }
+    .f04-bascule-band {
+      position: absolute;
+      left: -200px;
+      width: 2320px;
+      overflow: hidden;
+      visibility: hidden;
+      opacity: 0;
+    }
+    .f04-bascule-band-inner {
+      position: absolute;
+      left: 200px;
+      top: 0;
+      width: 1920px;
+      height: 1080px;
     }
     .f04-bascule-ghost {
       mix-blend-mode: screen;
       visibility: hidden;
       opacity: 0;
     }
-    .f04-bascule-ghost.is-warm .f04-bascule-panels {
-      filter: blur(22px) brightness(0.75) sepia(1) saturate(6) hue-rotate(-28deg);
-    }
-    .f04-bascule-ghost.is-cool .f04-bascule-panels {
-      filter: blur(22px) brightness(0.75) sepia(1) saturate(5) hue-rotate(165deg);
-    }
-    .f04-bascule-panel {
+    #f04-bascule-avant-dim {
       position: absolute;
-      background: #2a2526;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 22px;
-      box-shadow: 0 60px 120px -30px rgba(0, 0, 0, 0.65);
-    }
-    .f04-bascule-bar {
-      position: absolute;
-      border-radius: 999px;
-      background: rgba(242, 239, 236, 0.85);
-    }
-    .f04-bascule-bar.is-mute {
-      background: rgba(140, 133, 128, 0.7);
-    }
-    .f04-bascule-bar.is-track {
-      background: rgba(242, 239, 236, 0.16);
-    }
-    .f04-bascule-knob {
-      position: absolute;
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      background: #f2efec;
-    }
-    .f04-bascule-slice {
-      visibility: hidden;
+      inset: 0;
+      background: #000000;
       opacity: 0;
     }
     .f04-bascule-avant-vignette {
       position: absolute;
       inset: 0;
-      background: radial-gradient(ellipse 70% 70% at 50% 45%, rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0.55) 100%);
+      box-shadow: inset 0 0 320px 90px rgba(0, 0, 0, 0.55);
     }
     .f04-bascule-track {
       position: absolute;
       left: -20px;
       width: 1960px;
       background: rgba(242, 239, 236, 0.9);
+      box-shadow: 0 0 6px rgba(242, 239, 236, 0.5);
       visibility: hidden;
       opacity: 0;
-      filter: blur(0.6px);
     }
 
     /* ───────── Ask-it ground (canvas + mesh + 44 px grid), revealed by the flood ───────── */
@@ -265,12 +252,19 @@
       top: -53px;
       width: 470px;
       height: 130px;
-      clip-path: inset(-20px 100% -20px 0px);
+    }
+    #f04-bascule-word-mask {
+      position: absolute;
+      left: 0;
+      top: -20px;
+      width: 470px;
+      height: 170px;
+      overflow: hidden;
     }
     #f04-bascule-word-inner {
       position: absolute;
       left: 0;
-      top: 0;
+      top: 20px;
       white-space: nowrap;
       font-size: 120px;
       line-height: 120px;
@@ -302,8 +296,8 @@
     }
     #f04-bascule-halo {
       position: absolute;
-      left: -230px;
-      top: -230px;
+      left: 330px;
+      top: 290px;
       width: 460px;
       height: 460px;
       border-radius: 50%;
@@ -514,52 +508,49 @@
     <div id="f04-bascule-avant" class="clip" data-start="0" data-duration="2.1" data-track-index="0">
       <div class="f04-bascule-avant-ground"></div>
       <div id="f04-bascule-avant-cam">
+        <!-- the blurred f03 dashboard, painted as soft box-shadow shapes (no CSS filters) -->
         <div id="f04-bascule-avant-base" class="f04-bascule-avant-layer">
           <div class="f04-bascule-scrub">
-            <div id="f04-bascule-panels" class="f04-bascule-panels">
-              <!-- spend card (left) -->
-              <div class="f04-bascule-panel" style="left: 96px; top: 176px; width: 620px; height: 300px">
-                <div class="f04-bascule-bar is-mute" style="left: 44px; top: 46px; width: 300px; height: 18px"></div>
-                <div class="f04-bascule-bar" style="left: 44px; top: 112px; width: 430px; height: 92px; border-radius: 18px"></div>
-                <div class="f04-bascule-bar is-mute" style="left: 44px; top: 236px; width: 210px; height: 16px"></div>
-              </div>
-              <!-- visitor card with question marks (right) -->
-              <div class="f04-bascule-panel" style="left: 1236px; top: 150px; width: 560px; height: 470px">
-                <div class="f04-bascule-knob" style="left: 44px; top: 42px; width: 76px; height: 76px; background: #8c8580"></div>
-                <div class="f04-bascule-bar is-mute" style="left: 140px; top: 66px; width: 220px; height: 22px"></div>
-                <div class="f04-bascule-bar is-track" style="left: 44px; top: 170px; width: 380px; height: 20px"></div>
-                <div class="f04-bascule-knob" style="left: 466px; top: 165px; background: #8c8580"></div>
-                <div class="f04-bascule-bar is-track" style="left: 44px; top: 240px; width: 330px; height: 20px"></div>
-                <div class="f04-bascule-knob" style="left: 466px; top: 235px; background: #8c8580"></div>
-                <div class="f04-bascule-bar is-track" style="left: 44px; top: 310px; width: 360px; height: 20px"></div>
-                <div class="f04-bascule-knob" style="left: 466px; top: 305px; background: #8c8580"></div>
-                <div class="f04-bascule-bar is-track" style="left: 44px; top: 380px; width: 300px; height: 20px"></div>
-                <div class="f04-bascule-knob" style="left: 466px; top: 375px; background: #8c8580"></div>
-              </div>
-              <!-- campaign settings card (centre, the dominant blurred panel) -->
-              <div class="f04-bascule-panel" style="left: 560px; top: 330px; width: 800px; height: 500px; background: #322c2d">
-                <div class="f04-bascule-bar is-mute" style="left: 52px; top: 52px; width: 320px; height: 22px"></div>
-                <div class="f04-bascule-bar is-track" style="left: 52px; top: 142px; width: 560px; height: 10px"></div>
-                <div class="f04-bascule-bar" style="left: 52px; top: 142px; width: 330px; height: 10px"></div>
-                <div class="f04-bascule-knob" style="left: 368px; top: 132px"></div>
-                <div class="f04-bascule-bar is-track" style="left: 52px; top: 222px; width: 560px; height: 10px"></div>
-                <div class="f04-bascule-bar" style="left: 52px; top: 222px; width: 180px; height: 10px"></div>
-                <div class="f04-bascule-knob" style="left: 218px; top: 212px"></div>
-                <div class="f04-bascule-bar is-track" style="left: 52px; top: 302px; width: 560px; height: 10px"></div>
-                <div class="f04-bascule-bar" style="left: 52px; top: 302px; width: 450px; height: 10px"></div>
-                <div class="f04-bascule-knob" style="left: 488px; top: 292px"></div>
-                <div class="f04-bascule-bar is-mute" style="left: 52px; top: 392px; width: 88px; height: 44px"></div>
-                <div class="f04-bascule-bar is-mute" style="left: 176px; top: 392px; width: 88px; height: 44px"></div>
-                <div class="f04-bascule-bar" style="left: 560px; top: 384px; width: 190px; height: 60px"></div>
-              </div>
-            </div>
+              <i class="f04-bascule-soft" style="left: 246px; top: 386px; width: 320px; height: 0px; box-shadow: 0 0 150px 150px rgba(0,0,0,0.42)"></i>
+              <i class="f04-bascule-soft" style="left: 246px; top: 326px; width: 320px; height: 0px; box-shadow: 0 0 44px 150px rgba(255,255,255,0.03)"></i>
+              <i class="f04-bascule-soft" style="left: 149px; top: 231px; width: 282px; height: 0px; box-shadow: 0 0 44px 9px rgba(140,133,128,0.42)"></i>
+              <i class="f04-bascule-soft is-bright" style="left: 186px; top: 334px; width: 338px; height: 0px; box-shadow: 0 0 44px 46px rgba(242,239,236,0.5)"></i>
+              <i class="f04-bascule-soft" style="left: 148px; top: 420px; width: 194px; height: 0px; box-shadow: 0 0 44px 8px rgba(140,133,128,0.42)"></i>
+              <i class="f04-bascule-soft" style="left: 1471px; top: 445px; width: 90px; height: 0px; box-shadow: 0 0 150px 235px rgba(0,0,0,0.42)"></i>
+              <i class="f04-bascule-soft" style="left: 1471px; top: 385px; width: 90px; height: 0px; box-shadow: 0 0 44px 235px rgba(255,255,255,0.03)"></i>
+              <i class="f04-bascule-soft" style="left: 1318px; top: 230px; width: 0px; height: 0px; box-shadow: 0 0 44px 38px rgba(140,133,128,0.42)"></i>
+              <i class="f04-bascule-soft" style="left: 1387px; top: 227px; width: 198px; height: 0px; box-shadow: 0 0 44px 11px rgba(140,133,128,0.42)"></i>
+              <i class="f04-bascule-soft" style="left: 1290px; top: 330px; width: 360px; height: 0px; box-shadow: 0 0 44px 10px rgba(242,239,236,0.1)"></i>
+              <i class="f04-bascule-soft" style="left: 1717px; top: 330px; width: 0px; height: 0px; box-shadow: 0 0 44px 15px rgba(140,133,128,0.42)"></i>
+              <i class="f04-bascule-soft" style="left: 1290px; top: 400px; width: 310px; height: 0px; box-shadow: 0 0 44px 10px rgba(242,239,236,0.1)"></i>
+              <i class="f04-bascule-soft" style="left: 1717px; top: 400px; width: 0px; height: 0px; box-shadow: 0 0 44px 15px rgba(140,133,128,0.42)"></i>
+              <i class="f04-bascule-soft" style="left: 1290px; top: 470px; width: 340px; height: 0px; box-shadow: 0 0 44px 10px rgba(242,239,236,0.1)"></i>
+              <i class="f04-bascule-soft" style="left: 1717px; top: 470px; width: 0px; height: 0px; box-shadow: 0 0 44px 15px rgba(140,133,128,0.42)"></i>
+              <i class="f04-bascule-soft" style="left: 1290px; top: 540px; width: 280px; height: 0px; box-shadow: 0 0 44px 10px rgba(242,239,236,0.1)"></i>
+              <i class="f04-bascule-soft" style="left: 1717px; top: 540px; width: 0px; height: 0px; box-shadow: 0 0 44px 15px rgba(140,133,128,0.42)"></i>
+              <i class="f04-bascule-soft" style="left: 810px; top: 640px; width: 300px; height: 0px; box-shadow: 0 0 150px 250px rgba(0,0,0,0.42)"></i>
+              <i class="f04-bascule-soft" style="left: 810px; top: 580px; width: 300px; height: 0px; box-shadow: 0 0 44px 250px rgba(255,255,255,0.05)"></i>
+              <i class="f04-bascule-soft" style="left: 623px; top: 393px; width: 298px; height: 0px; box-shadow: 0 0 44px 11px rgba(140,133,128,0.42)"></i>
+              <i class="f04-bascule-soft" style="left: 617px; top: 477px; width: 550px; height: 0px; box-shadow: 0 0 44px 5px rgba(242,239,236,0.1)"></i>
+              <i class="f04-bascule-soft is-bright" style="left: 617px; top: 477px; width: 320px; height: 0px; box-shadow: 0 0 44px 5px rgba(242,239,236,0.5)"></i>
+              <i class="f04-bascule-soft is-bright" style="left: 942px; top: 477px; width: 0px; height: 0px; box-shadow: 0 0 44px 15px rgba(242,239,236,0.5)"></i>
+              <i class="f04-bascule-soft" style="left: 617px; top: 557px; width: 550px; height: 0px; box-shadow: 0 0 44px 5px rgba(242,239,236,0.1)"></i>
+              <i class="f04-bascule-soft is-bright" style="left: 617px; top: 557px; width: 170px; height: 0px; box-shadow: 0 0 44px 5px rgba(242,239,236,0.5)"></i>
+              <i class="f04-bascule-soft is-bright" style="left: 792px; top: 557px; width: 0px; height: 0px; box-shadow: 0 0 44px 15px rgba(242,239,236,0.5)"></i>
+              <i class="f04-bascule-soft" style="left: 617px; top: 637px; width: 550px; height: 0px; box-shadow: 0 0 44px 5px rgba(242,239,236,0.1)"></i>
+              <i class="f04-bascule-soft is-bright" style="left: 617px; top: 637px; width: 440px; height: 0px; box-shadow: 0 0 44px 5px rgba(242,239,236,0.5)"></i>
+              <i class="f04-bascule-soft is-bright" style="left: 1062px; top: 637px; width: 0px; height: 0px; box-shadow: 0 0 44px 15px rgba(242,239,236,0.5)"></i>
+              <i class="f04-bascule-soft" style="left: 634px; top: 744px; width: 44px; height: 0px; box-shadow: 0 0 44px 22px rgba(140,133,128,0.42)"></i>
+              <i class="f04-bascule-soft" style="left: 758px; top: 744px; width: 44px; height: 0px; box-shadow: 0 0 44px 22px rgba(140,133,128,0.42)"></i>
+              <i class="f04-bascule-soft is-bright" style="left: 1150px; top: 744px; width: 130px; height: 0px; box-shadow: 0 0 44px 30px rgba(242,239,236,0.5)"></i>
           </div>
         </div>
         <div id="f04-bascule-slices"></div>
       </div>
+      <div id="f04-bascule-avant-dim"></div>
       <div class="f04-bascule-avant-vignette"></div>
       <div class="f04-bascule-track" style="top: 300px; height: 3px"></div>
-      <div class="f04-bascule-track" style="top: 600px; height: 7px"></div>
+      <div class="f04-bascule-track" style="top: 600px; height: 6px"></div>
       <div class="f04-bascule-track" style="top: 820px; height: 2px"></div>
     </div>
 
@@ -597,13 +588,17 @@
               </div>
             </div>
             <div id="f04-bascule-word">
-              <div id="f04-bascule-word-inner"><span class="f04-bascule-ch is-strong">a</span><span class="f04-bascule-ch is-strong">s</span><span class="f04-bascule-ch is-strong">k</span><span class="f04-bascule-ch is-strong">-</span><span class="f04-bascule-ch is-strong">i</span><span class="f04-bascule-ch is-strong">t</span><span class="f04-bascule-ch is-light">.</span><span class="f04-bascule-ch is-light">a</span><span class="f04-bascule-ch is-light">i</span></div>
+              <div id="f04-bascule-word-mask"><div id="f04-bascule-word-inner"><span class="f04-bascule-ch is-strong">a</span><span class="f04-bascule-ch is-strong">s</span><span class="f04-bascule-ch is-strong">k</span><span class="f04-bascule-ch is-strong">-</span><span class="f04-bascule-ch is-strong">i</span><span class="f04-bascule-ch is-strong">t</span><span class="f04-bascule-ch is-light">.</span><span class="f04-bascule-ch is-light">a</span><span class="f04-bascule-ch is-light">i</span></div></div>
             </div>
           </div>
 
           <div id="f04-bascule-group">
+            <div id="f04-bascule-halo"></div>
+            <div id="f04-bascule-chip-4" class="f04-bascule-chip" style="left: 1008px; top: 528px; width: 300px"><i></i><span>Routine essentielle</span></div>
+            <div id="f04-bascule-chip-3" class="f04-bascule-chip" style="left: 790px; top: 528px; width: 200px"><i></i><span>Teint terne</span></div>
+            <div id="f04-bascule-chip-2" class="f04-bascule-chip" style="left: 906px; top: 458px; width: 206px"><i></i><span>Peau mixte</span></div>
+            <div id="f04-bascule-chip-1" class="f04-bascule-chip" style="left: 740px; top: 458px; width: 148px"><i></i><span><span class="f04-bascule-num">35</span>&nbsp;ans</span></div>
             <div id="f04-bascule-visitor">
-              <div id="f04-bascule-halo"></div>
               <div class="f04-bascule-ripple"></div>
               <div class="f04-bascule-ripple"></div>
               <div id="f04-bascule-dashring"></div>
@@ -625,10 +620,6 @@
               <div class="f04-bascule-tagslot"><div id="f04-bascule-tag-name" class="f04-bascule-tag"><span>Claire</span></div></div>
             </div>
 
-            <div id="f04-bascule-chip-1" class="f04-bascule-chip" style="left: 740px; top: 458px; width: 148px"><i></i><span><span class="f04-bascule-num">35</span>&nbsp;ans</span></div>
-            <div id="f04-bascule-chip-2" class="f04-bascule-chip" style="left: 906px; top: 458px; width: 206px"><i></i><span>Peau mixte</span></div>
-            <div id="f04-bascule-chip-3" class="f04-bascule-chip" style="left: 790px; top: 528px; width: 200px"><i></i><span>Teint terne</span></div>
-            <div id="f04-bascule-chip-4" class="f04-bascule-chip" style="left: 1008px; top: 528px; width: 300px"><i></i><span>Routine essentielle</span></div>
           </div>
         </div>
       </div>
@@ -670,29 +661,38 @@
       var base = $("avant-base");
       var scrubSrc = base.firstElementChild;
       var slicesWrap = $("slices");
+      // Slice bands: overflow-clipped copies of the blurred stage that tear sideways.
       var SLICES = 8;
+      var BAND_H = 1080 / SLICES;
       var slices = [];
       for (var i = 0; i < SLICES; i++) {
-        var s = document.createElement("div");
-        s.className = "f04-bascule-avant-layer f04-bascule-slice";
-        var top = (i * 100) / SLICES;
-        var bottom = 100 - ((i + 1) * 100) / SLICES;
-        s.style.clipPath = "inset(" + top.toFixed(3) + "% -10% " + bottom.toFixed(3) + "% -10%)";
-        var c = scrubSrc.cloneNode(true);
-        c.firstElementChild.removeAttribute("id");
-        s.appendChild(c);
-        slicesWrap.appendChild(s);
-        slices.push(s);
+        var band = document.createElement("div");
+        band.className = "f04-bascule-band";
+        band.style.top = i * BAND_H + "px";
+        band.style.height = BAND_H + "px";
+        var inner = document.createElement("div");
+        inner.className = "f04-bascule-band-inner";
+        inner.style.top = -i * BAND_H + "px";
+        inner.appendChild(scrubSrc.cloneNode(true));
+        band.appendChild(inner);
+        slicesWrap.appendChild(band);
+        slices.push(band);
       }
-      // warm + cool chromatic ghosts (RGB split of the blurred content), screen-blended above
-      var ghosts = ["is-warm", "is-cool"].map(function (cls) {
-        var g = document.createElement("div");
-        g.className = "f04-bascule-avant-layer f04-bascule-ghost " + cls;
+      // Warm + cool chromatic ghosts of the bright content, screen-blended above (RGB split).
+      var ghosts = [
+        ["is-warm", "rgba(255,112,58,0.62)"],
+        ["is-cool", "rgba(96,170,255,0.58)"],
+      ].map(function (g) {
+        var layer = document.createElement("div");
+        layer.className = "f04-bascule-avant-layer f04-bascule-ghost " + g[0];
         var c = scrubSrc.cloneNode(true);
-        c.firstElementChild.removeAttribute("id");
-        g.appendChild(c);
-        slicesWrap.appendChild(g);
-        return g;
+        Array.prototype.slice.call(c.children).forEach(function (sh) {
+          if (!sh.classList.contains("is-bright")) c.removeChild(sh);
+          else sh.style.boxShadow = sh.style.boxShadow.replace(/rgba?\([^)]*\)/, g[1]);
+        });
+        layer.appendChild(c);
+        slicesWrap.appendChild(layer);
+        return layer;
       });
       var scrubs = $$("#" + ID + "-avant .f04-bascule-scrub");
       var tracks = $$("#" + ID + "-avant .f04-bascule-track");
@@ -765,7 +765,7 @@
       tl.to($("ring"), { opacity: 0, duration: 0.3, ease: "power1.in" }, FLOOD_AT + 0.42);
       // the old world falls away behind the flood
       tl.to($("avant-cam"), { scale: 0.9, duration: FLOOD_DUR, ease: "power2.in" }, FLOOD_AT);
-      tl.to($("panels"), { filter: "blur(34px) brightness(0.4)", duration: FLOOD_DUR, ease: "power2.in" }, FLOOD_AT);
+      tl.fromTo($("avant-dim"), { opacity: 0 }, { opacity: 0.45, duration: FLOOD_DUR, ease: "power2.in" }, FLOOD_AT);
 
       // Grid lines draw outward from the centre axes, nearest lines first.
       var gl = $("gridlines");
@@ -818,13 +818,10 @@
       tl.fromTo($("bar1"), { scaleX: 0 }, { scaleX: 1, transformOrigin: "0% 50%", duration: 0.24, ease: "power3.out" }, 1.96);
       tl.fromTo($("bar2"), { scaleX: 0 }, { scaleX: 1, transformOrigin: "0% 50%", duration: 0.22, ease: "power3.out" }, 2.02);
       tl.fromTo($("dot"), { scale: 0 }, { scale: 1, transformOrigin: "50% 50%", duration: 0.3, ease: "back.out(2.2)" }, 2.08);
-      tl.fromTo(
-        $("word"),
-        { clipPath: "inset(-20px 100% -20px 0px)" },
-        { clipPath: "inset(-20px 0% -20px 0px)", duration: 0.55, ease: "expo.inOut" },
-        2.02,
-      );
-      tl.fromTo($("word-inner"), { x: -30 }, { x: 0, duration: 0.6, ease: "expo.out" }, 2.06);
+      // mask wipe: the mask box travels −470 → 0 while the text counter-travels +440 → 0,
+      // so the text itself only slides x −30 → 0 while its right edge is wiped open.
+      tl.fromTo($("word-mask"), { x: -470 }, { x: 0, duration: 0.55, ease: "expo.inOut" }, 2.02);
+      tl.fromTo($("word-inner"), { x: 440 }, { x: 0, duration: 0.55, ease: "expo.inOut" }, 2.02);
       $$("#" + ID + "-word-inner .f04-bascule-ch").forEach(function (ch, k) {
         tl.fromTo(ch, { color: "#d6cfc7" }, { color: "#241f20", duration: 0.26, ease: "power1.out" }, 2.1 + k * 0.035);
       });
@@ -847,7 +844,7 @@
       tl.to($("dashring"), { rotation: 70, duration: 1.3, ease: "none" }, 3.78);
       // two "who is she?" sonar pings
       $$("#" + ID + "-visitor .f04-bascule-ripple").forEach(function (r, k) {
-        tl.fromTo(r, { scale: 1, opacity: 0.55 }, { scale: 1.75, opacity: 0, duration: 0.7, ease: "power2.out" }, 3.5 + k * 0.42);
+        tl.fromTo(r, { scale: 1, opacity: 0.55 }, { scale: 1.75, opacity: 0, duration: 0.7, ease: "power2.out", immediateRender: false }, 3.5 + k * 0.42);
       });
       tl.fromTo(
         $("tag-anon"),
@@ -855,6 +852,7 @@
         { y: 0, opacity: 1, filter: "blur(0px)", duration: 0.42, ease: "expo.out" },
         3.26,
       );
+      tl.set($("tag-anon"), { filter: "none" }, 3.7);
 
       // « clients » — card-morph-anchor: the anonymous circle becomes Claire.
       var MORPH_AT = 4.4;
@@ -881,6 +879,7 @@
       tl.fromTo($("halo"), { opacity: 0, scale: 0.7 }, { opacity: 0.32, scale: 1, duration: 0.8, ease: "power2.out" }, MORPH_AT + 0.2);
       // tag swap: « Visiteuse anonyme » rolls out, « Claire » rolls in
       tl.to($("tag-anon"), { y: -14, opacity: 0, filter: "blur(4px)", duration: 0.22, ease: "power2.in" }, MORPH_AT + 0.04);
+      tl.set($("tag-anon"), { filter: "none" }, MORPH_AT + 0.3);
       tl.fromTo($("tag-name"), { y: 16, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: "expo.out" }, MORPH_AT + 0.22);
       // green « Cliente » badge pops off the ring
       tl.fromTo($("badge"), { scale: 0, opacity: 0, x: -14 }, { scale: 1, opacity: 1, x: 0, duration: 0.45, ease: "back.out(1.7)" }, MORPH_AT + 0.42);

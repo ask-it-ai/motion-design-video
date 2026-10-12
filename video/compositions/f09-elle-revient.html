@@ -114,19 +114,20 @@
     .f09-elle-revient-ripple { position: absolute; width: 60px; height: 60px; margin-left: -30px; margin-top: -30px; border-radius: 50%; border: 2.5px solid rgba(36,31,32,0.35); opacity: 0; }
     .f09-elle-revient-sparkw { position: absolute; width: 0; height: 0; }
     .f09-elle-revient-sparkl { position: absolute; left: -1.75px; top: -46px; width: 3.5px; height: 13px; border-radius: 2px; background: #F8571F; opacity: 0; transform-origin: 50% 100%; }
+    #f09-elle-revient-badgering { position: absolute; left: 404px; top: 48px; width: 28px; height: 28px; border-radius: 50%; border: 2.5px solid #F8571F; opacity: 0; }
     #f09-elle-revient-cartdot { position: absolute; left: -8px; top: -8px; width: 16px; height: 16px; border-radius: 50%; background: #F8571F; box-shadow: 0 4px 10px rgba(248,87,31,0.45); opacity: 0; }
 
     /* answer chips (world coordinates, right of the phone) */
     .f09-elle-revient-chip {
-      position: absolute; left: 1000px; height: 58px; display: flex; align-items: center; gap: 12px; padding: 0 26px 0 20px;
+      position: absolute; left: 1000px; height: 66px; display: flex; align-items: center; gap: 14px; padding: 0 30px 0 24px;
       background: #FFFFFF; border: 1.5px solid rgba(36,31,32,0.10); border-radius: 999px;
       box-shadow: 0 18px 40px -18px rgba(36,31,32,0.18), 0 2px 6px rgba(36,31,32,0.05);
-      font-weight: 500; font-size: 26px; color: #241F20; white-space: nowrap; transform-origin: 12% 50%; opacity: 0;
+      font-weight: 500; font-size: 30px; color: #241F20; white-space: nowrap; transform-origin: 12% 50%; opacity: 0;
     }
-    .f09-elle-revient-cdot { width: 10px; height: 10px; border-radius: 50%; background: #F8571F; flex: none; }
+    .f09-elle-revient-cdot { width: 12px; height: 12px; border-radius: 50%; background: #F8571F; flex: none; }
     .f09-elle-revient-chip .f09-elle-revient-num { font-weight: 600; }
     #f09-elle-revient-chip4 { background: #FDEEE7; border-color: #F8571F; color: #D74B1B; font-weight: 600; }
-    #f09-elle-revient-chip4 .f09-elle-revient-cdot { width: 16px; height: 16px; background: #DF764C; box-shadow: 0 0 0 3px rgba(223,118,76,0.25); }
+    #f09-elle-revient-chip4 .f09-elle-revient-cdot { width: 18px; height: 18px; background: #DF764C; box-shadow: 0 0 0 4px rgba(223,118,76,0.25); }
 
     .f09-elle-revient-spk { position: absolute; width: 0; height: 0; }
     .f09-elle-revient-spk svg { position: absolute; display: block; overflow: visible; opacity: 0; }
@@ -153,7 +154,7 @@
               <div class="f09-elle-revient-layer" id="f09-elle-revient-L-serums">
                 <img class="f09-elle-revient-shot" id="f09-elle-revient-serums-img" src="assets/screens/endro-shop/collection-serums.png" alt="" />
                 <div class="f09-elle-revient-pillrow">
-                  <div id="f09-elle-revient-pill"><div class="f09-elle-revient-pdot"><div id="f09-elle-revient-pdotring"></div></div>Trouvez votre routine en <span class="f09-elle-revient-num">30</span>&nbsp;s →</div>
+                  <div id="f09-elle-revient-pill"><div class="f09-elle-revient-pdot"><div id="f09-elle-revient-pdotring"></div></div><span>Trouvez votre routine en <span class="f09-elle-revient-num">30</span>&nbsp;s →</span></div>
                 </div>
                 <div class="f09-elle-revient-shade" id="f09-elle-revient-sh-serums"></div>
               </div>
@@ -226,6 +227,7 @@
 
             <div id="f09-elle-revient-tlayer" data-layout-allow-overflow>
               <div id="f09-elle-revient-cartdot"></div>
+              <div id="f09-elle-revient-badgering"></div>
               <div id="f09-elle-revient-touchgrp">
                 <div id="f09-elle-revient-touch"></div>
                 <div id="f09-elle-revient-tag">
@@ -236,10 +238,10 @@
             </div>
           </div>
 
-          <div class="f09-elle-revient-chip" id="f09-elle-revient-chip1" style="top:371px;"><div class="f09-elle-revient-cdot"></div>Peau mixte</div>
-          <div class="f09-elle-revient-chip" id="f09-elle-revient-chip2" style="top:447px;"><div class="f09-elle-revient-cdot"></div>Sensibilité&nbsp;<span class="f09-elle-revient-num">3/10</span></div>
-          <div class="f09-elle-revient-chip" id="f09-elle-revient-chip3" style="top:523px;"><div class="f09-elle-revient-cdot"></div>Teint terne</div>
-          <div class="f09-elle-revient-chip" id="f09-elle-revient-chip4" style="top:599px;"><div class="f09-elle-revient-cdot"></div>Profil CORAIL<span class="f09-elle-revient-num">02</span></div>
+          <div class="f09-elle-revient-chip" id="f09-elle-revient-chip1" style="top:347px;"><div class="f09-elle-revient-cdot"></div><span>Peau mixte</span></div>
+          <div class="f09-elle-revient-chip" id="f09-elle-revient-chip2" style="top:431px;"><div class="f09-elle-revient-cdot"></div><span>Sensibilité <span class="f09-elle-revient-num">3/10</span></span></div>
+          <div class="f09-elle-revient-chip" id="f09-elle-revient-chip3" style="top:515px;"><div class="f09-elle-revient-cdot"></div><span>Teint terne</span></div>
+          <div class="f09-elle-revient-chip" id="f09-elle-revient-chip4" style="top:599px;"><div class="f09-elle-revient-cdot"></div><span>Profil CORAIL<span class="f09-elle-revient-num">02</span></span></div>
 
           <div id="f09-elle-revient-sparkles"></div>
         </div>
@@ -297,7 +299,7 @@
       /* answer chip flies out of the tap point into the right-hand column */
       function chipFly(id, sx, sy, cy, t) {
         var el = q(id);
-        tl.fromTo(el, { x: wx(sx) - 1000 - 28, y: wy(sy) - cy, scale: 0.45 },
+        tl.fromTo(el, { x: wx(sx) - 1000 - 30, y: wy(sy) - cy, scale: 0.4 },
           { x: 0, y: 0, scale: 1, duration: 0.6, ease: "expo.out" }, t);
         tl.fromTo(el, { opacity: 0 }, { opacity: 1, duration: 0.14, ease: "power1.out" }, t);
       }
@@ -311,10 +313,12 @@
 
       /* ── Background: slow brand-mesh drift ── */
       tl.fromTo(q("mesh"), { x: -26, y: 16, scale: 1 }, { x: 28, y: -18, scale: 1.06, duration: D, ease: "none" }, 0);
-      tl.fromTo(q("grid"), { x: 0, y: 0 }, { x: -22, y: -10, duration: D, ease: "none" }, 0);
+      tl.fromTo(q("grid"), { y: 0 }, { y: -16, duration: D, ease: "none" }, 0);
 
       /* ── Camera: continuous slow push; commit-synced micro push-in on the add-to-cart ── */
       tl.fromTo(q("cam"), { scale: 1 }, { scale: 1.03, duration: 10.4, ease: "none" }, 0);
+      tl.fromTo(q("cam"), { x: 160 }, { x: 0, duration: 0.62, ease: "power2.inOut" }, 3.3);
+      tl.fromTo(q("grid"), { x: 70 }, { x: 0, duration: 0.62, ease: "power2.inOut" }, 3.3);
       tl.fromTo(q("push"), { scale: 1 }, { scale: 1.045, duration: 0.6, ease: "power2.out" }, 10.42);
       tl.fromTo(q("push"), { scale: 1.045 }, { scale: 1.055, duration: D - 11.02, ease: "none", immediateRender: false }, 11.02);
 
@@ -366,7 +370,7 @@
       tapFx(318, 505, 4.68, true);                      // c'est ça 4.75
       tl.fromTo(q("ring04"), { scale: 1.08 }, { scale: 1, duration: 0.36, ease: "back.out(2)" }, 4.7);
       tl.fromTo(q("ring04"), { opacity: 0 }, { opacity: 1, duration: 0.08, ease: "none" }, 4.7);
-      chipFly("chip1", 318, 505, 400, 4.72);
+      chipFly("chip1", 318, 505, 380, 4.72);
 
       pushScreen("L-q04", "sh-q04", "L-q05", 4.98, 0.38);
       move(5.08, 81.7, 686.9, 0.42);
@@ -377,7 +381,7 @@
       move(5.7, 141.7, 686.9, 0.3);
       tl.to(q("touch"), { scale: 1, duration: 0.12, ease: "power2.out" }, 6.02);
       tapFx(141.7, 686.9, 6.02, true);
-      chipFly("chip2", 141.7, 686.9, 476, 6.04);
+      chipFly("chip2", 141.7, 686.9, 464, 6.04);
 
       pushScreen("L-q05", "sh-q05", "L-q07", 6.16, 0.38);
       move(6.12, 118, 459, 0.36);
@@ -385,13 +389,14 @@
       tapFx(118, 459, 6.54, true);                      // et ça 6.61
       tl.fromTo(q("ring07"), { scale: 1.08 }, { scale: 1, duration: 0.36, ease: "back.out(2)" }, 6.56);
       tl.fromTo(q("ring07"), { opacity: 0 }, { opacity: 1, duration: 0.08, ease: "none" }, 6.56);
-      chipFly("chip3", 118, 459, 552, 6.58);
+      chipFly("chip3", 118, 459, 548, 6.58);
       move(6.95, 300, 790, 0.5);                        // finger lifts toward the lower screen
 
       /* ── Scene 4 (7.1–9.9): loading flash → CORAIL02 result → scroll to the cart button ── */
       tl.fromTo(q("L-load"), { opacity: 0 }, { opacity: 1, duration: 0.1, ease: "none" }, 7.1);
       tl.fromTo(q("load-img"), { scale: 1 }, { scale: 1.035, duration: 0.45, ease: "none" }, 7.1);
-      tl.fromTo(q("L-res"), { opacity: 0, scale: 1.06 }, { opacity: 1, scale: 1, duration: 0.42, ease: "expo.out" }, 7.45);  // Oh 7.69
+      tl.fromTo(q("L-res"), { scale: 1.06 }, { scale: 1, duration: 0.5, ease: "expo.out" }, 7.45);  // Oh 7.69
+      tl.fromTo(q("L-res"), { opacity: 0 }, { opacity: 1, duration: 0.12, ease: "none" }, 7.45);
       tl.fromTo(q("chip4"), { scale: 0.5, y: 10 }, { scale: 1, y: 0, duration: 0.5, ease: "back.out(1.7)" }, 7.5);
       tl.fromTo(q("chip4"), { opacity: 0 }, { opacity: 1, duration: 0.14, ease: "power1.out" }, 7.5);
       // finger drags up; the page follows 1:1 (scroll 0 → 320 screen px); the header sticks under the status bar
@@ -420,11 +425,12 @@
       flash(q("cartdot"), 10.56, 1, 0.05, 0.4, "power4.in");
       tl.fromTo(q("badge"), { scale: 0 }, { scale: 1, duration: 0.42, ease: "back.out(2.4)" }, 10.94);
       tl.fromTo(q("badge"), { opacity: 0 }, { opacity: 1, duration: 0.06, ease: "none" }, 10.94);
-      tapFx(418, 62, 10.96, false);
+      tl.fromTo(q("badgering"), { scale: 0.8 }, { scale: 2.1, duration: 0.5, ease: "power2.out" }, 10.96);
+      flash(q("badgering"), 10.96, 0.9, 0.03, 0.47);
       // visitor-tag gets its green check
       tl.fromTo(q("tagcheck"), { scale: 0, rotation: -30 }, { scale: 1, rotation: 0, duration: 0.42, ease: "back.out(2.2)" }, 11.02);
       tl.fromTo(q("tagcheck"), { opacity: 0 }, { opacity: 1, duration: 0.06, ease: "none" }, 11.02);
-      move(10.72, BX + 14, BY + 26, 0.8, "sine.out");   // finger relaxes off the button (hold)
+      move(10.74, BX + 30, BY + 84, 0.7, "power2.inOut");   // finger relaxes off the button (hold)
 
       /* ── Sparkles around the phone (exactement 8.31 · fallait 9.45) ── */
       var spkHost = q("sparkles");

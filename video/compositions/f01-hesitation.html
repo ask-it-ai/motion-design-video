@@ -332,18 +332,16 @@
       var AX = 14 + 119.567, BX = 14 + 322.433;
       var TAG_X = 492;                    // tag hangs just outside the phone's right edge
 
-      // ── initial states ──
-      tl.set(touch, { x: 414, y: 714, scale: 0.6, opacity: 0 }, 0);
-      tl.set(tag, { x: 478, y: 714, opacity: 0, filter: "blur(8px)" }, 0);
-      tl.set([rippleA, rippleB], { scale: 0.6, opacity: 0 }, 0);
-      tl.set(rippleA, { x: AX, y: TILE_Y }, 0);
-      tl.set(rippleB, { x: BX, y: TILE_Y }, 0);
-      tl.set([ringA, ringB], { opacity: 0, scale: 1.1 }, 0);
-      tl.set([liftA, liftB], { scale: 1, x: 0 }, 0);
-      tl.set(scroller, { y: 0 }, 0);
-      tl.set(card, { scale: 1, y: 0 }, 0);
-      tl.set(world, { scale: 1 }, 0);
-      tl.set(burst, { scale: 1, opacity: 1, "--recede": "0px" }, 0);
+      // ── static setup (positions only; every visible entrance below is a fromTo) ──
+      gsap.set(touch, { x: 414, y: 714 });
+      gsap.set(tag, { y: 714 });
+      gsap.set(rippleA, { x: AX, y: TILE_Y, scale: 0.6, opacity: 0 });
+      gsap.set(rippleB, { x: BX, y: TILE_Y, scale: 0.6, opacity: 0 });
+      gsap.set([liftA, liftB], { scale: 1, x: 0 });
+      gsap.set(scroller, { y: 0 });
+      gsap.set(card, { scale: 1, y: 0 });
+      gsap.set(world, { scale: 1 });
+      gsap.set(burst, { scale: 1, opacity: 1, "--recede": "0px" });
 
       // ════ Scene 1 (0.0–1.4): PHONE_AVANT rises in, slow drift; touch + visitor-tag on « Hmm » ════
       tl.fromTo(phone, { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power1.out" }, 0);
@@ -351,8 +349,8 @@
       tl.set(phone, { filter: "none" }, 0.92);
       tl.fromTo(phone, { scale: 0.9 }, { scale: 0.93, duration: DUR, ease: "none" }, 0);
 
-      tl.to(touch, { scale: 1, opacity: 1, duration: 0.34, ease: "power3.out" }, 0.36);
-      tl.to(tag, { x: TAG_X, opacity: 1, filter: "blur(0px)", duration: 0.4, ease: "power3.out" }, 0.46);
+      tl.fromTo(touch, { scale: 0.6, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.34, ease: "power3.out" }, 0.36);
+      tl.fromTo(tag, { x: 478, opacity: 0, filter: "blur(8px)" }, { x: TAG_X, opacity: 1, filter: "blur(0px)", duration: 0.4, ease: "power3.out" }, 0.46);
       tl.to(touch, { x: 410, y: 706, duration: 0.72, ease: "sine.inOut" }, 0.68);
       tl.to(tag, { y: 706, duration: 0.72, ease: "sine.inOut" }, 0.7);
 
@@ -450,7 +448,7 @@
         tl.set(ripple, { scale: 0.6, opacity: 0.9 }, t + 0.02);
         tl.to(ripple, { scale: 2.3, opacity: 0, duration: 0.42, ease: "power2.out" }, t + 0.02);
         // 3px white highlight ring pops in (back.out)
-        tl.to(ring, { opacity: 1, scale: 1, duration: 0.32, ease: "back.out(1.6)" }, t + 0.06);
+        tl.fromTo(ring, { opacity: 0, scale: 1.1 }, { opacity: 1, scale: 1, duration: 0.32, ease: "back.out(1.6)" }, t + 0.06);
       }
       function shake(el, t) {
         // x ±6 px, 3 cycles
