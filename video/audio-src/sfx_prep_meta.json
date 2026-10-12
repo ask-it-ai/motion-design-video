@@ -1,0 +1,218 @@
+{
+ "ui_tap": {
+  "var": "v1",
+  "hp": 120,
+  "dur": 0.109,
+  "gain_db": 1.9,
+  "rms_db": -21.8,
+  "lead_trim": 0.001,
+  "hit": 0.03
+ },
+ "ui_select": {
+  "var": "v1",
+  "hp": 200,
+  "dur": 0.48,
+  "gain_db": 14.3,
+  "rms_db": -19.4,
+  "lead_trim": 0.0,
+  "hit": 0.0
+ },
+ "swipe": {
+  "var": "v1",
+  "hp": 150,
+  "dur": 0.514,
+  "gain_db": 15.9,
+  "rms_db": -21.0,
+  "lead_trim": 0.061,
+  "hit": 0.22
+ },
+ "whoosh_soft": {
+  "var": "v2",
+  "hp": 60,
+  "dur": 0.43,
+  "gain_db": -3.9,
+  "rms_db": -18.8,
+  "lead_trim": 0.0,
+  "hit": 0.14
+ },
+ "whoosh_fast": {
+  "var": "v2",
+  "hp": 80,
+  "dur": 0.314,
+  "gain_db": -2.6,
+  "rms_db": -17.0,
+  "lead_trim": 0.001,
+  "hit": 0.115
+ },
+ "pop": {
+  "var": "v2",
+  "hp": 100,
+  "dur": 0.15,
+  "gain_db": -1.3,
+  "rms_db": -17.6,
+  "lead_trim": 0.0,
+  "hit": 0.01
+ },
+ "chip_fly": {
+  "var": "v1",
+  "hp": 120,
+  "dur": 0.429,
+  "gain_db": -1.3,
+  "rms_db": -27.5,
+  "lead_trim": 0.091,
+  "hit": 0.355
+ },
+ "tab_close": {
+  "var": "v2",
+  "hp": 60,
+  "dur": 0.55,
+  "gain_db": 3.9,
+  "rms_db": -17.2,
+  "lead_trim": 0.0,
+  "hit": 0.24
+ },
+ "dots_fade": {
+  "var": "v2",
+  "hp": 80,
+  "dur": 1.16,
+  "gain_db": 6.4,
+  "rms_db": -18.9,
+  "lead_trim": 0.0,
+  "hit": 0.17
+ },
+ "counter_tick": {
+  "var": "v2",
+  "hp": 300,
+  "dur": 1.2,
+  "gain_db": 3.7,
+  "rms_db": -20.3,
+  "lead_trim": 0.0,
+  "hit": 0.73
+ },
+ "number_slam": {
+  "var": "v2",
+  "hp": 0,
+  "dur": 0.8,
+  "gain_db": -0.8,
+  "rms_db": -8.5,
+  "lead_trim": 0.0,
+  "hit": 0.005
+ },
+ "ember_burn": {
+  "var": "v1",
+  "hp": 80,
+  "dur": 1.79,
+  "gain_db": -1.4,
+  "rms_db": -19.8,
+  "lead_trim": 0.0,
+  "hit": 0.195
+ },
+ "muffle_drone": {
+  "var": "v1",
+  "hp": 0,
+  "dur": 2.13,
+  "gain_db": 1.0,
+  "rms_db": -14.6,
+  "lead_trim": 0.0,
+  "hit": 1.18
+ },
+ "rewind": {
+  "var": "v1",
+  "hp": 100,
+  "dur": 1.0,
+  "gain_db": -1.2,
+  "rms_db": -15.3,
+  "lead_trim": 0.0,
+  "hit": 0.395
+ },
+ "color_flood": {
+  "var": "v1",
+  "hp": 80,
+  "dur": 1.304,
+  "gain_db": -1.1,
+  "rms_db": -15.8,
+  "lead_trim": 0.056,
+  "hit": 0.975
+ },
+ "logo_sting": {
+  "var": "v2",
+  "hp": 80,
+  "dur": 1.36,
+  "gain_db": 7.0,
+  "rms_db": -20.7,
+  "lead_trim": 0.0,
+  "hit": 0.0
+ },
+ "success": {
+  "var": "v2",
+  "hp": 120,
+  "dur": 0.57,
+  "gain_db": 3.6,
+  "rms_db": -14.6,
+  "lead_trim": 0.0,
+  "hit": 0.055
+ },
+ "paper_crumple": {
+  "var": "v1",
+  "hp": 150,
+  "dur": 0.815,
+  "gain_db": 1.8,
+  "rms_db": -23.6,
+  "lead_trim": 0.0,
+  "hit": 0.155
+ },
+ "typing": {
+  "var": "v1",
+  "hp": 200,
+  "dur": 1.215,
+  "gain_db": 0.9,
+  "rms_db": -34.1,
+  "lead_trim": 0.0,
+  "hit": 1.11
+ },
+ "notif": {
+  "var": "v1",
+  "hp": 200,
+  "dur": 0.365,
+  "gain_db": 7.6,
+  "rms_db": -19.7,
+  "lead_trim": 0.0,
+  "hit": 0.0
+ },
+ "timer": {
+  "var": "v1",
+  "hp": 200,
+  "dur": 0.409,
+  "gain_db": 4.5,
+  "rms_db": -24.9,
+  "lead_trim": 0.096,
+  "hit": 0.075
+ },
+ "sparkle": {
+  "var": "v1",
+  "hp": 400,
+  "dur": 0.88,
+  "gain_db": 5.6,
+  "rms_db": -18.0,
+  "lead_trim": 0.0,
+  "hit": 0.11
+ },
+ "skin_swap": {
+  "var": "v1",
+  "hp": 120,
+  "dur": 0.315,
+  "gain_db": -1.5,
+  "rms_db": -17.6,
+  "lead_trim": 0.0,
+  "hit": 0.13
+ },
+ "cart_add": {
+  "var": "v1",
+  "hp": 120,
+  "dur": 0.61,
+  "gain_db": 1.4,
+  "rms_db": -21.0,
+  "lead_trim": 0.0,
+  "hit": 0.22
+ }
+}

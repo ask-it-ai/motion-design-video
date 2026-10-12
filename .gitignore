@@ -18,3 +18,13 @@ out/
 *.mp3
 
 .DS_Store
+
+# Video project: third-party brand assets, captures, licensed fonts and generated audio stay local
+video/assets/
+video/.hyperframes/
+video/renders/
+video/snapshots/
+
+# Python bytecode
+__pycache__/
+*.pyc

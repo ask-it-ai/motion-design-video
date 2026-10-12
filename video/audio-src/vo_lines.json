@@ -1,0 +1,93 @@
+[
+ {
+  "id": "L01",
+  "spk": "V",
+  "sec": "A",
+  "gap_after": 0.7,
+  "text": "[hesitant, thinking out loud] Hmm… c'est lequel pour ma peau ? Celui-là ?… Ah non. Celui-là ! [sighs] Ah bah non, pas lui non plus… [overwhelmed] Oh là là… y a vraiment trop de choix. [exhales] Bon. Je verrai plus tard."
+ },
+ {
+  "id": "L02",
+  "spk": "N",
+  "sec": "B",
+  "gap_after": 0.32,
+  "text": "[calm, low] Non. Elle ne reviendra pas. Comme soixante-dix pour cent de vos visiteurs."
+ },
+ {
+  "id": "L03",
+  "spk": "N",
+  "sec": "B",
+  "gap_after": 0.3,
+  "text": "[matter-of-fact] Le problème, ce n'est pas votre trafic. Sur votre site, tout le monde voit la même chose… et personne n'est là pour guider."
+ },
+ {
+  "id": "L04",
+  "spk": "N",
+  "sec": "B",
+  "gap_after": 0.6,
+  "text": "[dry] Résultat : vous brûlez votre budget sur des visiteurs dont vous ne savez rien. Et vous optimisez… à l'aveugle."
+ },
+ {
+  "id": "L05",
+  "spk": "N",
+  "sec": "C",
+  "gap_after": 0.35,
+  "text": "[a knowing smile] Bon… ça, c'était avant."
+ },
+ {
+  "id": "L06",
+  "spk": "N",
+  "sec": "C",
+  "gap_after": 0.45,
+  "text": "[warm, brighter] Ask-it transforme vos visiteurs anonymes en clients… et en data. En trois étapes."
+ },
+ {
+  "id": "L07",
+  "spk": "N",
+  "sec": "D",
+  "gap_after": 0.45,
+  "text": "D'abord, le diagnostic. Intégré à votre site, à votre image. Il pose à chaque visiteuse les bonnes questions : ses besoins, sa routine, ses habitudes. En trente secondes, vous savez qui elle est, ce qu'elle cherche… et ce qui la fait hésiter."
+ },
+ {
+  "id": "L08",
+  "spk": "N",
+  "sec": "E",
+  "gap_after": 0.5,
+  "text": "Ensuite, sa page de recommandation, cent pour cent personnalisée : sa routine sur mesure, et les arguments qui la rassurent. [confident] À la clé : quatre fois plus de conversions en moyenne… et des paniers trente-six pour cent plus élevés."
+ },
+ {
+  "id": "L09",
+  "spk": "N",
+  "sec": "F",
+  "gap_after": 0.4,
+  "text": "Et enfin, votre dashboard. [lightly amused] Adieu le tableau Excel. [clear, steady] Ask-it vous dit combien ça vous rapporte… qui sont vos meilleurs personas… où votre tunnel bloque… et quelle publicité lancer ensuite."
+ },
+ {
+  "id": "L10",
+  "spk": "N",
+  "sec": "G",
+  "gap_after": 0.65,
+  "text": "[playful] Le mieux ? Vous n'avez presque rien à faire. Un formulaire… et notre équipe s'occupe du reste. Et vous ? [smiling] Vous profitez."
+ },
+ {
+  "id": "L11",
+  "spk": "V",
+  "sec": "H",
+  "gap_after": 0.6,
+  "text": "[curious] Tiens… c'est quoi, ça ? Un diagnostic personnalisé ? [focused, murmuring] Alors moi… c'est ça… hop… et ça. [delighted] Oh, c'est exactement ce qu'il me fallait ! Allez, au panier."
+ },
+ {
+  "id": "L12",
+  "spk": "N",
+  "sec": "I",
+  "gap_after": 0.4,
+  "text": "[warm, quiet satisfaction] Cette fois… elle est restée."
+ },
+ {
+  "id": "L13",
+  "spk": "N",
+  "sec": "I",
+  "gap_after": 0.0,
+  "text": "[confident] Ne laissez plus partir soixante-dix pour cent de vos visiteurs. Réservez votre démo avec Ask-it."
+ }
+]
