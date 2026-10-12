@@ -56,15 +56,47 @@
       position: absolute;
       inset: 0;
       background-color: #1b1718;
+    }
+    /* f03's grid (36 px offset) — faded out at f03's end, it returns as the stage rewinds */
+    #f04-bascule-avant-grid {
+      position: absolute;
+      inset: 0;
       background-image:
         linear-gradient(to right, rgba(255, 255, 255, 0.08) 1px, transparent 1px),
         linear-gradient(to bottom, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
       background-size: 44px 44px;
+      background-position: 36px 36px;
+      opacity: 0;
     }
+    /* f03's world camera: origin 0 0, ends at translate(-93.1, -75.3) scale(1.092) */
     #f04-bascule-avant-cam {
       position: absolute;
       inset: 0;
-      transform-origin: 960px 540px;
+      transform-origin: 0px 0px;
+    }
+    .f04-bascule-sg {
+      position: absolute;
+      inset: 0;
+    }
+    /* text blurred without filters: transparent glyphs + text-shadow (blur 44–46 = sigma 22–23) */
+    .f04-bascule-st {
+      position: absolute;
+      white-space: nowrap;
+      color: transparent;
+    }
+    .f04-bascule-cs {
+      display: inline-block;
+      width: 0.64em;
+      text-align: center;
+    }
+    .f04-bascule-cp {
+      display: inline-block;
+      width: 0.2em;
+    }
+    .f04-bascule-ce {
+      display: inline-block;
+      margin-left: 0.1em;
+      font-size: 0.55em;
     }
     .f04-bascule-avant-layer,
     .f04-bascule-scrub {
@@ -100,12 +132,12 @@
       position: absolute;
       inset: 0;
       background: #000000;
-      opacity: 0;
+      opacity: 0.4;
     }
     .f04-bascule-avant-vignette {
       position: absolute;
       inset: 0;
-      box-shadow: inset 0 0 320px 90px rgba(0, 0, 0, 0.55);
+      background: radial-gradient(ellipse 70% 70% at 50% 45%, rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0.55) 100%);
     }
     .f04-bascule-track {
       position: absolute;
@@ -523,15 +555,16 @@
     <!-- Track 0 · AVANT stage: dark, blurred, rewinding (hidden once the flood has covered it) -->
     <div id="f04-bascule-avant" class="clip" data-start="0" data-duration="2.1" data-track-index="0">
       <div class="f04-bascule-avant-ground"></div>
+      <div id="f04-bascule-avant-grid"></div>
+      <div class="f04-bascule-avant-vignette"></div>
       <div id="f04-bascule-avant-cam">
-        <!-- the blurred f03 dashboard: soft box-shadow shapes generated below (no CSS filters) -->
+        <!-- f03's final blurred dashboard, rebuilt filter-free (generated below) -->
         <div id="f04-bascule-avant-base" class="f04-bascule-avant-layer">
           <div class="f04-bascule-scrub"></div>
         </div>
         <div id="f04-bascule-slices"></div>
       </div>
       <div id="f04-bascule-avant-dim"></div>
-      <div class="f04-bascule-avant-vignette"></div>
       <div class="f04-bascule-track" style="top: 300px; height: 3px"></div>
       <div class="f04-bascule-track" style="top: 600px; height: 6px"></div>
       <div class="f04-bascule-track" style="top: 820px; height: 2px"></div>
@@ -628,84 +661,90 @@
       var hash = function (n) { var x = Math.sin(n * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); };
 
       /* ═══ Scene 1 · 0–1.1 s · « Bon… ça, c'était » — rewind chromatic glitch ═══ */
-      // The blurred f03 dashboard as soft shapes: a Gaussian-blurred rect (σ 22) is a
-      // zero-thickness element + box-shadow (blur 44, spread = half its short side).
+      // f03's final frame rebuilt without CSS filters: a Gaussian-blurred rect is a zero-thickness
+      // element + box-shadow (spread = half its short side), blurred text is transparent glyphs +
+      // text-shadow. Same local layout, opacities and world transform as f03 at its last frame.
       var base = $("avant-base");
       var scrubSrc = base.firstElementChild;
-      var COL = ["rgba(242,239,236,0.5)", "rgba(140,133,128,0.42)", "rgba(242,239,236,0.1)", "rgba(255,255,255,0.03)", "rgba(255,255,255,0.05)", "rgba(0,0,0,0.42)"];
-      [[96,236,620,300,5,150],[96,176,620,300,3],[140,222,300,18,1],[140,288,430,92,0],[140,412,210,16,1],
-       [1236,210,560,470,5,150],[1236,150,560,470,3],[1280,192,76,76,1],[1376,216,220,22,1],
-       [1280,320,380,20,2],[1702,315,30,30,1],[1280,390,330,20,2],[1702,385,30,30,1],[1280,460,360,20,2],[1702,455,30,30,1],[1280,530,300,20,2],[1702,525,30,30,1],
-       [560,390,800,500,5,150],[560,330,800,500,4],[612,382,320,22,1],
-       [612,472,560,10,2],[612,472,330,10,0],[927,462,30,30,0],[612,552,560,10,2],[612,552,180,10,0],[777,542,30,30,0],
-       [612,632,560,10,2],[612,632,450,10,0],[1047,622,30,30,0],[612,722,88,44,1],[736,722,88,44,1],[1120,714,190,60,0]
-      ].forEach(function (d) {
-        var sp = Math.min(d[2], d[3]) / 2, e = document.createElement("i");
-        e.className = "f04-bascule-soft" + (d[4] === 0 ? " f04-bascule-bright" : "");
-        e.style.cssText = "left:" + (d[0] + sp) + "px;top:" + (d[1] + sp) + "px;width:" + (d[2] - 2 * sp) + "px;height:" + (d[3] - 2 * sp) + "px;box-shadow:0 0 " + (d[5] || 44) + "px " + sp + "px " + COL[d[4]];
-        scrubSrc.appendChild(e);
+      var grp = function (op) { var g = document.createElement("div"); g.className = "f04-bascule-sg"; g.style.opacity = op; scrubSrc.appendChild(g); return g; };
+      var R = function (g, x, y, w, h, col, bl, br) {
+        var sp = Math.min(w, h) / 2, e = document.createElement("i");
+        e.className = "f04-bascule-soft" + (br ? " f04-bascule-bright" : "");
+        e.style.cssText = "left:" + (x + sp) + "px;top:" + (y + sp) + "px;width:" + (w - 2 * sp) + "px;height:" + (h - 2 * sp) + "px;box-shadow:0 0 " + bl + "px " + sp + "px " + col;
+        g.appendChild(e);
+      };
+      var T = function (g, x, y, font, col, html, bl, br) {
+        var e = document.createElement("div");
+        e.className = "f04-bascule-st" + (br ? " f04-bascule-bright" : "");
+        e.style.cssText = "left:" + x + "px;top:" + y + "px;font:" + font + ";text-shadow:0 0 " + bl + "px " + col;
+        e.innerHTML = html;
+        g.appendChild(e);
+      };
+      var P = function (g, x, y, w, h, bl) { R(g, x + 24, y + 64, w - 48, h - 48, "rgba(0,0,0,0.65)", 91); R(g, x + 8, y + 16, w - 16, h - 16, "rgba(0,0,0,0.4)", 50); R(g, x, y, w, h, "#2c2728", bl); };
+      var W = "#f2efec", M = "#8c8580", g1 = grp(0.62), g2 = grp(0.7), g3 = grp(1);
+      // spend card (« budget brûle »)
+      R(g1, 310, 553, 400, 41, "rgba(255,128,48,0.15)", 90); P(g1, 200, 270, 620, 300, 46);
+      R(g1, 200, 440, 620, 66, "rgba(255,138,60,0.07)", 46); R(g1, 200, 506, 620, 64, "rgba(255,138,60,0.2)", 46); R(g1, 223, 568, 576, 3, "rgba(255,150,70,0.95)", 46, 1);
+      T(g1, 241, 307, "500 28px/1 Lufga", W, "Budget publicitaire <span style='text-shadow:0 0 46px #8c8580'>· ce mois</span>", 46, 1);
+      T(g1, 241, 396, "700 132px/1 'DM Sans'", W, "<span class='f04-bascule-cs'>2</span><span class='f04-bascule-cs'>4</span><span class='f04-bascule-cp'></span><span class='f04-bascule-cs'>9</span><span class='f04-bascule-cs'>6</span><span class='f04-bascule-cs'>0</span><span class='f04-bascule-ce' style='text-shadow:0 0 46px #8c8580'>€</span>", 46, 1);
+      // anonymous visitor card
+      P(g2, 1210, 150, 520, 476, 46); R(g2, 1247, 187, 88, 88, "#3a3435", 46); R(g2, 1275, 206, 31, 31, M, 46); R(g2, 1262, 245, 57, 28, M, 46);
+      T(g2, 1357, 197, "600 32px/1 Lufga", W, "Visiteuse anonyme", 46, 1); R(g2, 1357, 247, 176, 14, "rgba(255,255,255,0.08)", 46);
+      ["Âge", "Peau", "Besoin", "Frein"].forEach(function (l, k) {
+        T(g2, 1247, 337 + 70 * k, "500 30px/1 Lufga", W, l, 46, 1); R(g2, 1629, 330 + 70 * k, 66, 44, "rgba(255,255,255,0.07)", 46); T(g2, 1655, 339 + 70 * k, "600 26px/1 Lufga", M, "?", 46);
       });
+      // campaign settings card
+      P(g3, 700, 594, 640, 297, 44); T(g3, 742, 625, "600 30px/1 Lufga", W, "Réglages de campagne", 44, 1);
+      ["Audience", "Enchères", "Budget / jour"].forEach(function (l, k) {
+        var y = 690 + 49 * k;
+        T(g3, 741 - k, y - 9, "500 24px/1 Lufga", M, l, 44); R(g3, 928, y, 373, 6, "rgba(255,255,255,0.1)", 44);
+        R(g3, 928, y, [186, 254, 225][k], 6, "rgba(242,239,236,0.55)", 44, 1); R(g3, [1104, 1171, 1142][k], y - 8, 22, 22, W, 44, 1);
+      });
+      R(g3, 737, 835, 60, 34, "rgba(255,255,255,0.1)", 44); R(g3, 742, 839, 26, 26, W, 44, 1); T(g3, 811, 840, "500 24px/1 Lufga", M, "Ciblage auto", 44);
+      R(g3, 1031, 835, 60, 34, M, 44); R(g3, 1061, 839, 26, 26, W, 44, 1); T(g3, 1105, 840, "500 24px/1 Lufga", M, "Lookalike", 44);
       // slice bands: overflow-clipped copies of the stage that tear sideways
       var slicesWrap = $("slices");
       var slices = [];
       for (var i = 0; i < 8; i++) {
         var band = document.createElement("div"), inner = document.createElement("div");
-        band.className = "f04-bascule-band";
-        band.style.top = i * 135 + "px";
-        band.style.height = "135px";
-        inner.className = "f04-bascule-band-inner";
-        inner.style.top = -i * 135 + "px";
-        inner.appendChild(scrubSrc.cloneNode(true));
-        band.appendChild(inner);
-        slicesWrap.appendChild(band);
-        slices.push(band);
+        band.className = "f04-bascule-band"; band.style.top = i * 135 + "px"; band.style.height = "135px";
+        inner.className = "f04-bascule-band-inner"; inner.style.top = -i * 135 + "px";
+        inner.appendChild(scrubSrc.cloneNode(true)); band.appendChild(inner); slicesWrap.appendChild(band); slices.push(band);
       }
       // warm + cool chromatic ghosts of the bright content, screen-blended (RGB split)
-      var ghosts = [["f04-bascule-warm", "rgba(255,112,58,0.62)"], ["f04-bascule-cool", "rgba(96,170,255,0.58)"]].map(function (g) {
+      var ghosts = [["f04-bascule-warm", "rgba(255,112,58,0.95)"], ["f04-bascule-cool", "rgba(96,170,255,0.92)"]].map(function (g) {
         var layer = document.createElement("div"), c = scrubSrc.cloneNode(true);
         layer.className = "f04-bascule-avant-layer f04-bascule-ghost " + g[0];
-        Array.prototype.slice.call(c.children).forEach(function (sh) {
-          if (!sh.classList.contains("f04-bascule-bright")) c.removeChild(sh);
-          else sh.style.boxShadow = sh.style.boxShadow.replace(/rgba?\([^)]*\)/, g[1]);
+        Array.prototype.slice.call(c.querySelectorAll(".f04-bascule-soft, .f04-bascule-st")).forEach(function (sh) {
+          if (!sh.classList.contains("f04-bascule-bright")) sh.parentNode.removeChild(sh);
+          else if (sh.tagName === "I") sh.style.boxShadow = sh.style.boxShadow.replace(/rgba?\([^)]*\)|#[0-9a-f]{3,6}/i, g[1]);
+          else [sh].concat(Array.prototype.slice.call(sh.querySelectorAll("span"))).forEach(function (t) { t.style.textShadow = "0 0 46px " + g[1]; });
         });
-        layer.appendChild(c);
-        slicesWrap.appendChild(layer);
+        layer.appendChild(c); slicesWrap.appendChild(layer);
         return layer;
       });
-      var scrubs = $$("#" + ID + "-avant .f04-bascule-scrub");
-      var tracks = $$("#" + ID + "-avant .f04-bascule-track");
+      var scrubs = $$("#" + ID + "-avant .f04-bascule-scrub"), tracks = $$("#" + ID + "-avant .f04-bascule-track");
       // the f03 camera push (scale 1.08) rewinds while the tape scrubs
-      tl.fromTo($("avant-cam"), { scale: 1.08 }, { scale: 1, duration: 0.9, ease: "power2.inOut" }, 0.1);
+      tl.fromTo($("avant-cam"), { x: -93.1, y: -75.3, scale: 1.092 }, { x: -40, y: -32, scale: 1.04, duration: 0.9, ease: "power2.inOut" }, 0.1);
+      tl.fromTo($("avant-dim"), { opacity: 0.4 }, { opacity: 0.26, duration: 0.9, ease: "power2.inOut" }, 0.1);
+      tl.fromTo($("avant-grid"), { opacity: 0 }, { opacity: 0.5, duration: 0.9, ease: "power2.inOut" }, 0.1);
       // panel scrub: x −40 then +60, twice — stepped like a tape — then settles
       [[0.12, -40, 0.08, "steps(3)"], [0.27, 60, 0.1, "steps(4)"], [0.56, -40, 0.08, "steps(3)"], [0.71, 60, 0.1, "steps(4)"], [0.88, 0, 0.16, "power3.out"]].forEach(function (m, k) {
-        if (k === 0) tl.fromTo(scrubs, { x: 0 }, { x: m[1], duration: m[2], ease: m[3] }, m[0]);
-        else tl.to(scrubs, { x: m[1], duration: m[2], ease: m[3] }, m[0]);
+        if (k === 0) tl.fromTo(scrubs, { x: 0 }, { x: m[1], duration: m[2], ease: m[3] }, m[0]); else tl.to(scrubs, { x: m[1], duration: m[2], ease: m[3] }, m[0]);
       });
       // two bursts on a quantized clock (1/15 s): bands tear, ghosts split, tracking lines flicker
       [[0.12, 3], [0.56, 17]].forEach(function (b) {
-        tl.set(base, { autoAlpha: 0 }, b[0]);
-        tl.set(slices, { autoAlpha: 1 }, b[0]);
-        tl.set(ghosts, { autoAlpha: 0.6 }, b[0]);
-        tl.set(tracks, { autoAlpha: 1 }, b[0]);
+        tl.set(base, { autoAlpha: 0 }, b[0]); tl.set(slices, { autoAlpha: 1 }, b[0]);
+        tl.set(ghosts, { autoAlpha: 0.6 }, b[0]); tl.set(tracks, { autoAlpha: 1 }, b[0]);
         for (var k = 0; k < 6; k++) {
           var t = b[0] + k / 15, amp = Math.pow(1 - k / 6, 1.4), sd = b[1];
-          slices.forEach(function (sl, n) {
-            var h = hash(k * 13 + n * 7 + sd), dir = hash(k * 29 + n * 11 + sd) > 0.5 ? 1 : -1, still = hash(k * 5 + n * 3 + sd) < 0.22;
-            tl.set(sl, { x: still ? 0 : dir * (14 + h * 58) * amp, scaleX: 1 + (still ? 0 : h * 0.06 * amp) }, t);
-          });
-          ghosts.forEach(function (g, n) {
-            tl.set(g, { x: (n ? 1 : -1) * (12 + hash(k * 19 + n * 13 + sd) * 22) * amp, y: (hash(k * 37 + n * 3 + sd) * 2 - 1) * 5 * amp, opacity: 0.35 + 0.35 * amp }, t);
-          });
-          tracks.forEach(function (tr, n) {
-            var y = 60 + hash(k * 17 + n * 31 + sd) * 960;
-            tl.set(tr, { y: y - parseFloat(tr.style.top), opacity: (0.08 + hash(k * 23 + n * 5 + sd) * 0.22) * (0.4 + amp * 0.6) }, t);
-          });
+          slices.forEach(function (sl, n) { var h = hash(k * 13 + n * 7 + sd), dir = hash(k * 29 + n * 11 + sd) > 0.5 ? 1 : -1, still = hash(k * 5 + n * 3 + sd) < 0.22; tl.set(sl, { x: still ? 0 : dir * (14 + h * 58) * amp, scaleX: 1 + (still ? 0 : h * 0.06 * amp) }, t); });
+          ghosts.forEach(function (g, n) { tl.set(g, { x: (n ? 1 : -1) * (12 + hash(k * 19 + n * 13 + sd) * 22) * amp, y: (hash(k * 37 + n * 3 + sd) * 2 - 1) * 5 * amp, opacity: 0.5 + 0.45 * amp }, t); });
+          tracks.forEach(function (tr, n) { tl.set(tr, { y: 60 + hash(k * 17 + n * 31 + sd) * 960 - parseFloat(tr.style.top), opacity: (0.08 + hash(k * 23 + n * 5 + sd) * 0.22) * (0.4 + amp * 0.6) }, t); });
         }
         var end = b[0] + 0.4;
-        tl.set(slices, { x: 0, scaleX: 1, autoAlpha: 0 }, end);
-        tl.set(ghosts, { x: 0, y: 0, autoAlpha: 0 }, end);
-        tl.set(tracks, { autoAlpha: 0 }, end);
-        tl.set(base, { autoAlpha: 1 }, end);
+        tl.set(slices, { x: 0, scaleX: 1, autoAlpha: 0 }, end); tl.set(ghosts, { x: 0, y: 0, autoAlpha: 0 }, end);
+        tl.set(tracks, { autoAlpha: 0 }, end); tl.set(base, { autoAlpha: 1 }, end);
       });
 
       /* ═══ Scene 2 · 1.1–2.3 s · « avant » — circular colour flood ═══ */
@@ -713,24 +752,20 @@
       // glowing rim locked to the flood radius (same ease + duration); the old world falls away
       tl.fromTo($("ring"), { scale: 0, opacity: 1 }, { scale: 1, duration: 0.7, ease: "power3.inOut" }, 1.1);
       tl.to($("ring"), { opacity: 0, duration: 0.3, ease: "power1.in" }, 1.52);
-      tl.to($("avant-cam"), { scale: 0.9, duration: 0.7, ease: "power2.in" }, 1.1);
-      tl.fromTo($("avant-dim"), { opacity: 0 }, { opacity: 0.45, duration: 0.7, ease: "power2.in" }, 1.1);
+      tl.to($("avant-cam"), { x: 40, y: 13.8, scale: 0.9568, duration: 0.7, ease: "power2.in" }, 1.1);
+      tl.to($("avant-dim"), { opacity: 0.6, duration: 0.7, ease: "power2.in" }, 1.1);
       // grid lines draw outward from the centre axes, nearest lines first…
       var gl = $("gridlines");
       for (var gx = 0; gx < 1920; gx += 44) addLine("f04-bascule-vl", "left", gx, "scaleY", Math.abs(gx - 960));
       for (var gy = 0; gy < 1080; gy += 44) addLine("f04-bascule-hl", "top", gy, "scaleX", Math.abs(gy - 540));
       function addLine(cls, side, pos, prop, dist) {
         var el = document.createElement("div"), from = {}, to = { duration: 0.8, ease: "power3.out" };
-        el.className = cls;
-        el.style[side] = pos + "px";
-        gl.appendChild(el);
-        from[prop] = 0;
-        to[prop] = 1;
+        el.className = cls; el.style[side] = pos + "px"; gl.appendChild(el);
+        from[prop] = 0; to[prop] = 1;
         tl.fromTo(el, from, to, 1.12 + (dist / 960) * 0.34);
       }
       // …then hand over to the canonical background grid (pixel-identical)
-      tl.set($("grid"), { autoAlpha: 1 }, 2.3);
-      tl.set(gl, { autoAlpha: 0 }, 2.3);
+      tl.set($("grid"), { autoAlpha: 1 }, 2.3); tl.set(gl, { autoAlpha: 0 }, 2.3);
       // colour arrives with the flood: mesh blooms, drifts, and lands canonical at 7.63
       tl.fromTo($("mesh"), { opacity: 0, scale: 0.82, x: 0, y: 0 }, { opacity: 1, scale: 1, duration: 1, ease: "power2.out" }, 1.08);
       tl.to($("mesh"), { scale: 1.035, x: -26, y: 12, duration: 2.9, ease: "sine.inOut" }, 2.08);
@@ -805,7 +840,7 @@
       // hold with a slow drift that lands exactly on the canonical layout at 7.63 (f05 continues it)
       tl.fromTo($("pills-drift"), { scale: 0.98 }, { scale: 1, duration: 1.77, ease: "none" }, 5.86);
 
-      window.__timelines[ID] = tl;
+      window.__timelines["f04-bascule"] = tl;
     })();
   </script>
 </template>

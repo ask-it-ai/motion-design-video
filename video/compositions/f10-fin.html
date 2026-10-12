@@ -87,16 +87,16 @@
     #f10-fin-cursor svg { display: block; }
   </style>
 
-  <div id="root" data-composition-id="f10-fin" data-start="0" data-duration="10.66" data-width="1920" data-height="1080">
+  <div id="root" data-composition-id="f10-fin" data-start="0" data-fit-start="0" data-duration="11.06" data-fit-duration="10.66" data-width="1920" data-height="1080">
 
     <!-- Track 0: Ask-it grid-bg with brand-mesh glow -->
-    <div id="f10-fin-bg" class="clip" data-start="0" data-duration="10.66" data-track-index="0">
+    <div id="f10-fin-bg" class="clip" data-start="0" data-fit-start="0" data-duration="11.06" data-fit-duration="10.66" data-track-index="0">
       <div id="f10-fin-mesh"></div>
       <div id="f10-fin-grid"></div>
     </div>
 
     <!-- Track 1: GRID_100 callback + « 70 % » + Claire -->
-    <div id="f10-fin-world" class="clip" data-start="0" data-duration="10.66" data-track-index="1">
+    <div id="f10-fin-world" class="clip" data-start="0" data-fit-start="0" data-duration="11.06" data-fit-duration="10.66" data-track-index="1">
       <div id="f10-fin-wfade">
         <div id="f10-fin-wdrift">
           <div id="f10-fin-cam" data-layout-allow-overflow>
@@ -122,7 +122,7 @@
     </div>
 
     <!-- Track 2: end card — ask-it.ai lockup + « Réserver une démo → » -->
-    <div id="f10-fin-end" class="clip" data-start="0" data-duration="10.66" data-track-index="2">
+    <div id="f10-fin-end" class="clip" data-start="0" data-fit-start="0" data-duration="11.06" data-fit-duration="10.66" data-track-index="2">
       <div id="f10-fin-enddrift">
         <div id="f10-fin-endglow"></div>
         <div id="f10-fin-ctabloom"></div>
@@ -285,7 +285,10 @@
       tl.to(q("cursor"), { x: CX + 92, y: CY + 44, duration: 1.1, ease: "sine.inOut" }, 8.9);
       tl.fromTo(q("endglow"), { opacity: 0.25 }, { opacity: 0.24, duration: 0.55, ease: "sine.out", immediateRender: false }, 10.05);
 
-      window.__timelines[ID] = tl;
+      /* fit_slot lead-in */
+      var __lead = gsap.timeline({ paused: true });
+      __lead.add(tl.paused(false), 0.4);
+      window.__timelines[ID] = __lead;
     })();
   </script>
 </template>

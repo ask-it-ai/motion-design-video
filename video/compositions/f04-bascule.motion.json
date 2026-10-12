@@ -1,13 +1,18 @@
 {
   "scene": "f04-bascule",
   "duration_s": 7.63,
-  "rules": ["chromatic-glitch", "ambient-glow-bloom", "spring-pop-entrance", "card-morph-anchor"],
+  "rules": [
+    "chromatic-glitch",
+    "ambient-glow-bloom",
+    "spring-pop-entrance",
+    "card-morph-anchor"
+  ],
   "exit": {
     "vector": "radial scale-out from (960,540), linear +1.13 %/s on the PILLS_ROW wrapper (≈5 px/s outward at pill centres x=520/1400, 0 px/s at pill 02); brand mesh at rest; lands exactly on canonical PILLS_ROW (scale 1) at 7.63",
     "still_moving": true
   },
   "entry": {
-    "vector": "static (0 px/s): dark blurred AVANT stage (avant-bg, soft grey panels ≈ blur 22 px / brightness 0.6, panels at scale 1.08) holds until the rewind starts at 0.10 s",
+    "vector": "static (0 px/s): f03-budget's final frame rebuilt filter-free (world translate(-93.1,-75.3) scale(1.092), blur ≈22 px, black dim 0.4) holds until the rewind starts at 0.10 s",
     "from_rest": true
   }
 }

@@ -182,13 +182,13 @@
       tl.fromTo(
         ["#f06-recommandation", "#f07-dashboard"],
         { filter: "blur(0px)" },
-        { filter: "blur(6px)", duration: 0.2, ease: "power2.in", yoyo: true, repeat: 1 },
+        { filter: "blur(6px)", duration: 0.2, ease: "power2.in", yoyo: true, repeat: 1, immediateRender: false },
         T7 + 0.025,
       );
 
       // f07 → f08 · blur crossfade: the dashboard dissolves out of focus while the form comes into focus on top
       const T8 = 75.52;
-      tl.fromTo("#f07-dashboard", { filter: "blur(0px)" }, { filter: "blur(16px)", duration: 0.4, ease: "power2.in" }, T8);
+      tl.fromTo("#f07-dashboard", { filter: "blur(0px)" }, { filter: "blur(16px)", duration: 0.4, ease: "power2.in", immediateRender: false }, T8);
       tl.fromTo(
         "#f08-zero-effort",
         { opacity: 0, filter: "blur(16px)" },
@@ -198,18 +198,18 @@
 
       // f08 → f09 · push left (same grammar as f06 → f07)
       const T9 = 82.83;
-      tl.fromTo("#f08-zero-effort", { x: 0 }, { x: -W, duration: 0.45, ease: "power3.inOut" }, T9);
+      tl.fromTo("#f08-zero-effort", { x: 0 }, { x: -W, duration: 0.45, ease: "power3.inOut", immediateRender: false }, T9);
       tl.fromTo("#f09-elle-revient", { x: W }, { x: 0, duration: 0.45, ease: "power3.inOut" }, T9);
       tl.fromTo(
         ["#f08-zero-effort", "#f09-elle-revient"],
         { filter: "blur(0px)" },
-        { filter: "blur(6px)", duration: 0.2, ease: "power2.in", yoyo: true, repeat: 1 },
+        { filter: "blur(6px)", duration: 0.2, ease: "power2.in", yoyo: true, repeat: 1, immediateRender: false },
         T9 + 0.025,
       );
 
       // f09 → f10 · slower blur crossfade into the ending (wind-down)
       const T10 = 94.44;
-      tl.fromTo("#f09-elle-revient", { filter: "blur(0px)" }, { filter: "blur(20px)", duration: 0.5, ease: "sine.in" }, T10);
+      tl.fromTo("#f09-elle-revient", { filter: "blur(0px)" }, { filter: "blur(20px)", duration: 0.5, ease: "sine.in", immediateRender: false }, T10);
       tl.fromTo(
         "#f10-fin",
         { opacity: 0, filter: "blur(20px)" },

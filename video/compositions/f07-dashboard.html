@@ -174,11 +174,11 @@
     #f07-dashboard-crease path.f07-dashboard-hi { stroke: rgba(255,255,255,0.9); stroke-width: 1.5; }
   </style>
   <div id="root" data-composition-id="f07-dashboard" data-width="1920" data-height="1080" data-duration="11.23">
-    <div id="f07-dashboard-bg" class="clip" data-start="0" data-duration="11.23" data-track-index="0" data-layout-allow-overflow>
+    <div id="f07-dashboard-bg" class="clip" data-start="0" data-fit-start="0" data-duration="11.78" data-fit-duration="11.23" data-track-index="0" data-layout-allow-overflow>
       <div id="f07-dashboard-mesh"></div>
       <div id="f07-dashboard-grid"></div>
     </div>
-    <div id="f07-dashboard-stage" class="clip" data-start="0" data-duration="11.23" data-track-index="1" data-layout-allow-overflow data-layout-allow-overlap data-layout-allow-occlusion>
+    <div id="f07-dashboard-stage" class="clip" data-start="0" data-fit-start="0" data-duration="11.78" data-fit-duration="11.23" data-track-index="1" data-layout-allow-overflow data-layout-allow-overlap data-layout-allow-occlusion>
       <!-- the one camera: every leg is a tween on a single cam state written by applyCamera() -->
       <div id="f07-dashboard-world" data-layout-allow-overflow>
         <div id="f07-dashboard-pill"><div id="f07-dashboard-pillnum">03</div><div id="f07-dashboard-pilltxt">Dashboard</div></div>
@@ -441,7 +441,10 @@
       tl.to($('cursor'), { x: 1652, y: 840, duration: 0.6, ease: 'power2.out' }, 10.4);
       camLeg({ fx: 1474, fy: 764, s: 1.7 }, { fx: 1484, fy: 772, s: 1.82 }, 9.4, 1.83, 'power1.in');
       window.__timelines = window.__timelines || {};
-      window.__timelines['f07-dashboard'] = tl;
+      /* fit_slot lead-in */
+      var __lead = gsap.timeline({ paused: true });
+      __lead.add(tl.paused(false), 0.35);
+      window.__timelines['f07-dashboard'] = __lead;
     })();
   </script>
 </template>

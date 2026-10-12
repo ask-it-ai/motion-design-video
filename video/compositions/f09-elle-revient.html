@@ -133,16 +133,16 @@
     .f09-elle-revient-spk svg { position: absolute; display: block; overflow: visible; opacity: 0; }
   </style>
 
-  <div id="root" data-composition-id="f09-elle-revient" data-start="0" data-duration="11.61" data-width="1920" data-height="1080">
+  <div id="root" data-composition-id="f09-elle-revient" data-start="0" data-fit-start="0" data-duration="12.21" data-fit-duration="11.61" data-width="1920" data-height="1080">
 
     <!-- Track 0: Ask-it grid-bg -->
-    <div id="f09-elle-revient-bg" class="clip" data-start="0" data-duration="11.61" data-track-index="0">
+    <div id="f09-elle-revient-bg" class="clip" data-start="0" data-fit-start="0" data-duration="12.21" data-fit-duration="11.61" data-track-index="0">
       <div id="f09-elle-revient-mesh"></div>
       <div id="f09-elle-revient-grid"></div>
     </div>
 
     <!-- Track 1: the world — PHONE_HERO + answer chips + sparkles -->
-    <div id="f09-elle-revient-world" class="clip" data-start="0" data-duration="11.61" data-track-index="1">
+    <div id="f09-elle-revient-world" class="clip" data-start="0" data-fit-start="0" data-duration="12.21" data-fit-duration="11.61" data-track-index="1">
       <div id="f09-elle-revient-cam">
         <div id="f09-elle-revient-push">
 
@@ -164,7 +164,7 @@
                 <img class="f09-elle-revient-shot" src="assets/screens/endro-diag/00-intro.png" alt="" />
                 <div id="f09-elle-revient-focus"></div>
                 <div id="f09-elle-revient-namepatch"></div>
-                <div class="f09-elle-revient-namerow"><span id="f09-elle-revient-name"></span><span id="f09-elle-revient-ncaret"></span></div>
+                <div class="f09-elle-revient-namerow"><span id="f09-elle-revient-name" data-layout-allow-overlap></span><span id="f09-elle-revient-ncaret"></span></div>
                 <div class="f09-elle-revient-shade" id="f09-elle-revient-sh-intro"></div>
               </div>
 
@@ -203,7 +203,7 @@
                 <div id="f09-elle-revient-page" data-layout-allow-overflow>
                   <img src="assets/screens/endro-diag/17-resultat-full.png" alt="" />
                   <div id="f09-elle-revient-btn">
-                    <div class="f09-elle-revient-bface" id="f09-elle-revient-bdef">Ajouter au panier</div>
+                    <div class="f09-elle-revient-bface" id="f09-elle-revient-bdef" data-layout-allow-overlap>Ajouter au panier</div>
                     <div class="f09-elle-revient-bface" id="f09-elle-revient-bok">Ajoutée<svg viewBox="0 0 15 15"><path id="f09-elle-revient-bcheck" d="M2.6 7.8 L6 11 L12.4 4.2" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"/></svg></div>
                     <div id="f09-elle-revient-bglow"></div>
                   </div>
@@ -451,7 +451,10 @@
         flash(svg, s[4], 1, 0.08, 0.76, "power2.in");
       });
 
-      window.__timelines[ID] = tl;
+      /* fit_slot lead-in */
+      var __lead = gsap.timeline({ paused: true });
+      __lead.add(tl.paused(false), 0.4);
+      window.__timelines[ID] = __lead;
     })();
   </script>
 </template>
