@@ -1,0 +1,20 @@
+# Secrets — never commit (public repo)
+.env
+.env.*
+*.key
+secrets/
+
+# Dependencies & build output
+node_modules/
+renders/
+out/
+.cache/
+*.log
+
+# Heavy media (deliver via Frame.io, not git)
+*.mp4
+*.mov
+*.wav
+*.mp3
+
+.DS_Store
