@@ -123,3 +123,30 @@ Rapport détaillé avec visuels : artefact privé « Revue vidéo Ask-it » (lie
 2. Pierre commente la vidéo sur Frame.io. Je lis les commentaires depuis le lien de partage.
 3. Production : reconstruction en code, voix calée au mot près, bruitages et musique ElevenLabs, mixage.
 4. Rendu MP4, nouvelle version sur Frame.io, puis itérations jusqu'à la version finale.
+
+## v3 livrée le 12/10 (sans commentaires Frame, sans musique)
+
+- **Demande** : Pierre a ajouté les 6 références en MP4 sur Frame. Il garde Martin Dupont. Il demande une v3 sans attendre ses commentaires Frame (il les ajoutera ensuite), avec la voix et les bruitages ; la musique viendra après.
+- **Analyse des 6 références** (Trellis, Slack, Taapit, Notion, Gojiberry, lemlist) :
+  - pas de coupe sèche ; transitions dans les pauses de la voix ;
+  - impacts réservés aux chiffres ;
+  - un son par geste, calé sur le pic du mouvement ;
+  - court silence avant les bascules ;
+  - interface en très grand, caméra toujours en mouvement.
+- **Projet** :
+  - `video/` (HyperFrames) : 10 scènes `compositions/f01…f10`, assemblage dans `index.html`, piste son unique `assets/audio/mix.wav` (hors git).
+  - Transitions : f02→f03 fondu, f06→f07 et f08→f09 poussée, f07→f08 et f09→f10 flou. Les autres raccords sont des raccords d'image.
+  - `fit_slot.py` ajuste les scènes à ces transitions sans décaler les repères voix.
+- **Son** :
+  - 176 repères (`video/scripts/cues_gen.py`) mesurés sur les timelines GSAP réelles ;
+  - bruitages 14 LU sous la voix et atténués de 4 dB quand elle parle ;
+  - master −14 LUFS / −1 dBTP.
+- **Rendu** : 105,5 s, 1080p30.
+  - Master de 57,7 Mo (trop lourd pour l'envoi direct).
+  - Copie de 27,2 Mo envoyée à Pierre (SSIM 0,997 par rapport au master).
+- **Écarts assumés** :
+  - chiffres du script (×4, +36 %) ;
+  - total de la routine 72,50 € pour 5 produits (4 cartes affichées) ;
+  - « Peau sensible 3/10 » d'après la capture réelle ;
+  - chiffres du dashboard repris de la maquette.
+- **Suite** : commentaires Frame de Pierre, puis musique Eleven Music (deux sections avant/après), puis déclinaison 30 s.
