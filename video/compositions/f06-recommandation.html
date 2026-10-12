@@ -232,7 +232,7 @@
         </div>
         <div id="f06-recommandation-sb" class="f06-recommandation-stat">
           <svg id="f06-recommandation-sb-lines" class="f06-recommandation-lines" viewBox="0 0 1000 560"></svg>
-          <div id="f06-recommandation-sb-num" class="f06-recommandation-statnum"><span class="f06-recommandation-sign">+</span><span id="f06-recommandation-sb-d1" class="f06-recommandation-dig"></span><span id="f06-recommandation-sb-d2" class="f06-recommandation-dig">0</span><span id="f06-recommandation-pct" class="f06-recommandation-sign">%</span></div>
+          <div id="f06-recommandation-sb-num" class="f06-recommandation-statnum"><span class="f06-recommandation-sign">+</span><span id="f06-recommandation-sb-d1" class="f06-recommandation-dig">0</span><span id="f06-recommandation-sb-d2" class="f06-recommandation-dig"></span><span id="f06-recommandation-pct" class="f06-recommandation-sign">%</span></div>
           <div id="f06-recommandation-sb-label" class="f06-recommandation-statlabel">de panier moyen</div>
         </div>
       </div>
@@ -291,8 +291,8 @@
       const renderA = () => { digA.textContent = String(Math.round(stA.v)); };
       const renderB = () => {
         const n = Math.round(stB.v);
-        digB1.textContent = n >= 10 ? String(Math.floor(n / 10)) : '';
-        digB2.textContent = String(n % 10);
+        digB1.textContent = n >= 10 ? String(Math.floor(n / 10)) : String(n);
+        digB2.textContent = n >= 10 ? String(n % 10) : '';
       };
 
       gsap.set([$('phone1'), $('phone2')], { scale: 0.9 });
@@ -354,7 +354,7 @@
       tl.to(stA, { v: 4, duration: 0.46, ease: 'power2.out', onUpdate: renderA }, 7.49);
       tl.fromTo(digA, { scale: 0.62 }, { scale: 1, duration: 0.46, ease: 'power2.out' }, 7.49);
       tl.fromTo($('sa-label'), { y: 24, opacity: 0, filter: 'blur(8px)' }, { y: 0, opacity: 1, filter: 'blur(0px)', duration: 0.5, ease: 'expo.out' }, 8.3);
-      tl.to($('sa'), { x: -400, duration: 0.6, ease: 'expo.inOut' }, 9.62);
+      tl.to($('sa'), { x: -400, duration: 0.5, ease: 'power3.inOut' }, 9.45);
 
       // +36 % — number slam, impact lines, count 0 → 36, % lands after the count
       tl.fromTo($('sb'), { yPercent: -120, opacity: 0, filter: 'blur(12px)' }, { yPercent: 0, opacity: 1, filter: 'blur(0px)', duration: 0.08, ease: 'power4.in' }, 9.82);
