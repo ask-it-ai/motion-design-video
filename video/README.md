@@ -29,18 +29,21 @@ Scripts are in `scripts/` and their inputs in `audio-src/`. The ElevenLabs key i
    - Master: −14 LUFS integrated, −1 dBTP.
    - QC measures how far the effects sit under the voice.
 
-## Transitions with a lead-in
+## Fitting scenes to their slots
 
-`scripts/lead_pad.py compositions/<scene>.html <seconds>` delays a scene's own timeline inside a wrapper. A root push or blur can then show the scene during the pause before its first cue, without moving any cue against the voice.
+`scripts/fit_slot.py compositions/<scene>.html --pad P --tail T` adjusts a scene so the transitions in `index.html` work:
 
-Current pads:
+- **Pad**: delays the scene's own timeline inside a wrapper. A root push or blur can then show the scene during the voice pause before its first cue, and no cue moves against the voice.
+- **Tail**: keeps the scene's clips on screen while the next scene comes in.
 
-| Scene | Pad |
-| --- | --- |
-| f07 | 0.35 s |
-| f08 | 0.30 s |
-| f09 | 0.40 s |
-| f10 | 0.40 s |
+| Scene | Pad | Tail |
+| --- | --- | --- |
+| f02 | — | 0.40 s |
+| f06 | — | 0.10 s |
+| f07 | 0.35 s | 0.20 s |
+| f08 | 0.30 s | 0.05 s |
+| f09 | 0.40 s | 0.20 s |
+| f10 | 0.40 s | — |
 
 ## Render
 

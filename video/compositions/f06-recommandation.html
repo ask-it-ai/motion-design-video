@@ -1,0 +1,372 @@
+<template>
+  <style>
+    @font-face { font-family: 'Lufga'; src: url('assets/fonts/Lufga-Regular.woff2') format('woff2'); font-weight: 400; font-style: normal; }
+    @font-face { font-family: 'Lufga'; src: url('assets/fonts/Lufga-Medium.woff2') format('woff2'); font-weight: 500; font-style: normal; }
+    @font-face { font-family: 'Lufga'; src: url('assets/fonts/Lufga-SemiBold.woff2') format('woff2'); font-weight: 600; font-style: normal; }
+    @font-face { font-family: 'Lufga'; src: url('assets/fonts/Lufga-Bold.woff2') format('woff2'); font-weight: 700; font-style: normal; }
+    @font-face { font-family: 'DM Sans'; src: url('assets/fonts/DMSans-normal-latin.woff2') format('woff2'); font-weight: 300 800; font-style: normal; }
+    @font-face { font-family: 'Archivo'; src: url('assets/fonts/Archivo-normal-latin.woff2') format('woff2'); font-weight: 400 900; font-style: normal; }
+    @font-face { font-family: 'Mulish'; src: url('assets/fonts/Mulish-normal-latin.woff2') format('woff2'); font-weight: 300 800; font-style: normal; }
+
+    #root { position: absolute; inset: 0; width: 1920px; height: 1080px; overflow: hidden; font-family: 'Lufga', sans-serif; color: #241F20; }
+
+    /* ---------- ground: grid-bg ---------- */
+    #f06-recommandation-bg { position: absolute; inset: 0; overflow: hidden; background: #FDFCFC; }
+    #f06-recommandation-mesh { position: absolute; left: -8%; top: -8%; width: 116%; height: 116%;
+      background: radial-gradient(60% 60% at 27% 23%, rgba(248,87,31,0.22) 0%, transparent 60%), radial-gradient(55% 55% at 78% 30%, rgba(172,204,233,0.55) 0%, transparent 62%), radial-gradient(60% 60% at 55% 85%, rgba(167,171,221,0.45) 0%, transparent 65%); }
+    #f06-recommandation-grid { position: absolute; inset: 0;
+      background-image: linear-gradient(rgba(36,31,32,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(36,31,32,0.05) 1px, transparent 1px);
+      background-size: 44px 44px; }
+
+    /* ---------- stage / camera ---------- */
+    #f06-recommandation-stage { position: absolute; inset: 0; overflow: hidden; }
+    #f06-recommandation-cam, #f06-recommandation-group { position: absolute; inset: 0; transform-origin: 960px 540px; }
+    #f06-recommandation-persp { position: absolute; inset: 0; perspective: 1800px; perspective-origin: 960px 520px; }
+
+    /* ---------- phone component ---------- */
+    .f06-recommandation-phone { position: absolute; top: 20px; width: 470px; height: 1000px; transform-origin: 50% 50%; }
+    #f06-recommandation-phone1 { left: 465px; }
+    #f06-recommandation-phone2 { left: 1035px; }
+    .f06-recommandation-body { position: absolute; inset: 0; border-radius: 68px; background: #111;
+      box-shadow: inset 0 0 0 2px rgba(255,255,255,0.12), 0 60px 120px -30px rgba(36,31,32,0.35), 0 20px 40px -20px rgba(36,31,32,0.25); }
+    .f06-recommandation-screen { position: absolute; left: 14px; top: 14px; width: 442px; height: 972px; border-radius: 56px; overflow: hidden; background: #fff; }
+    .f06-recommandation-status { position: absolute; left: 0; top: 0; width: 442px; height: 44px; background: #fff; z-index: 3; }
+    .f06-recommandation-time { position: absolute; left: 44px; top: 0; line-height: 46px; font: 600 21px 'Lufga', sans-serif; color: #241F20; letter-spacing: -0.01em; }
+    .f06-recommandation-glyphs { position: absolute; right: 34px; top: 16px; width: 76px; height: 14px; }
+    .f06-recommandation-island { position: absolute; left: 161px; top: 9px; width: 120px; height: 34px; border-radius: 17px; background: #000; z-index: 4; }
+    .f06-recommandation-page { position: absolute; left: 0; top: 44px; width: 442px; height: 928px; overflow: hidden; }
+    #f06-recommandation-pagecontent { position: absolute; left: 0; top: 0; width: 442px; }
+    #f06-recommandation-pageimg { display: block; width: 442px; height: auto; }
+    .f06-recommandation-ring { position: absolute; left: 130px; top: 198px; width: 182px; height: 182px; border-radius: 50%; border: 3px solid rgba(255,255,255,0.95); box-sizing: border-box; }
+
+    /* phone 2 — rebuilt Endro result header (OCÉAN01) */
+    #f06-recommandation-s2head { position: absolute; left: 0; top: 44px; width: 442px; height: 108px; overflow: hidden; }
+    #f06-recommandation-s2head img { display: block; width: 442px; height: auto; }
+    #f06-recommandation-s2hero { position: absolute; left: 0; top: 152px; width: 442px; height: 540px; overflow: hidden; background: #2C4A6E; }
+    #f06-recommandation-s2hero img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+    #f06-recommandation-s2shade { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(8,20,36,0.05) 0%, rgba(8,20,36,0.18) 55%, rgba(8,20,36,0.5) 100%); }
+    #f06-recommandation-s2circle { position: absolute; left: 130px; top: 90px; width: 182px; height: 182px; border-radius: 50%; background: #2C4A6E;
+      box-shadow: 0 14px 34px rgba(0,0,0,0.35); display: flex; align-items: center; justify-content: center;
+      font: 800 25px 'Archivo', sans-serif; color: #fff; letter-spacing: 0.01em; }
+    #f06-recommandation-s2title { position: absolute; left: 0; top: 314px; width: 442px; text-align: center; font: 800 25px 'Archivo', sans-serif; color: #fff; text-transform: uppercase; letter-spacing: -0.01em; }
+    #f06-recommandation-s2chips { position: absolute; left: 0; top: 370px; width: 442px; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+    .f06-recommandation-echip { height: 38px; padding: 0 16px; border: 1px solid rgba(255,255,255,0.65); border-radius: 6px; background: rgba(6,18,34,0.32);
+      display: flex; align-items: center; gap: 6px; font: 400 15px 'Mulish', sans-serif; color: #fff; white-space: nowrap; }
+    .f06-recommandation-echip b { font-weight: 800; }
+    #f06-recommandation-s2routine { position: absolute; left: 0; top: 692px; width: 442px; height: 280px; background: #fff; padding: 20px 24px 0; box-sizing: border-box; }
+    #f06-recommandation-s2rt { font: 800 15px 'Archivo', sans-serif; color: #1A1A1A; letter-spacing: 0.04em; text-transform: uppercase; }
+    #f06-recommandation-s2thumbs { display: flex; gap: 14px; margin-top: 14px; }
+    .f06-recommandation-thumb { width: 122px; }
+    .f06-recommandation-thumb img { display: block; width: 122px; height: 122px; border-radius: 8px; object-fit: cover; }
+    .f06-recommandation-thumb span { display: block; margin-top: 8px; font: 700 12.5px 'Mulish', sans-serif; color: #1A1A1A; }
+
+    /* ---------- ≠ badge ---------- */
+    #f06-recommandation-neq { position: absolute; left: 902px; top: 462px; width: 116px; height: 116px; border-radius: 50%; background: #fff;
+      border: 1.5px solid rgba(36,31,32,0.10); box-shadow: 0 18px 40px -18px rgba(36,31,32,0.28), 0 2px 6px rgba(36,31,32,0.06); }
+    #f06-recommandation-neq svg { position: absolute; left: 22px; top: 22px; width: 72px; height: 72px; }
+
+    /* ---------- profile card (handoff from frame 5) ---------- */
+    #f06-recommandation-profile { position: absolute; left: 1020px; top: 236px; width: 520px; padding: 30px; box-sizing: border-box; border-radius: 22px; background: #fff;
+      border: 1.5px solid rgba(36,31,32,0.10); box-shadow: 0 18px 40px -18px rgba(36,31,32,0.18), 0 2px 6px rgba(36,31,32,0.05); transform-origin: 0% 50%; }
+    .f06-recommandation-phead { display: flex; align-items: center; gap: 22px; }
+    .f06-recommandation-avatar { width: 88px; height: 88px; border-radius: 50%; overflow: hidden; background: #DDD7CD; box-shadow: 0 0 0 4px #fff, 0 6px 16px rgba(36,31,32,0.18); flex: none; }
+    .f06-recommandation-avatar img { display: block; width: 100%; height: 100%; object-fit: cover; }
+    .f06-recommandation-pname { font: 600 40px 'Lufga', sans-serif; letter-spacing: -0.02em; line-height: 1.05; }
+    .f06-recommandation-psub { font: 500 22px 'Lufga', sans-serif; color: #F8571F; margin-top: 4px; }
+    .f06-recommandation-pchips { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
+    .f06-recommandation-achip { height: 46px; padding: 0 18px 0 16px; border: 1.5px solid rgba(36,31,32,0.10); border-radius: 999px; background: #fff; box-sizing: border-box;
+      display: flex; align-items: center; gap: 10px; font: 500 21px 'Lufga', sans-serif; white-space: nowrap; }
+    .f06-recommandation-achip i { width: 10px; height: 10px; border-radius: 50%; background: #F8571F; flex: none; }
+    .f06-recommandation-achip.f06-recommandation-tint { background: #FDEEE7; border-color: rgba(248,87,31,0.35); }
+    .f06-recommandation-achip i.f06-recommandation-amber { background: #F2A33A; }
+    .f06-recommandation-pbar { margin-top: 22px; font: 500 18px 'Lufga', sans-serif; color: #6C6560; }
+    .f06-recommandation-ptrack { margin-top: 8px; height: 8px; border-radius: 4px; background: #F5F5F7; overflow: hidden; }
+    .f06-recommandation-ptrack div { width: 100%; height: 100%; background: #F8571F; }
+
+    /* ---------- step pill (HUD) ---------- */
+    #f06-recommandation-pill { position: absolute; left: 120px; top: 90px; height: 60px; padding: 0 24px 0 10px; box-sizing: border-box; border-radius: 999px;
+      background: #FDEEE7; border: 1.5px solid #F8571F; display: flex; align-items: center; gap: 12px;
+      box-shadow: 0 18px 40px -18px rgba(36,31,32,0.18), 0 2px 6px rgba(36,31,32,0.05); }
+    #f06-recommandation-pillnum { width: 40px; height: 40px; border-radius: 50%; background: #F8571F; color: #fff; display: flex; align-items: center; justify-content: center;
+      font: 600 19px 'DM Sans', sans-serif; letter-spacing: -0.01em; }
+    #f06-recommandation-pilltxt { font: 500 28px 'Lufga', sans-serif; color: #241F20; letter-spacing: -0.01em; }
+
+    /* ---------- routine step cards ---------- */
+    .f06-recommandation-card { position: absolute; width: 260px; height: 330px; border-radius: 22px; background: #fff; box-sizing: border-box;
+      border: 1.5px solid rgba(36,31,32,0.10); box-shadow: 0 30px 60px -24px rgba(36,31,32,0.30), 0 2px 6px rgba(36,31,32,0.06); transform-origin: 50% 50%; }
+    .f06-recommandation-pack { margin: 10px 10px 0; height: 140px; border-radius: 14px; overflow: hidden; }
+    .f06-recommandation-pack img { display: block; width: 100%; height: 100%; object-fit: cover; }
+    .f06-recommandation-cbody { padding: 14px 20px 0; }
+    .f06-recommandation-step { font: 600 16px 'Lufga', sans-serif; color: #F8571F; letter-spacing: 0.12em; text-transform: uppercase; }
+    .f06-recommandation-step b { font: 700 16px 'DM Sans', sans-serif; letter-spacing: 0.04em; }
+    .f06-recommandation-verb { font: 600 30px 'Lufga', sans-serif; letter-spacing: -0.02em; line-height: 1.1; margin-top: 3px; }
+    .f06-recommandation-name { font: 500 19px 'Lufga', sans-serif; color: #6C6560; line-height: 1.2; margin-top: 4px; }
+    .f06-recommandation-price { position: absolute; left: 20px; bottom: 15px; font: 700 28px 'DM Sans', sans-serif; letter-spacing: -0.02em; }
+
+    /* ---------- total pill + reassurance badges ---------- */
+    .f06-recommandation-center { position: absolute; display: flex; justify-content: center; }
+    #f06-recommandation-total { height: 66px; padding: 0 30px; border-radius: 999px; background: #241F20; color: #fff; display: flex; align-items: center; gap: 16px;
+      box-shadow: 0 40px 80px -24px rgba(36,31,32,0.30), 0 8px 24px -8px rgba(36,31,32,0.14); }
+    #f06-recommandation-totlab { font: 500 25px 'Lufga', sans-serif; color: rgba(255,255,255,0.72); }
+    #f06-recommandation-totnum { display: flex; align-items: baseline; font: 700 34px 'DM Sans', sans-serif; letter-spacing: -0.01em; transform-origin: 0% 60%; }
+    .f06-recommandation-sd { display: inline-block; width: 0.6em; text-align: center; }
+    .f06-recommandation-ss { display: inline-block; width: 0.22em; text-align: center; }
+    .f06-recommandation-badge { height: 58px; padding: 0 24px 0 16px; border-radius: 999px; background: #fff; box-sizing: border-box; border: 1.5px solid rgba(36,31,32,0.10);
+      box-shadow: 0 18px 40px -18px rgba(36,31,32,0.22), 0 2px 6px rgba(36,31,32,0.05); display: flex; align-items: center; gap: 11px;
+      font: 500 25px 'Lufga', sans-serif; color: #241F20; white-space: nowrap; }
+    .f06-recommandation-badge svg { width: 28px; height: 28px; flex: none; }
+    .f06-recommandation-badge em { font-style: normal; font: 700 26px 'DM Sans', sans-serif; letter-spacing: -0.01em; }
+    .f06-recommandation-badge .f06-recommandation-soft { color: #6C6560; }
+    .f06-recommandation-badge .f06-recommandation-coral { color: #F8571F; }
+    #f06-recommandation-seal { position: absolute; left: 1763px; top: 236px; height: 92px; width: auto; filter: drop-shadow(0 8px 14px rgba(36,31,32,0.28)); }
+
+    /* ---------- stats ---------- */
+    #f06-recommandation-stats { position: absolute; inset: 0; transform-origin: 960px 540px; }
+    #f06-recommandation-veil { position: absolute; left: 110px; top: 150px; width: 1700px; height: 800px;
+      background: radial-gradient(closest-side, rgba(253,252,252,0.94) 0%, rgba(253,252,252,0.8) 55%, rgba(253,252,252,0) 100%); }
+    .f06-recommandation-stat { position: absolute; top: 355px; width: 800px; height: 420px; }
+    #f06-recommandation-sa { left: 560px; }
+    #f06-recommandation-sb { left: 900px; }
+    .f06-recommandation-statnum { position: absolute; left: 0; top: 0; width: 800px; height: 260px; display: flex; justify-content: center; align-items: baseline;
+      font: 700 260px 'DM Sans', sans-serif; line-height: 0.9; letter-spacing: -0.05em; color: #241F20; transform-origin: 50% 85%; }
+    .f06-recommandation-dig { display: inline-block; width: 0.6em; text-align: center; transform-origin: 50% 80%; }
+    .f06-recommandation-sign { color: #F8571F; }
+    #f06-recommandation-pct { display: inline-block; margin-left: 0.07em; }
+    .f06-recommandation-statlabel { position: absolute; left: 0; top: 268px; width: 800px; text-align: center; font: 500 44px 'Lufga', sans-serif; line-height: 1.15; letter-spacing: -0.01em; color: #6C6560; }
+    .f06-recommandation-lines { position: absolute; left: -100px; top: -170px; width: 1000px; height: 560px; overflow: visible; }
+    .f06-recommandation-lines line { stroke: #F8571F; stroke-width: 5; stroke-linecap: round; }
+  </style>
+
+  <div id="root" data-composition-id="f06-recommandation" data-width="1920" data-height="1080" data-duration="12.36">
+    <div id="f06-recommandation-bg" class="clip" data-start="0" data-duration="12.36" data-track-index="0">
+      <div id="f06-recommandation-mesh"></div>
+      <div id="f06-recommandation-grid"></div>
+    </div>
+
+    <div id="f06-recommandation-stage" class="clip" data-start="0" data-duration="12.36" data-track-index="1" data-layout-allow-overflow data-layout-allow-overlap data-layout-allow-occlusion>
+      <div id="f06-recommandation-cam">
+        <div id="f06-recommandation-group">
+          <div id="f06-recommandation-persp">
+            <!-- phone 2: another visitor's page (OCÉAN01), rebuilt in HTML -->
+            <div id="f06-recommandation-phone2" class="f06-recommandation-phone">
+              <div class="f06-recommandation-body"></div>
+              <div class="f06-recommandation-screen">
+                <div id="f06-recommandation-s2head"><img src="assets/screens/endro-diag/17-resultat.png" alt=""></div>
+                <div id="f06-recommandation-s2hero">
+                  <img src="assets/endro/diag/ocean.webp" alt="">
+                  <div id="f06-recommandation-s2shade"></div>
+                  <div id="f06-recommandation-s2circle">OCÉAN01</div>
+                  <div id="f06-recommandation-s2title">Votre profil OCÉAN01</div>
+                  <div id="f06-recommandation-s2chips">
+                    <div class="f06-recommandation-echip">Type de peau :<b>Sèche</b></div>
+                    <div class="f06-recommandation-echip">Préoccupation :<b>Sécheresse</b></div>
+                  </div>
+                </div>
+                <div id="f06-recommandation-s2routine">
+                  <div id="f06-recommandation-s2rt">Votre routine OCÉAN01</div>
+                  <div id="f06-recommandation-s2thumbs">
+                    <div class="f06-recommandation-thumb"><img src="assets/endro/products/gelee-nettoyante.jpg" alt=""><span>Gelée Nettoyante</span></div>
+                    <div class="f06-recommandation-thumb"><img src="assets/endro/products/serum-hydratant.jpg" alt=""><span>Sérum Hydratant</span></div>
+                    <div class="f06-recommandation-thumb"><img src="assets/endro/products/masque-creme.jpg" alt=""><span>Masque Crème</span></div>
+                  </div>
+                </div>
+                <div class="f06-recommandation-status"><div class="f06-recommandation-time">9:41</div><svg class="f06-recommandation-glyphs" viewBox="0 0 76 14"><g fill="#241F20"><rect x="0" y="8.5" width="3.4" height="4.5" rx="1"/><rect x="5" y="6.3" width="3.4" height="6.7" rx="1"/><rect x="10" y="3.9" width="3.4" height="9.1" rx="1"/><rect x="15" y="1.5" width="3.4" height="11.5" rx="1"/><path d="M32 3.2c2.6 0 5 1 6.8 2.7l1.3-1.4A11.6 11.6 0 0 0 32 1.2c-3.1 0-6 1.2-8.1 3.3l1.3 1.4A9.6 9.6 0 0 1 32 3.2zm0 3.7c1.6 0 3.1.6 4.2 1.7l1.3-1.4A8 8 0 0 0 32 4.9a8 8 0 0 0-5.5 2.3l1.3 1.4A6 6 0 0 1 32 6.9zm0 3.6c.6 0 1.2.2 1.6.6L32 12.8l-1.6-1.7c.4-.4 1-.6 1.6-.6z"/><rect x="72.6" y="4.7" width="1.8" height="4.6" rx="0.9" opacity="0.45"/><rect x="48" y="3.2" width="20" height="7.6" rx="2"/></g><rect x="46" y="1.2" width="24.6" height="11.6" rx="3.6" fill="none" stroke="#241F20" stroke-opacity="0.4" stroke-width="1.1"/></svg></div>
+                <div class="f06-recommandation-island"></div>
+              </div>
+            </div>
+            <!-- phone 1: Claire's real result page (CORAIL02) -->
+            <div id="f06-recommandation-phone1" class="f06-recommandation-phone">
+              <div class="f06-recommandation-body"></div>
+              <div class="f06-recommandation-screen">
+                <div class="f06-recommandation-page">
+                  <div id="f06-recommandation-pagecontent">
+                    <img id="f06-recommandation-pageimg" src="assets/screens/endro-diag/17-resultat-full.png" alt="">
+                    <div id="f06-recommandation-ring1" class="f06-recommandation-ring"></div>
+                    <div id="f06-recommandation-ring2" class="f06-recommandation-ring"></div>
+                  </div>
+                </div>
+                <div class="f06-recommandation-status"><div class="f06-recommandation-time">9:41</div><svg class="f06-recommandation-glyphs" viewBox="0 0 76 14"><g fill="#241F20"><rect x="0" y="8.5" width="3.4" height="4.5" rx="1"/><rect x="5" y="6.3" width="3.4" height="6.7" rx="1"/><rect x="10" y="3.9" width="3.4" height="9.1" rx="1"/><rect x="15" y="1.5" width="3.4" height="11.5" rx="1"/><path d="M32 3.2c2.6 0 5 1 6.8 2.7l1.3-1.4A11.6 11.6 0 0 0 32 1.2c-3.1 0-6 1.2-8.1 3.3l1.3 1.4A9.6 9.6 0 0 1 32 3.2zm0 3.7c1.6 0 3.1.6 4.2 1.7l1.3-1.4A8 8 0 0 0 32 4.9a8 8 0 0 0-5.5 2.3l1.3 1.4A6 6 0 0 1 32 6.9zm0 3.6c.6 0 1.2.2 1.6.6L32 12.8l-1.6-1.7c.4-.4 1-.6 1.6-.6z"/><rect x="72.6" y="4.7" width="1.8" height="4.6" rx="0.9" opacity="0.45"/><rect x="48" y="3.2" width="20" height="7.6" rx="2"/></g><rect x="46" y="1.2" width="24.6" height="11.6" rx="3.6" fill="none" stroke="#241F20" stroke-opacity="0.4" stroke-width="1.1"/></svg></div>
+                <div class="f06-recommandation-island"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- routine step cards (fly out of the phone) -->
+          <div id="f06-recommandation-c1" class="f06-recommandation-card" style="left:888px;top:280px"><div class="f06-recommandation-pack"><img src="assets/endro/products/gelee-nettoyante.jpg" alt=""></div><div class="f06-recommandation-cbody"><div class="f06-recommandation-step">Étape <b>1</b></div><div class="f06-recommandation-verb">Nettoyer</div><div class="f06-recommandation-name">Gelée Nettoyante</div></div><div class="f06-recommandation-price">10,90 €</div></div>
+          <div id="f06-recommandation-c2" class="f06-recommandation-card" style="left:1110px;top:245px"><div class="f06-recommandation-pack"><img src="assets/endro/products/gommage-visage-eclat.jpg" alt=""></div><div class="f06-recommandation-cbody"><div class="f06-recommandation-step">Étape <b>2</b></div><div class="f06-recommandation-verb">Exfolier</div><div class="f06-recommandation-name">Gommage<br>Visage Éclat</div></div><div class="f06-recommandation-price">14,90 €</div></div>
+          <div id="f06-recommandation-c3" class="f06-recommandation-card" style="left:1332px;top:245px"><div class="f06-recommandation-pack"><img src="assets/endro/products/serum-bonne-mine.jpg" alt=""></div><div class="f06-recommandation-cbody"><div class="f06-recommandation-step">Étape <b>3</b></div><div class="f06-recommandation-verb">Traiter</div><div class="f06-recommandation-name">Sérum<br>Bonne Mine</div></div><div class="f06-recommandation-price">16,90 €</div></div>
+          <div id="f06-recommandation-c4" class="f06-recommandation-card" style="left:1554px;top:280px"><div class="f06-recommandation-pack"><img src="assets/endro/products/creme-bonne-mine.jpg" alt=""></div><div class="f06-recommandation-cbody"><div class="f06-recommandation-step">Étape <b>4</b></div><div class="f06-recommandation-verb">Hydrater</div><div class="f06-recommandation-name">Crème<br>Bonne Mine</div></div><div class="f06-recommandation-price">16,90 €</div></div>
+
+          <div class="f06-recommandation-center" style="left:1051px;top:658px;width:600px"><div id="f06-recommandation-total"><span id="f06-recommandation-totlab">Total routine</span><span id="f06-recommandation-totnum"></span></div></div>
+          <div class="f06-recommandation-center" style="left:830px;top:162px;width:600px"><div id="f06-recommandation-b1" class="f06-recommandation-badge"><svg viewBox="0 0 24 24"><path fill="#F8571F" d="M12 2.2l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.1l-5.9 3.2 1.3-6.6-4.9-4.6 6.6-.8z"/></svg><em>4,7/5</em><span class="f06-recommandation-soft">· <em class="f06-recommandation-soft">3 158</em> avis</span></div></div>
+          <div class="f06-recommandation-center" style="left:1260px;top:162px;width:600px"><div id="f06-recommandation-b2" class="f06-recommandation-badge"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#1F8A4C"/><path d="M7 12.4l3.2 3.1L17.2 8.6" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Validé par un dermatologue</div></div>
+          <div class="f06-recommandation-center" style="left:951px;top:758px;width:800px"><div id="f06-recommandation-b3" class="f06-recommandation-badge"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.6" fill="#F8571F"/><path d="M2.5 19.5c.6-3.6 3.2-5.6 6.5-5.6s5.9 2 6.5 5.6z" fill="#F8571F"/><circle cx="17" cy="9" r="2.8" fill="#F8571F" opacity="0.45"/><path d="M14.8 14.2c.7-.3 1.4-.4 2.2-.4 2.6 0 4.6 1.6 5 4.4h-5.2" fill="#F8571F" opacity="0.45"/></svg>Vous êtes comme <em class="f06-recommandation-coral">6 %</em> des endroïstes</div></div>
+          <img id="f06-recommandation-seal" src="assets/endro/diag/meilleur-pharma-2026.png" alt="">
+        </div>
+
+        <!-- ≠ between the two phones -->
+        <div id="f06-recommandation-neq"><svg viewBox="0 0 72 72"><g stroke="#F8571F" stroke-width="8" stroke-linecap="round"><line x1="14" y1="27" x2="58" y2="27"/><line x1="14" y1="45" x2="58" y2="45"/><line x1="45" y1="10" x2="27" y2="62"/></g></svg></div>
+
+        <!-- Claire's profile card, inherited from frame 5 -->
+        <div id="f06-recommandation-profile">
+          <div class="f06-recommandation-phead">
+            <div class="f06-recommandation-avatar"><img src="assets/personas/claire.webp" alt=""></div>
+            <div><div class="f06-recommandation-pname">Claire</div><div class="f06-recommandation-psub">Profil CORAIL02</div></div>
+          </div>
+          <div class="f06-recommandation-pchips">
+            <div class="f06-recommandation-achip"><i></i>Peau mixte</div><div class="f06-recommandation-achip"><i></i>Peau sensible 4/10</div>
+            <div class="f06-recommandation-achip"><i></i>Routine essentielle</div><div class="f06-recommandation-achip f06-recommandation-tint"><i></i>Préoccupation : teint terne</div>
+            <div class="f06-recommandation-achip"><i class="f06-recommandation-amber"></i>Frein : peur des réactions</div>
+          </div>
+          <div class="f06-recommandation-pbar">Profil complété<div class="f06-recommandation-ptrack"><div></div></div></div>
+        </div>
+      </div>
+
+      <!-- proof: ×4 and +36 % -->
+      <div id="f06-recommandation-stats">
+        <div id="f06-recommandation-veil"></div>
+        <div id="f06-recommandation-sa" class="f06-recommandation-stat">
+          <svg id="f06-recommandation-sa-lines" class="f06-recommandation-lines" viewBox="0 0 1000 560"></svg>
+          <div id="f06-recommandation-sa-num" class="f06-recommandation-statnum"><span class="f06-recommandation-sign">×</span><span id="f06-recommandation-sa-d" class="f06-recommandation-dig">1</span></div>
+          <div id="f06-recommandation-sa-label" class="f06-recommandation-statlabel">de conversions en moyenne</div>
+        </div>
+        <div id="f06-recommandation-sb" class="f06-recommandation-stat">
+          <svg id="f06-recommandation-sb-lines" class="f06-recommandation-lines" viewBox="0 0 1000 560"></svg>
+          <div id="f06-recommandation-sb-num" class="f06-recommandation-statnum"><span class="f06-recommandation-sign">+</span><span id="f06-recommandation-sb-d1" class="f06-recommandation-dig"></span><span id="f06-recommandation-sb-d2" class="f06-recommandation-dig">0</span><span id="f06-recommandation-pct" class="f06-recommandation-sign">%</span></div>
+          <div id="f06-recommandation-sb-label" class="f06-recommandation-statlabel">de panier moyen</div>
+        </div>
+      </div>
+
+      <!-- step pill (HUD) -->
+      <div id="f06-recommandation-pill"><div id="f06-recommandation-pillnum">02</div><div id="f06-recommandation-pilltxt">Recommandation</div></div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <script>
+    (() => {
+      const P = 'f06-recommandation-';
+      const $ = (id) => document.getElementById(P + id);
+      const SVGNS = 'http://www.w3.org/2000/svg';
+
+      // ---- build-time setup (deterministic, synchronous) ----
+      // total pill counter: fixed-width digit slots for "72,50 €" (DM Sans ships proportional digits)
+      const totNum = $('totnum');
+      const totSlots = [];
+      ['d', 'd', 's', 'd', 'd'].forEach((k) => {
+        const s = document.createElement('span');
+        s.className = P + (k === 'd' ? 'sd' : 'ss');
+        if (k === 's') s.textContent = ',';
+        totNum.appendChild(s);
+        if (k === 'd') totSlots.push(s);
+      });
+      const euro = document.createElement('span');
+      euro.textContent = ' €';
+      totNum.appendChild(euro);
+      const renderTotal = (v) => {
+        const cents = Math.round(v * 100);
+        const s = String(Math.floor(cents / 100)).padStart(2, ' ') + String(cents % 100).padStart(2, '0');
+        for (let i = 0; i < 4; i++) totSlots[i].textContent = s[i] === ' ' ? '' : s[i];
+      };
+      renderTotal(0);
+
+      // impact lines (thin radial strokes) around each stat
+      const buildLines = (svg, rx, ry) => {
+        for (let i = 0; i < 12; i++) {
+          const a = (i / 12) * Math.PI * 2 + 0.26;
+          const c = Math.cos(a), s = Math.sin(a);
+          const l = document.createElementNS(SVGNS, 'line');
+          l.setAttribute('x1', (500 + c * rx).toFixed(1));
+          l.setAttribute('y1', (280 + s * ry).toFixed(1));
+          l.setAttribute('x2', (500 + c * (rx + 46)).toFixed(1));
+          l.setAttribute('y2', (280 + s * (ry + 30)).toFixed(1));
+          svg.appendChild(l);
+        }
+      };
+      buildLines($('sa-lines'), 210, 150);
+      buildLines($('sb-lines'), 380, 160);
+
+      const digA = $('sa-d'), digB1 = $('sb-d1'), digB2 = $('sb-d2');
+      const stA = { v: 1 }, stB = { v: 0 }, stT = { v: 0 };
+      const renderA = () => { digA.textContent = String(Math.round(stA.v)); };
+      const renderB = () => {
+        const n = Math.round(stB.v);
+        digB1.textContent = n >= 10 ? String(Math.floor(n / 10)) : '';
+        digB2.textContent = String(n % 10);
+      };
+
+      gsap.set([$('phone1'), $('phone2')], { scale: 0.9 });
+      gsap.set($('phone2'), { rotationY: -8 });
+      gsap.set([$('sa-lines'), $('sb-lines')], { opacity: 0, transformOrigin: '50% 50%' });
+
+      const tl = gsap.timeline({ paused: true });
+
+      // ---- ambient: brand mesh drift + slow camera drift (never a frozen frame) ----
+      tl.fromTo($('mesh'), { x: -40, y: 10, scale: 1 }, { x: 40, y: -10, scale: 1.06, duration: 12.36, ease: 'sine.inOut' }, 0);
+      tl.fromTo($('cam'), { scale: 1 }, { scale: 1.025, duration: 6.9, ease: 'none' }, 0);
+
+      // ---- Scene 1 (0–1.9): profile handed to the page, step pill, scroll to the routine ----
+      tl.to($('profile'), { x: -150, scale: 0.86, opacity: 0, filter: 'blur(10px)', duration: 0.55, ease: 'power2.in' }, 0);
+      tl.fromTo($('ring1'), { scale: 1, opacity: 0.95 }, { scale: 1.75, opacity: 0, duration: 0.6, ease: 'power2.out' }, 0.36);
+      tl.fromTo($('ring2'), { scale: 1, opacity: 0.8 }, { scale: 1.45, opacity: 0, duration: 0.55, ease: 'power2.out' }, 0.5);
+      tl.fromTo($('pill'), { y: -44, opacity: 0, filter: 'blur(8px)' }, { y: 0, opacity: 1, filter: 'blur(0px)', duration: 0.45, ease: 'expo.out' }, 0.95);
+      tl.fromTo($('pillnum'), { scale: 0.4, rotation: -40 }, { scale: 1, rotation: 0, duration: 0.5, ease: 'back.out(1.6)' }, 1.02);
+      tl.to($('pagecontent'), { y: -960, duration: 1.18, ease: 'power2.inOut' }, 0.72);
+
+      // ---- Scene 2 (2.0–3.6): split-tilt — another visitor's page, ≠ ----
+      tl.to($('phone1'), { x: -50, rotationY: 8, duration: 0.72, ease: 'power3.out' }, 1.98);
+      tl.fromTo($('phone2'), { x: 930, rotationY: -22, filter: 'blur(10px)' }, { x: 0, rotationY: -8, filter: 'blur(0px)', duration: 0.75, ease: 'power3.out' }, 1.98);
+      tl.fromTo($('neq'), { scale: 0, rotation: -35, opacity: 0 }, { scale: 1, rotation: 0, opacity: 1, duration: 0.45, ease: 'back.out(1.6)' }, 2.53);
+      tl.to($('phone1'), { y: -7, duration: 0.72, ease: 'sine.inOut' }, 2.7);
+      tl.to($('phone2'), { y: 7, duration: 0.72, ease: 'sine.inOut' }, 2.7);
+      tl.to($('neq'), { scale: 0.45, opacity: 0, filter: 'blur(6px)', duration: 0.16, ease: 'power2.in' }, 3.42);
+      tl.to($('phone2'), { x: 960, rotationY: -28, opacity: 0, filter: 'blur(8px)', duration: 0.32, ease: 'power2.in' }, 3.45);
+      tl.to($('phone1'), { rotationY: 0, y: 0, duration: 0.5, ease: 'power3.inOut' }, 3.45);
+
+      // ---- Scene 3 (3.6–6.3): routine cards fly out of the page, total counts, reassurance ----
+      const cards = [
+        { el: $('c1'), ox: -502, oy: -238, r: -5 },
+        { el: $('c2'), ox: -724, oy: 9, r: -1.6 },
+        { el: $('c3'), ox: -946, oy: 223, r: 1.6 },
+        { el: $('c4'), ox: -1168, oy: 470, r: 5 },
+      ];
+      cards.forEach((c, i) => {
+        tl.fromTo(c.el, { x: c.ox, y: c.oy, scale: 0.3, rotation: 0, opacity: 0, filter: 'blur(8px)' },
+          { x: 0, y: 0, scale: 1, rotation: c.r, opacity: 1, filter: 'blur(0px)', duration: 0.62, ease: 'expo.out' }, 3.62 + i * 0.08);
+      });
+      tl.fromTo($('total'), { y: 26, scale: 0.85, opacity: 0, filter: 'blur(8px)' }, { y: 0, scale: 1, opacity: 1, filter: 'blur(0px)', duration: 0.45, ease: 'expo.out' }, 3.98);
+      tl.to(stT, { v: 72.5, duration: 1.0, ease: 'power2.out', onUpdate: () => renderTotal(stT.v) }, 4.05);
+      tl.fromTo(totNum, { scale: 0.72 }, { scale: 1, duration: 1.0, ease: 'power2.out' }, 4.05);
+      [['b1', 5.15], ['b2', 5.38], ['b3', 5.62]].forEach(([id, at]) => {
+        tl.fromTo($(id), { y: 18, scale: 0.6, opacity: 0, filter: 'blur(8px)' }, { y: 0, scale: 1, opacity: 1, filter: 'blur(0px)', duration: 0.45, ease: 'expo.out' }, at);
+      });
+      tl.fromTo($('seal'), { scale: 1.9, rotation: 24, opacity: 0 }, { scale: 1, rotation: 9, opacity: 1, duration: 0.36, ease: 'back.out(1.8)' }, 5.86);
+
+      // ---- Scene 4 (7.0–12.36): video-text pivot — the page yields, ×4 and +36 % land ----
+      tl.to($('group'), { x: -300, y: 12, scale: 0.8, opacity: 0.42, filter: 'blur(8px)', duration: 0.62, ease: 'power3.inOut' }, 6.9);
+      tl.fromTo($('veil'), { opacity: 0 }, { opacity: 1, duration: 0.6, ease: 'power2.out' }, 6.95);
+      tl.fromTo($('stats'), { scale: 1 }, { scale: 1.03, duration: 4.96, ease: 'none' }, 7.4);
+
+      // ×4 — number slam, impact lines, count 1 → 4
+      tl.fromTo($('sa'), { yPercent: -120, opacity: 0, filter: 'blur(12px)' }, { yPercent: 0, opacity: 1, filter: 'blur(0px)', duration: 0.08, ease: 'power4.in' }, 7.4);
+      tl.fromTo($('sa-num'), { scaleX: 1.1, scaleY: 0.86 }, { scaleX: 1, scaleY: 1, duration: 0.3, ease: 'back.out(2)' }, 7.48);
+      tl.fromTo($('sa-lines'), { scale: 1, opacity: 1 }, { scale: 1.6, opacity: 0, duration: 0.25, ease: 'power2.out' }, 7.48);
+      tl.to(stA, { v: 4, duration: 0.46, ease: 'power2.out', onUpdate: renderA }, 7.49);
+      tl.fromTo(digA, { scale: 0.62 }, { scale: 1, duration: 0.46, ease: 'power2.out' }, 7.49);
+      tl.fromTo($('sa-label'), { y: 24, opacity: 0, filter: 'blur(8px)' }, { y: 0, opacity: 1, filter: 'blur(0px)', duration: 0.5, ease: 'expo.out' }, 8.3);
+      tl.to($('sa'), { x: -400, duration: 0.6, ease: 'expo.inOut' }, 9.62);
+
+      // +36 % — number slam, impact lines, count 0 → 36, % lands after the count
+      tl.fromTo($('sb'), { yPercent: -120, opacity: 0, filter: 'blur(12px)' }, { yPercent: 0, opacity: 1, filter: 'blur(0px)', duration: 0.08, ease: 'power4.in' }, 9.82);
+      tl.fromTo($('sb-num'), { scaleX: 1.1, scaleY: 0.86 }, { scaleX: 1, scaleY: 1, duration: 0.3, ease: 'back.out(2)' }, 9.9);
+      tl.fromTo($('sb-lines'), { scale: 1, opacity: 1 }, { scale: 1.6, opacity: 0, duration: 0.25, ease: 'power2.out' }, 9.9);
+      tl.to(stB, { v: 36, duration: 1.12, ease: 'power3.out', onUpdate: renderB }, 9.9);
+      tl.fromTo([digB1, digB2], { scale: 0.55 }, { scale: 1, duration: 1.12, ease: 'power3.out' }, 9.9);
+      tl.fromTo($('pct'), { y: 40, scale: 0.4, opacity: 0 }, { y: 0, scale: 1, opacity: 1, duration: 0.42, ease: 'back.out(1.6)' }, 10.98);
+      tl.fromTo($('sb-label'), { y: 24, opacity: 0, filter: 'blur(8px)' }, { y: 0, opacity: 1, filter: 'blur(0px)', duration: 0.5, ease: 'expo.out' }, 11.18);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines['f06-recommandation'] = tl;
+    })();
+  </script>
+</template>
