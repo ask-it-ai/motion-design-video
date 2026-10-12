@@ -89,6 +89,34 @@ Vimeo bloque les téléchargements automatisés (captcha Cloudflare). Pour les a
   - Sova : https://sova-diag.ask-it.ai/
 - Connecteur Motion disponible pour des plans très avancés. Compte Motion à 0 crédit au 12/10.
 
+## Constats du 12/10 (analyse complète)
+
+Rapport détaillé avec visuels : artefact privé « Revue vidéo Ask-it » (lien dans la conversation du 12/10).
+
+- **DA Ask-it (site)** : fond blanc cassé avec grille fine, noir profond, typo géométrique (Lufga sur le site), boutons pilules noirs. L'orange/corail vient du dashboard et des signes « + » / « × » des chiffres du site.
+- **Dashboard (maquette)** : accueil « CA généré par le diagnostic » (78 343 €), courbe corail, KPI, personas avec photos (Claire « la peau qui tiraille », Julie, Inès), parcours du diagnostic avec « Frein détecté : l'écran de contact », Aski Chat (IA), segment Klaviyo. « Alice » y est l'utilisatrice côté marque : la visiteuse de la vidéo s'appellera **Claire**.
+- **Endro** (marque à privilégier, déjà en vitrine sur ask-it.ai) : panneau vert profond, Nuancier de Peau (36 profils = textures naturelles × 3 teintes), questions au prénom, choix en photos, curseur, offre −15 % contre l'e-mail, révélation « Votre profil CORAIL02 », routine en 4 étapes (72,50 €), « Vous êtes comme 6 % des endroïstes ».
+- **Les Petits Prodiges** : même moteur, habillage opposé (beige, photos lifestyle, mot des fondatrices). Idéal pour « à votre image ».
+- **Sova** : la page du site « Camille ≠ Sarah » (même diagnostic, deux pages différentes) illustre « 100 % personnalisée ».
+- **Chiffres à harmoniser** : script ×4 / +36 % ; site ×6,4 / +33 % (« mesuré sur l'ensemble de nos clients ») ; maquette Endro ×4,7 / +18 %. Le « 70 % » figure aussi sur le site.
+- **Références** : langage commun = univers couleur de la marque cliente, titre gras avec un mot mis en valeur, interface réelle en très grand avec profondeur de champ, cartes flottantes, visages réels. MP4 à fournir pour analyser le mouvement et le son.
+
+## Direction recommandée (résumé)
+
+- Master d'environ 95 s (voix resserrée, script ajusté pour Eleven v4) + déclinaison 30 s pour les publicités.
+- Deux mondes : « avant » gris froid désaturé, « après » univers Ask-it ; bascule sur « Bon, ça, c'était avant ».
+- Une idée par plan, interface zoomée (texte ≥ 28 px en 1080p), caméra continue avec raccords de forme, typo cinétique calée au mot.
+- Son : musique Eleven Music en sections (avant / après), bruitages UI ElevenLabs, ducking −12 dB, −14 LUFS réseaux / −16 LUFS site.
+- Structure : hésitation (9 s) · problème (16 s) · bascule (7 s) · diagnostic Endro + CORAIL02 (14 s) · recommandation (13 s) · dashboard (16 s) · zéro effort (6 s) · elle revient (9 s) · fin (6 s).
+
+## Chaîne de fabrication
+
+- HyperFrames 0.8.150 (Apache-2.0), HTML/CSS/GSAP. Rendu validé dans l'environnement cloud avec
+  `HYPERFRAMES_BROWSER_PATH=/opt/pw-browsers/chromium_headless_shell-1194/chrome-linux/headless_shell`.
+- Voix : `eleven_v4`, phrase par phrase, puis alignement mot à mot (`/v1/speech-to-text`, `scribe_v2`) pour piloter les animations.
+- Bruitages : 40 crédits par seconde. Musique : Eleven Music, autorisée pour un usage publicitaire.
+- Motion (connecteur) : à réserver à un ou deux plans très avancés ; compte à 0 crédit au 12/10.
+
 ## Process convenu
 
 1. Analyse de toutes les sources et recommandations (12/10).
