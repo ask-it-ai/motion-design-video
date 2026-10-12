@@ -30,7 +30,7 @@
     /* ---------- browser window ---------- */
     #f07-dashboard-win { position: absolute; left: 210px; top: 130px; width: 1500px; height: 860px; border-radius: 20px; background: #fff; overflow: hidden; box-sizing: border-box;
       border: 1.5px solid rgba(36,31,32,0.10); box-shadow: 0 40px 80px -24px rgba(36,31,32,0.22), 0 8px 24px -8px rgba(36,31,32,0.10); transform-origin: 50% 100%; }
-    #f07-dashboard-bar { position: absolute; left: 0; top: 0; width: 1500px; height: 52px; background: #fff; border-bottom: 1.5px solid rgba(36,31,32,0.08); box-sizing: border-box; }
+    #f07-dashboard-wbar { position: absolute; left: 0; top: 0; width: 1500px; height: 52px; background: #fff; border-bottom: 1.5px solid rgba(36,31,32,0.08); box-sizing: border-box; }
     .f07-dashboard-dot { position: absolute; top: 20px; width: 12px; height: 12px; border-radius: 50%; }
     #f07-dashboard-url { position: absolute; left: 580px; top: 10px; width: 340px; height: 32px; border-radius: 999px; background: #F5F5F7; display: flex; align-items: center; justify-content: center; gap: 8px;
       font: 500 15px 'Lufga', sans-serif; color: #A39C95; }
@@ -147,7 +147,7 @@
     #f07-dashboard-ston { color: #1F8A4C; background: #E9F5EE; border-radius: 999px; padding: 0 12px 0 8px; left: 10px; }
     #f07-dashboard-ston svg { width: 16px; height: 16px; }
     #f07-dashboard-cursor { position: absolute; left: 0; top: 0; width: 22px; height: 30px; transform-origin: 2px 2px; }
-    #f07-dashboard-ripple { position: absolute; left: 1610px; top: 418px; width: 50px; height: 50px; border-radius: 50%; box-sizing: border-box; border: 2.5px solid #1F8A4C; }
+    #f07-dashboard-ripple { position: absolute; left: 1610px; top: 504px; width: 50px; height: 50px; border-radius: 50%; box-sizing: border-box; border: 2.5px solid #1F8A4C; }
 
     /* ---------- Excel sheet (the old way) ---------- */
     #f07-dashboard-xl { position: absolute; left: 500px; top: 250px; width: 920px; height: 560px; transform-origin: 50% 50%; }
@@ -185,7 +185,7 @@
         <div id="f07-dashboard-pill"><div id="f07-dashboard-pillnum">03</div><div id="f07-dashboard-pilltxt">Dashboard</div></div>
 
         <div id="f07-dashboard-win">
-          <div id="f07-dashboard-bar">
+          <div id="f07-dashboard-wbar">
             <div class="f07-dashboard-dot" style="left:22px;background:#FF5F57"></div><div class="f07-dashboard-dot" style="left:42px;background:#FEBC2E"></div><div class="f07-dashboard-dot" style="left:62px;background:#28C840"></div>
             <div id="f07-dashboard-url"><svg viewBox="0 0 16 16"><rect x="3" y="7" width="10" height="7.5" rx="2" fill="#A39C95"/><path d="M5.2 7V5.2a2.8 2.8 0 0 1 5.6 0V7" fill="none" stroke="#A39C95" stroke-width="1.6"/></svg>app.ask-it.ai</div>
           </div>
@@ -363,8 +363,7 @@
         world.style.filter = cam.blur > 0.05 ? 'blur(' + cam.blur.toFixed(2) + 'px)' : 'none';
       };
       applyCamera();
-      gsap.set([$('pu1'), $('pu2'), $('pu3')], { opacity: 0 });
-      gsap.set($('cursor'), { x: 1720, y: 650, opacity: 0 });
+      gsap.set($('cursor'), { x: 1720, y: 700, opacity: 0 });
 
       const tl = gsap.timeline({ paused: true });
       const camLeg = (from, to, at, dur, ease, blurPeak) => {
@@ -432,7 +431,8 @@
       tl.fromTo($('frein'), { y: 12, scale: 0.6, opacity: 0 }, { y: 0, scale: 1, opacity: 1, duration: 0.42, ease: 'back.out(1.6)' }, 8.14);
       tl.to(link, { strokeDashoffset: 0, duration: 0.3, ease: 'power2.out' }, 8.3);
       [$('pu1'), $('pu2'), $('pu3')].forEach((el, i) => {
-        tl.fromTo(el, { scale: 1, opacity: 0.9 }, { scale: 3, opacity: 0, duration: 0.7, ease: 'power1.out', immediateRender: false }, 8.34 + i * 0.6);
+        tl.fromTo(el, { scale: 0.8, opacity: 0 }, { scale: 1.2, opacity: 0.9, duration: 0.08, ease: 'none' }, 8.34 + i * 0.6);
+        tl.to(el, { scale: 3, opacity: 0, duration: 0.62, ease: 'power1.out' }, 8.42 + i * 0.6);
       });
       camLeg({ fx: 871, fy: 811, s: 1.85 }, { fx: 874, fy: 806, s: 1.9 }, 7.95, 0.8, 'power1.inOut');
 
@@ -447,10 +447,10 @@
         tl.to(el, { y: 0, duration: 0.11, ease: 'sine.in' }, 9.21 + i * 0.05);
       });
       tl.to($('typing'), { opacity: 0, duration: 0.06 }, 9.32);
-      tl.fromTo(chars, { opacity: 0 }, { opacity: 1, duration: 0.02, stagger: 0.0092, ease: 'none' }, 9.33);
+      tl.fromTo(chars, { opacity: 0 }, { opacity: 1, duration: 0.02, stagger: 0.0088, ease: 'none' }, 9.33);
       tl.fromTo($('camp'), { y: 20, scale: 0.94, opacity: 0 }, { y: 0, scale: 1, opacity: 1, duration: 0.4, ease: 'expo.out' }, 9.92);
       tl.fromTo($('cursor'), { opacity: 0 }, { opacity: 1, duration: 0.15, ease: 'power1.out' }, 9.68);
-      tl.to($('cursor'), { x: 1635, y: 441, duration: 0.32, ease: 'power2.inOut' }, 9.7);
+      tl.to($('cursor'), { x: 1633, y: 527, duration: 0.32, ease: 'power2.inOut' }, 9.7);
       tl.to($('cursor'), { scale: 0.86, duration: 0.07, ease: 'power2.in' }, 10.02);
       tl.to($('cursor'), { scale: 1, duration: 0.12, ease: 'power2.out' }, 10.09);
       tl.fromTo($('ripple'), { scale: 0.2, opacity: 0.9 }, { scale: 1.6, opacity: 0, duration: 0.38, ease: 'power2.out' }, 10.06);
@@ -459,8 +459,8 @@
       tl.to($('stoff'), { y: -8, opacity: 0, duration: 0.14, ease: 'power2.in' }, 10.1);
       tl.fromTo($('ston'), { y: 10, opacity: 0, scale: 0.9 }, { y: 0, opacity: 1, scale: 1, duration: 0.36, ease: 'back.out(1.6)' }, 10.18);
       tl.fromTo($('campok'), { opacity: 0 }, { opacity: 1, duration: 0.35, ease: 'power2.out' }, 10.16);
-      tl.to($('cursor'), { x: 1690, y: 520, opacity: 0, duration: 0.5, ease: 'power2.in' }, 10.45);
-      camLeg({ fx: 1474, fy: 425, s: 1.7 }, { fx: 1488, fy: 455, s: 1.84 }, 10.3, 0.93, 'sine.inOut');
+      tl.to($('cursor'), { x: 1652, y: 552, duration: 0.6, ease: 'power2.out' }, 10.4);
+      camLeg({ fx: 1474, fy: 425, s: 1.7 }, { fx: 1488, fy: 455, s: 1.84 }, 9.4, 1.83, 'power1.inOut');
 
       window.__timelines = window.__timelines || {};
       window.__timelines['f07-dashboard'] = tl;

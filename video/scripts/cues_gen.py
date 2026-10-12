@@ -44,8 +44,11 @@ S = {
          (2.21,'number_slam',{}),(3.95,'whoosh_soft',{}),(5.10,'ui_select',{}),(5.98,'whoosh_soft',{'gain':-23}),
          (6.00,'pop',{'gain':-22,'pan':-0.4}),(6.24,'pop',{'gain':-23,'pitch':2,'pan':0.4}),(7.70,'swipe',{'gain':-24}),
          (8.55,'ui_select',{'pan':-0.5}),(8.73,'ui_select',{'pan':0.4,'gain':-20}),(8.91,'ui_select',{'pan':-0.2,'gain':-21}),(9.09,'ui_select',{'pan':0.5,'gain':-22})],
- 'f03': [(1.67,'counter_tick',{'align':'start'}),(1.80,'ember_burn',{'align':'start'}),(2.88,'ui_select',{}),(4.10,'ui_select',{'pitch':3}),
-         (6.0,'muffle_drone',{'trim':(0.0,1.9)})],
+ 'f03': [(1.44,'counter_tick',{'align':'start','trim':(0.0,0.85),'gain':-24}),(1.50,'ember_burn',{'align':'start'}),
+         (2.68,'swipe',{'gain':-23}),(2.76,'ui_select',{'gain':-20}),(3.22,'ui_select',{'gain':-20}),(3.62,'ui_select',{'gain':-21}),(4.02,'ui_select',{'gain':-21}),
+         (4.66,'whoosh_soft',{'gain':-23}),(5.36,'ui_tap',{'gain':-22}),(5.50,'ui_tap',{'gain':-23,'pitch':2}),
+         # the blur swells into a muffled drone that stops dead 150 ms before the rewind: silence before the world switch
+         (5.45,'muffle_drone',{'align':'start','trim':(0.0,1.35)})],
  'f05': [(0.06,'ui_select',{}),(1.15,'whoosh_soft',{}),(2.30,'skin_swap',{}),(3.20,'skin_swap',{'pitch':-1}),
          (4.45,'swipe',{}),(6.89,'ui_tap',{}),(7.44,'chip_fly',{}),(7.68,'ui_tap',{}),(8.23,'chip_fly',{'pitch':1}),(8.54,'ui_tap',{}),(9.09,'chip_fly',{'pitch':2}),
          (9.80,'timer',{'align':'start'}),(11.62,'success',{}),(12.30,'pop',{'pitch':1}),(13.52,'pop',{'pitch':-1})],

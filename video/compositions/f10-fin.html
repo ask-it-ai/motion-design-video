@@ -43,7 +43,7 @@
     #f10-fin-her { position: absolute; left: 498px; top: 454px; width: 26px; height: 26px; margin-left: -13px; margin-top: -13px; border-radius: 50%; background: #F8571F; opacity: 0; }
     #f10-fin-herhalo { position: absolute; left: 498px; top: 454px; width: 40px; height: 40px; margin-left: -20px; margin-top: -20px; border-radius: 50%; border: 2.5px solid #F8571F; opacity: 0; }
 
-    #f10-fin-stat { position: absolute; left: 972px; top: 316px; width: 700px; height: 420px; }
+    #f10-fin-stat { position: absolute; left: 972px; top: 352px; width: 700px; height: 420px; }
     #f10-fin-statnum {
       position: absolute; left: 0; top: 0; font-family: "DM Sans", sans-serif; font-weight: 700; font-size: 260px; line-height: 0.9;
       letter-spacing: -0.05em; color: #F8571F; white-space: nowrap; font-variant-numeric: tabular-nums;
@@ -171,13 +171,12 @@
         l.className = P + "lit"; l.style.left = x + "px"; l.style.top = y + "px";
         dotsHost.appendChild(l); lit.push(l);
       }
-      // seeded, index-derived shuffle (mulberry32) → which 69 others stay, and in what order they light
-      var seed = 0x2f6a1c;
-      function rnd() { seed |= 0; seed = (seed + 0x6D2B79F5) | 0; var t = Math.imul(seed ^ (seed >>> 15), 1 | seed); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }
-      var order = [];
-      for (var k = 0; k < 100; k++) if (k !== HER) order.push(k);
-      for (var k2 = order.length - 1; k2 > 0; k2--) { var j = Math.floor(rnd() * (k2 + 1)); var tmp = order[k2]; order[k2] = order[j]; order[j] = tmp; }
-      var stayers = order.slice(0, 69);
+      // index-derived order — the SAME 69 others (+ her) that faded away in frame 2, now lighting up in the same order
+      var prand = function (n) { var x = Math.sin(n * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); };
+      var others = [];
+      for (var k = 0; k < 100; k++) if (k !== HER) others.push({ i: k, key: prand(k * 7.13 + 3.7) });
+      others.sort(function (u, v) { return u.key - v.key; });
+      var stayers = others.slice(0, 69).map(function (o) { return o.i; });
 
       /* ── Background: gentle brand-mesh drift that settles to still by the end ── */
       tl.fromTo(q("mesh"), { x: -30, y: 18, scale: 1 }, { x: 30, y: -20, scale: 1.06, duration: 10.6, ease: "sine.inOut" }, 0);
@@ -190,12 +189,8 @@
       tl.fromTo(q("avcheck"), { opacity: 0 }, { opacity: 1, duration: 0.06, ease: "none" }, 0.32);
       // ambient-glow-bloom behind her, landing as one beat with « restée »
       tl.fromTo(q("avglow"), { opacity: 0, scale: 0.8 }, { opacity: 0.3, scale: 1, duration: 0.9, ease: "power2.out" }, 0.95);
-      var gphase = { p: 0 }, avglow = q("avglow");
-      tl.fromTo(gphase, { p: 0 }, {
-        p: Math.PI * 0.5, duration: 0.25, ease: "none",
-        onUpdate: function () { var s = Math.sin(gphase.p); avglow.style.opacity = String(0.3 + 0.04 * s); }
-      }, 1.85);
-      tl.to(q("avglow"), { opacity: 0, scale: 0.9, duration: 0.35, ease: "power2.in" }, 2.1);
+      tl.fromTo(q("avglow"), { opacity: 0.3 }, { opacity: 0.34, duration: 0.25, ease: "sine.inOut", immediateRender: false }, 1.85);
+      tl.fromTo(q("avglow"), { opacity: 0.34, scale: 1 }, { opacity: 0, scale: 0.9, duration: 0.35, ease: "power2.in", immediateRender: false }, 2.1);
       tl.to(q("avcheck"), { opacity: 0, duration: 0.2, ease: "power1.in" }, 2.15);
 
       /* ── Scene 2 (2.15–4.6): camera pulls back, she becomes one dot of GRID_100; 70 light up coral ── */
@@ -222,7 +217,7 @@
         tl.fromTo(lit[idx], { opacity: 0 }, { opacity: 1, duration: 0.08, ease: "none" }, t);
       });
       // keep the grid alive while it holds
-      tl.fromTo(q("wdrift"), { scale: 1 }, { scale: 1.025, duration: 5.2 - (PB + PBD), ease: "none" }, PB + PBD);
+      tl.fromTo(q("wdrift"), { scale: 1 }, { scale: 1.025, duration: 5.12 - (PB + PBD), ease: "none" }, PB + PBD);
 
       // « 70 % » number slam (soixante-dix 3.33) + impact lines, label « restent »
       var SL = 3.08;
@@ -243,7 +238,7 @@
       tl.fromTo(q("statlabel"), { opacity: 0, y: 22 }, { opacity: 1, y: 0, duration: 0.45, ease: "expo.out" }, 3.3);
 
       /* ── Scene 3 (5.2–7.6): grid + stat shrink-fade at centre while the ask-it.ai lockup builds (final frame: exit allowed) ── */
-      tl.fromTo(q("wfade"), { opacity: 1, scale: 1, filter: "blur(0px)" }, { opacity: 0, scale: 0.95, filter: "blur(6px)", duration: 0.45, ease: "power2.in" }, 5.2);
+      tl.fromTo(q("wfade"), { opacity: 1, scale: 1, filter: "blur(0px)" }, { opacity: 0, scale: 0.95, filter: "blur(6px)", duration: 0.4, ease: "power2.in" }, 5.12);
       tl.fromTo(q("mark"), { scale: 0, rotation: -18 }, { scale: 1, rotation: 0, duration: 0.42, ease: "back.out(1.7)" }, 5.3);
       tl.fromTo(q("mark"), { opacity: 0 }, { opacity: 1, duration: 0.1, ease: "none" }, 5.3);
       gsap.utils.toArray("#" + P + "lockup ." + P + "ch").forEach(function (ch, n) {
@@ -259,11 +254,8 @@
       tl.fromTo(q("mark"), { rotation: 0 }, { rotation: -9, duration: 0.16, ease: "power2.out", immediateRender: false }, 6.84);
       tl.fromTo(q("mark"), { rotation: -9 }, { rotation: 0, duration: 0.5, ease: "back.out(2.2)", immediateRender: false }, 7.0);
       tl.fromTo(q("endglow"), { opacity: 0, scale: 0.85 }, { opacity: 0.26, scale: 1, duration: 1.1, ease: "power2.out" }, 6.75);
-      var ephase = { p: 0 }, endglow = q("endglow");
-      tl.fromTo(ephase, { p: 0 }, {
-        p: Math.PI * 2, duration: 2.2, ease: "none",
-        onUpdate: function () { endglow.style.opacity = String(0.26 + 0.035 * Math.sin(ephase.p)); }
-      }, 7.85);
+      tl.fromTo(q("endglow"), { opacity: 0.26 }, { opacity: 0.3, duration: 1.1, ease: "sine.inOut", immediateRender: false }, 7.85);
+      tl.fromTo(q("endglow"), { opacity: 0.3 }, { opacity: 0.25, duration: 1.1, ease: "sine.inOut", immediateRender: false }, 8.95);
       // slow end-card drift that eases into a calm still frame
       tl.fromTo(q("enddrift"), { scale: 1 }, { scale: 1.022, duration: D - 0.06 - 5.3, ease: "sine.out" }, 5.3);
 
@@ -286,7 +278,7 @@
       tl.to(q("endglow"), { scale: 1, duration: 1.2, ease: "sine.inOut" }, 8.54);
       // cursor eases off the label and rests; everything settles to a still frame by ~10.6
       tl.to(q("cursor"), { x: CX + 34, y: CY + 40, duration: 1.1, ease: "sine.inOut" }, 8.9);
-      tl.to(q("endglow"), { opacity: 0.24, duration: 0.55, ease: "sine.out" }, 10.05);
+      tl.fromTo(q("endglow"), { opacity: 0.25 }, { opacity: 0.24, duration: 0.55, ease: "sine.out", immediateRender: false }, 10.05);
 
       window.__timelines[ID] = tl;
     })();

@@ -1,0 +1,390 @@
+<template id="f03-budget-template">
+  <style>
+    @font-face { font-family: "Lufga"; src: url('assets/fonts/Lufga-Regular.woff2') format('woff2'); font-weight: 400; font-style: normal; font-display: block; }
+    @font-face { font-family: "Lufga"; src: url('assets/fonts/Lufga-Medium.woff2') format('woff2'); font-weight: 500; font-style: normal; font-display: block; }
+    @font-face { font-family: "Lufga"; src: url('assets/fonts/Lufga-SemiBold.woff2') format('woff2'); font-weight: 600; font-style: normal; font-display: block; }
+    @font-face { font-family: "Lufga"; src: url('assets/fonts/Lufga-Bold.woff2') format('woff2'); font-weight: 700; font-style: normal; font-display: block; }
+    @font-face { font-family: "DM Sans"; src: url('assets/fonts/DMSans-normal-latin.woff2') format('woff2'); font-weight: 300 800; font-style: normal; font-display: block; }
+
+    #root {
+      position: relative;
+      width: 1920px;
+      height: 1080px;
+      overflow: hidden;
+      font-family: "Lufga", sans-serif;
+      color: #F2EFEC;
+    }
+
+    /* ── AVANT ground: avant-bg + 44px grid (avant-line) + avant-vignette ── */
+    #f03-budget-bg { position: absolute; inset: 0; background-color: #1B1718; }
+    #f03-budget-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(to right, rgba(255,255,255,0.08) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255,255,255,0.08) 1px, transparent 1px);
+      background-size: 44px 44px;
+      background-position: 36px 36px;
+    }
+    #f03-budget-bg::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 70% 70% at 50% 45%, rgba(0,0,0,0) 40%, rgba(0,0,0,0.55) 100%);
+    }
+
+    #f03-budget-stage { position: absolute; inset: 0; }
+    #f03-budget-world { position: absolute; inset: 0; transform-origin: 940px 660px; }
+    #f03-budget-dim { position: absolute; inset: 0; background: #000000; opacity: 0; pointer-events: none; }
+
+    .f03-budget-panel {
+      position: absolute;
+      border-radius: 22px;
+      background: #2A2526;
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: 0 40px 80px -24px rgba(0,0,0,0.65), 0 8px 24px -8px rgba(0,0,0,0.4);
+    }
+
+    /* ── spend card (620×300) ── */
+    #f03-budget-spend {
+      position: absolute;
+      left: 170px;
+      top: 210px;
+      width: 620px;
+      height: 300px;
+      --dof: 0px;
+      filter: blur(var(--dof));
+    }
+    #f03-budget-spend-card { left: 0; top: 0; width: 620px; height: 300px; overflow: hidden; }
+    #f03-budget-heat {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 170px;
+      background: linear-gradient(to top, rgba(255,138,60,0.30), rgba(255,138,60,0.10) 38%, rgba(255,138,60,0) 100%);
+      opacity: 0;
+    }
+    #f03-budget-edge {
+      position: absolute;
+      left: 22px;
+      right: 22px;
+      bottom: 0;
+      height: 3px;
+      border-radius: 2px;
+      background: linear-gradient(to right, rgba(255,150,70,0), rgba(255,150,70,0.95) 18%, rgba(255,170,90,1) 50%, rgba(255,150,70,0.95) 82%, rgba(255,150,70,0));
+      opacity: 0;
+    }
+    #f03-budget-title {
+      position: absolute;
+      left: 40px;
+      top: 36px;
+      font: 500 28px/1 "Lufga", sans-serif;
+      white-space: nowrap;
+      color: #F2EFEC;
+    }
+    #f03-budget-title span { color: #8C8580; }
+    #f03-budget-counter-wrap { position: absolute; left: 40px; top: 125px; height: 132px; }
+    #f03-budget-counter {
+      display: inline-block;
+      white-space: nowrap;
+      font: 700 132px/1 "DM Sans", sans-serif;
+      color: #F2EFEC;
+      transform-origin: 0px 111px;   /* left baseline (0.841em) */
+    }
+    .f03-budget-slot { display: inline-block; width: 0.64em; text-align: center; }  /* emulated tabular figures */
+    .f03-budget-sep { display: inline-block; width: 0.2em; }
+    #f03-budget-eur { display: inline-block; margin-left: 0.1em; font-size: 0.55em; color: #8C8580; }
+    #f03-budget-glow {
+      position: absolute;
+      left: 10px;
+      top: 236px;
+      width: 600px;
+      height: 150px;
+      background: radial-gradient(ellipse 50% 42% at 50% 45%, rgba(255,128,48,0.42), rgba(255,128,48,0) 100%);
+      opacity: 0;
+      pointer-events: none;
+    }
+    #f03-budget-embers { position: absolute; left: 0; top: 300px; width: 0; height: 0; }
+    .f03-budget-ember {
+      position: absolute;
+      left: 0;
+      top: 0;
+      border-radius: 50%;
+      background: #FF8A3C;
+      box-shadow: 0 0 7px 1px rgba(255,138,60,0.75);
+      opacity: 0;
+      will-change: transform, opacity;
+    }
+
+    /* ── visitor profile card ── */
+    #f03-budget-profile {
+      position: absolute;
+      left: 1150px;
+      top: 165px;
+      width: 520px;
+      height: 476px;
+      --dof: 0px;
+      filter: blur(var(--dof));
+    }
+    #f03-budget-profile-card { left: 0; top: 0; width: 520px; height: 476px; }
+    .f03-budget-avatar {
+      position: absolute;
+      left: 36px;
+      top: 36px;
+      width: 88px;
+      height: 88px;
+      border-radius: 50%;
+      overflow: hidden;
+      box-shadow: 0 0 0 3px rgba(255,255,255,0.08);
+    }
+    .f03-budget-avatar svg { display: block; width: 88px; height: 88px; }
+    .f03-budget-name { position: absolute; left: 146px; top: 46px; font: 600 32px/1 "Lufga", sans-serif; color: #F2EFEC; white-space: nowrap; }
+    .f03-budget-skel { position: absolute; height: 14px; border-radius: 7px; background: rgba(255,255,255,0.08); }
+    .f03-budget-divider { position: absolute; left: 36px; right: 36px; height: 1px; background: rgba(255,255,255,0.08); }
+    .f03-budget-row { position: absolute; left: 36px; right: 36px; height: 56px; }
+    .f03-budget-row-label { position: absolute; left: 0; top: 14px; font: 500 30px/1 "Lufga", sans-serif; color: #F2EFEC; }
+    .f03-budget-q {
+      position: absolute;
+      right: 0;
+      top: 7px;
+      width: 64px;
+      height: 42px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.13);
+      font: 600 26px/40px "Lufga", sans-serif;
+      color: #8C8580;
+      text-align: center;
+      transform-origin: 50% 50%;
+      opacity: 0;
+    }
+
+    /* ── campaign settings card (rises in perspective) ── */
+    #f03-budget-settings {
+      position: absolute;
+      left: 640px;
+      top: 470px;
+      width: 600px;
+      height: 380px;
+      perspective: 1400px;
+      --dof: 0px;
+      filter: blur(var(--dof));
+    }
+    #f03-budget-settings-card { left: 0; top: 0; width: 600px; height: 380px; transform-origin: 50% 100%; opacity: 0; }
+    .f03-budget-set-title { position: absolute; left: 36px; top: 32px; font: 600 30px/1 "Lufga", sans-serif; color: #F2EFEC; white-space: nowrap; }
+    .f03-budget-slider { position: absolute; left: 36px; right: 36px; height: 40px; }
+    .f03-budget-slider-label { position: absolute; left: 0; top: 10px; font: 500 22px/1 "Lufga", sans-serif; color: #8C8580; white-space: nowrap; }
+    .f03-budget-track { position: absolute; left: 184px; right: 0; top: 17px; height: 6px; border-radius: 3px; background: rgba(255,255,255,0.10); }
+    .f03-budget-fill { position: absolute; left: 0; top: 0; width: 344px; height: 6px; border-radius: 3px; background: rgba(242,239,236,0.55); transform-origin: 0% 50%; }
+    .f03-budget-knob {
+      position: absolute;
+      left: 0;
+      top: -8px;
+      width: 22px;
+      height: 22px;
+      margin-left: -11px;
+      border-radius: 50%;
+      background: #F2EFEC;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    }
+    .f03-budget-toggle-row { position: absolute; top: 300px; display: flex; align-items: center; gap: 14px; font: 500 22px/1 "Lufga", sans-serif; color: #8C8580; white-space: nowrap; }
+    .f03-budget-toggle { position: relative; width: 60px; height: 34px; border-radius: 999px; background: rgba(255,255,255,0.10); }
+    .f03-budget-toggle i {
+      position: absolute;
+      left: 4px;
+      top: 4px;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: #F2EFEC;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+    }
+  </style>
+
+  <div id="root" data-composition-id="f03-budget" data-start="0" data-duration="6.85" data-width="1920" data-height="1080">
+    <div id="f03-budget-bg" class="clip" data-start="0" data-duration="6.85" data-track-index="0">
+      <div id="f03-budget-grid"></div>
+    </div>
+
+    <div id="f03-budget-stage" class="clip" data-start="0" data-duration="6.85" data-track-index="1">
+      <div id="f03-budget-world">
+
+        <!-- spend card: budget burning -->
+        <div id="f03-budget-spend">
+          <div id="f03-budget-glow"></div>
+          <div class="f03-budget-panel" id="f03-budget-spend-card">
+            <div id="f03-budget-heat"></div>
+            <div id="f03-budget-title">Budget publicitaire <span>· ce mois</span></div>
+            <div id="f03-budget-counter-wrap">
+              <span id="f03-budget-counter"><span class="f03-budget-slot" id="f03-budget-s0" style="display:none"></span><span class="f03-budget-slot" id="f03-budget-s1">8</span><span class="f03-budget-sep"></span><span class="f03-budget-slot" id="f03-budget-s2">2</span><span class="f03-budget-slot" id="f03-budget-s3">4</span><span class="f03-budget-slot" id="f03-budget-s4">0</span><span id="f03-budget-eur">€</span></span>
+            </div>
+            <div id="f03-budget-edge"></div>
+          </div>
+          <div id="f03-budget-embers"></div>
+        </div>
+
+        <!-- visitor profile card: nothing known -->
+        <div id="f03-budget-profile">
+          <div class="f03-budget-panel" id="f03-budget-profile-card">
+            <div class="f03-budget-avatar">
+              <svg viewBox="0 0 36 36" aria-hidden="true"><rect width="36" height="36" fill="#3A3435"/><circle cx="18" cy="14" r="6.4" fill="#8C8580"/><path d="M5.5 33c1.7-6.9 6.6-10.2 12.5-10.2S28.8 26.1 30.5 33z" fill="#8C8580"/></svg>
+            </div>
+            <div class="f03-budget-name">Visiteuse anonyme</div>
+            <div class="f03-budget-skel" style="left:146px;top:96px;width:176px"></div>
+            <div class="f03-budget-divider" style="top:152px"></div>
+            <div class="f03-budget-row" style="top:172px"><span class="f03-budget-row-label">Âge</span><span class="f03-budget-q">?</span></div>
+            <div class="f03-budget-row" style="top:242px"><span class="f03-budget-row-label">Peau</span><span class="f03-budget-q">?</span></div>
+            <div class="f03-budget-row" style="top:312px"><span class="f03-budget-row-label">Besoin</span><span class="f03-budget-q">?</span></div>
+            <div class="f03-budget-row" style="top:382px"><span class="f03-budget-row-label">Frein</span><span class="f03-budget-q">?</span></div>
+          </div>
+        </div>
+
+        <!-- campaign settings: three sliders, two toggles -->
+        <div id="f03-budget-settings">
+          <div class="f03-budget-panel" id="f03-budget-settings-card">
+            <div class="f03-budget-set-title">Réglages de campagne</div>
+            <div class="f03-budget-slider" style="top:96px"><span class="f03-budget-slider-label">Audience</span><div class="f03-budget-track"><div class="f03-budget-fill"></div><div class="f03-budget-knob"></div></div></div>
+            <div class="f03-budget-slider" style="top:160px"><span class="f03-budget-slider-label">Enchères</span><div class="f03-budget-track"><div class="f03-budget-fill"></div><div class="f03-budget-knob"></div></div></div>
+            <div class="f03-budget-slider" style="top:224px"><span class="f03-budget-slider-label">Budget / jour</span><div class="f03-budget-track"><div class="f03-budget-fill"></div><div class="f03-budget-knob"></div></div></div>
+            <div class="f03-budget-toggle-row" style="left:36px"><div class="f03-budget-toggle" id="f03-budget-t1"><i></i></div><span>Ciblage auto</span></div>
+            <div class="f03-budget-toggle-row" style="left:316px"><div class="f03-budget-toggle" id="f03-budget-t2"><i></i></div><span>Lookalike</span></div>
+          </div>
+        </div>
+
+      </div>
+      <div id="f03-budget-dim"></div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <script>
+    (function () {
+      var ID = "f03-budget";
+      var DUR = 6.85;
+      var $ = function (s) { return document.getElementById(ID + "-" + s); };
+      var prand = function (n) { var x = Math.sin(n * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); };
+      var tl = gsap.timeline({ paused: true });
+
+      var world = $("world"), dim = $("dim"), grid = $("grid");
+      var spend = $("spend"), profile = $("profile"), settings = $("settings"), setCard = $("settings-card");
+      var counter = $("counter"), cwrap = $("counter-wrap"), title = $("title");
+      var glow = $("glow"), heat = $("heat"), edge = $("edge"), field = $("embers");
+      var S = [$("s0"), $("s1"), $("s2"), $("s3"), $("s4")];
+      var rootEl = world.closest('[data-composition-id="' + ID + '"]') || document;
+
+      // ── camera: slow drift, then the blind push-in ──
+      tl.fromTo(world, { scale: 1 }, { scale: 1.015, duration: 5.6, ease: "none" }, 0);
+
+      // ════ Scene 1 (0.0–1.6): spend card establishes; counter at 8 240 € ════
+      tl.fromTo(spend, { opacity: 0, y: 50, scale: 0.92, "--dof": "10px" }, { opacity: 1, y: 0, scale: 1, "--dof": "0px", duration: 0.45, ease: "expo.out" }, 0.05);
+      tl.fromTo(title, { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.4, ease: "expo.out" }, 0.22);
+      tl.fromTo(cwrap, { opacity: 0, y: 26, filter: "blur(10px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.42, ease: "expo.out" }, 0.42);
+
+      // ════ Scene 2 (1.67–3.2): « vous brûlez votre budget » — counter rolls 8 240 → 24 960 €, edge glows, embers rise ════
+      var COUNT_AT = 1.44, COUNT_DUR = 0.86;
+      var c = { v: 8240 }, five = false;
+      tl.fromTo(c, { v: 8240 }, {
+        v: 24960, duration: COUNT_DUR, ease: "power2.out",
+        onUpdate: function () {
+          var n = Math.round(c.v), str = String(n), isFive = n >= 10000;
+          if (isFive !== five) { S[0].style.display = isFive ? "" : "none"; five = isFive; }
+          if (isFive) { S[0].textContent = str[0]; S[1].textContent = str[1]; S[2].textContent = str[2]; S[3].textContent = str[3]; S[4].textContent = str[4]; }
+          else { S[1].textContent = str[0]; S[2].textContent = str[1]; S[3].textContent = str[2]; S[4].textContent = str[3]; }
+        }
+      }, COUNT_AT);
+      tl.fromTo(counter, { scale: 120 / 132 }, { scale: 1, duration: COUNT_DUR, ease: "power2.out" }, COUNT_AT); // digits grow as they climb
+      // the card's bottom edge ignites (the only warm color in AVANT), then smoulders
+      tl.fromTo([edge, heat], { opacity: 0 }, { opacity: 1, duration: 0.4, ease: "power2.out" }, 1.52);
+      tl.fromTo(glow, { opacity: 0 }, { opacity: 1, duration: 0.45, ease: "power2.out" }, 1.55);
+      var flick = [0.78, 1, 0.84, 1, 0.8, 1, 0.88];
+      for (var f = 0; f < flick.length; f++) tl.to(glow, { opacity: flick[f], duration: 0.5, ease: "sine.inOut" }, 2.0 + f * 0.5);
+      // ember particles — pure function of the driver (index-seeded births, buoyant rise, sway, fade)
+      var N = 26, G = -40, FLIGHT = 1.85, parts = [];
+      for (var i = 0; i < N; i++) {
+        var el = document.createElement("div");
+        el.className = "f03-budget-ember";
+        var size = 3 + prand(i * 3 + 1) * 4.5;
+        el.style.width = size + "px";
+        el.style.height = size + "px";
+        field.appendChild(el);
+        parts.push({
+          el: el,
+          ox: 26 + prand(i * 5 + 2) * 568,
+          vx: (prand(i * 11 + 4) - 0.5) * 50,
+          vy: -(150 + prand(i * 7 + 3) * 170),
+          sway: 5 + prand(i * 13 + 5) * 10,
+          freq: 3 + prand(i * 17 + 6) * 4,
+          phase: prand(i * 19 + 7) * 6.283,
+          birth: prand(i * 23 + 8) * 0.55,
+          life: 0.85 + prand(i * 29 + 9) * 0.4
+        });
+      }
+      var drive = { T: 0 };
+      tl.fromTo(drive, { T: 0 }, {
+        T: 1, duration: FLIGHT, ease: "none",
+        onUpdate: function () {
+          var t = drive.T * FLIGHT;
+          for (var j = 0; j < parts.length; j++) {
+            var p = parts[j], a = t - p.birth;
+            if (drive.T === 0 || a <= 0 || a >= p.life) { p.el.style.opacity = "0"; continue; }
+            var k = a / p.life;
+            var x = p.ox + p.vx * a + p.sway * Math.sin(p.freq * a + p.phase);
+            var y = p.vy * a + 0.5 * G * a * a;
+            var o = 0.6 * Math.min(1, a / 0.12) * Math.min(1, (1 - k) / 0.45);
+            p.el.style.opacity = o.toFixed(3);
+            p.el.style.transform = "translate(" + x.toFixed(2) + "px," + y.toFixed(2) + "px) scale(" + (1 - 0.55 * k).toFixed(3) + ")";
+          }
+        }
+      }, 1.58);
+
+      // ════ Scene 3 (2.88–4.3): « des visiteurs dont vous ne savez rien » — profile card slides in, « ? » pills pop ════
+      tl.fromTo(profile, { opacity: 0, x: 90, "--dof": "10px" }, { opacity: 1, x: 0, "--dof": "0px", duration: 0.45, ease: "expo.out" }, 2.62);
+      var rows = rootEl.querySelectorAll(".f03-budget-row-label");
+      rows.forEach(function (r, j) {
+        tl.fromTo(r, { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.35, ease: "expo.out" }, 2.7 + j * 0.04);
+      });
+      var qs = rootEl.querySelectorAll(".f03-budget-q");
+      [2.88, 3.3, 3.7, 4.1].forEach(function (cue, j) {
+        tl.fromTo(qs[j], { opacity: 0, scale: 0.4 }, { opacity: 1, scale: 1, duration: 0.34, ease: "back.out(1.6)" }, cue - 0.14);
+      });
+      // focus racks from the burning counter to the unknown visitor
+      tl.to(spend, { "--dof": "5px", opacity: 0.72, duration: 0.6, ease: "power2.inOut" }, 3.0);
+
+      // ════ Scene 4 (4.9–6.85): « et vous optimisez… à l'aveugle » — settings card rises; the whole stage goes blind ════
+      tl.fromTo(setCard, { rotationX: 35, yPercent: 60, opacity: 0, filter: "blur(10px)" }, { rotationX: 10, yPercent: 0, opacity: 1, filter: "blur(0px)", duration: 0.45, ease: "power3.out" }, 4.62);
+      tl.to(setCard, { rotationX: 6, duration: 0.5, ease: "sine.out" }, 5.07);
+      tl.to(profile, { "--dof": "6px", opacity: 0.7, duration: 0.5, ease: "power2.inOut" }, 4.72);
+      tl.to(spend, { "--dof": "7px", opacity: 0.62, duration: 0.5, ease: "power2.inOut" }, 4.72);
+      // blind optimizing: knobs keep moving, toggles flip — before and after the stage defocuses
+      var sliders = rootEl.querySelectorAll(".f03-budget-slider");
+      var STOPS = [[0.35, 0.74, 0.5], [0.62, 0.4, 0.68], [0.48, 0.82, 0.6]];
+      sliders.forEach(function (sl, j) {
+        var knob = sl.querySelector(".f03-budget-knob"), fill = sl.querySelector(".f03-budget-fill"), W = 344;
+        gsap.set(knob, { x: STOPS[j][0] * W });
+        gsap.set(fill, { scaleX: STOPS[j][0] });
+        tl.to(knob, { x: STOPS[j][1] * W, duration: 0.55, ease: "power2.inOut" }, 5.02 + j * 0.09);
+        tl.to(fill, { scaleX: STOPS[j][1], duration: 0.55, ease: "power2.inOut" }, 5.02 + j * 0.09);
+        tl.to(knob, { x: STOPS[j][2] * W, duration: 0.6, ease: "power2.inOut" }, 5.95 + j * 0.12);
+        tl.to(fill, { scaleX: STOPS[j][2], duration: 0.6, ease: "power2.inOut" }, 5.95 + j * 0.12);
+      });
+      var t1 = $("t1"), t2 = $("t2");
+      gsap.set(t1, { backgroundColor: "#8C8580" });
+      gsap.set(t1.firstElementChild, { x: 26 });
+      tl.to(t1.firstElementChild, { x: 0, duration: 0.22, ease: "power2.inOut" }, 5.3);
+      tl.to(t1, { backgroundColor: "rgba(255,255,255,0.10)", duration: 0.22, ease: "power2.inOut" }, 5.3);
+      tl.to(t2.firstElementChild, { x: 26, duration: 0.22, ease: "power2.inOut" }, 5.44);
+      tl.to(t2, { backgroundColor: "#8C8580", duration: 0.22, ease: "power2.inOut" }, 5.44);
+      // « à l'aveugle » (5.76): depth-of-field blur on the whole stage → 22px, brightness → 0.6, camera pushes in
+      tl.set(world, { filter: "blur(0px)" }, 5.59);
+      tl.to(world, { filter: "blur(22px)", duration: 0.85, ease: "power2.inOut" }, 5.6);
+      tl.to(grid, { opacity: 0.25, filter: "blur(4px)", duration: 0.85, ease: "power2.inOut" }, 5.6);   // a 1px grid at 22px blur is just tone
+      tl.to(dim, { opacity: 0.4, duration: 0.85, ease: "power2.inOut" }, 5.6);                           // brightness 0.6 over the stage
+      tl.to(glow, { opacity: 0.35, duration: 0.85, ease: "power2.inOut" }, 5.6);
+      tl.to(world, { scale: 1.095, duration: 1.24, ease: "power2.out" }, 5.6);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines[ID] = tl;
+    })();
+  </script>
+</template>

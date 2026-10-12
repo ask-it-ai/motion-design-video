@@ -818,10 +818,10 @@
       tl.fromTo($("bar1"), { scaleX: 0 }, { scaleX: 1, transformOrigin: "0% 50%", duration: 0.24, ease: "power3.out" }, 1.96);
       tl.fromTo($("bar2"), { scaleX: 0 }, { scaleX: 1, transformOrigin: "0% 50%", duration: 0.22, ease: "power3.out" }, 2.02);
       tl.fromTo($("dot"), { scale: 0 }, { scale: 1, transformOrigin: "50% 50%", duration: 0.3, ease: "back.out(2.2)" }, 2.08);
-      // mask wipe: the mask box travels −470 → 0 while the text counter-travels +440 → 0,
-      // so the text itself only slides x −30 → 0 while its right edge is wiped open.
-      tl.fromTo($("word-mask"), { x: -470 }, { x: 0, duration: 0.55, ease: "expo.inOut" }, 2.02);
-      tl.fromTo($("word-inner"), { x: 440 }, { x: 0, duration: 0.55, ease: "expo.inOut" }, 2.02);
+      // mask wipe: the mask box travels −500 → 0 while the text counter-travels +470 → 0,
+      // so the text itself only slides x −30 → 0 while the mask's right edge wipes it open.
+      tl.fromTo($("word-mask"), { x: -500 }, { x: 0, duration: 0.55, ease: "expo.inOut" }, 2.02);
+      tl.fromTo($("word-inner"), { x: 470 }, { x: 0, duration: 0.55, ease: "expo.inOut" }, 2.02);
       $$("#" + ID + "-word-inner .f04-bascule-ch").forEach(function (ch, k) {
         tl.fromTo(ch, { color: "#d6cfc7" }, { color: "#241f20", duration: 0.26, ease: "power1.out" }, 2.1 + k * 0.035);
       });
