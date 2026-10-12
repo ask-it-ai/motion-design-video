@@ -17,16 +17,16 @@ def keys(times, gain=-15, pan=0.0):
     return out
 
 S = {
- 'f01': [(1.70,'swipe',{}),(2.96,'ui_tap',{}),(4.76,'ui_tap',{'pitch':1}),(6.30,'swipe',{'gain':-22}),
+ 'f01': [(1.70,'swipe',{}),(2.96,'ui_tap',{'gain':-16}),(4.76,'ui_tap',{'pitch':1,'gain':-16}),(6.30,'swipe',{'gain':-22}),
          (7.92,'whoosh_soft',{'gain':-20}),(7.86,'pop',{'gain':-24,'pan':-0.4}),(8.00,'pop',{'gain':-25,'pitch':2,'pan':0.4}),
          (9.00,'pop',{'gain':-25,'pitch':3,'pan':0.3}),(9.12,'pop',{'gain':-26,'pitch':5,'pan':-0.3}),
          (9.40,'muffle_drone',{'gain':-21}),(11.78,'tab_close',{})],
- 'f04': [(0.10,'rewind',{'align':'start'}),(1.78,'color_flood',{}),(1.90,'logo_sting',{}),(3.16,'pop',{'gain':-23}),
+ 'f04': [(0.10,'rewind',{'align':'start','gain':-24}),(1.78,'color_flood',{'gain':-21}),(1.90,'logo_sting',{'gain':-20}),(3.16,'pop',{'gain':-23}),
          (4.62,'skin_swap',{}),(4.92,'success',{'gain':-20}),
          (5.29,'pop',{'gain':-21,'pan':-0.3}),(5.36,'pop',{'gain':-21,'pitch':2,'pan':0.3}),(5.43,'pop',{'gain':-22,'pitch':4,'pan':-0.1}),(5.50,'pop',{'gain':-22,'pitch':5,'pan':0.4}),
          (5.92,'whoosh_soft',{'gain':-24}),(6.03,'ui_select',{}),(6.11,'ui_select',{'pitch':2}),(6.19,'ui_select',{'pitch':4})],
  'f06': [(0.95,'swipe',{}),(1.10,'ui_select',{}),(2.10,'whoosh_soft',{}),(2.62,'pop',{}),(3.52,'swipe',{'gain':-23}),
-         (3.66,'pop',{'gain':-20}),(3.74,'pop',{'gain':-20,'pitch':2}),(3.82,'pop',{'gain':-21,'pitch':4}),(3.90,'pop',{'gain':-21,'pitch':5}),
+         (3.66,'pop',{'gain':-22}),(3.74,'pop',{'gain':-22,'pitch':2}),(3.82,'pop',{'gain':-23,'pitch':4}),(3.90,'pop',{'gain':-23,'pitch':5}),
          (4.05,'counter_tick',{'align':'start','trim':(0.0,1.0)}),(5.20,'sparkle',{'gain':-22}),(5.95,'pop',{'gain':-21,'pitch':-2}),
          (7.21,'whoosh_soft',{}),(7.48,'number_slam',{}),(7.50,'counter_tick',{'align':'start','trim':(0.0,0.45)}),
          (9.80,'whoosh_soft',{'gain':-23}),(9.90,'number_slam',{}),(9.92,'counter_tick',{'align':'start','trim':(0.0,1.1)}),(11.02,'pop',{})],
@@ -34,10 +34,10 @@ S = {
         [(1.72,'ui_select',{}),(2.70,'ui_tap',{}),(2.86,'success',{}),(3.55,'whoosh_soft',{'gain':-23}),
          (4.10,'ui_select',{}),(4.35,'ui_select',{'pitch':2}),(4.60,'ui_select',{'pitch':4}),(4.85,'ui_select',{'pitch':5}),
          (5.55,'notif',{}),(5.85,'notif',{'pitch':1}),(6.15,'notif',{'pitch':2,'gain':-16})],
- 'f09': [(0.45,'pop',{}),(1.97,'ui_tap',{}),(2.10,'swipe',{'gain':-22}),(2.54,'ui_tap',{'gain':-17,'pitch':-1}),
-         (3.38,'swipe',{'gain':-24}),(4.72,'ui_tap',{}),(5.05,'swipe',{'gain':-25}),(5.82,'swipe',{'pitch':3,'gain':-21}),
-         (6.05,'ui_tap',{'pitch':1}),(6.58,'ui_tap',{'pitch':2}),(7.12,'skin_swap',{}),(7.55,'sparkle',{'gain':-20}),
-         (8.75,'swipe',{'gain':-22}),(9.25,'sparkle',{'gain':-24}),(10.44,'ui_tap',{}),(10.53,'cart_add',{}),(10.99,'pop',{'pitch':3})],
+ 'f09': [(0.45,'pop',{}),(1.97,'ui_tap',{'gain':-18}),(2.10,'swipe',{'gain':-24}),(2.54,'ui_tap',{'gain':-18,'pitch':-1}),
+         (3.38,'swipe',{'gain':-26}),(4.72,'ui_tap',{'gain':-16}),(5.05,'swipe',{'gain':-27}),(5.82,'swipe',{'pitch':3,'gain':-24}),
+         (6.05,'ui_tap',{'pitch':1,'gain':-16}),(6.58,'ui_tap',{'pitch':2,'gain':-16}),(7.12,'skin_swap',{}),(7.55,'sparkle',{'gain':-20}),
+         (8.75,'swipe',{'gain':-24}),(9.25,'sparkle',{'gain':-24}),(10.44,'ui_tap',{}),(10.53,'cart_add',{}),(10.99,'pop',{'pitch':3})],
  # provisional until the scene lands
  'f02': [(0.06,'dots_fade',{'trim':(0.0,0.16),'align':'start','pitch':-2,'gain':-20}),
          (1.22,'dots_fade',{'align':'start','gain':-17}),(1.22,'counter_tick',{'align':'start','trim':(0.0,1.0),'gain':-25}),
@@ -49,9 +49,11 @@ S = {
          (4.66,'whoosh_soft',{'gain':-23}),(5.36,'ui_tap',{'gain':-22}),(5.50,'ui_tap',{'gain':-23,'pitch':2}),
          # the blur swells into a muffled drone that stops dead 150 ms before the rewind: silence before the world switch
          (5.45,'muffle_drone',{'align':'start','trim':(0.0,1.35)})],
- 'f05': [(0.06,'ui_select',{}),(1.15,'whoosh_soft',{}),(2.30,'skin_swap',{}),(3.20,'skin_swap',{'pitch':-1}),
-         (4.45,'swipe',{}),(6.89,'ui_tap',{}),(7.44,'chip_fly',{}),(7.68,'ui_tap',{}),(8.23,'chip_fly',{'pitch':1}),(8.54,'ui_tap',{}),(9.09,'chip_fly',{'pitch':2}),
-         (9.80,'timer',{'align':'start'}),(11.62,'success',{}),(12.30,'pop',{'pitch':1}),(13.52,'pop',{'pitch':-1})],
+ 'f05': [(0.06,'ui_select',{}),(1.15,'whoosh_soft',{}),(1.90,'pop',{'gain':-22}),(2.42,'skin_swap',{}),(3.32,'skin_swap',{'pitch':-1}),
+         (4.45,'swipe',{'gain':-22}),(5.78,'swipe',{'gain':-25}),
+         (6.86,'ui_tap',{}),(7.45,'chip_fly',{}),(7.64,'ui_tap',{'pitch':1}),(8.22,'chip_fly',{'pitch':1}),(8.50,'ui_tap',{'pitch':2}),(9.10,'chip_fly',{'pitch':2}),
+         (9.60,'pop',{'gain':-22}),(9.66,'timer',{'align':'start','gain':-18}),(10.14,'ui_select',{}),
+         (11.13,'pop',{}),(11.85,'success',{}),(12.16,'pop',{'pitch':1}),(13.46,'notif',{'gain':-19})],
  'f07': [(0.86,'ui_select',{}),(1.86,'tab_close',{'gain':-16}),(2.80,'paper_crumple',{}),(3.22,'whoosh_soft',{'gain':-23}),
          (3.95,'whoosh_soft',{}),(3.97,'counter_tick',{'align':'start','trim':(0.0,0.9),'gain':-25}),(5.17,'cart_add',{}),
          (4.98,'pop',{'gain':-23}),(6.02,'whoosh_soft',{'gain':-22}),(6.68,'ui_select',{}),(7.62,'whoosh_soft',{'gain':-22}),
@@ -60,7 +62,7 @@ S = {
         [(9.96,'pop',{'gain':-21}),(10.06,'ui_tap',{}),(10.22,'success',{})],
  'f10': [(0.40,'ui_select',{'gain':-21}),(1.00,'success',{'gain':-19}),(2.45,'whoosh_soft',{'gain':-22}),
          (2.95,'dots_fade',{'rev':True,'align':'start','gain':-16}),(3.15,'number_slam',{'gain':-18}),
-         (5.34,'logo_sting',{'gain':-16}),(6.02,'pop',{}),(8.20,'ui_tap',{}),(8.27,'success',{'gain':-18})],
+         (5.42,'logo_sting',{'gain':-16}),(5.97,'pop',{}),(8.20,'ui_tap',{}),(8.27,'success',{'gain':-18})],
 }
 # root-level transitions (global times = middle of the move)
 T = [(23.15,'whoosh_soft',{'gain':-25}), (64.465,'whoosh_fast',{}), (75.75,'whoosh_soft',{'gain':-20}),

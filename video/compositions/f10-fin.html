@@ -81,7 +81,8 @@
     #f10-fin-ctaglow { position: absolute; inset: 0; border-radius: 999px; box-shadow: inset 0 0 0 3px rgba(255,255,255,0.20), inset 0 0 22px rgba(255,255,255,0.18); opacity: 0; }
     .f10-fin-labelrow { position: absolute; left: 0; top: 670px; width: 1920px; height: 30px; display: flex; justify-content: center; }
     #f10-fin-url { font-weight: 500; font-size: 22px; letter-spacing: 0.02em; color: #6C6560; line-height: 30px; }
-    .f10-fin-ring { position: absolute; width: 140px; height: 140px; margin-left: -70px; margin-top: -70px; border-radius: 50%; border: 3px solid #F8571F; opacity: 0; }
+    .f10-fin-ring { position: absolute; width: 160px; height: 160px; margin-left: -80px; margin-top: -80px; border-radius: 50%; border: 3.5px solid #F8571F; opacity: 0; }
+    #f10-fin-ctabloom { position: absolute; left: 610px; top: 470px; width: 700px; height: 260px; border-radius: 50%; background: radial-gradient(closest-side, rgba(248,87,31,0.9) 0%, rgba(248,87,31,0.35) 50%, rgba(248,87,31,0) 100%); opacity: 0; }
     #f10-fin-cursor { position: absolute; left: 0; top: 0; width: 52px; height: 66px; margin-left: -4.5px; margin-top: -3.4px; transform-origin: 4.5px 3.4px; filter: drop-shadow(0 8px 12px rgba(36,31,32,0.28)); }
     #f10-fin-cursor svg { display: block; }
   </style>
@@ -98,7 +99,7 @@
     <div id="f10-fin-world" class="clip" data-start="0" data-duration="10.66" data-track-index="1">
       <div id="f10-fin-wfade">
         <div id="f10-fin-wdrift">
-          <div id="f10-fin-cam">
+          <div id="f10-fin-cam" data-layout-allow-overflow>
             <div id="f10-fin-dots"></div>
             <div id="f10-fin-herhalo"></div>
             <div id="f10-fin-her"></div>
@@ -124,6 +125,7 @@
     <div id="f10-fin-end" class="clip" data-start="0" data-duration="10.66" data-track-index="2">
       <div id="f10-fin-enddrift">
         <div id="f10-fin-endglow"></div>
+        <div id="f10-fin-ctabloom"></div>
         <div class="f10-fin-lockrow">
           <div id="f10-fin-lockup">
             <img id="f10-fin-mark" src="assets/askit/askit-logo-mark.svg" alt="" />
@@ -136,7 +138,7 @@
         <div class="f10-fin-labelrow"><div id="f10-fin-url">ask-it.ai</div></div>
         <div class="f10-fin-ring" id="f10-fin-ring1"></div>
         <div class="f10-fin-ring" id="f10-fin-ring2"></div>
-        <div id="f10-fin-cursor">
+        <div id="f10-fin-cursor" data-layout-allow-overflow>
           <svg width="52" height="66" viewBox="0 0 46 58"><path d="M4 3 L4 45 L14.6 35.4 L21.4 51.6 L28.6 48.6 L21.8 32.6 L36 32.6 Z" fill="#241F20" stroke="#FFFFFF" stroke-width="3" stroke-linejoin="round"/></svg>
         </div>
       </div>
@@ -217,7 +219,7 @@
         tl.fromTo(lit[idx], { opacity: 0 }, { opacity: 1, duration: 0.08, ease: "none" }, t);
       });
       // keep the grid alive while it holds
-      tl.fromTo(q("wdrift"), { scale: 1 }, { scale: 1.025, duration: 5.12 - (PB + PBD), ease: "none" }, PB + PBD);
+      tl.fromTo(q("wdrift"), { scale: 1 }, { scale: 1.025, duration: 5.1 - (PB + PBD), ease: "none" }, PB + PBD);
 
       // « 70 % » number slam (soixante-dix 3.33) + impact lines, label « restent »
       var SL = 3.08;
@@ -238,11 +240,11 @@
       tl.fromTo(q("statlabel"), { opacity: 0, y: 22 }, { opacity: 1, y: 0, duration: 0.45, ease: "expo.out" }, 3.3);
 
       /* ── Scene 3 (5.2–7.6): grid + stat shrink-fade at centre while the ask-it.ai lockup builds (final frame: exit allowed) ── */
-      tl.fromTo(q("wfade"), { opacity: 1, scale: 1, filter: "blur(0px)" }, { opacity: 0, scale: 0.95, filter: "blur(6px)", duration: 0.4, ease: "power2.in" }, 5.12);
-      tl.fromTo(q("mark"), { scale: 0, rotation: -18 }, { scale: 1, rotation: 0, duration: 0.42, ease: "back.out(1.7)" }, 5.3);
-      tl.fromTo(q("mark"), { opacity: 0 }, { opacity: 1, duration: 0.1, ease: "none" }, 5.3);
+      tl.fromTo(q("wfade"), { opacity: 1, scale: 1, filter: "blur(0px)" }, { opacity: 0, scale: 0.95, filter: "blur(6px)", duration: 0.4, ease: "power2.inOut" }, 5.1);
+      tl.fromTo(q("mark"), { scale: 0, rotation: -18 }, { scale: 1, rotation: 0, duration: 0.42, ease: "back.out(1.7)" }, 5.36);
+      tl.fromTo(q("mark"), { opacity: 0 }, { opacity: 1, duration: 0.1, ease: "none" }, 5.36);
       gsap.utils.toArray("#" + P + "lockup ." + P + "ch").forEach(function (ch, n) {
-        var t = 5.42 + n * 0.042;
+        var t = 5.48 + n * 0.042;
         tl.fromTo(ch, { y: 46, opacity: 0, color: "#DDD7CD" }, { y: 0, opacity: 1, duration: 0.42, ease: "expo.out" }, t);
         tl.fromTo(ch, { color: "#DDD7CD" }, { color: "#241F20", duration: 0.35, ease: "power1.out", immediateRender: false }, t + 0.12);
       });
@@ -275,6 +277,8 @@
       tl.fromTo(q("ring2"), { scale: 0 }, { scale: 2.3, duration: 0.75, ease: "power2.out" }, 8.3);
       flash(q("ring2"), 8.3, 0.28, 0.02, 0.73);
       // release bloom under the CTA (pulse-on-arrival), then the glow settles
+      tl.fromTo(q("ctabloom"), { opacity: 0, scale: 0.7 }, { opacity: 0.34, scale: 1, duration: 0.32, ease: "power2.out" }, 8.22);
+      tl.fromTo(q("ctabloom"), { opacity: 0.34 }, { opacity: 0.14, duration: 1.4, ease: "sine.inOut", immediateRender: false }, 8.54);
       tl.to(q("endglow"), { scale: 1.06, duration: 0.3, ease: "power2.out" }, 8.24);
       tl.to(q("endglow"), { scale: 1, duration: 1.2, ease: "sine.inOut" }, 8.54);
       // cursor eases off the label and rests; everything settles to a still frame by ~10.6

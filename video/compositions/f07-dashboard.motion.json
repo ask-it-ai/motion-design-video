@@ -1,0 +1,13 @@
+{
+  "scene": "f07-dashboard",
+  "duration_s": 11.23,
+  "rules": ["counting-dynamic-scale", "svg-path-draw", "stat-bars-and-fills"],
+  "exit": {
+    "vector": "camera push-in on the activated campaign card, accelerating (power1.in): scale rate ≈ +0.13/s at s≈1.82 (≈7 %/s) → ≈50–90 px/s outward at the frame edges; focus drifting right/down (content ≈ −20 px/s x, −16 px/s y)",
+    "still_moving": true
+  },
+  "entry": {
+    "vector": "up (−y): browser window rises from +160 px with rotationX 22°→0 and blur 10→0 (expo.out ≈ 1170 px/s at frame 0, fading in from opacity 0, settled by ~1.0 s); camera static",
+    "from_rest": false
+  }
+}

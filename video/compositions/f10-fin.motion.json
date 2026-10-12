@@ -1,0 +1,7 @@
+{
+  "scene": "f10-fin",
+  "duration_s": 10.66,
+  "rules": ["spring-pop-entrance", "ambient-glow-bloom", "cursor-click-ripple", "physics-press-reaction", "scale-swap-transition", "viewport-change", "gsap-effects"],
+  "exit": { "vector": "none — calm still end card (lockup + clicked « Réserver une démo → » pill + resting cursor); every drift and glow eased to zero by 10.6 s, no fade to black", "still_moving": false },
+  "entry": { "vector": "centre pop-in of Claire's avatar at (960,520): scale 0.86→1 (expo.out 0.55 s, ~176 %/s at t=0), opacity 0→1, blur 8→0 px; camera static, background mesh starting from rest (sine.inOut)", "from_rest": false }
+}

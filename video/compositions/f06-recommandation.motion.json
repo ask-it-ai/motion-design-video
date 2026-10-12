@@ -1,0 +1,13 @@
+{
+  "scene": "f06-recommandation",
+  "duration_s": 12.36,
+  "rules": ["split-tilt-cards", "spring-pop-entrance", "counting-dynamic-scale"],
+  "exit": {
+    "vector": "radial scale-up drift of the stats layer, +0.6 %/s about (960,540) (linear) — ≈2–3 px/s outward at the ×4 / +36 % stats, no translation; brand mesh drift easing to 0",
+    "still_moving": true
+  },
+  "entry": {
+    "vector": "0 px/s — PHONE_HERO static on 17-resultat.png scroll 0 with frame 5's profile card + 30 s badge pixel-matched; card/badge start from rest (power2.in) toward the phone",
+    "from_rest": true
+  }
+}

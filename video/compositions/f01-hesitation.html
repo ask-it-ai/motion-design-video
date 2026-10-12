@@ -142,9 +142,7 @@
     .f01-hesitation-tileimg {
       position: absolute;
       inset: 0;
-      background-image: url('assets/screens/endro-shop/collection-serums.png');
-      background-size: 442px auto;
-      background-repeat: no-repeat;
+      background: url('assets/screens/endro-shop/collection-serums.png') 0px 0px / 442px auto no-repeat;
       filter: grayscale(0.85) brightness(0.85);
     }
     .f01-hesitation-ring {
@@ -470,7 +468,7 @@
       }
 
       window.__timelines = window.__timelines || {};
-      window.__timelines[ID] = tl;
+      window.__timelines["f01-hesitation"] = tl;
     })();
   </script>
 </template>

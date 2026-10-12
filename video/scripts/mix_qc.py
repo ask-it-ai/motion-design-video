@@ -25,3 +25,8 @@ for i in bad:
     print(f'  t={tt:6.2f}  VO {Mv[i]:6.1f}  SFX {Ms[i]:6.1f}  ->', ', '.join(key))
 gaps = (~speech) & (Ms > -60)
 print('SFX in voice gaps: max momentary %.1f LUFS' % (Ms[gaps].max() if gaps.any() else -120))
+print('worst windows (SFX minus VO, during speech):')
+order = np.argsort(-(np.where(speech, diff, -999)))[:10]
+for i in order:
+    tt = t[i]; near = [p['sfx'] + '@' + str(p['t']) for p in placed if p['start'] - 0.1 <= tt <= p['start'] + 1.2]
+    print(f'  t={tt:6.2f} diff {diff[i]:+5.1f}  VO {Mv[i]:6.1f}  ->', ', '.join(near))

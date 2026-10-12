@@ -274,10 +274,10 @@
       display: inline-block;
       color: #241f20;
     }
-    .f04-bascule-ch.is-strong {
+    .f04-bascule-ch.f04-bascule-strong {
       font-weight: 600;
     }
-    .f04-bascule-ch.is-light {
+    .f04-bascule-ch.f04-bascule-light {
       font-weight: 400;
     }
 
@@ -420,6 +420,22 @@
       opacity: 0;
     }
 
+    /* unknown-data slots shown while she is anonymous */
+    .f04-bascule-qslot {
+      position: absolute;
+      height: 56px;
+      box-sizing: border-box;
+      border-radius: 999px;
+      border: 1.5px dashed rgba(36, 31, 32, 0.2);
+      background: rgba(255, 255, 255, 0.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 22px;
+      color: #b5ada5;
+    }
+
     /* data chips (answer-chip atom) */
     .f04-bascule-chip {
       position: absolute;
@@ -508,42 +524,9 @@
     <div id="f04-bascule-avant" class="clip" data-start="0" data-duration="2.1" data-track-index="0">
       <div class="f04-bascule-avant-ground"></div>
       <div id="f04-bascule-avant-cam">
-        <!-- the blurred f03 dashboard, painted as soft box-shadow shapes (no CSS filters) -->
+        <!-- the blurred f03 dashboard: soft box-shadow shapes generated below (no CSS filters) -->
         <div id="f04-bascule-avant-base" class="f04-bascule-avant-layer">
-          <div class="f04-bascule-scrub">
-              <i class="f04-bascule-soft" style="left: 246px; top: 386px; width: 320px; height: 0px; box-shadow: 0 0 150px 150px rgba(0,0,0,0.42)"></i>
-              <i class="f04-bascule-soft" style="left: 246px; top: 326px; width: 320px; height: 0px; box-shadow: 0 0 44px 150px rgba(255,255,255,0.03)"></i>
-              <i class="f04-bascule-soft" style="left: 149px; top: 231px; width: 282px; height: 0px; box-shadow: 0 0 44px 9px rgba(140,133,128,0.42)"></i>
-              <i class="f04-bascule-soft is-bright" style="left: 186px; top: 334px; width: 338px; height: 0px; box-shadow: 0 0 44px 46px rgba(242,239,236,0.5)"></i>
-              <i class="f04-bascule-soft" style="left: 148px; top: 420px; width: 194px; height: 0px; box-shadow: 0 0 44px 8px rgba(140,133,128,0.42)"></i>
-              <i class="f04-bascule-soft" style="left: 1471px; top: 445px; width: 90px; height: 0px; box-shadow: 0 0 150px 235px rgba(0,0,0,0.42)"></i>
-              <i class="f04-bascule-soft" style="left: 1471px; top: 385px; width: 90px; height: 0px; box-shadow: 0 0 44px 235px rgba(255,255,255,0.03)"></i>
-              <i class="f04-bascule-soft" style="left: 1318px; top: 230px; width: 0px; height: 0px; box-shadow: 0 0 44px 38px rgba(140,133,128,0.42)"></i>
-              <i class="f04-bascule-soft" style="left: 1387px; top: 227px; width: 198px; height: 0px; box-shadow: 0 0 44px 11px rgba(140,133,128,0.42)"></i>
-              <i class="f04-bascule-soft" style="left: 1290px; top: 330px; width: 360px; height: 0px; box-shadow: 0 0 44px 10px rgba(242,239,236,0.1)"></i>
-              <i class="f04-bascule-soft" style="left: 1717px; top: 330px; width: 0px; height: 0px; box-shadow: 0 0 44px 15px rgba(140,133,128,0.42)"></i>
-              <i class="f04-bascule-soft" style="left: 1290px; top: 400px; width: 310px; height: 0px; box-shadow: 0 0 44px 10px rgba(242,239,236,0.1)"></i>
-              <i class="f04-bascule-soft" style="left: 1717px; top: 400px; width: 0px; height: 0px; box-shadow: 0 0 44px 15px rgba(140,133,128,0.42)"></i>
-              <i class="f04-bascule-soft" style="left: 1290px; top: 470px; width: 340px; height: 0px; box-shadow: 0 0 44px 10px rgba(242,239,236,0.1)"></i>
-              <i class="f04-bascule-soft" style="left: 1717px; top: 470px; width: 0px; height: 0px; box-shadow: 0 0 44px 15px rgba(140,133,128,0.42)"></i>
-              <i class="f04-bascule-soft" style="left: 1290px; top: 540px; width: 280px; height: 0px; box-shadow: 0 0 44px 10px rgba(242,239,236,0.1)"></i>
-              <i class="f04-bascule-soft" style="left: 1717px; top: 540px; width: 0px; height: 0px; box-shadow: 0 0 44px 15px rgba(140,133,128,0.42)"></i>
-              <i class="f04-bascule-soft" style="left: 810px; top: 640px; width: 300px; height: 0px; box-shadow: 0 0 150px 250px rgba(0,0,0,0.42)"></i>
-              <i class="f04-bascule-soft" style="left: 810px; top: 580px; width: 300px; height: 0px; box-shadow: 0 0 44px 250px rgba(255,255,255,0.05)"></i>
-              <i class="f04-bascule-soft" style="left: 623px; top: 393px; width: 298px; height: 0px; box-shadow: 0 0 44px 11px rgba(140,133,128,0.42)"></i>
-              <i class="f04-bascule-soft" style="left: 617px; top: 477px; width: 550px; height: 0px; box-shadow: 0 0 44px 5px rgba(242,239,236,0.1)"></i>
-              <i class="f04-bascule-soft is-bright" style="left: 617px; top: 477px; width: 320px; height: 0px; box-shadow: 0 0 44px 5px rgba(242,239,236,0.5)"></i>
-              <i class="f04-bascule-soft is-bright" style="left: 942px; top: 477px; width: 0px; height: 0px; box-shadow: 0 0 44px 15px rgba(242,239,236,0.5)"></i>
-              <i class="f04-bascule-soft" style="left: 617px; top: 557px; width: 550px; height: 0px; box-shadow: 0 0 44px 5px rgba(242,239,236,0.1)"></i>
-              <i class="f04-bascule-soft is-bright" style="left: 617px; top: 557px; width: 170px; height: 0px; box-shadow: 0 0 44px 5px rgba(242,239,236,0.5)"></i>
-              <i class="f04-bascule-soft is-bright" style="left: 792px; top: 557px; width: 0px; height: 0px; box-shadow: 0 0 44px 15px rgba(242,239,236,0.5)"></i>
-              <i class="f04-bascule-soft" style="left: 617px; top: 637px; width: 550px; height: 0px; box-shadow: 0 0 44px 5px rgba(242,239,236,0.1)"></i>
-              <i class="f04-bascule-soft is-bright" style="left: 617px; top: 637px; width: 440px; height: 0px; box-shadow: 0 0 44px 5px rgba(242,239,236,0.5)"></i>
-              <i class="f04-bascule-soft is-bright" style="left: 1062px; top: 637px; width: 0px; height: 0px; box-shadow: 0 0 44px 15px rgba(242,239,236,0.5)"></i>
-              <i class="f04-bascule-soft" style="left: 634px; top: 744px; width: 44px; height: 0px; box-shadow: 0 0 44px 22px rgba(140,133,128,0.42)"></i>
-              <i class="f04-bascule-soft" style="left: 758px; top: 744px; width: 44px; height: 0px; box-shadow: 0 0 44px 22px rgba(140,133,128,0.42)"></i>
-              <i class="f04-bascule-soft is-bright" style="left: 1150px; top: 744px; width: 130px; height: 0px; box-shadow: 0 0 44px 30px rgba(242,239,236,0.5)"></i>
-          </div>
+          <div class="f04-bascule-scrub"></div>
         </div>
         <div id="f04-bascule-slices"></div>
       </div>
@@ -570,7 +553,6 @@
       <div id="f04-bascule-scene">
         <div id="f04-bascule-drift">
           <div id="f04-bascule-glow"></div>
-
           <div id="f04-bascule-lockup">
             <div id="f04-bascule-mark">
               <div id="f04-bascule-mark-pop">
@@ -588,12 +570,15 @@
               </div>
             </div>
             <div id="f04-bascule-word">
-              <div id="f04-bascule-word-mask"><div id="f04-bascule-word-inner"><span class="f04-bascule-ch is-strong">a</span><span class="f04-bascule-ch is-strong">s</span><span class="f04-bascule-ch is-strong">k</span><span class="f04-bascule-ch is-strong">-</span><span class="f04-bascule-ch is-strong">i</span><span class="f04-bascule-ch is-strong">t</span><span class="f04-bascule-ch is-light">.</span><span class="f04-bascule-ch is-light">a</span><span class="f04-bascule-ch is-light">i</span></div></div>
+              <div id="f04-bascule-word-mask"><div id="f04-bascule-word-inner"><span class="f04-bascule-ch f04-bascule-strong">a</span><span class="f04-bascule-ch f04-bascule-strong">s</span><span class="f04-bascule-ch f04-bascule-strong">k</span><span class="f04-bascule-ch f04-bascule-strong">-</span><span class="f04-bascule-ch f04-bascule-strong">i</span><span class="f04-bascule-ch f04-bascule-strong">t</span><span class="f04-bascule-ch f04-bascule-light">.</span><span class="f04-bascule-ch f04-bascule-light">a</span><span class="f04-bascule-ch f04-bascule-light">i</span></div></div>
             </div>
           </div>
-
           <div id="f04-bascule-group">
             <div id="f04-bascule-halo"></div>
+            <div class="f04-bascule-qslot" style="left: 740px; top: 458px; width: 148px">?</div>
+            <div class="f04-bascule-qslot" style="left: 906px; top: 458px; width: 206px">?</div>
+            <div class="f04-bascule-qslot" style="left: 790px; top: 528px; width: 200px">?</div>
+            <div class="f04-bascule-qslot" style="left: 1008px; top: 528px; width: 300px">?</div>
             <div id="f04-bascule-chip-4" class="f04-bascule-chip" style="left: 1008px; top: 528px; width: 300px"><i></i><span>Routine essentielle</span></div>
             <div id="f04-bascule-chip-3" class="f04-bascule-chip" style="left: 790px; top: 528px; width: 200px"><i></i><span>Teint terne</span></div>
             <div id="f04-bascule-chip-2" class="f04-bascule-chip" style="left: 906px; top: 458px; width: 206px"><i></i><span>Peau mixte</span></div>
@@ -603,23 +588,16 @@
               <div class="f04-bascule-ripple"></div>
               <div id="f04-bascule-dashring"></div>
               <div id="f04-bascule-avatar">
-                <svg class="f04-bascule-silhouette" viewBox="0 0 140 140" aria-hidden="true">
-                  <circle cx="70" cy="57" r="25" fill="#bdb6ae"></circle>
-                  <path d="M22 140c0-28 21.5-48 48-48s48 20 48 48z" fill="#bdb6ae"></path>
-                </svg>
+                <svg class="f04-bascule-silhouette" viewBox="0 0 140 140" aria-hidden="true"><circle cx="70" cy="57" r="25" fill="#bdb6ae"></circle><path d="M22 140c0-28 21.5-48 48-48s48 20 48 48z" fill="#bdb6ae"></path></svg>
                 <img class="f04-bascule-photo" src="assets/personas/claire.webp" alt="Claire" />
               </div>
               <div id="f04-bascule-badge">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <path d="M5.2 8h13.6l-1.1 11.6a1.6 1.6 0 0 1-1.6 1.4H7.9a1.6 1.6 0 0 1-1.6-1.4z"></path>
-                  <path d="M9 10.5V7a3 3 0 0 1 6 0v3.5"></path>
-                </svg>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5.2 8h13.6l-1.1 11.6a1.6 1.6 0 0 1-1.6 1.4H7.9a1.6 1.6 0 0 1-1.6-1.4z"></path><path d="M9 10.5V7a3 3 0 0 1 6 0v3.5"></path></svg>
                 <span>Cliente</span>
               </div>
               <div class="f04-bascule-tagslot"><div id="f04-bascule-tag-anon" class="f04-bascule-tag"><i></i><span>Visiteuse anonyme</span></div></div>
               <div class="f04-bascule-tagslot"><div id="f04-bascule-tag-name" class="f04-bascule-tag"><span>Claire</span></div></div>
             </div>
-
           </div>
         </div>
       </div>
@@ -643,51 +621,51 @@
   <script>
     (function () {
       var ID = "f04-bascule";
-      var $ = function (id) {
-        return document.getElementById(ID + "-" + id);
-      };
-      var $$ = function (sel) {
-        return Array.prototype.slice.call(document.querySelectorAll(sel));
-      };
+      var $ = function (id) { return document.getElementById(ID + "-" + id); };
+      var $$ = function (sel) { return Array.prototype.slice.call(document.querySelectorAll(sel)); };
       var tl = gsap.timeline({ paused: true });
+      // deterministic hash: every glitch value is a pure function of (step, index)
+      var hash = function (n) { var x = Math.sin(n * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); };
 
-      // Deterministic hash — every glitch value is a pure function of (step, index).
-      var hash = function (n) {
-        var x = Math.sin(n * 127.1 + 311.7) * 43758.5453;
-        return x - Math.floor(x);
-      };
-
-      /* ════════ Scene 1 · 0.0–1.1 s · « Bon… ça, c'était » — rewind glitch ════════ */
+      /* ═══ Scene 1 · 0–1.1 s · « Bon… ça, c'était » — rewind chromatic glitch ═══ */
+      // The blurred f03 dashboard as soft shapes: a Gaussian-blurred rect (σ 22) is a
+      // zero-thickness element + box-shadow (blur 44, spread = half its short side).
       var base = $("avant-base");
       var scrubSrc = base.firstElementChild;
+      var COL = ["rgba(242,239,236,0.5)", "rgba(140,133,128,0.42)", "rgba(242,239,236,0.1)", "rgba(255,255,255,0.03)", "rgba(255,255,255,0.05)", "rgba(0,0,0,0.42)"];
+      [[96,236,620,300,5,150],[96,176,620,300,3],[140,222,300,18,1],[140,288,430,92,0],[140,412,210,16,1],
+       [1236,210,560,470,5,150],[1236,150,560,470,3],[1280,192,76,76,1],[1376,216,220,22,1],
+       [1280,320,380,20,2],[1702,315,30,30,1],[1280,390,330,20,2],[1702,385,30,30,1],[1280,460,360,20,2],[1702,455,30,30,1],[1280,530,300,20,2],[1702,525,30,30,1],
+       [560,390,800,500,5,150],[560,330,800,500,4],[612,382,320,22,1],
+       [612,472,560,10,2],[612,472,330,10,0],[927,462,30,30,0],[612,552,560,10,2],[612,552,180,10,0],[777,542,30,30,0],
+       [612,632,560,10,2],[612,632,450,10,0],[1047,622,30,30,0],[612,722,88,44,1],[736,722,88,44,1],[1120,714,190,60,0]
+      ].forEach(function (d) {
+        var sp = Math.min(d[2], d[3]) / 2, e = document.createElement("i");
+        e.className = "f04-bascule-soft" + (d[4] === 0 ? " f04-bascule-bright" : "");
+        e.style.cssText = "left:" + (d[0] + sp) + "px;top:" + (d[1] + sp) + "px;width:" + (d[2] - 2 * sp) + "px;height:" + (d[3] - 2 * sp) + "px;box-shadow:0 0 " + (d[5] || 44) + "px " + sp + "px " + COL[d[4]];
+        scrubSrc.appendChild(e);
+      });
+      // slice bands: overflow-clipped copies of the stage that tear sideways
       var slicesWrap = $("slices");
-      // Slice bands: overflow-clipped copies of the blurred stage that tear sideways.
-      var SLICES = 8;
-      var BAND_H = 1080 / SLICES;
       var slices = [];
-      for (var i = 0; i < SLICES; i++) {
-        var band = document.createElement("div");
+      for (var i = 0; i < 8; i++) {
+        var band = document.createElement("div"), inner = document.createElement("div");
         band.className = "f04-bascule-band";
-        band.style.top = i * BAND_H + "px";
-        band.style.height = BAND_H + "px";
-        var inner = document.createElement("div");
+        band.style.top = i * 135 + "px";
+        band.style.height = "135px";
         inner.className = "f04-bascule-band-inner";
-        inner.style.top = -i * BAND_H + "px";
+        inner.style.top = -i * 135 + "px";
         inner.appendChild(scrubSrc.cloneNode(true));
         band.appendChild(inner);
         slicesWrap.appendChild(band);
         slices.push(band);
       }
-      // Warm + cool chromatic ghosts of the bright content, screen-blended above (RGB split).
-      var ghosts = [
-        ["is-warm", "rgba(255,112,58,0.62)"],
-        ["is-cool", "rgba(96,170,255,0.58)"],
-      ].map(function (g) {
-        var layer = document.createElement("div");
+      // warm + cool chromatic ghosts of the bright content, screen-blended (RGB split)
+      var ghosts = [["f04-bascule-warm", "rgba(255,112,58,0.62)"], ["f04-bascule-cool", "rgba(96,170,255,0.58)"]].map(function (g) {
+        var layer = document.createElement("div"), c = scrubSrc.cloneNode(true);
         layer.className = "f04-bascule-avant-layer f04-bascule-ghost " + g[0];
-        var c = scrubSrc.cloneNode(true);
         Array.prototype.slice.call(c.children).forEach(function (sh) {
-          if (!sh.classList.contains("is-bright")) c.removeChild(sh);
+          if (!sh.classList.contains("f04-bascule-bright")) c.removeChild(sh);
           else sh.style.boxShadow = sh.style.boxShadow.replace(/rgba?\([^)]*\)/, g[1]);
         });
         layer.appendChild(c);
@@ -696,228 +674,135 @@
       });
       var scrubs = $$("#" + ID + "-avant .f04-bascule-scrub");
       var tracks = $$("#" + ID + "-avant .f04-bascule-track");
-
-      // The f03 camera push (scale 1.08) rewinds while the tape scrubs.
-      tl.fromTo($("avant-cam"), { scale: 1.08 }, { scale: 1.0, duration: 0.9, ease: "power2.inOut" }, 0.1);
-
-      // Panel scrub: x −40 then +60, twice — stepped like a tape, then settles.
-      var scrubMoves = [
-        [0.12, -40, 0.08, "steps(3)"],
-        [0.27, 60, 0.1, "steps(4)"],
-        [0.56, -40, 0.08, "steps(3)"],
-        [0.71, 60, 0.1, "steps(4)"],
-        [0.88, 0, 0.16, "power3.out"],
-      ];
-      scrubMoves.forEach(function (m, k) {
+      // the f03 camera push (scale 1.08) rewinds while the tape scrubs
+      tl.fromTo($("avant-cam"), { scale: 1.08 }, { scale: 1, duration: 0.9, ease: "power2.inOut" }, 0.1);
+      // panel scrub: x −40 then +60, twice — stepped like a tape — then settles
+      [[0.12, -40, 0.08, "steps(3)"], [0.27, 60, 0.1, "steps(4)"], [0.56, -40, 0.08, "steps(3)"], [0.71, 60, 0.1, "steps(4)"], [0.88, 0, 0.16, "power3.out"]].forEach(function (m, k) {
         if (k === 0) tl.fromTo(scrubs, { x: 0 }, { x: m[1], duration: m[2], ease: m[3] }, m[0]);
         else tl.to(scrubs, { x: m[1], duration: m[2], ease: m[3] }, m[0]);
       });
-
-      // Two bursts: bands tear on a quantized hash, RGB ghosts jitter, tracking lines flicker.
-      var JITTER = 1 / 15;
-      [
-        { start: 0.12, steps: 6, seed: 3 },
-        { start: 0.56, steps: 6, seed: 17 },
-      ].forEach(function (b) {
-        tl.set(base, { autoAlpha: 0 }, b.start);
-        tl.set(slices, { autoAlpha: 1 }, b.start);
-        tl.set(ghosts, { autoAlpha: 0.6 }, b.start);
-        tl.set(tracks, { autoAlpha: 1 }, b.start);
-        for (var k = 0; k < b.steps; k++) {
-          var t = b.start + k * JITTER;
-          var amp = Math.pow(1 - k / b.steps, 1.4);
-          slices.forEach(function (sl, idx) {
-            var h = hash(k * 13 + idx * 7 + b.seed);
-            var dir = hash(k * 29 + idx * 11 + b.seed) > 0.5 ? 1 : -1;
-            var still = hash(k * 5 + idx * 3 + b.seed) < 0.22;
-            var off = still ? 0 : dir * (14 + h * 58) * amp;
-            tl.set(sl, { x: off, scaleX: 1 + (still ? 0 : h * 0.06 * amp) }, t);
+      // two bursts on a quantized clock (1/15 s): bands tear, ghosts split, tracking lines flicker
+      [[0.12, 3], [0.56, 17]].forEach(function (b) {
+        tl.set(base, { autoAlpha: 0 }, b[0]);
+        tl.set(slices, { autoAlpha: 1 }, b[0]);
+        tl.set(ghosts, { autoAlpha: 0.6 }, b[0]);
+        tl.set(tracks, { autoAlpha: 1 }, b[0]);
+        for (var k = 0; k < 6; k++) {
+          var t = b[0] + k / 15, amp = Math.pow(1 - k / 6, 1.4), sd = b[1];
+          slices.forEach(function (sl, n) {
+            var h = hash(k * 13 + n * 7 + sd), dir = hash(k * 29 + n * 11 + sd) > 0.5 ? 1 : -1, still = hash(k * 5 + n * 3 + sd) < 0.22;
+            tl.set(sl, { x: still ? 0 : dir * (14 + h * 58) * amp, scaleX: 1 + (still ? 0 : h * 0.06 * amp) }, t);
           });
-          ghosts.forEach(function (g, idx) {
-            var jx = (idx === 0 ? -1 : 1) * (8 + hash(k * 19 + idx * 13 + b.seed) * 16) * amp;
-            var jy = (hash(k * 37 + idx * 3 + b.seed) * 2 - 1) * 5 * amp;
-            tl.set(g, { x: jx, y: jy, opacity: 0.35 + 0.35 * amp }, t);
+          ghosts.forEach(function (g, n) {
+            tl.set(g, { x: (n ? 1 : -1) * (12 + hash(k * 19 + n * 13 + sd) * 22) * amp, y: (hash(k * 37 + n * 3 + sd) * 2 - 1) * 5 * amp, opacity: 0.35 + 0.35 * amp }, t);
           });
-          tracks.forEach(function (tr, idx) {
-            var y = 60 + hash(k * 17 + idx * 31 + b.seed) * 960;
-            var o = (0.08 + hash(k * 23 + idx * 5 + b.seed) * 0.22) * (0.4 + amp * 0.6);
-            tl.set(tr, { y: y - parseFloat(tr.style.top), opacity: o }, t);
+          tracks.forEach(function (tr, n) {
+            var y = 60 + hash(k * 17 + n * 31 + sd) * 960;
+            tl.set(tr, { y: y - parseFloat(tr.style.top), opacity: (0.08 + hash(k * 23 + n * 5 + sd) * 0.22) * (0.4 + amp * 0.6) }, t);
           });
         }
-        var end = b.start + b.steps * JITTER;
+        var end = b[0] + 0.4;
         tl.set(slices, { x: 0, scaleX: 1, autoAlpha: 0 }, end);
         tl.set(ghosts, { x: 0, y: 0, autoAlpha: 0 }, end);
         tl.set(tracks, { autoAlpha: 0 }, end);
         tl.set(base, { autoAlpha: 1 }, end);
       });
 
-      /* ════════ Scene 2 · 1.1–2.2 s · « avant » — circular colour flood ════════ */
-      var FLOOD_AT = 1.1;
-      var FLOOD_DUR = 0.7;
-      tl.fromTo(
-        $("flood"),
-        { clipPath: "circle(0px at 960px 540px)" },
-        { clipPath: "circle(1400px at 960px 540px)", duration: FLOOD_DUR, ease: "power3.inOut" },
-        FLOOD_AT,
-      );
-      // glowing rim riding the flood edge (same ease + duration → locked to the radius)
-      tl.fromTo($("ring"), { scale: 0, opacity: 1 }, { scale: 1, duration: FLOOD_DUR, ease: "power3.inOut" }, FLOOD_AT);
-      tl.to($("ring"), { opacity: 0, duration: 0.3, ease: "power1.in" }, FLOOD_AT + 0.42);
-      // the old world falls away behind the flood
-      tl.to($("avant-cam"), { scale: 0.9, duration: FLOOD_DUR, ease: "power2.in" }, FLOOD_AT);
-      tl.fromTo($("avant-dim"), { opacity: 0 }, { opacity: 0.45, duration: FLOOD_DUR, ease: "power2.in" }, FLOOD_AT);
-
-      // Grid lines draw outward from the centre axes, nearest lines first.
+      /* ═══ Scene 2 · 1.1–2.3 s · « avant » — circular colour flood ═══ */
+      tl.fromTo($("flood"), { clipPath: "circle(0px at 960px 540px)" }, { clipPath: "circle(1400px at 960px 540px)", duration: 0.7, ease: "power3.inOut" }, 1.1);
+      // glowing rim locked to the flood radius (same ease + duration); the old world falls away
+      tl.fromTo($("ring"), { scale: 0, opacity: 1 }, { scale: 1, duration: 0.7, ease: "power3.inOut" }, 1.1);
+      tl.to($("ring"), { opacity: 0, duration: 0.3, ease: "power1.in" }, 1.52);
+      tl.to($("avant-cam"), { scale: 0.9, duration: 0.7, ease: "power2.in" }, 1.1);
+      tl.fromTo($("avant-dim"), { opacity: 0 }, { opacity: 0.45, duration: 0.7, ease: "power2.in" }, 1.1);
+      // grid lines draw outward from the centre axes, nearest lines first…
       var gl = $("gridlines");
-      var lines = [];
-      for (var vx = 0; vx < 1920; vx += 44) {
-        var v = document.createElement("div");
-        v.className = "f04-bascule-vl";
-        v.style.left = vx + "px";
-        gl.appendChild(v);
-        lines.push([v, "scaleY", Math.abs(vx - 960)]);
+      for (var gx = 0; gx < 1920; gx += 44) addLine("f04-bascule-vl", "left", gx, "scaleY", Math.abs(gx - 960));
+      for (var gy = 0; gy < 1080; gy += 44) addLine("f04-bascule-hl", "top", gy, "scaleX", Math.abs(gy - 540));
+      function addLine(cls, side, pos, prop, dist) {
+        var el = document.createElement("div"), from = {}, to = { duration: 0.8, ease: "power3.out" };
+        el.className = cls;
+        el.style[side] = pos + "px";
+        gl.appendChild(el);
+        from[prop] = 0;
+        to[prop] = 1;
+        tl.fromTo(el, from, to, 1.12 + (dist / 960) * 0.34);
       }
-      for (var hy = 0; hy < 1080; hy += 44) {
-        var hl = document.createElement("div");
-        hl.className = "f04-bascule-hl";
-        hl.style.top = hy + "px";
-        gl.appendChild(hl);
-        lines.push([hl, "scaleX", Math.abs(hy - 540)]);
-      }
-      lines.forEach(function (L) {
-        var from = {};
-        var to = { duration: 0.8, ease: "power3.out" };
-        from[L[1]] = 0;
-        to[L[1]] = 1;
-        tl.fromTo(L[0], from, to, 1.12 + (L[2] / 960) * 0.34);
-      });
-      // hand the drawn lines over to the canonical background grid (pixel-identical)
+      // …then hand over to the canonical background grid (pixel-identical)
       tl.set($("grid"), { autoAlpha: 1 }, 2.3);
       tl.set(gl, { autoAlpha: 0 }, 2.3);
-
-      // colour arrives with the flood: brand mesh blooms, then drifts and lands canonical at 7.63
-      tl.fromTo($("mesh"), { opacity: 0, scale: 0.82, x: 0, y: 0 }, { opacity: 1, scale: 1, duration: 1.0, ease: "power2.out" }, 1.08);
+      // colour arrives with the flood: mesh blooms, drifts, and lands canonical at 7.63
+      tl.fromTo($("mesh"), { opacity: 0, scale: 0.82, x: 0, y: 0 }, { opacity: 1, scale: 1, duration: 1, ease: "power2.out" }, 1.08);
       tl.to($("mesh"), { scale: 1.035, x: -26, y: 12, duration: 2.9, ease: "sine.inOut" }, 2.08);
       tl.to($("mesh"), { scale: 1, x: 0, y: 0, duration: 2.65, ease: "sine.inOut" }, 4.98);
-      // ambient glow blooms behind the centre (pulse-on-arrival, ≤ 0.45), then breathes
+      // ambient glow blooms behind the centre (pulse-on-arrival, peak ≤ 0.45)
       tl.fromTo($("glow"), { opacity: 0, scale: 0.75 }, { opacity: 0.45, scale: 1.04, duration: 0.6, ease: "power2.out" }, 1.14);
       tl.to($("glow"), { opacity: 0.34, scale: 1, duration: 0.7, ease: "sine.inOut" }, 1.74);
 
-      /* ════════ Scene 3 · 1.84–3.1 s · « Ask-it » — lockup assembles, then rises ════════ */
-      // The mark pops at 120 px on the frame centre; the whole lockup then slides left as
-      // the wordmark is pulled out from behind its mask (they never cross).
-      var LOCK_SHIFT = 244.7; // lockup x-offset that puts the mark's centre on x = 960
-      tl.fromTo($("lockup"), { x: LOCK_SHIFT }, { x: 0, duration: 0.52, ease: "expo.inOut" }, 2.0);
+      /* ═══ Scene 3 · 1.84–3.1 s · « Ask-it » — lockup assembles, then rises ═══ */
+      // the mark pops at 120 px on the centre; the lockup slides left as the wordmark is wiped open
+      tl.fromTo($("lockup"), { x: 244.7 }, { x: 0, duration: 0.52, ease: "expo.inOut" }, 2.0);
       tl.fromTo($("mark"), { scale: 120 / 86 }, { scale: 1, duration: 0.52, ease: "expo.inOut" }, 2.0);
-      tl.fromTo(
-        $("mark-pop"),
-        { scale: 0, rotation: -14, opacity: 0 },
-        { scale: 1, rotation: 0, opacity: 1, duration: 0.42, ease: "back.out(1.6)" },
-        1.84,
-      );
+      tl.fromTo($("mark-pop"), { scale: 0, rotation: -14, opacity: 0 }, { scale: 1, rotation: 0, opacity: 1, duration: 0.42, ease: "back.out(1.6)" }, 1.84);
       tl.fromTo($("bar1"), { scaleX: 0 }, { scaleX: 1, transformOrigin: "0% 50%", duration: 0.24, ease: "power3.out" }, 1.96);
       tl.fromTo($("bar2"), { scaleX: 0 }, { scaleX: 1, transformOrigin: "0% 50%", duration: 0.22, ease: "power3.out" }, 2.02);
       tl.fromTo($("dot"), { scale: 0 }, { scale: 1, transformOrigin: "50% 50%", duration: 0.3, ease: "back.out(2.2)" }, 2.08);
-      // mask wipe: the mask box travels −500 → 0 while the text counter-travels +470 → 0,
-      // so the text itself only slides x −30 → 0 while the mask's right edge wipes it open.
+      // mask box travels −500 → 0 while the text counter-travels +470 → 0: text slides −30 → 0, wiped open
       tl.fromTo($("word-mask"), { x: -500 }, { x: 0, duration: 0.55, ease: "expo.inOut" }, 2.02);
       tl.fromTo($("word-inner"), { x: 470 }, { x: 0, duration: 0.55, ease: "expo.inOut" }, 2.02);
       $$("#" + ID + "-word-inner .f04-bascule-ch").forEach(function (ch, k) {
         tl.fromTo(ch, { color: "#d6cfc7" }, { color: "#241f20", duration: 0.26, ease: "power1.out" }, 2.1 + k * 0.035);
       });
-      // « transforme » — the lockup rises to y 230 and settles at 0.7; the glow follows it
+      // « transforme » — the lockup rises to y 230 at 0.7; the glow follows
       tl.to($("lockup"), { y: -310, scale: 0.7, transformOrigin: "0px 0px", duration: 0.56, ease: "power3.inOut" }, 2.54);
       tl.to($("glow"), { y: -310, scale: 0.72, opacity: 0.26, duration: 0.56, ease: "power3.inOut" }, 2.54);
-
-      // a slow camera drift keeps the Ask-it world breathing until the step pills take over
       tl.fromTo($("drift"), { scale: 1 }, { scale: 1.025, duration: 3.86, ease: "sine.inOut" }, 2.0);
 
-      /* ════════ Scene 4 · 3.1–5.9 s · anonymous visitor → client → data ════════ */
+      /* ═══ Scene 4 · 3.1–5.9 s · anonymous visitor → client → data ═══ */
       tl.fromTo($("group"), { scale: 1 }, { scale: 1.07, duration: 2.8, ease: "sine.inOut" }, 3.06);
       tl.fromTo($("avatar"), { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.48, ease: "power3.out" }, 3.12);
-      tl.fromTo(
-        $("dashring"),
-        { scale: 0.7, opacity: 0, rotation: -40 },
-        { scale: 1, opacity: 1, rotation: 0, duration: 0.6, ease: "power3.out" },
-        3.18,
-      );
+      tl.fromTo($("dashring"), { scale: 0.7, opacity: 0, rotation: -40 }, { scale: 1, opacity: 1, rotation: 0, duration: 0.6, ease: "power3.out" }, 3.18);
       tl.to($("dashring"), { rotation: 70, duration: 1.3, ease: "none" }, 3.78);
-      // two "who is she?" sonar pings
       $$("#" + ID + "-visitor .f04-bascule-ripple").forEach(function (r, k) {
         tl.fromTo(r, { scale: 1, opacity: 0.55 }, { scale: 1.75, opacity: 0, duration: 0.7, ease: "power2.out", immediateRender: false }, 3.5 + k * 0.42);
       });
-      tl.fromTo(
-        $("tag-anon"),
-        { y: 18, opacity: 0, filter: "blur(6px)" },
-        { y: 0, opacity: 1, filter: "blur(0px)", duration: 0.42, ease: "expo.out" },
-        3.26,
-      );
+      // her unknown data: dashed « ? » slots, filled later by the real chips
+      $$("#" + ID + "-group .f04-bascule-qslot").forEach(function (qs, k) {
+        tl.fromTo(qs, { scale: 0.7, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.4, ease: "power3.out" }, 3.42 + k * 0.06);
+        tl.to(qs, { scale: 0.96, opacity: 0, duration: 0.18, ease: "power1.in" }, 5.44 + k * 0.07);
+      });
+      tl.fromTo($("tag-anon"), { y: 18, opacity: 0, filter: "blur(6px)" }, { y: 0, opacity: 1, filter: "blur(0px)", duration: 0.42, ease: "expo.out" }, 3.26);
       tl.set($("tag-anon"), { filter: "none" }, 3.7);
-
-      // « clients » — card-morph-anchor: the anonymous circle becomes Claire.
-      var MORPH_AT = 4.4;
-      var MORPH_DUR = 0.6;
-      tl.to(
-        $("avatar"),
-        {
-          scale: 1.1,
-          backgroundColor: "#ffffff",
-          boxShadow: "0px 0px 0px 6px rgba(255,255,255,1), 0px 26px 50px -18px rgba(36,31,32,0.32)",
-          duration: MORPH_DUR,
-          ease: "power2.inOut",
-        },
-        MORPH_AT,
-      );
-      tl.to(document.querySelector("#" + ID + "-avatar .f04-bascule-silhouette"), { opacity: 0, duration: MORPH_DUR * 0.4, ease: "power1.in" }, MORPH_AT);
-      tl.fromTo(
-        document.querySelector("#" + ID + "-avatar .f04-bascule-photo"),
-        { opacity: 0, scale: 1.12 },
-        { opacity: 1, scale: 1, duration: MORPH_DUR * 0.55, ease: "power2.out" },
-        MORPH_AT + MORPH_DUR * 0.45,
-      );
-      tl.to($("dashring"), { opacity: 0, scale: 1.18, duration: 0.3, ease: "power2.in" }, MORPH_AT);
-      tl.fromTo($("halo"), { opacity: 0, scale: 0.7 }, { opacity: 0.32, scale: 1, duration: 0.8, ease: "power2.out" }, MORPH_AT + 0.2);
-      // tag swap: « Visiteuse anonyme » rolls out, « Claire » rolls in
-      tl.to($("tag-anon"), { y: -14, opacity: 0, filter: "blur(4px)", duration: 0.22, ease: "power2.in" }, MORPH_AT + 0.04);
-      tl.set($("tag-anon"), { filter: "none" }, MORPH_AT + 0.3);
-      tl.fromTo($("tag-name"), { y: 16, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: "expo.out" }, MORPH_AT + 0.22);
-      // green « Cliente » badge pops off the ring
-      tl.fromTo($("badge"), { scale: 0, opacity: 0, x: -14 }, { scale: 1, opacity: 1, x: 0, duration: 0.45, ease: "back.out(1.7)" }, MORPH_AT + 0.42);
-
-      // « data » — four answer chips spring out of her into a 2×2 cluster.
-      var FROM_X = 560;
-      var FROM_Y = 520;
-      [
-        ["chip-1", 740, 148, 486],
-        ["chip-2", 906, 206, 486],
-        ["chip-3", 790, 200, 556],
-        ["chip-4", 1008, 300, 556],
-      ].forEach(function (cd, k) {
-        var el = $(cd[0]);
-        var at = 5.24 + k * 0.07;
-        tl.fromTo(el, { x: FROM_X - (cd[1] + cd[2] / 2), y: FROM_Y - cd[3] }, { x: 0, y: 0, duration: 0.55, ease: "expo.out" }, at);
+      // « clients » — card-morph-anchor: the anonymous circle becomes Claire (scale + paint channels)
+      tl.to($("avatar"), { scale: 1.1, backgroundColor: "#ffffff", boxShadow: "0px 0px 0px 6px rgba(255,255,255,1), 0px 26px 50px -18px rgba(36,31,32,0.32)", duration: 0.6, ease: "power2.inOut" }, 4.4);
+      tl.to(document.querySelector("#" + ID + "-avatar .f04-bascule-silhouette"), { opacity: 0, duration: 0.24, ease: "power1.in" }, 4.4);
+      tl.fromTo(document.querySelector("#" + ID + "-avatar .f04-bascule-photo"), { opacity: 0, scale: 1.12 }, { opacity: 1, scale: 1, duration: 0.33, ease: "power2.out" }, 4.67);
+      tl.to($("dashring"), { opacity: 0, scale: 1.18, duration: 0.3, ease: "power2.in" }, 4.4);
+      tl.fromTo($("halo"), { opacity: 0, scale: 0.7 }, { opacity: 0.32, scale: 1, duration: 0.8, ease: "power2.out" }, 4.6);
+      tl.to($("tag-anon"), { y: -14, opacity: 0, filter: "blur(4px)", duration: 0.22, ease: "power2.in" }, 4.44);
+      tl.set($("tag-anon"), { filter: "none" }, 4.7);
+      tl.fromTo($("tag-name"), { y: 16, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: "expo.out" }, 4.62);
+      tl.fromTo($("badge"), { scale: 0, opacity: 0, x: -14 }, { scale: 1, opacity: 1, x: 0, duration: 0.45, ease: "back.out(1.7)" }, 4.82);
+      // « data » — four answer chips spring out of her into the 2×2 cluster
+      [["chip-1", 740, 148, 486], ["chip-2", 906, 206, 486], ["chip-3", 790, 200, 556], ["chip-4", 1008, 300, 556]].forEach(function (cd, k) {
+        var el = $(cd[0]), at = 5.24 + k * 0.07;
+        tl.fromTo(el, { x: 560 - (cd[1] + cd[2] / 2), y: 520 - cd[3] }, { x: 0, y: 0, duration: 0.55, ease: "expo.out" }, at);
         tl.fromTo(el, { scale: 0.2 }, { scale: 1, duration: 0.5, ease: "back.out(1.5)" }, at);
         tl.fromTo(el, { opacity: 0 }, { opacity: 1, duration: 0.14, ease: "none" }, at);
       });
 
-      /* ════════ Scene 5 · 5.86–7.63 s · « en trois étapes » — PILLS_ROW ════════ */
+      /* ═══ Scene 5 · 5.86–7.63 s · « en trois étapes » — PILLS_ROW ═══ */
       tl.to($("scene"), { scale: 0.9, opacity: 0, filter: "blur(8px)", duration: 0.32, ease: "power2.in" }, 5.86);
       tl.set($("scene"), { autoAlpha: 0, filter: "none" }, 6.2);
       [1, 2, 3].forEach(function (n, k) {
-        var at = 5.96 + k * 0.08;
-        var pill = $("pill-" + n);
+        var at = 5.96 + k * 0.08, pill = $("pill-" + n);
         tl.fromTo(pill, { scale: 0.3, y: 40 }, { scale: 1, y: 0, duration: 0.52, ease: "back.out(1.6)" }, at);
         tl.fromTo(pill, { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.3, ease: "power2.out" }, at);
         tl.set(pill, { filter: "none" }, at + 0.3);
         tl.fromTo(pill.querySelector(".f04-bascule-pill-num"), { scale: 0 }, { scale: 1, duration: 0.4, ease: "back.out(2)" }, at + 0.1);
-        tl.fromTo(
-          pill.querySelector(".f04-bascule-pill-label"),
-          { x: -16, opacity: 0 },
-          { x: 0, opacity: 1, duration: 0.42, ease: "power3.out" },
-          at + 0.12,
-        );
+        tl.fromTo(pill.querySelector(".f04-bascule-pill-label"), { x: -16, opacity: 0 }, { x: 0, opacity: 1, duration: 0.42, ease: "power3.out" }, at + 0.12);
       });
-      // hold on PILLS_ROW with a slow drift that lands exactly on the canonical layout at 7.63
+      // hold with a slow drift that lands exactly on the canonical layout at 7.63 (f05 continues it)
       tl.fromTo($("pills-drift"), { scale: 0.98 }, { scale: 1, duration: 1.77, ease: "none" }, 5.86);
 
       window.__timelines[ID] = tl;

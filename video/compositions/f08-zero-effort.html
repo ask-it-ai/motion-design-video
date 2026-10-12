@@ -209,7 +209,7 @@
 
         </div>
 
-        <div id="f08-zero-effort-cursor">
+        <div id="f08-zero-effort-cursor" data-layout-allow-overflow>
           <svg width="46" height="58" viewBox="0 0 46 58"><path d="M4 3 L4 45 L14.6 35.4 L21.4 51.6 L28.6 48.6 L21.8 32.6 L36 32.6 Z" fill="#241F20" stroke="#FFFFFF" stroke-width="3" stroke-linejoin="round"/></svg>
         </div>
        </div>
@@ -218,7 +218,7 @@
 
     <!-- Track 2: order notifications (screen space) -->
     <div id="f08-zero-effort-notifs" class="clip" data-start="0" data-duration="7.41" data-track-index="2">
-      <div id="f08-zero-effort-nstack">
+      <div id="f08-zero-effort-nstack" data-layout-allow-overflow>
       <div class="f08-zero-effort-slot" id="f08-zero-effort-slotA">
         <div class="f08-zero-effort-notif" id="f08-zero-effort-nA">
           <div class="f08-zero-effort-nicon"><img src="assets/endro/logo-noir.png" alt="" /></div>
@@ -365,7 +365,7 @@
       tl.fromTo(q("slotA"), { y: 112 }, { y: 224, duration: 0.28, ease: "expo.out", immediateRender: false }, 6.02);
       tl.fromTo(q("slotB"), { y: 0 }, { y: 112, duration: 0.28, ease: "expo.out" }, 6.02);
       // keep the held stack alive: gentle float through the hold
-      tl.fromTo(q("nstack"), { y: 0 }, { y: -10, duration: D - 6.3, ease: "sine.inOut" }, 6.3);
+      tl.fromTo(q("nstack"), { y: 0 }, { y: -10, duration: D - 6.3, ease: "none" }, 6.3);
 
       window.__timelines[ID] = tl;
     })();

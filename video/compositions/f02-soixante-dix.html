@@ -191,10 +191,7 @@
       top: 44px;
       width: 442px;
       height: 928px;
-      background-image: url('assets/screens/endro-shop/collection-serums.png');
-      background-size: 442px auto;
-      background-repeat: no-repeat;
-      background-position: 0px 0px;
+      background: url('assets/screens/endro-shop/collection-serums.png') 0px 0px / 442px auto no-repeat;
       filter: grayscale(0.85) brightness(0.85);
     }
     .f02-soixante-dix-island {
@@ -246,10 +243,10 @@
     }
   </style>
 
-  <div id="root" data-composition-id="f02-soixante-dix" data-start="0" data-duration="10.61" data-width="1920" data-height="1080">
-    <div id="f02-soixante-dix-bg" class="clip" data-start="0" data-duration="10.61" data-track-index="0"></div>
+  <div id="root" data-composition-id="f02-soixante-dix" data-start="0" data-fit-start="0" data-duration="11.01" data-fit-duration="10.61" data-width="1920" data-height="1080">
+    <div id="f02-soixante-dix-bg" class="clip" data-start="0" data-fit-start="0" data-duration="11.01" data-fit-duration="10.61" data-track-index="0"></div>
 
-    <div id="f02-soixante-dix-stage" class="clip" data-start="0" data-duration="10.61" data-track-index="1">
+    <div id="f02-soixante-dix-stage" class="clip" data-start="0" data-fit-start="0" data-duration="11.01" data-fit-duration="10.61" data-track-index="1">
       <div id="f02-soixante-dix-zoomer">
         <div id="f02-soixante-dix-world" data-layout-allow-overflow>
 
@@ -468,7 +465,7 @@
       });
 
       window.__timelines = window.__timelines || {};
-      window.__timelines[ID] = tl;
+      window.__timelines["f02-soixante-dix"] = tl;
     })();
   </script>
 </template>

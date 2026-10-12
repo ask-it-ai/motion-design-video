@@ -149,9 +149,13 @@
     }
 
     /* ───────── stage ───────── */
-    #f05-diagnostic-stage {
+    #f05-diagnostic-stage,
+    #f05-diagnostic-stage-drift {
       position: absolute;
       inset: 0;
+    }
+    #f05-diagnostic-stage-drift {
+      transform-origin: 960px 540px;
     }
 
     /* PHONE_HERO: 470×1000 body scaled 0.9, centre (700, 520) */
@@ -427,7 +431,7 @@
       border-radius: 50%;
       background: #f8571f;
     }
-    .f05-diagnostic-chip.is-tint {
+    .f05-diagnostic-chip.f05-diagnostic-tint {
       background: #fdeee7;
       border-color: rgba(248, 87, 31, 0.32);
     }
@@ -597,24 +601,14 @@
 
     <!-- Track 2 · phone (Endro diagnostic), brand label, profile card -->
     <div id="f05-diagnostic-stage" class="clip" data-start="0" data-duration="14.75" data-track-index="2">
+      <div id="f05-diagnostic-stage-drift">
       <div id="f05-diagnostic-phone-pos">
         <div id="f05-diagnostic-phone">
           <div id="f05-diagnostic-screen">
             <div class="f05-diagnostic-status">
               <span class="f05-diagnostic-time">9:41</span>
               <span class="f05-diagnostic-island"></span>
-              <svg class="f05-diagnostic-glyphs" viewBox="0 0 78 18" aria-hidden="true">
-                <rect x="0" y="12" width="4" height="6" rx="1" fill="#241f20"></rect>
-                <rect x="6" y="8.5" width="4" height="9.5" rx="1" fill="#241f20"></rect>
-                <rect x="12" y="5" width="4" height="13" rx="1" fill="#241f20"></rect>
-                <rect x="18" y="1.5" width="4" height="16.5" rx="1" fill="#241f20"></rect>
-                <path d="M33 6.2a11 11 0 0 1 15 0" fill="none" stroke="#241f20" stroke-width="2.2" stroke-linecap="round"></path>
-                <path d="M35.8 9.6a6.8 6.8 0 0 1 9.4 0" fill="none" stroke="#241f20" stroke-width="2.2" stroke-linecap="round"></path>
-                <circle cx="40.5" cy="14.4" r="2" fill="#241f20"></circle>
-                <rect x="53" y="2.5" width="21" height="13" rx="3.5" fill="none" stroke="#241f20" stroke-opacity="0.45" stroke-width="1.4"></rect>
-                <rect x="55" y="4.5" width="17" height="9" rx="2" fill="#241f20"></rect>
-                <rect x="75.2" y="6.6" width="1.8" height="4.8" rx="0.9" fill="#241f20" fill-opacity="0.45"></rect>
-              </svg>
+              <svg class="f05-diagnostic-glyphs" viewBox="0 0 78 18" aria-hidden="true"><rect x="0" y="12" width="4" height="6" rx="1" fill="#241f20"></rect><rect x="6" y="8.5" width="4" height="9.5" rx="1" fill="#241f20"></rect><rect x="12" y="5" width="4" height="13" rx="1" fill="#241f20"></rect><rect x="18" y="1.5" width="4" height="16.5" rx="1" fill="#241f20"></rect><path d="M33 6.2a11 11 0 0 1 15 0" fill="none" stroke="#241f20" stroke-width="2.2" stroke-linecap="round"></path><path d="M35.8 9.6a6.8 6.8 0 0 1 9.4 0" fill="none" stroke="#241f20" stroke-width="2.2" stroke-linecap="round"></path><circle cx="40.5" cy="14.4" r="2" fill="#241f20"></circle><rect x="53" y="2.5" width="21" height="13" rx="3.5" fill="none" stroke="#241f20" stroke-opacity="0.45" stroke-width="1.4"></rect><rect x="55" y="4.5" width="17" height="9" rx="2" fill="#241f20"></rect><rect x="75.2" y="6.6" width="1.8" height="4.8" rx="0.9" fill="#241f20" fill-opacity="0.45"></rect></svg>
             </div>
             <div id="f05-diagnostic-viewport">
               <div id="f05-diagnostic-p00" class="f05-diagnostic-page"><img src="assets/screens/endro-diag/00-intro.png" alt="" /></div>
@@ -665,7 +659,7 @@
         <div id="f05-diagnostic-c1" class="f05-diagnostic-cslot" style="left: 32px; top: 152px; width: 206px"><div class="f05-diagnostic-chip"><i></i><span>Peau mixte</span></div></div>
         <div id="f05-diagnostic-c2" class="f05-diagnostic-cslot" style="left: 250px; top: 152px; width: 294px"><div class="f05-diagnostic-chip"><i></i><span>Peau sensible&nbsp;<span class="f05-diagnostic-num">3/10</span></span></div></div>
         <div id="f05-diagnostic-c3" class="f05-diagnostic-cslot" style="left: 32px; top: 220px; width: 300px"><div class="f05-diagnostic-chip"><i></i><span>Routine essentielle</span></div></div>
-        <div id="f05-diagnostic-c4" class="f05-diagnostic-cslot" style="left: 32px; top: 288px; width: 400px"><div class="f05-diagnostic-chip is-tint"><i></i><span>Préoccupation&nbsp;: teint terne</span></div></div>
+        <div id="f05-diagnostic-c4" class="f05-diagnostic-cslot" style="left: 32px; top: 288px; width: 400px"><div class="f05-diagnostic-chip f05-diagnostic-tint"><i></i><span>Préoccupation&nbsp;: teint terne</span></div></div>
         <div id="f05-diagnostic-c5" class="f05-diagnostic-cslot" style="left: 32px; top: 356px; width: 388px"><div class="f05-diagnostic-chip"><b>!</b><span>Frein&nbsp;: peur des réactions</span></div></div>
 
         <div class="f05-diagnostic-prog-label">Profil complété</div>
@@ -674,12 +668,7 @@
       </div>
 
       <div id="f05-diagnostic-timer">
-        <svg viewBox="0 0 64 64" aria-hidden="true">
-          <circle cx="32" cy="32" r="27" fill="none" stroke="#f1eeea" stroke-width="6"></circle>
-          <circle id="f05-diagnostic-ring-fill" cx="32" cy="32" r="27" fill="none" stroke="#f8571f" stroke-width="6" stroke-linecap="round" stroke-dasharray="169.65" stroke-dashoffset="169.65" transform="rotate(-90 32 32)"></circle>
-          <circle cx="32" cy="34" r="9" fill="none" stroke="#6c6560" stroke-width="2.4"></circle>
-          <path d="M32 34v-4.6M29.4 22.6h5.2M32 22.6v2.4" fill="none" stroke="#6c6560" stroke-width="2.4" stroke-linecap="round"></path>
-        </svg>
+        <svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="27" fill="none" stroke="#f1eeea" stroke-width="6"></circle><circle id="f05-diagnostic-ring-fill" cx="32" cy="32" r="27" fill="none" stroke="#f8571f" stroke-width="6" stroke-linecap="round" stroke-dasharray="169.65" stroke-dashoffset="169.65" transform="rotate(-90 32 32)"></circle><circle cx="32" cy="34" r="9" fill="none" stroke="#6c6560" stroke-width="2.4"></circle><path d="M32 34v-4.6M29.4 22.6h5.2M32 22.6v2.4" fill="none" stroke="#6c6560" stroke-width="2.4" stroke-linecap="round"></path></svg>
         <span id="f05-diagnostic-timer-val">0 s</span>
       </div>
 
@@ -689,6 +678,7 @@
         <div class="f05-diagnostic-ripple"></div>
         <div class="f05-diagnostic-touch-dot"></div>
       </div>
+      </div>
     </div>
   </div>
 
@@ -696,12 +686,8 @@
   <script>
     (function () {
       var ID = "f05-diagnostic";
-      var $ = function (id) {
-        return document.getElementById(ID + "-" + id);
-      };
-      var q = function (el, sel) {
-        return el.querySelector(sel);
-      };
+      var $ = function (id) { return document.getElementById(ID + "-" + id); };
+      var q = function (el, sel) { return el.querySelector(sel); };
       var tl = gsap.timeline({ paused: true });
       var REST_SHADOW = "0px 18px 40px -18px rgba(36,31,32,0.18), 0px 2px 6px 0px rgba(36,31,32,0.05)";
       var FLY_SHADOW = "0px 34px 60px -14px rgba(36,31,32,0.34), 0px 10px 22px -6px rgba(248,87,31,0.30)";
@@ -725,9 +711,7 @@
       };
 
       // PHONE_HERO screen → frame coordinates (phone centre 700,520 · scale 0.9 · screen 442×972)
-      var scr = function (sx, sy) {
-        return [700 + (sx - 221) * 0.9, 520 + (sy - 486) * 0.9];
-      };
+      var scr = function (sx, sy) { return [700 + (sx - 221) * 0.9, 520 + (sy - 486) * 0.9]; };
       var CARD = [1020, 236];
 
       /* ════════ Scene 1 · 0–1.9 s · « D'abord, le diagnostic » ════════ */
@@ -746,12 +730,8 @@
       tl.set($("pills-cam"), { filter: "none" }, 1.45);
       // …and PHONE_HERO rises into place out of it (perspective rise, settles flat)
       var phone = $("phone-pos");
-      tl.fromTo(
-        phone,
-        { x: -150, y: 330, scale: 0.6, rotationX: 30, transformPerspective: 1400, opacity: 0, filter: "blur(10px)" },
-        { x: 0, y: 0, scale: 1, rotationX: 7, opacity: 1, filter: "blur(0px)", duration: 0.62, ease: "power3.out" },
-        1.0,
-      );
+      tl.fromTo(phone, { x: -150, y: 330, scale: 0.6, rotationX: 30, transformPerspective: 1400, filter: "blur(10px)" }, { x: 0, y: 0, scale: 1, rotationX: 7, filter: "blur(0px)", duration: 0.62, ease: "power3.out" }, 1.0);
+      tl.fromTo(phone, { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power1.inOut" }, 1.1);
       tl.to(phone, { rotationX: 0, duration: 0.5, ease: "sine.out" }, 1.62);
       tl.set(phone, { filter: "none" }, 1.62);
       // grid-bg mesh: parallax with the push, then drifts back to its canonical state
@@ -761,10 +741,7 @@
       /* ════════ Scene 2 · 1.84–3.9 s · « intégré à votre site, à votre image » ════════ */
       // theme-crossfade-morph: the phone frame is the still anchor; skins + logo relay crossfade
       tl.fromTo($("brand"), { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.45, ease: "back.out(1.7)" }, 1.84);
-      [
-        [2.3, "plpp", "p00", "skin-lpp", "skin-endro"],
-        [3.2, "p00", "plpp", "skin-endro", "skin-lpp"],
-      ].forEach(function (k) {
+      [[2.3, "plpp", "p00", "skin-lpp", "skin-endro"], [3.2, "p00", "plpp", "skin-endro", "skin-lpp"]].forEach(function (k) {
         tl.fromTo($(k[1]), { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power2.inOut", immediateRender: k[0] < 3 }, k[0]);
         tl.to($(k[2]), { opacity: 0, duration: 0.3, ease: "power2.inOut" }, k[0]);
         tl.fromTo($(k[3]), { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power2.inOut", immediateRender: k[0] < 3 }, k[0]);
@@ -783,7 +760,6 @@
         tl.fromTo(s, { scaleX: 0, opacity: 0 }, { scaleX: 1, opacity: 1, duration: 0.42, ease: "expo.out" }, 4.56 + k * 0.04);
       });
       tl.fromTo([q(card, ".f05-diagnostic-prog-label"), $("prog-val"), q(card, ".f05-diagnostic-prog-track")], { y: 10, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: "expo.out" }, 4.66);
-      tl.fromTo($("prog-fill"), { scaleX: 0 }, { scaleX: 0.002, duration: 0.01, ease: "none" }, 4.66);
       // phone: first name typed (00 → 01), then the first question slides in
       fadeIn($("p01"), 4.5, 0.2);
       tl.set($("p00"), { opacity: 0 }, 4.75);
@@ -812,17 +788,13 @@
         tl.fromTo(slot, { x: from[0] - cx, y: from[1] - cy }, { x: 0, y: 0, duration: 0.55, ease: "power2.inOut" }, at);
         tl.fromTo(chip, { y: 0 }, { y: -arc, duration: 0.275, ease: "power1.out" }, at);
         tl.to(chip, { y: 0, duration: 0.275, ease: "power1.in" }, at + 0.275);
-        tl.fromTo(
-          chip,
-          { scale: 0.4, boxShadow: FLY_SHADOW, borderColor: "rgba(248,87,31,0.85)" },
-          { scale: 1, boxShadow: REST_SHADOW, borderColor: "rgba(36,31,32,0.10)", duration: 0.55, ease: "power2.inOut" },
-          at,
-        );
+        tl.fromTo(chip, { scale: 0.4, boxShadow: FLY_SHADOW, borderColor: "rgba(248,87,31,0.85)" }, { scale: 1, boxShadow: REST_SHADOW, borderColor: "rgba(36,31,32,0.10)", duration: 0.55, ease: "power2.inOut" }, at);
         tl.fromTo(chip, { opacity: 0 }, { opacity: 1, duration: 0.12, ease: "none" }, at);
       };
       var skels = Array.prototype.slice.call(card.querySelectorAll(".f05-diagnostic-skel"));
       var step = function (at, from, to) {
-        tl.to($("prog-fill"), { scaleX: to / 100, duration: 0.45, ease: "power3.out" }, at);
+        if (from === 0) tl.fromTo($("prog-fill"), { scaleX: 0 }, { scaleX: to / 100, duration: 0.45, ease: "power3.out" }, at);
+        else tl.to($("prog-fill"), { scaleX: to / 100, duration: 0.45, ease: "power3.out" }, at);
         roll($("prog-val"), from, to, at, 0.36, " %");
       };
 
@@ -845,7 +817,7 @@
       fly("c3", T3, 32 + 150, 220 + 28, 8.57, 120);
       tl.to(skels[2], { opacity: 0, duration: 0.2 }, 9.01);
       step(9.12, 70, 100);
-      tl.to(touch, { y: "+=40", scale: 0.8, opacity: 0, duration: 0.3, ease: "power2.in" }, 8.86);
+      tl.to(touch, { x: T3[0] - T1[0] + 10, y: T3[1] - T1[1] + 40, scale: 0.8, opacity: 0, duration: 0.3, ease: "power2.in" }, 8.86);
 
       /* ════════ Scene 5 · 9.56–11.95 s · « En trente secondes… qui elle est » ════════ */
       tl.fromTo($("timer"), { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.42, ease: "back.out(1.7)" }, 9.56);
@@ -860,15 +832,15 @@
       var sw = $("swatch");
       var swIn = $("swatch-in");
       var DOT = [CARD[0] + 153, CARD[1] + 103];
-      tl.fromTo(swIn, { opacity: 0, scale: 1, boxShadow: "0px 0px 0px 0px rgba(36,31,32,0)" }, { opacity: 1, scale: 1.3, boxShadow: "0px 16px 30px -8px rgba(36,31,32,0.40)", duration: 0.16, ease: "power2.out" }, 11.26);
-      tl.fromTo(sw, { x: 0, y: 0 }, { x: DOT[0] - 699.5, y: DOT[1] - 511.3, duration: 0.5, ease: "power2.inOut" }, 11.36);
-      tl.to(swIn, { y: -70, duration: 0.25, ease: "power1.out" }, 11.36);
-      tl.to(swIn, { y: 0, duration: 0.25, ease: "power1.in" }, 11.61);
-      tl.to(swIn, { scale: 14 / 32, borderRadius: 16, boxShadow: "0px 0px 0px 0px rgba(36,31,32,0)", duration: 0.5, ease: "power2.inOut" }, 11.36);
+      tl.fromTo(swIn, { opacity: 0, scale: 1, boxShadow: "0px 0px 0px 0px rgba(36,31,32,0)" }, { opacity: 1, scale: 1.3, boxShadow: "0px 16px 30px -8px rgba(36,31,32,0.40)", duration: 0.12, ease: "power2.out" }, 11.2);
+      tl.fromTo(sw, { x: 0, y: 0 }, { x: DOT[0] - 699.5, y: DOT[1] - 511.3, duration: 0.46, ease: "power2.inOut" }, 11.32);
+      tl.to(swIn, { y: -70, duration: 0.23, ease: "power1.out" }, 11.32);
+      tl.to(swIn, { y: 0, duration: 0.23, ease: "power1.in" }, 11.55);
+      tl.to(swIn, { scale: 14 / 32, borderRadius: 16, boxShadow: "0px 0px 0px 0px rgba(36,31,32,0)", duration: 0.46, ease: "power2.inOut" }, 11.32);
       // « Profil CORAIL02 » wipes in next to it (mask travels −240 → 0, text counter-travels)
-      tl.to($("subskel"), { opacity: 0, duration: 0.2 }, 11.6);
-      tl.fromTo($("sub"), { x: -240 }, { x: 0, duration: 0.5, ease: "expo.inOut" }, 11.62);
-      tl.fromTo($("sub-inner"), { x: 230 }, { x: 0, duration: 0.5, ease: "expo.inOut" }, 11.62);
+      tl.to($("subskel"), { opacity: 0, duration: 0.2 }, 11.52);
+      tl.fromTo($("sub"), { x: -240 }, { x: 0, duration: 0.5, ease: "expo.inOut" }, 11.54);
+      tl.fromTo($("sub-inner"), { x: 230 }, { x: 0, duration: 0.5, ease: "expo.inOut" }, 11.54);
 
       /* ════════ Scene 6 · 11.94–14.75 s · « ce qu'elle cherche… ce qui la fait hésiter » ════════ */
       var pop = function (slotId, at) {
@@ -882,6 +854,9 @@
       tl.fromTo(q($("c5"), "b"), { scale: 0 }, { scale: 1, duration: 0.36, ease: "back.out(2.4)" }, 13.5);
       // the Nuancier resolves into her result page — PHONE_HERO on the CORAIL02 header (f06 handoff)
       fadeIn($("p17"), 13.9, 0.35);
+      // a slow breathing drift on the whole stage, landing exactly back on PHONE_HERO at 14.75
+      tl.fromTo($("stage-drift"), { scale: 1 }, { scale: 1.018, duration: 2.7, ease: "sine.inOut" }, 9.2);
+      tl.to($("stage-drift"), { scale: 1, duration: 2.85, ease: "sine.inOut" }, 11.9);
 
       window.__timelines[ID] = tl;
     })();
