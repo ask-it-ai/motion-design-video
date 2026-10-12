@@ -29,7 +29,7 @@ S = {
          (3.66,'pop',{'gain':-22}),(3.74,'pop',{'gain':-22,'pitch':2}),(3.82,'pop',{'gain':-23,'pitch':4}),(3.90,'pop',{'gain':-23,'pitch':5}),
          (4.05,'counter_tick',{'align':'start','trim':(0.0,1.0)}),(5.20,'sparkle',{'gain':-22}),(5.95,'pop',{'gain':-21,'pitch':-2}),
          (7.21,'whoosh_soft',{}),(7.48,'number_slam',{}),(7.50,'counter_tick',{'align':'start','trim':(0.0,0.45)}),
-         (9.80,'whoosh_soft',{'gain':-23}),(9.90,'number_slam',{}),(9.92,'counter_tick',{'align':'start','trim':(0.0,1.1)}),(11.02,'pop',{})],
+         (9.70,'whoosh_soft',{'gain':-23}),(9.90,'number_slam',{}),(9.92,'counter_tick',{'align':'start','trim':(0.0,1.1)}),(11.02,'pop',{})],
  'f08': keys([0.60,0.67,0.75,0.84,0.93]) + keys([1.04,1.10,1.16,1.22,1.28,1.35,1.41,1.47,1.60], gain=-16) +
         [(1.72,'ui_select',{}),(2.70,'ui_tap',{}),(2.86,'success',{}),(3.55,'whoosh_soft',{'gain':-23}),
          (4.10,'ui_select',{}),(4.35,'ui_select',{'pitch':2}),(4.60,'ui_select',{'pitch':4}),(4.85,'ui_select',{'pitch':5}),
