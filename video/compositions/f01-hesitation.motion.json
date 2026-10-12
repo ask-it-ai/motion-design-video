@@ -1,0 +1,13 @@
+{
+  "scene": "f01-hesitation",
+  "duration_s": 12.39,
+  "rules": ["cursor-click-ripple", "depth-of-field-blur", "center-outward-expansion"],
+  "exit": {
+    "vector": "radial inward: camera still pulling back at ~1.1%/s scale (sine.in, about x=860 y=520) under a +0.24%/s phone drift; ~3 px/s at the phone edges, ~9 px/s at the outer packshots; tab card, thumb and visitor-tag already gone (empty dark phone)",
+    "still_moving": true
+  },
+  "entry": {
+    "vector": "up ~460 px/s: PHONE_AVANT rises from y+60 (expo.out 0.9s) with blur 12px->0 and opacity 0->1 over 0.3s; phone scale drift 0.9->0.93 linear across the frame",
+    "from_rest": false
+  }
+}

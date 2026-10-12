@@ -306,7 +306,7 @@
 
       /* lateral push between two screens (old drifts left + darkens, new arrives from the right) */
       function pushScreen(oldL, oldSh, newL, t, d) {
-        tl.fromTo(q(newL), { x: 442 }, { x: 0, duration: d, ease: "power3.out" }, t);
+        tl.fromTo(q(newL), { x: 520 }, { x: 0, duration: d, ease: "power3.out" }, t);   // waits past the edge-shadow reach
         tl.fromTo(q(oldL), { x: 0 }, { x: -130, duration: d, ease: "power3.out", immediateRender: false }, t);
         tl.fromTo(q(oldSh), { opacity: 0 }, { opacity: 0.22, duration: d, ease: "power2.out" }, t);
       }

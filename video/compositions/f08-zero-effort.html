@@ -75,7 +75,7 @@
       position: absolute; right: 0; top: 0; height: 64px; display: flex; align-items: center; gap: 12px;
       padding: 0 32px; border-radius: 999px; font-weight: 600; font-size: 26px; color: #FFFFFF; white-space: nowrap;
     }
-    #f08-zero-effort-btn-send { background: #241F20; transform-origin: 70% 50%; box-shadow: 0 10px 22px -12px rgba(36,31,32,0.45); }
+    #f08-zero-effort-btn-send { background: #241F20; transform-origin: 70% 50%; box-shadow: inset 0 0 0 0px rgba(255,255,255,0), 0 10px 22px -12px rgba(36,31,32,0.45); }
     #f08-zero-effort-btn-done { background: #1F8A4C; transform-origin: 85% 50%; opacity: 0; box-shadow: 0 10px 24px -12px rgba(31,138,76,0.55); }
     .f08-zero-effort-btn svg { width: 26px; height: 26px; display: block; }
 
@@ -309,9 +309,11 @@
       /* ── Scene 2: physics-press-reaction on « Envoyer → » (Un formulaire 2.59–2.74) ── */
       tl.fromTo(q("cursor"), { x: 1250, y: 1160, scale: 1 }, { x: 998, y: 660, duration: 0.6, ease: "power3.out" }, 1.98);
       tl.to([q("btn-send"), q("cursor")], { scale: 0.9, duration: 0.12, ease: "power1.in" }, 2.6);
-      tl.to(q("btn-send"), { boxShadow: "inset 0 0 0 3px rgba(255,255,255,0.18), 0 2px 6px -2px rgba(36,31,32,0.4)", duration: 0.12, ease: "power1.in" }, 2.6);
+      var SH_REST = "inset 0px 0px 0px 0px rgba(255,255,255,0), 0px 10px 22px -12px rgba(36,31,32,0.45)";
+      var SH_PRESS = "inset 0px 0px 0px 3px rgba(255,255,255,0.18), 0px 2px 6px -2px rgba(36,31,32,0.4)";
+      tl.fromTo(q("btn-send"), { boxShadow: SH_REST }, { boxShadow: SH_PRESS, duration: 0.12, ease: "power1.in" }, 2.6);
       tl.to([q("btn-send"), q("cursor")], { scale: 1, duration: 0.45, ease: "back.out(2)" }, 2.74);
-      tl.to(q("btn-send"), { boxShadow: "inset 0 0 0 0px rgba(255,255,255,0), 0 10px 22px -12px rgba(36,31,32,0.45)", duration: 0.45, ease: "power2.out" }, 2.74);
+      tl.fromTo(q("btn-send"), { boxShadow: SH_PRESS }, { boxShadow: SH_REST, duration: 0.45, ease: "power2.out", immediateRender: false }, 2.74);
       // press triggers the swap → good-green « Demande envoyée ✓ »
       tl.to(q("btn-send"), { opacity: 0, duration: 0.12, ease: "power1.out" }, 2.76);
       tl.fromTo(q("btn-done"), { opacity: 0, scale: 0.86 }, { opacity: 1, scale: 1, duration: 0.42, ease: "back.out(1.8)" }, 2.76);

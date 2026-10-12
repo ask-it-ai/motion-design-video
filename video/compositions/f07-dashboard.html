@@ -18,7 +18,7 @@
     #f07-dashboard-stage { position: absolute; inset: 0; overflow: hidden; }
     #f07-dashboard-world { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; transform-origin: 0 0; }
     .f07-dashboard-n { font-family: 'DM Sans', sans-serif; }
-    .f07-dashboard-sd { display: inline-block; width: 0.62em; text-align: center; }
+    .f07-dashboard-sd { display: inline-block; width: 0.58em; text-align: center; }
     .f07-dashboard-ss { display: inline-block; width: 0.24em; }
 
     /* ---------- step pill ---------- */
@@ -63,6 +63,7 @@
     #f07-dashboard-rev { left: 36px; top: 112px; width: 640px; height: 350px; }
     #f07-dashboard-revlab { position: absolute; left: 28px; top: 24px; font: 500 15px 'Lufga', sans-serif; color: #6C6560; }
     #f07-dashboard-revnum { position: absolute; left: 22px; top: 46px; display: flex; align-items: baseline; font: 700 66px 'DM Sans', sans-serif; letter-spacing: -0.02em; line-height: 1.1; transform-origin: 0% 80%; }
+    #f07-dashboard-revsk { position: absolute; left: 28px; top: 62px; width: 250px; height: 46px; border-radius: 12px; }
     #f07-dashboard-chart { position: absolute; left: 0; top: 0; width: 640px; height: 350px; overflow: visible; }
     #f07-dashboard-line { fill: none; stroke: #F8571F; stroke-width: 3.2; stroke-linecap: round; stroke-linejoin: round; }
     .f07-dashboard-axis { font: 500 12px 'Lufga', sans-serif; fill: #A39C95; }
@@ -88,7 +89,7 @@
     .f07-dashboard-pct { width: 44px; text-align: right; font: 600 15px 'DM Sans', sans-serif; flex: none; }
     .f07-dashboard-amt { width: 92px; text-align: right; font: 700 17px 'DM Sans', sans-serif; letter-spacing: -0.01em; flex: none; }
     #f07-dashboard-hl { position: absolute; left: 0; top: 0; width: 516px; height: 84px; border-radius: 12px; background: #FDEEE7; box-shadow: inset 0 0 0 1.5px rgba(248,87,31,0.35); }
-    #f07-dashboard-hlbar { position: absolute; left: 0; top: 18px; width: 4px; height: 48px; border-radius: 0 3px 3px 0; background: #F8571F; transform-origin: 50% 50%; }
+    #f07-dashboard-hlbar { position: absolute; left: 7px; top: 22px; width: 4px; height: 40px; border-radius: 2px; background: #F8571F; transform-origin: 50% 50%; }
     .f07-dashboard-sk { background: #F0EDE9; border-radius: 6px; }
 
     /* funnel card */
@@ -125,17 +126,17 @@
     #f07-dashboard-ahead { position: absolute; left: 0; top: 0; width: 440px; height: 64px; border-bottom: 1.5px solid rgba(36,31,32,0.08); box-sizing: border-box; display: flex; align-items: center; gap: 12px; padding: 0 20px;
       font: 600 18px 'Lufga', sans-serif; }
     #f07-dashboard-ahead svg { margin-left: auto; width: 18px; height: 18px; }
-    #f07-dashboard-mhead { position: absolute; left: 20px; top: 84px; display: flex; align-items: center; gap: 10px; font: 600 15px 'Lufga', sans-serif; color: #4A5FC1; }
-    #f07-dashboard-bubble { position: absolute; left: 70px; top: 128px; width: 350px; padding: 16px 18px; box-sizing: border-box; border-radius: 6px 18px 18px 18px; background: #EEF0FA; transform-origin: 0% 0%;
+    #f07-dashboard-mhead { position: absolute; left: 20px; top: 372px; display: flex; align-items: center; gap: 10px; font: 600 15px 'Lufga', sans-serif; color: #4A5FC1; }
+    #f07-dashboard-bubble { position: absolute; left: 70px; top: 416px; width: 350px; padding: 16px 18px; box-sizing: border-box; border-radius: 6px 18px 18px 18px; background: #EEF0FA; transform-origin: 0% 0%;
       font: 500 17px 'Lufga', sans-serif; line-height: 1.42; color: #241F20; }
     #f07-dashboard-typing { position: absolute; left: 18px; top: 24px; display: flex; gap: 6px; }
     #f07-dashboard-typing i { width: 8px; height: 8px; border-radius: 50%; background: #4A5FC1; opacity: 0.6; }
-    #f07-dashboard-camp { position: absolute; left: 70px; top: 232px; width: 350px; height: 150px; border-radius: 14px; background: #fff; box-sizing: border-box; border: 1.5px solid rgba(36,31,32,0.10);
+    #f07-dashboard-camp { position: absolute; left: 70px; top: 520px; width: 350px; height: 132px; border-radius: 14px; background: #fff; box-sizing: border-box; border: 1.5px solid rgba(36,31,32,0.10);
       box-shadow: 0 18px 40px -18px rgba(36,31,32,0.22), 0 2px 6px rgba(36,31,32,0.05); }
     #f07-dashboard-campok { position: absolute; inset: -1.5px; border-radius: 14px; box-shadow: 0 0 0 2px #1F8A4C, 0 16px 34px -14px rgba(31,138,76,0.45); }
     #f07-dashboard-thumbs { position: absolute; left: 16px; top: 18px; display: flex; }
     #f07-dashboard-thumbs img { width: 40px; height: 40px; border-radius: 10px; object-fit: cover; box-shadow: 0 0 0 2px #fff; margin-right: -12px; }
-    #f07-dashboard-ctxt { position: absolute; left: 112px; top: 18px; }
+    #f07-dashboard-ctxt { position: absolute; left: 126px; top: 18px; }
     #f07-dashboard-ctxt b { display: block; font: 600 16px 'Lufga', sans-serif; letter-spacing: -0.01em; }
     #f07-dashboard-ctxt span { display: block; margin-top: 3px; font: 500 13px 'Lufga', sans-serif; color: #6C6560; }
     #f07-dashboard-tog { position: absolute; left: 288px; top: 86px; width: 46px; height: 26px; border-radius: 13px; background: #DDD7CD; }
@@ -147,7 +148,7 @@
     #f07-dashboard-ston { color: #1F8A4C; background: #E9F5EE; border-radius: 999px; padding: 0 12px 0 8px; left: 10px; }
     #f07-dashboard-ston svg { width: 16px; height: 16px; }
     #f07-dashboard-cursor { position: absolute; left: 0; top: 0; width: 22px; height: 30px; transform-origin: 2px 2px; }
-    #f07-dashboard-ripple { position: absolute; left: 1610px; top: 504px; width: 50px; height: 50px; border-radius: 50%; box-sizing: border-box; border: 2.5px solid #1F8A4C; }
+    #f07-dashboard-ripple { position: absolute; left: 1610px; top: 792px; width: 50px; height: 50px; border-radius: 50%; box-sizing: border-box; border: 2.5px solid #1F8A4C; }
 
     /* ---------- Excel sheet (the old way) ---------- */
     #f07-dashboard-xl { position: absolute; left: 500px; top: 250px; width: 920px; height: 560px; transform-origin: 50% 50%; }
@@ -172,24 +173,20 @@
     #f07-dashboard-crease path { fill: none; stroke: rgba(0,0,0,0.22); stroke-width: 2; stroke-linejoin: round; }
     #f07-dashboard-crease path.f07-dashboard-hi { stroke: rgba(255,255,255,0.9); stroke-width: 1.5; }
   </style>
-
   <div id="root" data-composition-id="f07-dashboard" data-width="1920" data-height="1080" data-duration="11.23">
     <div id="f07-dashboard-bg" class="clip" data-start="0" data-duration="11.23" data-track-index="0">
       <div id="f07-dashboard-mesh"></div>
       <div id="f07-dashboard-grid"></div>
     </div>
-
     <div id="f07-dashboard-stage" class="clip" data-start="0" data-duration="11.23" data-track-index="1" data-layout-allow-overflow data-layout-allow-overlap data-layout-allow-occlusion>
       <!-- the one camera: every leg is a tween on a single cam state written by applyCamera() -->
       <div id="f07-dashboard-world" data-layout-allow-overflow>
         <div id="f07-dashboard-pill"><div id="f07-dashboard-pillnum">03</div><div id="f07-dashboard-pilltxt">Dashboard</div></div>
-
         <div id="f07-dashboard-win">
           <div id="f07-dashboard-wbar">
             <div class="f07-dashboard-dot" style="left:22px;background:#FF5F57"></div><div class="f07-dashboard-dot" style="left:42px;background:#FEBC2E"></div><div class="f07-dashboard-dot" style="left:62px;background:#28C840"></div>
             <div id="f07-dashboard-url"><svg viewBox="0 0 16 16"><rect x="3" y="7" width="10" height="7.5" rx="2" fill="#A39C95"/><path d="M5.2 7V5.2a2.8 2.8 0 0 1 5.6 0V7" fill="none" stroke="#A39C95" stroke-width="1.6"/></svg>app.ask-it.ai</div>
           </div>
-
           <div id="f07-dashboard-side">
             <div id="f07-dashboard-logo"><img src="assets/askit/askit-logo-mark.svg" alt="">ask-it.ai</div>
             <div id="f07-dashboard-menu">
@@ -202,12 +199,10 @@
             </div>
             <div id="f07-dashboard-ws"><i>E</i><div>Endro<span>Espace marque</span></div></div>
           </div>
-
           <div id="f07-dashboard-content">
             <div id="f07-dashboard-title">Espace Endro</div>
             <div id="f07-dashboard-sub">30 derniers jours</div>
             <div id="f07-dashboard-askbtn"><div class="f07-dashboard-orb" style="width:28px;height:28px"></div>Aski</div>
-
             <!-- « combien ça vous rapporte » -->
             <div id="f07-dashboard-rev" class="f07-dashboard-card">
               <svg id="f07-dashboard-chart" viewBox="0 0 640 350">
@@ -220,10 +215,9 @@
                 <text class="f07-dashboard-axis" x="28" y="342">J-30</text><text class="f07-dashboard-axis" x="612" y="342" text-anchor="end">Aujourd'hui</text>
               </svg>
               <div id="f07-dashboard-revlab">Chiffre d'affaires généré par le diagnostic</div>
-              <div id="f07-dashboard-revnum"><span id="f07-dashboard-revdig"></span><span>&nbsp;€</span></div>
+              <div id="f07-dashboard-revsk" class="f07-dashboard-sk"></div><div id="f07-dashboard-revnum"><span id="f07-dashboard-revdig"></span><span>&nbsp;€</span></div>
               <div class="f07-dashboard-tipwrap"><div id="f07-dashboard-tip"><span>Record ·</span><b>8 250 €</b></div></div>
             </div>
-
             <!-- « qui sont vos meilleurs personas » -->
             <div id="f07-dashboard-per" class="f07-dashboard-card">
               <div class="f07-dashboard-ctitle">Vos meilleurs personas</div><div id="f07-dashboard-percol">Part du CA</div>
@@ -238,7 +232,6 @@
                   <div class="f07-dashboard-track"><div class="f07-dashboard-fill"></div></div><div class="f07-dashboard-pct">19 %</div><div class="f07-dashboard-amt">14 885 €</div></div>
               </div>
             </div>
-
             <!-- « où votre tunnel bloque » -->
             <div id="f07-dashboard-fun" class="f07-dashboard-card">
               <div class="f07-dashboard-ctitle">Parcours du diagnostic</div>
@@ -247,13 +240,12 @@
               <div id="f07-dashboard-b3" class="f07-dashboard-bar" style="left:452px;height:127.8px"></div><div id="f07-dashboard-b4" class="f07-dashboard-bar" style="left:632px;height:17.7px"></div>
               <div id="f07-dashboard-ghost"></div>
               <div id="f07-dashboard-n1" class="f07-dashboard-fnum" style="left:70px;top:58px"></div><div id="f07-dashboard-n2" class="f07-dashboard-fnum" style="left:250px;top:68px"></div>
-              <div id="f07-dashboard-n3" class="f07-dashboard-fnum" style="left:430px;top:80px"></div><div id="f07-dashboard-n4" class="f07-dashboard-fnum" style="left:610px;top:190px"></div>
+              <div id="f07-dashboard-n3" class="f07-dashboard-fnum" style="left:430px;top:66px"></div><div id="f07-dashboard-n4" class="f07-dashboard-fnum" style="left:610px;top:190px"></div>
               <div class="f07-dashboard-flab" style="left:60px">Commencés</div><div class="f07-dashboard-flab" style="left:240px">Arrivées au contact</div>
               <div class="f07-dashboard-flab" style="left:420px">Terminés</div><div class="f07-dashboard-flab" style="left:600px">Achats</div>
               <svg id="f07-dashboard-link" viewBox="0 0 810 286"><path id="f07-dashboard-linkp" d="M556 64 L556 102"/></svg>
               <div class="f07-dashboard-frwrap"><div id="f07-dashboard-frein"><div id="f07-dashboard-frdot"><div id="f07-dashboard-pu1" class="f07-dashboard-pulse"></div><div id="f07-dashboard-pu2" class="f07-dashboard-pulse"></div><div id="f07-dashboard-pu3" class="f07-dashboard-pulse"></div></div><span>Frein détecté :</span>l'écran de contact</div></div>
             </div>
-
             <!-- Aski entry card -->
             <div id="f07-dashboard-askcard" class="f07-dashboard-card">
               <div id="f07-dashboard-askhead"><div class="f07-dashboard-orb" style="width:36px;height:36px"></div><div><b>Aski</b><span>Votre assistant IA</span></div></div>
@@ -261,7 +253,6 @@
               <div class="f07-dashboard-input" style="left:24px;top:214px;width:326px">Posez une question…<div class="f07-dashboard-send"><svg viewBox="0 0 16 16"><path d="M3 8h9M8.5 4.5L12 8l-3.5 3.5" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
             </div>
           </div>
-
           <div id="f07-dashboard-scrim"></div>
           <!-- « quelle publicité lancer ensuite » -->
           <div id="f07-dashboard-aski">
@@ -279,11 +270,9 @@
             <div class="f07-dashboard-input" style="left:20px;top:704px;width:400px;height:52px">Écrivez à Aski…<div class="f07-dashboard-send" style="background:#F8571F"><svg viewBox="0 0 16 16"><path d="M8 13V3.5M4.5 7L8 3.5 11.5 7" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
           </div>
         </div>
-
         <div id="f07-dashboard-ripple"></div>
         <svg id="f07-dashboard-cursor" viewBox="0 0 22 30"><path d="M2 2v22.5l6.2-5.8 4.1 9.3 3.7-1.6-4-9.2h8.4z" fill="#fff" stroke="#241F20" stroke-width="1.8" stroke-linejoin="round"/></svg>
       </div>
-
       <!-- « Adieu le tableau Excel » -->
       <div id="f07-dashboard-xl">
         <div id="f07-dashboard-xlin">
@@ -296,14 +285,12 @@
       </div>
     </div>
   </div>
-
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
   <script>
     (() => {
       const P = 'f07-dashboard-';
       const $ = (id) => document.getElementById(P + id);
       const mk = (tag, cls, txt) => { const e = document.createElement(tag); if (cls) e.className = P + cls; if (txt !== undefined) e.textContent = txt; return e; };
-
       // ---- build-time setup (synchronous, deterministic) ----
       // fixed-width digit slots (DM Sans ships proportional digits, no tnum)
       const makeCounter = (el, finalStr) => {
@@ -321,7 +308,6 @@
       const FUN = [11395, 10617, 9705, 1347];
       const revS = { v: 0 }, funS = FUN.map(() => ({ v: 0 }));
       revSet(0); funSet.forEach((f) => f(0));
-
       // persona skeleton rows (shown while the panel "loads")
       [0, 1, 2].forEach((i) => {
         const r = mk('div', 'row');
@@ -330,7 +316,6 @@
         r.appendChild(Object.assign(mk('div', 'sk'), { style: 'margin-left:auto;width:180px;height:10px' }));
         $('skel').appendChild(r);
       });
-
       // Excel grid labels + a few cells
       'ABCDEFGHI'.split('').forEach((c, i) => { const h = mk('div', 'xh', c); h.style.cssText = 'left:' + (44 + i * 96) + 'px;top:5px;width:96px'; $('xlcols').appendChild(h); });
       for (let r = 1; r <= 14; r++) { const h = mk('div', 'xh', String(r)); h.style.cssText = 'left:0;top:' + (6 + (r - 1) * 30) + 'px;width:44px'; $('xlrows').appendChild(h); }
@@ -343,17 +328,15 @@
         e.style.cssText = 'left:' + (44 + c * 96) + 'px;top:' + (28 + r * 30) + 'px;' + (r === 0 ? 'font-weight:700;' : '') + (c === 3 && r > 0 ? 'text-align:right;' : '') + (t === '#N/A' ? 'color:#C0392B;' : '');
         $('xlgrid').appendChild(e);
       }));
-
       // Aski message, split into characters for the streamed reply
       const MSG = 'Lancez une campagne Meta sur l’audience Teint terne · 30–44 ans';
       const chars = MSG.split('').map((ch) => { const s = mk('span', '', ch); $('msg').appendChild(s); return s; });
-
       // svg-path-draw setup: measured lengths
       const line = $('line'), link = $('linkp');
       const lineLen = line.getTotalLength(), linkLen = link.getTotalLength();
-      gsap.set(line, { strokeDasharray: lineLen, strokeDashoffset: lineLen });
-      gsap.set(link, { strokeDasharray: linkLen, strokeDashoffset: linkLen });
-
+      // two-component dash (gap > offset) so the round cap leaves no dot before the draw starts
+      gsap.set(line, { strokeDasharray: lineLen + ' ' + (lineLen + 24), strokeDashoffset: lineLen + 10 });
+      gsap.set(link, { strokeDasharray: linkLen + ' ' + (linkLen + 24), strokeDashoffset: linkLen + 10 });
       // camera: single state, single writer
       const world = $('world');
       const AX = 960, AY = 500;
@@ -363,8 +346,7 @@
         world.style.filter = cam.blur > 0.05 ? 'blur(' + cam.blur.toFixed(2) + 'px)' : 'none';
       };
       applyCamera();
-      gsap.set($('cursor'), { x: 1720, y: 700, opacity: 0 });
-
+      gsap.set($('cursor'), { x: 1720, y: 940, opacity: 0 });
       const tl = gsap.timeline({ paused: true });
       const camLeg = (from, to, at, dur, ease, blurPeak) => {
         tl.fromTo(cam, from, { ...to, duration: dur, ease, immediateRender: false, onUpdate: applyCamera }, at);
@@ -373,22 +355,16 @@
           tl.fromTo(cam, { blur: blurPeak }, { blur: 0, duration: dur / 2, ease: 'power2.out', immediateRender: false, onUpdate: applyCamera }, at + dur / 2);
         }
       };
-
       tl.fromTo($('mesh'), { x: -40, y: 10, scale: 1 }, { x: 40, y: -10, scale: 1.06, duration: 11.23, ease: 'sine.inOut' }, 0);
-
       // ---- Scene 1 (0–1.9): the dashboard window rises in, the app wakes up ----
       tl.fromTo($('win'), { y: 160, rotationX: 22, transformPerspective: 1400, opacity: 0, filter: 'blur(10px)' }, { y: 0, rotationX: 0, opacity: 1, filter: 'blur(0px)', duration: 0.95, ease: 'expo.out' }, 0.02);
       tl.fromTo($('pill'), { y: -44, opacity: 0, filter: 'blur(8px)' }, { y: 0, opacity: 1, filter: 'blur(0px)', duration: 0.45, ease: 'expo.out' }, 0.72);
       tl.fromTo($('pillnum'), { scale: 0.4, rotation: -40 }, { scale: 1, rotation: 0, duration: 0.5, ease: 'back.out(1.6)' }, 0.8);
-      gsap.utils.toArray('#' + P + 'menu > div').forEach((el, i) => {
-        tl.fromTo(el, { x: -18, opacity: 0 }, { x: 0, opacity: 1, duration: 0.35, ease: 'expo.out' }, 0.32 + i * 0.04);
-      });
+      const menuItems = Array.from($('menu').children);
+      tl.fromTo(menuItems, { x: -18, opacity: 0 }, { x: 0, opacity: 1, duration: 0.35, ease: 'expo.out', stagger: 0.04 }, 0.32);
       tl.fromTo([$('title'), $('sub')], { y: 16, opacity: 0 }, { y: 0, opacity: 1, duration: 0.45, ease: 'expo.out', stagger: 0.05 }, 0.42);
-      [$('rev'), $('per'), $('fun'), $('askcard')].forEach((el, i) => {
-        tl.fromTo(el, { y: 22, scale: 0.97, opacity: 0 }, { y: 0, scale: 1, opacity: 1, duration: 0.5, ease: 'expo.out' }, 0.5 + i * 0.06);
-      });
+      tl.fromTo([$('rev'), $('per'), $('fun'), $('askcard')], { y: 22, scale: 0.97, opacity: 0 }, { y: 0, scale: 1, opacity: 1, duration: 0.5, ease: 'expo.out', stagger: 0.06 }, 0.5);
       camLeg({ fx: 960, fy: 500, s: 1 }, { fx: 930, fy: 492, s: 1.03 }, 1.0, 2.6, 'power1.inOut');
-
       // ---- Scene 2 (2.0–3.6): « Adieu le tableau Excel » — slam in, crumple away ----
       tl.fromTo($('xl'), { scale: 1.15, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.25, ease: 'power3.out' }, 1.82);
       tl.fromTo(cam, { blur: 0 }, { blur: 5, duration: 0.3, ease: 'power2.out', immediateRender: false, onUpdate: applyCamera }, 1.82);
@@ -397,71 +373,67 @@
       tl.to($('xlin'), { scaleX: 0.9, scaleY: 0.84, skewX: -5, rotation: -6, duration: 0.14, ease: 'power2.in' }, 2.75);
       tl.to($('xl'), { x: 700, y: -250, scale: 0.15, rotation: -28, opacity: 0, filter: 'blur(8px)', duration: 0.55, ease: 'power3.in' }, 2.8);
       tl.fromTo(cam, { blur: 5 }, { blur: 0, duration: 0.4, ease: 'power2.inOut', immediateRender: false, onUpdate: applyCamera }, 2.95);
-
       // ---- Scene 3 (3.6–5.75): LEG 1 — dive onto revenue; counter + chart ----
       camLeg({ fx: 930, fy: 492, s: 1.03 }, { fx: 786, fy: 469, s: 1.8 }, 3.6, 0.75, 'expo.inOut', 6);
       tl.to(revS, { v: 78343, duration: 1.22, ease: 'power3.out', onUpdate: () => revSet(revS.v) }, 3.95);
-      tl.fromTo($('revnum'), { scale: 0.6 }, { scale: 1, duration: 1.22, ease: 'power3.out' }, 3.95);
+      tl.fromTo($('revnum'), { scale: 0.6, opacity: 0 }, { scale: 1, opacity: 1, duration: 1.22, ease: 'power3.out' }, 3.95);
+      tl.to($('revsk'), { opacity: 0, duration: 0.2, ease: 'power1.out' }, 3.9);
       tl.to(line, { strokeDashoffset: 0, duration: 0.95, ease: 'power1.inOut' }, 4.1);
       tl.fromTo($('area'), { opacity: 0 }, { opacity: 1, duration: 0.6, ease: 'power1.out' }, 4.6);
       tl.fromTo($('peak'), { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.35, ease: 'back.out(1.6)' }, 4.92);
       tl.fromTo($('tip'), { y: 12, scale: 0.85, opacity: 0 }, { y: 0, scale: 1, opacity: 1, duration: 0.4, ease: 'expo.out' }, 5.0);
       camLeg({ fx: 786, fy: 469, s: 1.8 }, { fx: 792, fy: 466, s: 1.88 }, 4.35, 1.4, 'power1.inOut');
-
       // ---- Scene 4 (5.75–7.35): LEG 2 — pan right to the personas ----
       camLeg({ fx: 792, fy: 466, s: 1.88 }, { fx: 1402, fy: 469, s: 2.0 }, 5.75, 0.62, 'power2.inOut', 5);
       tl.to($('skel'), { opacity: 0, duration: 0.25, ease: 'power1.out' }, 5.95);
-      [$('r1'), $('r2'), $('r3')].forEach((el, i) => {
-        tl.fromTo(el, { x: 44, opacity: 0 }, { x: 0, opacity: 1, duration: 0.45, ease: 'expo.out' }, 6.0 + i * 0.08);
-      });
-      gsap.utils.toArray('#' + P + 'per .' + P + 'fill').forEach((el, i) => {
-        tl.fromTo(el, { scaleX: 0 }, { scaleX: [0.9, 0.6, 0.475][i], duration: 0.6, ease: 'power2.out' }, 6.1 + i * 0.08);
-      });
+      tl.fromTo([$('r1'), $('r2'), $('r3')], { x: 44, opacity: 0 }, { x: 0, opacity: 1, duration: 0.45, ease: 'expo.out', stagger: 0.08 }, 6.0);
+      const SHARE = [0.9, 0.6, 0.475];
+      const fills = Array.from($('per').getElementsByClassName(P + 'fill'));
+      tl.fromTo(fills, { scaleX: 0 }, { scaleX: (i) => SHARE[i], duration: 0.6, ease: 'power2.out', stagger: 0.08 }, 6.1);
       tl.fromTo($('hl'), { opacity: 0, scaleX: 0.97 }, { opacity: 1, scaleX: 1, duration: 0.35, ease: 'expo.out' }, 6.64);
       tl.fromTo($('hlbar'), { scaleY: 0 }, { scaleY: 1, duration: 0.35, ease: 'expo.out' }, 6.7);
       camLeg({ fx: 1402, fy: 469, s: 2.0 }, { fx: 1398, fy: 472, s: 2.06 }, 6.37, 0.98, 'power1.inOut');
-
       // ---- Scene 5 (7.35–8.75): LEG 3 — swoop down to the funnel; friction detected ----
       camLeg({ fx: 1398, fy: 472, s: 2.06 }, { fx: 871, fy: 811, s: 1.85 }, 7.35, 0.6, 'power3.inOut', 6);
-      [$('b1'), $('b2'), $('b3'), $('b4')].forEach((el, i) => {
-        tl.fromTo(el, { scaleY: 0 }, { scaleY: 1, duration: 0.6, ease: 'power3.out' }, 7.72 + i * 0.08);
-        tl.to(funS[i], { v: FUN[i], duration: 0.6, ease: 'power3.out', onUpdate: () => funSet[i](funS[i].v) }, 7.72 + i * 0.08);
+      // bars grow (scaleY), their numbers ride the bar tops and count on the same ease
+      const RISE = [150, 139.8, 141.8, 17.7];
+      tl.fromTo([$('b1'), $('b2'), $('b3'), $('b4')], { scaleY: 0 }, { scaleY: 1, duration: 0.6, ease: 'power3.out', stagger: 0.08 }, 7.72);
+      tl.fromTo([$('n1'), $('n2'), $('n3'), $('n4')], { y: (i) => RISE[i], opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: 'power3.out', stagger: 0.08 }, 7.72);
+      funS.forEach((st, i) => {
+        tl.to(st, { v: FUN[i], duration: 0.6, ease: 'power3.out', onUpdate: () => funSet[i](st.v) }, 7.72 + i * 0.08);
       });
       tl.fromTo($('ghost'), { scaleY: 0, opacity: 0 }, { scaleY: 1, opacity: 1, duration: 0.3, ease: 'power2.out' }, 8.08);
       tl.fromTo($('frein'), { y: 12, scale: 0.6, opacity: 0 }, { y: 0, scale: 1, opacity: 1, duration: 0.42, ease: 'back.out(1.6)' }, 8.14);
       tl.to(link, { strokeDashoffset: 0, duration: 0.3, ease: 'power2.out' }, 8.3);
-      [$('pu1'), $('pu2'), $('pu3')].forEach((el, i) => {
-        tl.fromTo(el, { scale: 0.8, opacity: 0 }, { scale: 1.2, opacity: 0.9, duration: 0.08, ease: 'none' }, 8.34 + i * 0.6);
-        tl.to(el, { scale: 3, opacity: 0, duration: 0.62, ease: 'power1.out' }, 8.42 + i * 0.6);
-      });
+      const pulses = [$('pu1'), $('pu2'), $('pu3')];
+      tl.fromTo(pulses, { scale: 0.8, opacity: 0 }, { scale: 1.2, opacity: 0.9, duration: 0.08, ease: 'none', stagger: 0.6 }, 8.34);
+      tl.to(pulses, { scale: 3, opacity: 0, duration: 0.52, ease: 'power1.out', stagger: 0.6 }, 8.42);
       camLeg({ fx: 871, fy: 811, s: 1.85 }, { fx: 874, fy: 806, s: 1.9 }, 7.95, 0.8, 'power1.inOut');
-
       // ---- Scene 6 (8.75–11.23): LEG 4 — Aski slides in, proposes the next campaign, it gets activated ----
-      camLeg({ fx: 874, fy: 806, s: 1.9 }, { fx: 1474, fy: 425, s: 1.7 }, 8.75, 0.65, 'power3.inOut', 5);
+      camLeg({ fx: 874, fy: 806, s: 1.9 }, { fx: 1474, fy: 764, s: 1.7 }, 8.75, 0.65, 'power3.inOut', 5);
       tl.fromTo($('scrim'), { opacity: 0 }, { opacity: 1, duration: 0.4, ease: 'power1.out' }, 8.8);
       tl.fromTo($('aski'), { x: 470 }, { x: 0, duration: 0.6, ease: 'expo.out' }, 8.78);
       tl.fromTo($('mhead'), { y: 10, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: 'expo.out' }, 9.02);
       tl.fromTo($('bubble'), { scale: 0.85, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.3, ease: 'expo.out' }, 9.06);
-      gsap.utils.toArray('#' + P + 'typing i').forEach((el, i) => {
-        tl.fromTo(el, { y: 0 }, { y: -5, duration: 0.11, ease: 'sine.out' }, 9.1 + i * 0.05);
-        tl.to(el, { y: 0, duration: 0.11, ease: 'sine.in' }, 9.21 + i * 0.05);
-      });
+      const dots = Array.from($('typing').children);
+      tl.fromTo(dots, { y: 0 }, { y: -5, duration: 0.11, ease: 'sine.out', stagger: 0.05 }, 9.1);
+      tl.to(dots, { y: 0, duration: 0.11, ease: 'sine.in', stagger: 0.05 }, 9.21);
       tl.to($('typing'), { opacity: 0, duration: 0.06 }, 9.32);
       tl.fromTo(chars, { opacity: 0 }, { opacity: 1, duration: 0.02, stagger: 0.0088, ease: 'none' }, 9.33);
       tl.fromTo($('camp'), { y: 20, scale: 0.94, opacity: 0 }, { y: 0, scale: 1, opacity: 1, duration: 0.4, ease: 'expo.out' }, 9.92);
       tl.fromTo($('cursor'), { opacity: 0 }, { opacity: 1, duration: 0.15, ease: 'power1.out' }, 9.68);
-      tl.to($('cursor'), { x: 1633, y: 527, duration: 0.32, ease: 'power2.inOut' }, 9.7);
+      tl.to($('cursor'), { x: 1633, y: 815, duration: 0.32, ease: 'power2.inOut' }, 9.7);
       tl.to($('cursor'), { scale: 0.86, duration: 0.07, ease: 'power2.in' }, 10.02);
       tl.to($('cursor'), { scale: 1, duration: 0.12, ease: 'power2.out' }, 10.09);
-      tl.fromTo($('ripple'), { scale: 0.2, opacity: 0.9 }, { scale: 1.6, opacity: 0, duration: 0.38, ease: 'power2.out' }, 10.06);
+      tl.fromTo($('ripple'), { scale: 0.2, opacity: 0 }, { scale: 0.45, opacity: 0.9, duration: 0.05, ease: 'none' }, 10.04);
+      tl.to($('ripple'), { scale: 1.6, opacity: 0, duration: 0.36, ease: 'power2.out' }, 10.09);
       tl.fromTo($('knob'), { x: 0 }, { x: 20, duration: 0.22, ease: 'power3.inOut' }, 10.07);
       tl.fromTo($('togon'), { opacity: 0 }, { opacity: 1, duration: 0.2, ease: 'power1.out' }, 10.08);
       tl.to($('stoff'), { y: -8, opacity: 0, duration: 0.14, ease: 'power2.in' }, 10.1);
       tl.fromTo($('ston'), { y: 10, opacity: 0, scale: 0.9 }, { y: 0, opacity: 1, scale: 1, duration: 0.36, ease: 'back.out(1.6)' }, 10.18);
       tl.fromTo($('campok'), { opacity: 0 }, { opacity: 1, duration: 0.35, ease: 'power2.out' }, 10.16);
-      tl.to($('cursor'), { x: 1652, y: 552, duration: 0.6, ease: 'power2.out' }, 10.4);
-      camLeg({ fx: 1474, fy: 425, s: 1.7 }, { fx: 1488, fy: 455, s: 1.84 }, 9.4, 1.83, 'power1.inOut');
-
+      tl.to($('cursor'), { x: 1652, y: 840, duration: 0.6, ease: 'power2.out' }, 10.4);
+      camLeg({ fx: 1474, fy: 764, s: 1.7 }, { fx: 1484, fy: 774, s: 1.84 }, 9.4, 1.83, 'power1.inOut');
       window.__timelines = window.__timelines || {};
       window.__timelines['f07-dashboard'] = tl;
     })();

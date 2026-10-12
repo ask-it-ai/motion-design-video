@@ -1,0 +1,889 @@
+<template>
+  <style>
+    @font-face {
+      font-family: "Lufga";
+      src: url("assets/fonts/Lufga-Regular.woff2") format("woff2");
+      font-weight: 400;
+      font-style: normal;
+      font-display: block;
+    }
+    @font-face {
+      font-family: "Lufga";
+      src: url("assets/fonts/Lufga-Medium.woff2") format("woff2");
+      font-weight: 500;
+      font-style: normal;
+      font-display: block;
+    }
+    @font-face {
+      font-family: "Lufga";
+      src: url("assets/fonts/Lufga-SemiBold.woff2") format("woff2");
+      font-weight: 600;
+      font-style: normal;
+      font-display: block;
+    }
+    @font-face {
+      font-family: "Lufga";
+      src: url("assets/fonts/Lufga-Bold.woff2") format("woff2");
+      font-weight: 700;
+      font-style: normal;
+      font-display: block;
+    }
+    @font-face {
+      font-family: "DM Sans";
+      src: url("assets/fonts/DMSans-normal-latin.woff2") format("woff2");
+      font-weight: 300 800;
+      font-style: normal;
+      font-display: block;
+    }
+
+    #root {
+      position: relative;
+      width: 1920px;
+      height: 1080px;
+      overflow: hidden;
+      font-family: "Lufga", sans-serif;
+      color: #241f20;
+    }
+
+    /* ───────── grid-bg (identical to the end of f04-bascule) ───────── */
+    #f05-diagnostic-bg {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+    }
+    .f05-diagnostic-canvas {
+      position: absolute;
+      inset: 0;
+      background: #fdfcfc;
+    }
+    #f05-diagnostic-mesh {
+      position: absolute;
+      left: -1920px;
+      top: -1080px;
+      width: 5760px;
+      height: 3240px;
+      transform-origin: 2880px 1620px;
+      background:
+        radial-gradient(1152px 648px at 2438.4px 1328.4px, rgba(248, 87, 31, 0.22) 0%, rgba(248, 87, 31, 0) 60%),
+        radial-gradient(1056px 594px at 3417.6px 1404px, rgba(172, 204, 233, 0.55) 0%, rgba(172, 204, 233, 0) 62%),
+        radial-gradient(1152px 648px at 2976px 1998px, rgba(167, 171, 221, 0.45) 0%, rgba(167, 171, 221, 0) 65%);
+    }
+    .f05-diagnostic-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(to right, rgba(36, 31, 32, 0.05) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(36, 31, 32, 0.05) 1px, transparent 1px);
+      background-size: 44px 44px;
+    }
+
+    /* ───────── PILLS_ROW (identical to the end of f04-bascule) ───────── */
+    #f05-diagnostic-pills {
+      position: absolute;
+      inset: 0;
+    }
+    #f05-diagnostic-pills-drift {
+      position: absolute;
+      inset: 0;
+      transform-origin: 960px 540px;
+    }
+    #f05-diagnostic-pills-cam {
+      position: absolute;
+      inset: 0;
+      transform-origin: 520px 540px;
+    }
+    .f05-diagnostic-slot {
+      position: absolute;
+      top: 540px;
+      width: 0;
+      height: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .f05-diagnostic-pill {
+      position: relative;
+      flex: none;
+      height: 88px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 0 32px 0 24px;
+      box-sizing: border-box;
+      background: #ffffff;
+      border: 1.5px solid rgba(36, 31, 32, 0.1);
+      border-radius: 999px;
+      box-shadow: 0 18px 40px -18px rgba(36, 31, 32, 0.18), 0 2px 6px rgba(36, 31, 32, 0.05);
+      white-space: nowrap;
+    }
+    .f05-diagnostic-pill-num {
+      flex: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #f8571f;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: "DM Sans", sans-serif;
+      font-weight: 600;
+      font-size: 18px;
+      letter-spacing: 0.01em;
+    }
+    .f05-diagnostic-pill-label {
+      display: block;
+      font-weight: 500;
+      font-size: 30px;
+      color: #241f20;
+    }
+    #f05-diagnostic-pill-ring {
+      position: absolute;
+      left: -1.5px;
+      top: -1.5px;
+      right: -1.5px;
+      bottom: -1.5px;
+      border-radius: 999px;
+      border: 2px solid #f8571f;
+      opacity: 0;
+    }
+
+    /* ───────── stage ───────── */
+    #f05-diagnostic-stage {
+      position: absolute;
+      inset: 0;
+    }
+
+    /* PHONE_HERO: 470×1000 body scaled 0.9, centre (700, 520) */
+    #f05-diagnostic-phone-pos {
+      position: absolute;
+      left: 465px;
+      top: 20px;
+      width: 470px;
+      height: 1000px;
+    }
+    #f05-diagnostic-phone {
+      position: absolute;
+      inset: 0;
+      transform: scale(0.9);
+      transform-origin: 50% 50%;
+      border-radius: 68px;
+      background: #111111;
+      box-shadow:
+        inset 0 0 0 2px rgba(255, 255, 255, 0.12),
+        0 60px 120px -30px rgba(36, 31, 32, 0.35),
+        0 20px 40px -20px rgba(36, 31, 32, 0.25);
+    }
+    #f05-diagnostic-screen {
+      position: absolute;
+      left: 14px;
+      top: 14px;
+      width: 442px;
+      height: 972px;
+      border-radius: 56px;
+      overflow: hidden;
+      background: #ffffff;
+    }
+    .f05-diagnostic-status {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 442px;
+      height: 44px;
+      background: #ffffff;
+    }
+    .f05-diagnostic-time {
+      position: absolute;
+      left: 44px;
+      top: 0;
+      font-weight: 600;
+      font-size: 22px;
+      line-height: 44px;
+      color: #241f20;
+    }
+    .f05-diagnostic-island {
+      position: absolute;
+      left: 161px;
+      top: 5px;
+      width: 120px;
+      height: 34px;
+      border-radius: 999px;
+      background: #000000;
+    }
+    .f05-diagnostic-glyphs {
+      position: absolute;
+      right: 34px;
+      top: 13px;
+      display: block;
+      width: 78px;
+      height: 18px;
+    }
+    #f05-diagnostic-viewport {
+      position: absolute;
+      left: 0;
+      top: 44px;
+      width: 442px;
+      height: 928px;
+      overflow: hidden;
+      background: #ffffff;
+    }
+    .f05-diagnostic-page {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 442px;
+      height: 957px;
+      opacity: 0;
+    }
+    .f05-diagnostic-page img {
+      display: block;
+      width: 442px;
+      height: auto;
+    }
+    #f05-diagnostic-p00 {
+      opacity: 1;
+    }
+    .f05-diagnostic-flash {
+      position: absolute;
+      background: #ffffff;
+      border-radius: 4px;
+      opacity: 0;
+    }
+    #f05-diagnostic-spot {
+      position: absolute;
+      left: 202.9px;
+      top: 414.8px;
+      width: 36.3px;
+      height: 35.1px;
+      border-radius: 3px;
+      box-shadow: 0 0 0 1400px rgba(20, 16, 17, 0.5);
+      opacity: 0;
+    }
+    #f05-diagnostic-hl {
+      position: absolute;
+      left: 195.9px;
+      top: 407.8px;
+      width: 50.3px;
+      height: 49.1px;
+      box-sizing: border-box;
+      border: 3px solid #f8571f;
+      border-radius: 8px;
+      box-shadow: 0 0 0 5px rgba(248, 87, 31, 0.22);
+      opacity: 0;
+    }
+
+    /* brand label (theme-crossfade skins share one geometry) */
+    #f05-diagnostic-brand {
+      position: absolute;
+      left: 852px;
+      top: 46px;
+      width: 176px;
+      height: 64px;
+      border-radius: 999px;
+      transform-origin: 8% 92%;
+      box-shadow: 0 40px 80px -24px rgba(36, 31, 32, 0.22), 0 8px 24px -8px rgba(36, 31, 32, 0.1);
+    }
+    .f05-diagnostic-skin {
+      position: absolute;
+      inset: 0;
+      box-sizing: border-box;
+      border-radius: 999px;
+      border: 1.5px solid rgba(36, 31, 32, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    #f05-diagnostic-skin-endro {
+      background: #ffffff;
+    }
+    #f05-diagnostic-skin-endro img {
+      display: block;
+      height: 28px;
+      width: auto;
+    }
+    #f05-diagnostic-skin-lpp {
+      background: #fbf6ef;
+      opacity: 0;
+    }
+    .f05-diagnostic-lppcrop {
+      position: relative;
+      width: 77px;
+      height: 36px;
+      overflow: hidden;
+    }
+    .f05-diagnostic-lppcrop img {
+      position: absolute;
+      left: -292px;
+      top: -206px;
+      width: 800px;
+      height: auto;
+      filter: grayscale(1) brightness(1.12) contrast(1.7);
+      mix-blend-mode: multiply;
+    }
+
+    /* profile card (580 wide, x 1020–1600) */
+    #f05-diagnostic-card {
+      position: absolute;
+      left: 1020px;
+      top: 236px;
+      width: 580px;
+      height: 518px;
+      border-radius: 22px;
+      background: #ffffff;
+      box-shadow:
+        0 0 0 1.5px rgba(36, 31, 32, 0.1),
+        0 18px 40px -18px rgba(36, 31, 32, 0.18),
+        0 2px 6px rgba(36, 31, 32, 0.05);
+    }
+    .f05-diagnostic-avatar {
+      position: absolute;
+      left: 32px;
+      top: 32px;
+      width: 88px;
+      height: 88px;
+      border-radius: 50%;
+      overflow: hidden;
+      box-shadow: 0 0 0 4px #ffffff, 0 10px 22px -8px rgba(36, 31, 32, 0.35);
+    }
+    .f05-diagnostic-avatar img {
+      display: block;
+      width: 88px;
+      height: 88px;
+      object-fit: cover;
+    }
+    .f05-diagnostic-name {
+      position: absolute;
+      left: 146px;
+      top: 34px;
+      font-weight: 600;
+      font-size: 40px;
+      line-height: 48px;
+      letter-spacing: -0.01em;
+      white-space: nowrap;
+    }
+    #f05-diagnostic-subskel {
+      position: absolute;
+      left: 146px;
+      top: 97px;
+      width: 190px;
+      height: 12px;
+      border-radius: 6px;
+      background: #efebe6;
+      transform-origin: 0% 50%;
+    }
+    #f05-diagnostic-sub {
+      position: absolute;
+      left: 166px;
+      top: 88px;
+      width: 230px;
+      height: 30px;
+      overflow: hidden;
+    }
+    #f05-diagnostic-sub-inner {
+      position: absolute;
+      left: 0;
+      top: 0;
+      white-space: nowrap;
+      font-weight: 500;
+      font-size: 22px;
+      line-height: 30px;
+      color: #f8571f;
+    }
+    .f05-diagnostic-skel {
+      position: absolute;
+      height: 56px;
+      border-radius: 999px;
+      background: #f4f1ed;
+      transform-origin: 0% 50%;
+    }
+    .f05-diagnostic-cslot {
+      position: absolute;
+      height: 56px;
+    }
+    .f05-diagnostic-chip {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 22px 0 18px;
+      box-sizing: border-box;
+      background: #ffffff;
+      border: 1.5px solid rgba(36, 31, 32, 0.1);
+      border-radius: 999px;
+      box-shadow: 0 18px 40px -18px rgba(36, 31, 32, 0.18), 0 2px 6px rgba(36, 31, 32, 0.05);
+      font-weight: 500;
+      font-size: 26px;
+      color: #241f20;
+      white-space: nowrap;
+      opacity: 0;
+    }
+    .f05-diagnostic-chip i {
+      flex: none;
+      display: block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #f8571f;
+    }
+    .f05-diagnostic-chip.is-tint {
+      background: #fdeee7;
+      border-color: rgba(248, 87, 31, 0.32);
+    }
+    .f05-diagnostic-chip b {
+      flex: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #f2a33a;
+      color: #ffffff;
+      font-family: "DM Sans", sans-serif;
+      font-weight: 700;
+      font-size: 14px;
+    }
+    .f05-diagnostic-num {
+      font-family: "DM Sans", sans-serif;
+      font-weight: 500;
+    }
+    .f05-diagnostic-prog-label {
+      position: absolute;
+      left: 32px;
+      top: 440px;
+      font-weight: 500;
+      font-size: 22px;
+      line-height: 28px;
+      color: #6c6560;
+      white-space: nowrap;
+    }
+    #f05-diagnostic-prog-val {
+      position: absolute;
+      right: 32px;
+      top: 440px;
+      font-family: "DM Sans", sans-serif;
+      font-weight: 600;
+      font-size: 22px;
+      line-height: 28px;
+      color: #241f20;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+    .f05-diagnostic-prog-track {
+      position: absolute;
+      left: 32px;
+      top: 478px;
+      width: 516px;
+      height: 8px;
+      border-radius: 4px;
+      background: #f1eeea;
+      overflow: hidden;
+    }
+    #f05-diagnostic-prog-fill {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 516px;
+      height: 8px;
+      border-radius: 4px;
+      background: #f8571f;
+      transform-origin: 0% 50%;
+    }
+
+    /* 30 s timer badge, riding the card's top-right corner */
+    #f05-diagnostic-timer {
+      position: absolute;
+      left: 1452px;
+      top: 186px;
+      height: 84px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 0 26px 0 10px;
+      border-radius: 999px;
+      background: #ffffff;
+      white-space: nowrap;
+      box-shadow:
+        0 0 0 1.5px rgba(36, 31, 32, 0.1),
+        0 40px 80px -24px rgba(36, 31, 32, 0.22),
+        0 8px 24px -8px rgba(36, 31, 32, 0.1);
+    }
+    #f05-diagnostic-timer svg {
+      display: block;
+      width: 64px;
+      height: 64px;
+    }
+    #f05-diagnostic-timer-val {
+      display: block;
+      min-width: 70px;
+      font-family: "DM Sans", sans-serif;
+      font-weight: 700;
+      font-size: 34px;
+      line-height: 40px;
+      color: #241f20;
+      font-variant-numeric: tabular-nums;
+      transform-origin: 30% 50%;
+    }
+
+    /* CORAIL02 swatch that lifts off the Nuancier and lands in the card */
+    #f05-diagnostic-swatch {
+      position: absolute;
+      left: 683.5px;
+      top: 495.3px;
+      width: 32px;
+      height: 32px;
+    }
+    #f05-diagnostic-swatch-in {
+      position: absolute;
+      inset: 0;
+      border-radius: 3px;
+      background: #df764c;
+      opacity: 0;
+    }
+
+    /* touch indicator (frame.md touch) */
+    #f05-diagnostic-touch {
+      position: absolute;
+      left: 765.3px;
+      top: 503.2px;
+      width: 54px;
+      height: 54px;
+      opacity: 0;
+    }
+    .f05-diagnostic-touch-dot {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.55);
+      box-shadow: 0 0 0 2px rgba(36, 31, 32, 0.25), 0 8px 18px rgba(36, 31, 32, 0.22);
+    }
+    .f05-diagnostic-ripple {
+      position: absolute;
+      inset: 0;
+      box-sizing: border-box;
+      border-radius: 50%;
+      border: 2px solid rgba(255, 255, 255, 0.95);
+      box-shadow: 0 0 0 1px rgba(36, 31, 32, 0.22);
+      opacity: 0;
+    }
+  </style>
+
+  <div id="root" data-composition-id="f05-diagnostic" data-width="1920" data-height="1080" data-duration="14.75">
+    <!-- Track 0 · Ask-it grid-bg -->
+    <div id="f05-diagnostic-bg" class="clip" data-start="0" data-duration="14.75" data-track-index="0">
+      <div class="f05-diagnostic-canvas"></div>
+      <div id="f05-diagnostic-mesh"></div>
+      <div class="f05-diagnostic-grid"></div>
+    </div>
+
+    <!-- Track 1 · PILLS_ROW handoff from f04, then the push into pill 01 -->
+    <div id="f05-diagnostic-pills" class="clip" data-start="0" data-duration="2" data-track-index="1">
+      <div id="f05-diagnostic-pills-drift">
+        <div id="f05-diagnostic-pills-cam">
+          <div class="f05-diagnostic-slot" style="left: 520px">
+            <div id="f05-diagnostic-pill-1" class="f05-diagnostic-pill"><span class="f05-diagnostic-pill-num">01</span><span class="f05-diagnostic-pill-label">Diagnostic</span><span id="f05-diagnostic-pill-ring"></span></div>
+          </div>
+          <div class="f05-diagnostic-slot" style="left: 960px">
+            <div id="f05-diagnostic-pill-2" class="f05-diagnostic-pill"><span class="f05-diagnostic-pill-num">02</span><span class="f05-diagnostic-pill-label">Recommandation</span></div>
+          </div>
+          <div class="f05-diagnostic-slot" style="left: 1400px">
+            <div id="f05-diagnostic-pill-3" class="f05-diagnostic-pill"><span class="f05-diagnostic-pill-num">03</span><span class="f05-diagnostic-pill-label">Dashboard</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Track 2 · phone (Endro diagnostic), brand label, profile card -->
+    <div id="f05-diagnostic-stage" class="clip" data-start="0" data-duration="14.75" data-track-index="2">
+      <div id="f05-diagnostic-phone-pos">
+        <div id="f05-diagnostic-phone">
+          <div id="f05-diagnostic-screen">
+            <div class="f05-diagnostic-status">
+              <span class="f05-diagnostic-time">9:41</span>
+              <span class="f05-diagnostic-island"></span>
+              <svg class="f05-diagnostic-glyphs" viewBox="0 0 78 18" aria-hidden="true">
+                <rect x="0" y="12" width="4" height="6" rx="1" fill="#241f20"></rect>
+                <rect x="6" y="8.5" width="4" height="9.5" rx="1" fill="#241f20"></rect>
+                <rect x="12" y="5" width="4" height="13" rx="1" fill="#241f20"></rect>
+                <rect x="18" y="1.5" width="4" height="16.5" rx="1" fill="#241f20"></rect>
+                <path d="M33 6.2a11 11 0 0 1 15 0" fill="none" stroke="#241f20" stroke-width="2.2" stroke-linecap="round"></path>
+                <path d="M35.8 9.6a6.8 6.8 0 0 1 9.4 0" fill="none" stroke="#241f20" stroke-width="2.2" stroke-linecap="round"></path>
+                <circle cx="40.5" cy="14.4" r="2" fill="#241f20"></circle>
+                <rect x="53" y="2.5" width="21" height="13" rx="3.5" fill="none" stroke="#241f20" stroke-opacity="0.45" stroke-width="1.4"></rect>
+                <rect x="55" y="4.5" width="17" height="9" rx="2" fill="#241f20"></rect>
+                <rect x="75.2" y="6.6" width="1.8" height="4.8" rx="0.9" fill="#241f20" fill-opacity="0.45"></rect>
+              </svg>
+            </div>
+            <div id="f05-diagnostic-viewport">
+              <div id="f05-diagnostic-p00" class="f05-diagnostic-page"><img src="assets/screens/endro-diag/00-intro.png" alt="" /></div>
+              <div id="f05-diagnostic-plpp" class="f05-diagnostic-page"><img src="assets/screens/lpp-diag/00-intro-mobile.png" alt="" /></div>
+              <div id="f05-diagnostic-p01" class="f05-diagnostic-page"><img src="assets/screens/endro-diag/01-prenom.png" alt="" /></div>
+              <div id="f05-diagnostic-p04" class="f05-diagnostic-page">
+                <img src="assets/screens/endro-diag/04-claire-actuellement-comment-se-comporte-votre-pe-choix.png" alt="" />
+                <div id="f05-diagnostic-flash-1" class="f05-diagnostic-flash" style="left: 224.4px; top: 354.8px; width: 198.3px; height: 198.3px"></div>
+              </div>
+              <div id="f05-diagnostic-p05" class="f05-diagnostic-page">
+                <img src="assets/screens/endro-diag/05-claire-votre-peau-est-elle-sensible-choix.png" alt="" />
+                <div id="f05-diagnostic-flash-2" class="f05-diagnostic-flash" style="left: 121.7px; top: 622.1px; width: 40px; height: 40px; border-radius: 50%"></div>
+              </div>
+              <div id="f05-diagnostic-p12" class="f05-diagnostic-page">
+                <img src="assets/screens/endro-diag/12-claire-quel-type-de-routine-recherchez-vous-choix.png" alt="" />
+                <div id="f05-diagnostic-flash-3" class="f05-diagnostic-flash" style="left: 22.7px; top: 580.3px; width: 396.7px; height: 88.4px"></div>
+              </div>
+              <div id="f05-diagnostic-p16" class="f05-diagnostic-page">
+                <img src="assets/screens/endro-diag/16-chargement.png" alt="" />
+                <div id="f05-diagnostic-spot"></div>
+                <div id="f05-diagnostic-hl"></div>
+              </div>
+              <div id="f05-diagnostic-p17" class="f05-diagnostic-page"><img src="assets/screens/endro-diag/17-resultat.png" alt="" /></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="f05-diagnostic-brand">
+        <div id="f05-diagnostic-skin-endro" class="f05-diagnostic-skin"><img src="assets/endro/logo-noir.png" alt="Endro" /></div>
+        <div id="f05-diagnostic-skin-lpp" class="f05-diagnostic-skin">
+          <div class="f05-diagnostic-lppcrop"><img src="assets/lpp/logo-lpp.png" alt="Les Petits Prodiges" /></div>
+        </div>
+      </div>
+
+      <div id="f05-diagnostic-card">
+        <div class="f05-diagnostic-avatar"><img src="assets/personas/claire.webp" alt="Claire" /></div>
+        <div class="f05-diagnostic-name">Claire</div>
+        <div id="f05-diagnostic-subskel"></div>
+        <div id="f05-diagnostic-sub"><div id="f05-diagnostic-sub-inner">Profil CORAIL<span class="f05-diagnostic-num">02</span></div></div>
+
+        <div class="f05-diagnostic-skel" style="left: 32px; top: 152px; width: 206px"></div>
+        <div class="f05-diagnostic-skel" style="left: 250px; top: 152px; width: 294px"></div>
+        <div class="f05-diagnostic-skel" style="left: 32px; top: 220px; width: 300px"></div>
+        <div class="f05-diagnostic-skel" style="left: 32px; top: 288px; width: 400px"></div>
+        <div class="f05-diagnostic-skel" style="left: 32px; top: 356px; width: 388px"></div>
+
+        <div id="f05-diagnostic-c1" class="f05-diagnostic-cslot" style="left: 32px; top: 152px; width: 206px"><div class="f05-diagnostic-chip"><i></i><span>Peau mixte</span></div></div>
+        <div id="f05-diagnostic-c2" class="f05-diagnostic-cslot" style="left: 250px; top: 152px; width: 294px"><div class="f05-diagnostic-chip"><i></i><span>Peau sensible&nbsp;<span class="f05-diagnostic-num">3/10</span></span></div></div>
+        <div id="f05-diagnostic-c3" class="f05-diagnostic-cslot" style="left: 32px; top: 220px; width: 300px"><div class="f05-diagnostic-chip"><i></i><span>Routine essentielle</span></div></div>
+        <div id="f05-diagnostic-c4" class="f05-diagnostic-cslot" style="left: 32px; top: 288px; width: 400px"><div class="f05-diagnostic-chip is-tint"><i></i><span>Préoccupation&nbsp;: teint terne</span></div></div>
+        <div id="f05-diagnostic-c5" class="f05-diagnostic-cslot" style="left: 32px; top: 356px; width: 388px"><div class="f05-diagnostic-chip"><b>!</b><span>Frein&nbsp;: peur des réactions</span></div></div>
+
+        <div class="f05-diagnostic-prog-label">Profil complété</div>
+        <div id="f05-diagnostic-prog-val">0 %</div>
+        <div class="f05-diagnostic-prog-track"><div id="f05-diagnostic-prog-fill"></div></div>
+      </div>
+
+      <div id="f05-diagnostic-timer">
+        <svg viewBox="0 0 64 64" aria-hidden="true">
+          <circle cx="32" cy="32" r="27" fill="none" stroke="#f1eeea" stroke-width="6"></circle>
+          <circle id="f05-diagnostic-ring-fill" cx="32" cy="32" r="27" fill="none" stroke="#f8571f" stroke-width="6" stroke-linecap="round" stroke-dasharray="169.65" stroke-dashoffset="169.65" transform="rotate(-90 32 32)"></circle>
+          <circle cx="32" cy="34" r="9" fill="none" stroke="#6c6560" stroke-width="2.4"></circle>
+          <path d="M32 34v-4.6M29.4 22.6h5.2M32 22.6v2.4" fill="none" stroke="#6c6560" stroke-width="2.4" stroke-linecap="round"></path>
+        </svg>
+        <span id="f05-diagnostic-timer-val">0 s</span>
+      </div>
+
+      <div id="f05-diagnostic-swatch"><div id="f05-diagnostic-swatch-in"></div></div>
+
+      <div id="f05-diagnostic-touch">
+        <div class="f05-diagnostic-ripple"></div>
+        <div class="f05-diagnostic-touch-dot"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <script>
+    (function () {
+      var ID = "f05-diagnostic";
+      var $ = function (id) {
+        return document.getElementById(ID + "-" + id);
+      };
+      var q = function (el, sel) {
+        return el.querySelector(sel);
+      };
+      var tl = gsap.timeline({ paused: true });
+      var REST_SHADOW = "0px 18px 40px -18px rgba(36,31,32,0.18), 0px 2px 6px 0px rgba(36,31,32,0.05)";
+      var FLY_SHADOW = "0px 34px 60px -14px rgba(36,31,32,0.34), 0px 10px 22px -6px rgba(248,87,31,0.30)";
+
+      // counter that rolls through integer values on frame steps (no callbacks → seek-safe)
+      var roll = function (el, from, to, at, dur, suffix) {
+        var steps = Math.max(1, Math.round(dur * 30));
+        for (var k = 1; k <= steps; k++) {
+          var p = k / steps;
+          var e = 1 - Math.pow(1 - p, 3);
+          tl.set(el, { textContent: Math.round(from + (to - from) * e) + suffix }, at + (k / steps) * dur);
+        }
+      };
+      // page push inside the phone: old screen out left, new one in from the right
+      var slide = function (outEl, inEl, at) {
+        tl.to(outEl, { x: -442, duration: 0.42, ease: "power3.inOut" }, at);
+        tl.fromTo(inEl, { x: 442, opacity: 1 }, { x: 0, opacity: 1, duration: 0.42, ease: "power3.inOut" }, at);
+      };
+      var fadeIn = function (el, at, dur) {
+        tl.fromTo(el, { opacity: 0 }, { opacity: 1, duration: dur, ease: "power2.inOut" }, at);
+      };
+
+      // PHONE_HERO screen → frame coordinates (phone centre 700,520 · scale 0.9 · screen 442×972)
+      var scr = function (sx, sy) {
+        return [700 + (sx - 221) * 0.9, 520 + (sy - 486) * 0.9];
+      };
+      var CARD = [1020, 236];
+
+      /* ════════ Scene 1 · 0–1.9 s · « D'abord, le diagnostic » ════════ */
+      var pill1 = $("pill-1");
+      tl.to(pill1, { backgroundColor: "#fdeee7", borderColor: "#f8571f", duration: 0.3, ease: "power2.out" }, 0);
+      tl.to(pill1, { scale: 1.05, duration: 0.14, ease: "power2.out" }, 0);
+      tl.to(pill1, { scale: 1, duration: 0.3, ease: "power2.inOut" }, 0.14);
+      tl.fromTo($("pill-ring"), { scale: 1, opacity: 0.75 }, { scale: 1.16, opacity: 0, duration: 0.55, ease: "power2.out", immediateRender: false }, 0.04);
+      tl.to([$("pill-2"), $("pill-3")], { opacity: 0.3, duration: 0.35, ease: "power2.out" }, 0.04);
+      // the PILLS_ROW drift continues at f04's exit velocity (1.13 %/s)
+      tl.fromTo($("pills-drift"), { scale: 1 }, { scale: 1.018, duration: 1.6, ease: "none" }, 0);
+      // « diagnostic » — camera pushes into pill 01 (×2.6) with blur at peak speed
+      tl.fromTo($("pills-cam"), { scale: 1 }, { scale: 2.6, duration: 0.7, ease: "power3.inOut" }, 0.84);
+      tl.fromTo($("pills-cam"), { filter: "blur(0px)" }, { filter: "blur(9px)", duration: 0.42, ease: "power2.in" }, 0.98);
+      tl.to($("pills-cam"), { opacity: 0, duration: 0.32, ease: "power2.in" }, 1.1);
+      tl.set($("pills-cam"), { filter: "none" }, 1.45);
+      // …and PHONE_HERO rises into place out of it (perspective rise, settles flat)
+      var phone = $("phone-pos");
+      tl.fromTo(
+        phone,
+        { x: -150, y: 330, scale: 0.6, rotationX: 30, transformPerspective: 1400, opacity: 0, filter: "blur(10px)" },
+        { x: 0, y: 0, scale: 1, rotationX: 7, opacity: 1, filter: "blur(0px)", duration: 0.62, ease: "power3.out" },
+        1.0,
+      );
+      tl.to(phone, { rotationX: 0, duration: 0.5, ease: "sine.out" }, 1.62);
+      tl.set(phone, { filter: "none" }, 1.62);
+      // grid-bg mesh: parallax with the push, then drifts back to its canonical state
+      tl.fromTo($("mesh"), { scale: 1, x: 0, y: 0 }, { scale: 1.045, x: 28, y: -12, duration: 3, ease: "sine.inOut" }, 0);
+      tl.to($("mesh"), { scale: 1, x: 0, y: 0, duration: 11.75, ease: "sine.inOut" }, 3);
+
+      /* ════════ Scene 2 · 1.84–3.9 s · « intégré à votre site, à votre image » ════════ */
+      // theme-crossfade-morph: the phone frame is the still anchor; skins + logo relay crossfade
+      tl.fromTo($("brand"), { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.45, ease: "back.out(1.7)" }, 1.84);
+      [
+        [2.3, "plpp", "p00", "skin-lpp", "skin-endro"],
+        [3.2, "p00", "plpp", "skin-endro", "skin-lpp"],
+      ].forEach(function (k) {
+        tl.fromTo($(k[1]), { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power2.inOut", immediateRender: k[0] < 3 }, k[0]);
+        tl.to($(k[2]), { opacity: 0, duration: 0.3, ease: "power2.inOut" }, k[0]);
+        tl.fromTo($(k[3]), { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power2.inOut", immediateRender: k[0] < 3 }, k[0]);
+        tl.to($(k[4]), { opacity: 0, duration: 0.3, ease: "power2.inOut" }, k[0]);
+      });
+      tl.to($("brand"), { scale: 0.85, opacity: 0, duration: 0.28, ease: "power2.in" }, 4.22);
+
+      /* ════════ Scene 3 · 4.38–6.4 s · « Il pose à chaque visiteuse les bonnes questions » ════════ */
+      var card = $("card");
+      tl.fromTo(card, { x: 60, opacity: 0, filter: "blur(10px)" }, { x: 0, opacity: 1, filter: "blur(0px)", duration: 0.5, ease: "expo.out" }, 4.38);
+      tl.set(card, { filter: "none" }, 4.9);
+      tl.fromTo(q(card, ".f05-diagnostic-avatar"), { scale: 0.6 }, { scale: 1, duration: 0.45, ease: "back.out(1.6)" }, 4.46);
+      tl.fromTo(q(card, ".f05-diagnostic-name"), { y: 14, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: "expo.out" }, 4.5);
+      tl.fromTo($("subskel"), { scaleX: 0 }, { scaleX: 1, duration: 0.4, ease: "expo.out" }, 4.54);
+      Array.prototype.slice.call(card.querySelectorAll(".f05-diagnostic-skel")).forEach(function (s, k) {
+        tl.fromTo(s, { scaleX: 0, opacity: 0 }, { scaleX: 1, opacity: 1, duration: 0.42, ease: "expo.out" }, 4.56 + k * 0.04);
+      });
+      tl.fromTo([q(card, ".f05-diagnostic-prog-label"), $("prog-val"), q(card, ".f05-diagnostic-prog-track")], { y: 10, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: "expo.out" }, 4.66);
+      tl.fromTo($("prog-fill"), { scaleX: 0 }, { scaleX: 0.002, duration: 0.01, ease: "none" }, 4.66);
+      // phone: first name typed (00 → 01), then the first question slides in
+      fadeIn($("p01"), 4.5, 0.2);
+      tl.set($("p00"), { opacity: 0 }, 4.75);
+      slide($("p01"), $("p04"), 5.6);
+
+      /* ════════ Scene 4 · 6.5–9.2 s · three taps → answer chips fly into the profile ════════ */
+      var touch = $("touch");
+      var dot = q(touch, ".f05-diagnostic-touch-dot");
+      var ripple = q(touch, ".f05-diagnostic-ripple");
+      var T1 = scr(323.6, 497.6); // selected skin photo (04)
+      var T2 = scr(141.7, 686.1); // sensitivity slider knob (05)
+      var T3 = scr(221, 668.2); // « Essentielle » (12)
+      var tap = function (at, flashEl) {
+        tl.to(dot, { scale: 0.85, duration: 0.08, ease: "power2.out" }, at - 0.05);
+        tl.to(dot, { scale: 1, duration: 0.18, ease: "power2.out" }, at + 0.03);
+        tl.fromTo(ripple, { scale: 1, opacity: 0.6 }, { scale: 2.2, opacity: 0, duration: 0.38, ease: "power2.out", immediateRender: false }, at);
+        tl.fromTo(flashEl, { opacity: 0 }, { opacity: 0.45, duration: 0.07, ease: "power1.out" }, at);
+        tl.to(flashEl, { opacity: 0, duration: 0.3, ease: "power1.in" }, at + 0.07);
+      };
+      // answer chip flies on an arc from the tap point and lands in its card slot (card-morph landing)
+      var fly = function (slotId, from, slotCx, slotCy, at, arc) {
+        var slot = $(slotId);
+        var chip = q(slot, ".f05-diagnostic-chip");
+        var cx = CARD[0] + slotCx;
+        var cy = CARD[1] + slotCy;
+        tl.fromTo(slot, { x: from[0] - cx, y: from[1] - cy }, { x: 0, y: 0, duration: 0.55, ease: "power2.inOut" }, at);
+        tl.fromTo(chip, { y: 0 }, { y: -arc, duration: 0.275, ease: "power1.out" }, at);
+        tl.to(chip, { y: 0, duration: 0.275, ease: "power1.in" }, at + 0.275);
+        tl.fromTo(
+          chip,
+          { scale: 0.4, boxShadow: FLY_SHADOW, borderColor: "rgba(248,87,31,0.85)" },
+          { scale: 1, boxShadow: REST_SHADOW, borderColor: "rgba(36,31,32,0.10)", duration: 0.55, ease: "power2.inOut" },
+          at,
+        );
+        tl.fromTo(chip, { opacity: 0 }, { opacity: 1, duration: 0.12, ease: "none" }, at);
+      };
+      var skels = Array.prototype.slice.call(card.querySelectorAll(".f05-diagnostic-skel"));
+      var step = function (at, from, to) {
+        tl.to($("prog-fill"), { scaleX: to / 100, duration: 0.45, ease: "power3.out" }, at);
+        roll($("prog-val"), from, to, at, 0.36, " %");
+      };
+
+      tl.fromTo(touch, { x: 120, y: 150, scale: 0.8, opacity: 0 }, { x: 0, y: 0, scale: 1, opacity: 1, duration: 0.34, ease: "power2.inOut" }, 6.52);
+      tap(6.89, $("flash-1"));
+      fly("c1", T1, 32 + 103, 152 + 28, 6.92, 110);
+      tl.to(skels[0], { opacity: 0, duration: 0.2 }, 7.36);
+      step(7.47, 0, 35);
+      slide($("p04"), $("p05"), 7.06);
+
+      tl.to(touch, { x: T2[0] - T1[0], y: T2[1] - T1[1], duration: 0.25, ease: "power2.inOut" }, 7.38);
+      tap(7.68, $("flash-2"));
+      fly("c2", T2, 250 + 147, 152 + 28, 7.71, 130);
+      tl.to(skels[1], { opacity: 0, duration: 0.2 }, 8.15);
+      step(8.26, 35, 70);
+      slide($("p05"), $("p12"), 7.86);
+
+      tl.to(touch, { x: T3[0] - T1[0], y: T3[1] - T1[1], duration: 0.25, ease: "power2.inOut" }, 8.24);
+      tap(8.54, $("flash-3"));
+      fly("c3", T3, 32 + 150, 220 + 28, 8.57, 120);
+      tl.to(skels[2], { opacity: 0, duration: 0.2 }, 9.01);
+      step(9.12, 70, 100);
+      tl.to(touch, { y: "+=40", scale: 0.8, opacity: 0, duration: 0.3, ease: "power2.in" }, 8.86);
+
+      /* ════════ Scene 5 · 9.56–11.95 s · « En trente secondes… qui elle est » ════════ */
+      tl.fromTo($("timer"), { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.42, ease: "back.out(1.7)" }, 9.56);
+      tl.fromTo($("ring-fill"), { strokeDashoffset: 169.65 }, { strokeDashoffset: 0, duration: 0.46, ease: "power2.inOut" }, 9.66);
+      roll($("timer-val"), 0, 30, 9.66, 0.46, " s");
+      tl.fromTo($("timer-val"), { scale: 1.16 }, { scale: 1, duration: 0.32, ease: "power2.out", immediateRender: false }, 10.12);
+      // loading screen: the Nuancier narrows to her profile
+      fadeIn($("p16"), 10.76, 0.25);
+      tl.fromTo($("spot"), { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power2.inOut" }, 11.0);
+      tl.fromTo($("hl"), { scale: 1.8, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.42, ease: "back.out(1.6)" }, 11.08);
+      // the CORAIL02 swatch lifts off and lands as the profile dot (card-morph: size + radius)
+      var sw = $("swatch");
+      var swIn = $("swatch-in");
+      var DOT = [CARD[0] + 153, CARD[1] + 103];
+      tl.fromTo(swIn, { opacity: 0, scale: 1, boxShadow: "0px 0px 0px 0px rgba(36,31,32,0)" }, { opacity: 1, scale: 1.3, boxShadow: "0px 16px 30px -8px rgba(36,31,32,0.40)", duration: 0.16, ease: "power2.out" }, 11.26);
+      tl.fromTo(sw, { x: 0, y: 0 }, { x: DOT[0] - 699.5, y: DOT[1] - 511.3, duration: 0.5, ease: "power2.inOut" }, 11.36);
+      tl.to(swIn, { y: -70, duration: 0.25, ease: "power1.out" }, 11.36);
+      tl.to(swIn, { y: 0, duration: 0.25, ease: "power1.in" }, 11.61);
+      tl.to(swIn, { scale: 14 / 32, borderRadius: 16, boxShadow: "0px 0px 0px 0px rgba(36,31,32,0)", duration: 0.5, ease: "power2.inOut" }, 11.36);
+      // « Profil CORAIL02 » wipes in next to it (mask travels −240 → 0, text counter-travels)
+      tl.to($("subskel"), { opacity: 0, duration: 0.2 }, 11.6);
+      tl.fromTo($("sub"), { x: -240 }, { x: 0, duration: 0.5, ease: "expo.inOut" }, 11.62);
+      tl.fromTo($("sub-inner"), { x: 230 }, { x: 0, duration: 0.5, ease: "expo.inOut" }, 11.62);
+
+      /* ════════ Scene 6 · 11.94–14.75 s · « ce qu'elle cherche… ce qui la fait hésiter » ════════ */
+      var pop = function (slotId, at) {
+        var chip = q($(slotId), ".f05-diagnostic-chip");
+        tl.fromTo(chip, { scale: 0.4, opacity: 0, y: 14 }, { scale: 1, opacity: 1, y: 0, duration: 0.46, ease: "back.out(1.6)" }, at);
+      };
+      pop("c4", 12.1);
+      tl.to(skels[3], { opacity: 0, duration: 0.2 }, 12.3);
+      pop("c5", 13.36);
+      tl.to(skels[4], { opacity: 0, duration: 0.2 }, 13.56);
+      tl.fromTo(q($("c5"), "b"), { scale: 0 }, { scale: 1, duration: 0.36, ease: "back.out(2.4)" }, 13.5);
+      // the Nuancier resolves into her result page — PHONE_HERO on the CORAIL02 header (f06 handoff)
+      fadeIn($("p17"), 13.9, 0.35);
+
+      window.__timelines[ID] = tl;
+    })();
+  </script>
+</template>

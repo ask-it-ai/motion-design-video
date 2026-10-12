@@ -34,7 +34,7 @@
     }
 
     #f03-budget-stage { position: absolute; inset: 0; }
-    #f03-budget-world { position: absolute; inset: 0; transform-origin: 940px 660px; }
+    #f03-budget-world { position: absolute; inset: 0; transform-origin: 0px 0px; }
     #f03-budget-dim { position: absolute; inset: 0; background: #000000; opacity: 0; pointer-events: none; }
 
     .f03-budget-panel {
@@ -48,8 +48,8 @@
     /* ── spend card (620×300) ── */
     #f03-budget-spend {
       position: absolute;
-      left: 170px;
-      top: 210px;
+      left: 200px;
+      top: 270px;
       width: 620px;
       height: 300px;
       --dof: 0px;
@@ -105,7 +105,7 @@
       opacity: 0;
       pointer-events: none;
     }
-    #f03-budget-embers { position: absolute; left: 0; top: 300px; width: 0; height: 0; }
+    #f03-budget-embers { position: absolute; left: 0; top: 300px; width: 0; height: 0; }  /* inside the card: embers rise behind the digits */
     .f03-budget-ember {
       position: absolute;
       left: 0;
@@ -120,8 +120,8 @@
     /* ── visitor profile card ── */
     #f03-budget-profile {
       position: absolute;
-      left: 1150px;
-      top: 165px;
+      left: 1210px;
+      top: 150px;
       width: 520px;
       height: 476px;
       --dof: 0px;
@@ -163,20 +163,20 @@
     /* ── campaign settings card (rises in perspective) ── */
     #f03-budget-settings {
       position: absolute;
-      left: 640px;
-      top: 470px;
-      width: 600px;
-      height: 380px;
+      left: 700px;
+      top: 590px;
+      width: 640px;
+      height: 300px;
       perspective: 1400px;
       --dof: 0px;
       filter: blur(var(--dof));
     }
-    #f03-budget-settings-card { left: 0; top: 0; width: 600px; height: 380px; transform-origin: 50% 100%; opacity: 0; }
-    .f03-budget-set-title { position: absolute; left: 36px; top: 32px; font: 600 30px/1 "Lufga", sans-serif; color: #F2EFEC; white-space: nowrap; }
+    #f03-budget-settings-card { left: 0; top: 0; width: 640px; height: 300px; transform-origin: 50% 100%; opacity: 0; }
+    .f03-budget-set-title { position: absolute; left: 36px; top: 30px; font: 600 30px/1 "Lufga", sans-serif; color: #F2EFEC; white-space: nowrap; }
     .f03-budget-slider { position: absolute; left: 36px; right: 36px; height: 40px; }
-    .f03-budget-slider-label { position: absolute; left: 0; top: 10px; font: 500 22px/1 "Lufga", sans-serif; color: #8C8580; white-space: nowrap; }
-    .f03-budget-track { position: absolute; left: 184px; right: 0; top: 17px; height: 6px; border-radius: 3px; background: rgba(255,255,255,0.10); }
-    .f03-budget-fill { position: absolute; left: 0; top: 0; width: 344px; height: 6px; border-radius: 3px; background: rgba(242,239,236,0.55); transform-origin: 0% 50%; }
+    .f03-budget-slider-label { position: absolute; left: 0; top: 8px; font: 500 24px/1 "Lufga", sans-serif; color: #8C8580; white-space: nowrap; }
+    .f03-budget-track { position: absolute; left: 190px; right: 0; top: 17px; height: 6px; border-radius: 3px; background: rgba(255,255,255,0.10); }
+    .f03-budget-fill { position: absolute; left: 0; top: 0; width: 378px; height: 6px; border-radius: 3px; background: rgba(242,239,236,0.55); transform-origin: 0% 50%; }
     .f03-budget-knob {
       position: absolute;
       left: 0;
@@ -188,7 +188,7 @@
       background: #F2EFEC;
       box-shadow: 0 4px 10px rgba(0,0,0,0.5);
     }
-    .f03-budget-toggle-row { position: absolute; top: 300px; display: flex; align-items: center; gap: 14px; font: 500 22px/1 "Lufga", sans-serif; color: #8C8580; white-space: nowrap; }
+    .f03-budget-toggle-row { position: absolute; top: 244px; display: flex; align-items: center; gap: 14px; font: 500 24px/1 "Lufga", sans-serif; color: #8C8580; white-space: nowrap; }
     .f03-budget-toggle { position: relative; width: 60px; height: 34px; border-radius: 999px; background: rgba(255,255,255,0.10); }
     .f03-budget-toggle i {
       position: absolute;
@@ -208,20 +208,20 @@
     </div>
 
     <div id="f03-budget-stage" class="clip" data-start="0" data-duration="6.85" data-track-index="1">
-      <div id="f03-budget-world">
+      <div id="f03-budget-world" data-layout-allow-overflow>
 
         <!-- spend card: budget burning -->
         <div id="f03-budget-spend">
           <div id="f03-budget-glow"></div>
           <div class="f03-budget-panel" id="f03-budget-spend-card">
             <div id="f03-budget-heat"></div>
+            <div id="f03-budget-embers"></div>
             <div id="f03-budget-title">Budget publicitaire <span>· ce mois</span></div>
             <div id="f03-budget-counter-wrap">
               <span id="f03-budget-counter"><span class="f03-budget-slot" id="f03-budget-s0" style="display:none"></span><span class="f03-budget-slot" id="f03-budget-s1">8</span><span class="f03-budget-sep"></span><span class="f03-budget-slot" id="f03-budget-s2">2</span><span class="f03-budget-slot" id="f03-budget-s3">4</span><span class="f03-budget-slot" id="f03-budget-s4">0</span><span id="f03-budget-eur">€</span></span>
             </div>
             <div id="f03-budget-edge"></div>
           </div>
-          <div id="f03-budget-embers"></div>
         </div>
 
         <!-- visitor profile card: nothing known -->
@@ -244,11 +244,11 @@
         <div id="f03-budget-settings">
           <div class="f03-budget-panel" id="f03-budget-settings-card">
             <div class="f03-budget-set-title">Réglages de campagne</div>
-            <div class="f03-budget-slider" style="top:96px"><span class="f03-budget-slider-label">Audience</span><div class="f03-budget-track"><div class="f03-budget-fill"></div><div class="f03-budget-knob"></div></div></div>
-            <div class="f03-budget-slider" style="top:160px"><span class="f03-budget-slider-label">Enchères</span><div class="f03-budget-track"><div class="f03-budget-fill"></div><div class="f03-budget-knob"></div></div></div>
-            <div class="f03-budget-slider" style="top:224px"><span class="f03-budget-slider-label">Budget / jour</span><div class="f03-budget-track"><div class="f03-budget-fill"></div><div class="f03-budget-knob"></div></div></div>
+            <div class="f03-budget-slider" style="top:80px"><span class="f03-budget-slider-label">Audience</span><div class="f03-budget-track"><div class="f03-budget-fill"></div><div class="f03-budget-knob"></div></div></div>
+            <div class="f03-budget-slider" style="top:130px"><span class="f03-budget-slider-label">Enchères</span><div class="f03-budget-track"><div class="f03-budget-fill"></div><div class="f03-budget-knob"></div></div></div>
+            <div class="f03-budget-slider" style="top:180px"><span class="f03-budget-slider-label">Budget / jour</span><div class="f03-budget-track"><div class="f03-budget-fill"></div><div class="f03-budget-knob"></div></div></div>
             <div class="f03-budget-toggle-row" style="left:36px"><div class="f03-budget-toggle" id="f03-budget-t1"><i></i></div><span>Ciblage auto</span></div>
-            <div class="f03-budget-toggle-row" style="left:316px"><div class="f03-budget-toggle" id="f03-budget-t2"><i></i></div><span>Lookalike</span></div>
+            <div class="f03-budget-toggle-row" style="left:330px"><div class="f03-budget-toggle" id="f03-budget-t2"><i></i></div><span>Lookalike</span></div>
           </div>
         </div>
 
@@ -267,14 +267,20 @@
       var tl = gsap.timeline({ paused: true });
 
       var world = $("world"), dim = $("dim"), grid = $("grid");
-      var spend = $("spend"), profile = $("profile"), settings = $("settings"), setCard = $("settings-card");
+      var spend = $("spend"), profile = $("profile"), setCard = $("settings-card");
       var counter = $("counter"), cwrap = $("counter-wrap"), title = $("title");
       var glow = $("glow"), heat = $("heat"), edge = $("edge"), field = $("embers");
       var S = [$("s0"), $("s1"), $("s2"), $("s3"), $("s4")];
       var rootEl = world.closest('[data-composition-id="' + ID + '"]') || document;
 
-      // ── camera: slow drift, then the blind push-in ──
-      tl.fromTo(world, { scale: 1 }, { scale: 1.015, duration: 5.6, ease: "none" }, 0);
+      // ── camera (origin 0,0): open close on the spend card, pull back for the profile, drift, blind push-in ──
+      tl.fromTo(world, { x: 177, y: -76, scale: 1.3 }, { x: 156.6, y: -92.8, scale: 1.34, duration: 2.45, ease: "none" }, 0);
+      tl.to(world, { x: 0, y: 0, scale: 1, duration: 0.7, ease: "power2.inOut" }, 2.45);
+      tl.set(world, { filter: "blur(0px)" }, 2.44);
+      tl.to(world, { filter: "blur(3px)", duration: 0.35, ease: "power2.in" }, 2.45);   // motion blur at peak speed
+      tl.to(world, { filter: "blur(0px)", duration: 0.35, ease: "power2.out" }, 2.8);
+      tl.set(world, { filter: "none" }, 3.16);
+      tl.to(world, { x: -11.52, y: -6.48, scale: 1.012, duration: 2.45, ease: "none" }, 3.15);  // slow drift about frame center
 
       // ════ Scene 1 (0.0–1.6): spend card establishes; counter at 8 240 € ════
       tl.fromTo(spend, { opacity: 0, y: 50, scale: 0.92, "--dof": "10px" }, { opacity: 1, y: 0, scale: 1, "--dof": "0px", duration: 0.45, ease: "expo.out" }, 0.05);
@@ -304,7 +310,7 @@
       for (var i = 0; i < N; i++) {
         var el = document.createElement("div");
         el.className = "f03-budget-ember";
-        var size = 3 + prand(i * 3 + 1) * 4.5;
+        var size = 4 + prand(i * 3 + 1) * 5;
         el.style.width = size + "px";
         el.style.height = size + "px";
         field.appendChild(el);
@@ -312,12 +318,12 @@
           el: el,
           ox: 26 + prand(i * 5 + 2) * 568,
           vx: (prand(i * 11 + 4) - 0.5) * 50,
-          vy: -(150 + prand(i * 7 + 3) * 170),
+          vy: -(140 + prand(i * 7 + 3) * 150),
           sway: 5 + prand(i * 13 + 5) * 10,
           freq: 3 + prand(i * 17 + 6) * 4,
           phase: prand(i * 19 + 7) * 6.283,
           birth: prand(i * 23 + 8) * 0.55,
-          life: 0.85 + prand(i * 29 + 9) * 0.4
+          life: 0.8 + prand(i * 29 + 9) * 0.38
         });
       }
       var drive = { T: 0 };
@@ -360,7 +366,7 @@
       var sliders = rootEl.querySelectorAll(".f03-budget-slider");
       var STOPS = [[0.35, 0.74, 0.5], [0.62, 0.4, 0.68], [0.48, 0.82, 0.6]];
       sliders.forEach(function (sl, j) {
-        var knob = sl.querySelector(".f03-budget-knob"), fill = sl.querySelector(".f03-budget-fill"), W = 344;
+        var knob = sl.querySelector(".f03-budget-knob"), fill = sl.querySelector(".f03-budget-fill"), W = 378;
         gsap.set(knob, { x: STOPS[j][0] * W });
         gsap.set(fill, { scaleX: STOPS[j][0] });
         tl.to(knob, { x: STOPS[j][1] * W, duration: 0.55, ease: "power2.inOut" }, 5.02 + j * 0.09);
@@ -381,7 +387,7 @@
       tl.to(grid, { opacity: 0.25, filter: "blur(4px)", duration: 0.85, ease: "power2.inOut" }, 5.6);   // a 1px grid at 22px blur is just tone
       tl.to(dim, { opacity: 0.4, duration: 0.85, ease: "power2.inOut" }, 5.6);                           // brightness 0.6 over the stage
       tl.to(glow, { opacity: 0.35, duration: 0.85, ease: "power2.inOut" }, 5.6);
-      tl.to(world, { scale: 1.095, duration: 1.24, ease: "power2.out" }, 5.6);
+      tl.to(world, { x: -93.1, y: -75.3, scale: 1.092, duration: 1.24, ease: "power2.out" }, 5.6);  // ×1.08 about the panel's lower edge (1020,860)
 
       window.__timelines = window.__timelines || {};
       window.__timelines[ID] = tl;

@@ -247,7 +247,8 @@
         tl.fromTo(ch, { color: "#DDD7CD" }, { color: "#241F20", duration: 0.35, ease: "power1.out", immediateRender: false }, t + 0.12);
       });
       // pill-cta spring-pops under the lockup (démo 6.14), url label beneath
-      tl.fromTo(q("cta"), { scale: 0.6, y: 26, filter: "blur(8px)" }, { scale: 1, y: 0, filter: "blur(0px)", duration: 0.55, ease: "back.out(1.6)" }, 5.94);
+      tl.fromTo(q("cta"), { scale: 0.6, y: 26 }, { scale: 1, y: 0, duration: 0.55, ease: "back.out(1.6)" }, 5.94);
+      tl.fromTo(q("cta"), { filter: "blur(8px)" }, { filter: "blur(0px)", duration: 0.35, ease: "power2.out" }, 5.94);
       tl.fromTo(q("cta"), { opacity: 0 }, { opacity: 1, duration: 0.14, ease: "none" }, 5.94);
       tl.fromTo(q("url"), { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.45, ease: "expo.out" }, 6.28);
       // Ask-it (6.97): the mark nods, the brand glow blooms behind the end card
@@ -277,7 +278,7 @@
       tl.to(q("endglow"), { scale: 1.06, duration: 0.3, ease: "power2.out" }, 8.24);
       tl.to(q("endglow"), { scale: 1, duration: 1.2, ease: "sine.inOut" }, 8.54);
       // cursor eases off the label and rests; everything settles to a still frame by ~10.6
-      tl.to(q("cursor"), { x: CX + 34, y: CY + 40, duration: 1.1, ease: "sine.inOut" }, 8.9);
+      tl.to(q("cursor"), { x: CX + 92, y: CY + 44, duration: 1.1, ease: "sine.inOut" }, 8.9);
       tl.fromTo(q("endglow"), { opacity: 0.25 }, { opacity: 0.24, duration: 0.55, ease: "sine.out", immediateRender: false }, 10.05);
 
       window.__timelines[ID] = tl;

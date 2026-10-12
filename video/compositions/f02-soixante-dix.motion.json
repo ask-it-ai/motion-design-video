@@ -1,0 +1,13 @@
+{
+  "scene": "f02-soixante-dix",
+  "duration_s": 10.61,
+  "rules": ["counting-dynamic-scale", "spring-pop-entrance", "depth-of-field-blur", "svg-path-draw"],
+  "exit": {
+    "vector": "radial outward push-in on the phone wall at ~3.2%/s scale (power1.in, accelerating, about x=960 y=200): ~16-24 px/s at the wall edges; « ? » bubbles settled",
+    "still_moving": true
+  },
+  "entry": {
+    "vector": "near-static cut: GRID_100 visible at frame 0 under a linear 0.69%/s camera drift (~5 px/s at the grid); her dot drops 8 px (power2.out, ~32 px/s) from 0.04s",
+    "from_rest": false
+  }
+}
