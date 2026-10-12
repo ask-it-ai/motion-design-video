@@ -20,13 +20,14 @@
 
     /* ---------- stage / camera ---------- */
     #f06-recommandation-stage { position: absolute; inset: 0; overflow: hidden; }
-    #f06-recommandation-cam, #f06-recommandation-group { position: absolute; inset: 0; transform-origin: 960px 540px; }
+    #f06-recommandation-cam { position: absolute; inset: 0; transform-origin: 1000px 540px; }
+    #f06-recommandation-group { position: absolute; inset: 0; transform-origin: 960px 540px; }
     #f06-recommandation-persp { position: absolute; inset: 0; perspective: 1800px; perspective-origin: 960px 520px; }
 
     /* ---------- phone component ---------- */
     .f06-recommandation-phone { position: absolute; top: 20px; width: 470px; height: 1000px; transform-origin: 50% 50%; }
     #f06-recommandation-phone1 { left: 465px; }
-    #f06-recommandation-phone2 { left: 1035px; }
+    #f06-recommandation-phone2 { left: 1005px; }
     .f06-recommandation-body { position: absolute; inset: 0; border-radius: 68px; background: #111;
       box-shadow: inset 0 0 0 2px rgba(255,255,255,0.12), 0 60px 120px -30px rgba(36,31,32,0.35), 0 20px 40px -20px rgba(36,31,32,0.25); }
     .f06-recommandation-screen { position: absolute; left: 14px; top: 14px; width: 442px; height: 972px; border-radius: 56px; overflow: hidden; background: #fff; }
@@ -61,9 +62,9 @@
     .f06-recommandation-thumb span { display: block; margin-top: 8px; font: 700 12.5px 'Mulish', sans-serif; color: #1A1A1A; }
 
     /* ---------- ≠ badge ---------- */
-    #f06-recommandation-neq { position: absolute; left: 902px; top: 462px; width: 116px; height: 116px; border-radius: 50%; background: #fff;
+    #f06-recommandation-neq { position: absolute; left: 918px; top: 468px; width: 104px; height: 104px; border-radius: 50%; background: #fff;
       border: 1.5px solid rgba(36,31,32,0.10); box-shadow: 0 18px 40px -18px rgba(36,31,32,0.28), 0 2px 6px rgba(36,31,32,0.06); }
-    #f06-recommandation-neq svg { position: absolute; left: 22px; top: 22px; width: 72px; height: 72px; }
+    #f06-recommandation-neq svg { position: absolute; left: 18px; top: 18px; width: 68px; height: 68px; }
 
     /* ---------- profile card (handoff from frame 5) ---------- */
     #f06-recommandation-profile { position: absolute; left: 1020px; top: 236px; width: 520px; padding: 30px; box-sizing: border-box; border-radius: 22px; background: #fff;
@@ -92,8 +93,9 @@
     #f06-recommandation-pilltxt { font: 500 28px 'Lufga', sans-serif; color: #241F20; letter-spacing: -0.01em; }
 
     /* ---------- routine step cards ---------- */
-    .f06-recommandation-card { position: absolute; width: 260px; height: 330px; border-radius: 22px; background: #fff; box-sizing: border-box;
-      border: 1.5px solid rgba(36,31,32,0.10); box-shadow: 0 30px 60px -24px rgba(36,31,32,0.30), 0 2px 6px rgba(36,31,32,0.06); transform-origin: 50% 50%; }
+    .f06-recommandation-cwrap { position: absolute; width: 260px; height: 330px; transform-origin: 50% 50%; }
+    .f06-recommandation-card { position: relative; width: 260px; height: 330px; border-radius: 22px; background: #fff; box-sizing: border-box;
+      border: 1.5px solid rgba(36,31,32,0.10); box-shadow: 0 30px 60px -24px rgba(36,31,32,0.30), 0 2px 6px rgba(36,31,32,0.06); }
     .f06-recommandation-pack { margin: 10px 10px 0; height: 140px; border-radius: 14px; overflow: hidden; }
     .f06-recommandation-pack img { display: block; width: 100%; height: 100%; object-fit: cover; }
     .f06-recommandation-cbody { padding: 14px 20px 0; }
@@ -118,7 +120,7 @@
     .f06-recommandation-badge em { font-style: normal; font: 700 26px 'DM Sans', sans-serif; letter-spacing: -0.01em; }
     .f06-recommandation-badge .f06-recommandation-soft { color: #6C6560; }
     .f06-recommandation-badge .f06-recommandation-coral { color: #F8571F; }
-    #f06-recommandation-seal { position: absolute; left: 1763px; top: 236px; height: 92px; width: auto; filter: drop-shadow(0 8px 14px rgba(36,31,32,0.28)); }
+    #f06-recommandation-seal { position: absolute; left: 1770px; top: 234px; height: 92px; width: auto; filter: drop-shadow(0 8px 14px rgba(36,31,32,0.28)); }
 
     /* ---------- stats ---------- */
     #f06-recommandation-stats { position: absolute; inset: 0; transform-origin: 960px 540px; }
@@ -192,15 +194,15 @@
           </div>
 
           <!-- routine step cards (fly out of the phone) -->
-          <div id="f06-recommandation-c1" class="f06-recommandation-card" style="left:888px;top:280px"><div class="f06-recommandation-pack"><img src="assets/endro/products/gelee-nettoyante.jpg" alt=""></div><div class="f06-recommandation-cbody"><div class="f06-recommandation-step">Étape <b>1</b></div><div class="f06-recommandation-verb">Nettoyer</div><div class="f06-recommandation-name">Gelée Nettoyante</div></div><div class="f06-recommandation-price">10,90 €</div></div>
-          <div id="f06-recommandation-c2" class="f06-recommandation-card" style="left:1110px;top:245px"><div class="f06-recommandation-pack"><img src="assets/endro/products/gommage-visage-eclat.jpg" alt=""></div><div class="f06-recommandation-cbody"><div class="f06-recommandation-step">Étape <b>2</b></div><div class="f06-recommandation-verb">Exfolier</div><div class="f06-recommandation-name">Gommage<br>Visage Éclat</div></div><div class="f06-recommandation-price">14,90 €</div></div>
-          <div id="f06-recommandation-c3" class="f06-recommandation-card" style="left:1332px;top:245px"><div class="f06-recommandation-pack"><img src="assets/endro/products/serum-bonne-mine.jpg" alt=""></div><div class="f06-recommandation-cbody"><div class="f06-recommandation-step">Étape <b>3</b></div><div class="f06-recommandation-verb">Traiter</div><div class="f06-recommandation-name">Sérum<br>Bonne Mine</div></div><div class="f06-recommandation-price">16,90 €</div></div>
-          <div id="f06-recommandation-c4" class="f06-recommandation-card" style="left:1554px;top:280px"><div class="f06-recommandation-pack"><img src="assets/endro/products/creme-bonne-mine.jpg" alt=""></div><div class="f06-recommandation-cbody"><div class="f06-recommandation-step">Étape <b>4</b></div><div class="f06-recommandation-verb">Hydrater</div><div class="f06-recommandation-name">Crème<br>Bonne Mine</div></div><div class="f06-recommandation-price">16,90 €</div></div>
+          <div id="f06-recommandation-c1" class="f06-recommandation-cwrap" style="left:920px;top:280px"><div id="f06-recommandation-c1i" class="f06-recommandation-card"><div class="f06-recommandation-pack"><img src="assets/endro/products/gelee-nettoyante.jpg" alt=""></div><div class="f06-recommandation-cbody"><div class="f06-recommandation-step">Étape <b>1</b></div><div class="f06-recommandation-verb">Nettoyer</div><div class="f06-recommandation-name">Gelée Nettoyante</div></div><div class="f06-recommandation-price">10,90 €</div></div></div>
+          <div id="f06-recommandation-c2" class="f06-recommandation-cwrap" style="left:1130px;top:245px"><div id="f06-recommandation-c2i" class="f06-recommandation-card"><div class="f06-recommandation-pack"><img src="assets/endro/products/gommage-visage-eclat.jpg" alt=""></div><div class="f06-recommandation-cbody"><div class="f06-recommandation-step">Étape <b>2</b></div><div class="f06-recommandation-verb">Exfolier</div><div class="f06-recommandation-name">Gommage<br>Visage Éclat</div></div><div class="f06-recommandation-price">14,90 €</div></div></div>
+          <div id="f06-recommandation-c3" class="f06-recommandation-cwrap" style="left:1340px;top:245px"><div id="f06-recommandation-c3i" class="f06-recommandation-card"><div class="f06-recommandation-pack"><img src="assets/endro/products/serum-bonne-mine.jpg" alt=""></div><div class="f06-recommandation-cbody"><div class="f06-recommandation-step">Étape <b>3</b></div><div class="f06-recommandation-verb">Traiter</div><div class="f06-recommandation-name">Sérum<br>Bonne Mine</div></div><div class="f06-recommandation-price">16,90 €</div></div></div>
+          <div id="f06-recommandation-c4" class="f06-recommandation-cwrap" style="left:1550px;top:280px"><div id="f06-recommandation-c4i" class="f06-recommandation-card"><div class="f06-recommandation-pack"><img src="assets/endro/products/creme-bonne-mine.jpg" alt=""></div><div class="f06-recommandation-cbody"><div class="f06-recommandation-step">Étape <b>4</b></div><div class="f06-recommandation-verb">Hydrater</div><div class="f06-recommandation-name">Crème<br>Bonne Mine</div></div><div class="f06-recommandation-price">16,90 €</div></div></div>
 
-          <div class="f06-recommandation-center" style="left:1051px;top:658px;width:600px"><div id="f06-recommandation-total"><span id="f06-recommandation-totlab">Total routine</span><span id="f06-recommandation-totnum"></span></div></div>
-          <div class="f06-recommandation-center" style="left:830px;top:162px;width:600px"><div id="f06-recommandation-b1" class="f06-recommandation-badge"><svg viewBox="0 0 24 24"><path fill="#F8571F" d="M12 2.2l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.1l-5.9 3.2 1.3-6.6-4.9-4.6 6.6-.8z"/></svg><em>4,7/5</em><span class="f06-recommandation-soft">· <em class="f06-recommandation-soft">3 158</em> avis</span></div></div>
-          <div class="f06-recommandation-center" style="left:1260px;top:162px;width:600px"><div id="f06-recommandation-b2" class="f06-recommandation-badge"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#1F8A4C"/><path d="M7 12.4l3.2 3.1L17.2 8.6" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Validé par un dermatologue</div></div>
-          <div class="f06-recommandation-center" style="left:951px;top:758px;width:800px"><div id="f06-recommandation-b3" class="f06-recommandation-badge"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.6" fill="#F8571F"/><path d="M2.5 19.5c.6-3.6 3.2-5.6 6.5-5.6s5.9 2 6.5 5.6z" fill="#F8571F"/><circle cx="17" cy="9" r="2.8" fill="#F8571F" opacity="0.45"/><path d="M14.8 14.2c.7-.3 1.4-.4 2.2-.4 2.6 0 4.6 1.6 5 4.4h-5.2" fill="#F8571F" opacity="0.45"/></svg>Vous êtes comme <em class="f06-recommandation-coral">6 %</em> des endroïstes</div></div>
+          <div class="f06-recommandation-center" style="left:1065px;top:658px;width:600px"><div id="f06-recommandation-total"><span id="f06-recommandation-totlab">Total routine</span><span id="f06-recommandation-totnum"></span></div></div>
+          <div class="f06-recommandation-center" style="left:850px;top:162px;width:600px"><div id="f06-recommandation-b1" class="f06-recommandation-badge"><svg viewBox="0 0 24 24"><path fill="#F8571F" d="M12 2.2l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.1l-5.9 3.2 1.3-6.6-4.9-4.6 6.6-.8z"/></svg><em>4,7/5</em><span class="f06-recommandation-soft">· <em class="f06-recommandation-soft">3 158</em> avis</span></div></div>
+          <div class="f06-recommandation-center" style="left:1280px;top:162px;width:600px"><div id="f06-recommandation-b2" class="f06-recommandation-badge"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#1F8A4C"/><path d="M7 12.4l3.2 3.1L17.2 8.6" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Validé par un dermatologue</div></div>
+          <div class="f06-recommandation-center" style="left:965px;top:758px;width:800px"><div id="f06-recommandation-b3" class="f06-recommandation-badge"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.6" fill="#F8571F"/><path d="M2.5 19.5c.6-3.6 3.2-5.6 6.5-5.6s5.9 2 6.5 5.6z" fill="#F8571F"/><circle cx="17" cy="9" r="2.8" fill="#F8571F" opacity="0.45"/><path d="M14.8 14.2c.7-.3 1.4-.4 2.2-.4 2.6 0 4.6 1.6 5 4.4h-5.2" fill="#F8571F" opacity="0.45"/></svg>Vous êtes comme <em class="f06-recommandation-coral">6 %</em> des endroïstes</div></div>
           <img id="f06-recommandation-seal" src="assets/endro/diag/meilleur-pharma-2026.png" alt="">
         </div>
 
@@ -303,7 +305,7 @@
 
       // ---- ambient: brand mesh drift + slow camera drift (never a frozen frame) ----
       tl.fromTo($('mesh'), { x: -40, y: 10, scale: 1 }, { x: 40, y: -10, scale: 1.06, duration: 12.36, ease: 'sine.inOut' }, 0);
-      tl.fromTo($('cam'), { scale: 1 }, { scale: 1.025, duration: 6.9, ease: 'none' }, 0);
+      tl.fromTo($('cam'), { scale: 1 }, { scale: 1.02, duration: 6.9, ease: 'none' }, 0);
 
       // ---- Scene 1 (0–1.9): profile handed to the page, step pill, scroll to the routine ----
       tl.to($('profile'), { x: -150, scale: 0.86, opacity: 0, filter: 'blur(10px)', duration: 0.55, ease: 'power2.in' }, 0);
@@ -314,7 +316,7 @@
       tl.to($('pagecontent'), { y: -960, duration: 1.18, ease: 'power2.inOut' }, 0.72);
 
       // ---- Scene 2 (2.0–3.6): split-tilt — another visitor's page, ≠ ----
-      tl.to($('phone1'), { x: -50, rotationY: 8, duration: 0.72, ease: 'power3.out' }, 1.98);
+      tl.to($('phone1'), { rotationY: 8, duration: 0.72, ease: 'power3.out' }, 1.98);
       tl.fromTo($('phone2'), { x: 930, rotationY: -22, filter: 'blur(10px)' }, { x: 0, rotationY: -8, filter: 'blur(0px)', duration: 0.75, ease: 'power3.out' }, 1.98);
       tl.fromTo($('neq'), { scale: 0, rotation: -35, opacity: 0 }, { scale: 1, rotation: 0, opacity: 1, duration: 0.45, ease: 'back.out(1.6)' }, 2.53);
       tl.to($('phone1'), { y: -7, duration: 0.72, ease: 'sine.inOut' }, 2.7);
@@ -325,14 +327,16 @@
 
       // ---- Scene 3 (3.6–6.3): routine cards fly out of the page, total counts, reassurance ----
       const cards = [
-        { el: $('c1'), ox: -502, oy: -238, r: -5 },
-        { el: $('c2'), ox: -724, oy: 9, r: -1.6 },
-        { el: $('c3'), ox: -946, oy: 223, r: 1.6 },
-        { el: $('c4'), ox: -1168, oy: 470, r: 5 },
+        { el: $('c1'), ox: -484, oy: -238, r: -5 },
+        { el: $('c2'), ox: -694, oy: 9, r: -1.6 },
+        { el: $('c3'), ox: -904, oy: 223, r: 1.6 },
+        { el: $('c4'), ox: -1114, oy: 470, r: 5 },
       ];
       cards.forEach((c, i) => {
-        tl.fromTo(c.el, { x: c.ox, y: c.oy, scale: 0.3, rotation: 0, opacity: 0, filter: 'blur(8px)' },
-          { x: 0, y: 0, scale: 1, rotation: c.r, opacity: 1, filter: 'blur(0px)', duration: 0.62, ease: 'expo.out' }, 3.62 + i * 0.08);
+        const at = 3.62 + i * 0.08;
+        tl.fromTo(c.el, { x: c.ox, y: c.oy, scale: 0.3, rotation: 0, filter: 'blur(8px)' },
+          { x: 0, y: 0, scale: 1, rotation: c.r, filter: 'blur(0px)', duration: 0.62, ease: 'expo.out' }, at);
+        tl.fromTo(c.el.firstElementChild, { opacity: 0 }, { opacity: 1, duration: 0.14, ease: 'power1.out' }, at);
       });
       tl.fromTo($('total'), { y: 26, scale: 0.85, opacity: 0, filter: 'blur(8px)' }, { y: 0, scale: 1, opacity: 1, filter: 'blur(0px)', duration: 0.45, ease: 'expo.out' }, 3.98);
       tl.to(stT, { v: 72.5, duration: 1.0, ease: 'power2.out', onUpdate: () => renderTotal(stT.v) }, 4.05);

@@ -66,18 +66,25 @@
       inset: 0;
       transform-origin: 960px 540px;
     }
-    .f04-bascule-avant-layer {
-      position: absolute;
-      inset: 0;
-    }
-    .f04-bascule-scrub {
+    .f04-bascule-avant-layer,
+    .f04-bascule-scrub,
+    .f04-bascule-panels {
       position: absolute;
       inset: 0;
     }
     .f04-bascule-panels {
-      position: absolute;
-      inset: 0;
       filter: blur(22px) brightness(0.6);
+    }
+    .f04-bascule-ghost {
+      mix-blend-mode: screen;
+      visibility: hidden;
+      opacity: 0;
+    }
+    .f04-bascule-ghost.is-warm .f04-bascule-panels {
+      filter: blur(22px) brightness(0.75) sepia(1) saturate(6) hue-rotate(-28deg);
+    }
+    .f04-bascule-ghost.is-cool .f04-bascule-panels {
+      filter: blur(22px) brightness(0.75) sepia(1) saturate(5) hue-rotate(165deg);
     }
     .f04-bascule-panel {
       position: absolute;
@@ -107,11 +114,6 @@
     .f04-bascule-slice {
       visibility: hidden;
       opacity: 0;
-    }
-    .f04-bascule-slice-tint {
-      position: absolute;
-      inset: 0;
-      mix-blend-mode: screen;
     }
     .f04-bascule-avant-vignette {
       position: absolute;
@@ -145,9 +147,9 @@
       inset: 0;
       background: #fdfcfc;
     }
-    /* brand-mesh reproduced in px on an oversized plane so it can bloom/drift
-       without ever showing an edge; at scale 1 / x 0 / y 0 it is pixel-equal to the
-       canonical full-bleed brand-mesh. */
+    /* brand-mesh reproduced in px on an oversized plane so it can bloom/drift without
+       ever showing an edge; at scale 1 / x 0 / y 0 it is pixel-equal to the canonical
+       full-bleed brand-mesh (60%/55%/60% radii at 27·23 / 78·30 / 55·85). */
     #f04-bascule-mesh {
       position: absolute;
       left: -1920px;
@@ -160,18 +162,38 @@
         radial-gradient(1056px 594px at 3417.6px 1404px, rgba(172, 204, 233, 0.55) 0%, rgba(172, 204, 233, 0) 62%),
         radial-gradient(1152px 648px at 2976px 1998px, rgba(167, 171, 221, 0.45) 0%, rgba(167, 171, 221, 0) 65%);
     }
-    #f04-bascule-vlines,
-    #f04-bascule-hlines {
+    /* the canonical 44 px grid (what frame 5 starts on) */
+    #f04-bascule-grid {
       position: absolute;
       inset: 0;
-      transform-origin: 960px 540px;
+      background-image:
+        linear-gradient(to right, rgba(36, 31, 32, 0.05) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(36, 31, 32, 0.05) 1px, transparent 1px);
       background-size: 44px 44px;
+      visibility: hidden;
+      opacity: 0;
     }
-    #f04-bascule-vlines {
-      background-image: linear-gradient(to right, rgba(36, 31, 32, 0.05) 1px, transparent 1px);
+    /* the same grid as individual lines, so each can draw outward from the centre */
+    #f04-bascule-gridlines {
+      position: absolute;
+      inset: 0;
     }
-    #f04-bascule-hlines {
-      background-image: linear-gradient(to bottom, rgba(36, 31, 32, 0.05) 1px, transparent 1px);
+    .f04-bascule-vl,
+    .f04-bascule-hl {
+      position: absolute;
+      background: rgba(36, 31, 32, 0.05);
+    }
+    .f04-bascule-vl {
+      top: 0;
+      width: 1px;
+      height: 1080px;
+      transform-origin: 0.5px 540px;
+    }
+    .f04-bascule-hl {
+      left: 0;
+      width: 1920px;
+      height: 1px;
+      transform-origin: 960px 0.5px;
     }
     #f04-bascule-ring {
       position: absolute;
@@ -200,19 +222,10 @@
       inset: 0;
       transform-origin: 960px 540px;
     }
-
-    /* lockup: zero-size anchor at the frame centre */
-    #f04-bascule-lockup {
-      position: absolute;
-      left: 960px;
-      top: 540px;
-      width: 0;
-      height: 0;
-    }
     #f04-bascule-glow {
       position: absolute;
-      left: -520px;
-      top: -330px;
+      left: 440px;
+      top: 210px;
       width: 1040px;
       height: 660px;
       background:
@@ -220,12 +233,25 @@
         radial-gradient(50% 50% at 64% 46%, rgba(172, 204, 233, 0.95) 0%, rgba(172, 204, 233, 0) 74%);
       opacity: 0;
     }
+
+    /* lockup: zero-size anchor at the frame centre; children laid out around it */
+    #f04-bascule-lockup {
+      position: absolute;
+      left: 960px;
+      top: 540px;
+      width: 0;
+      height: 0;
+    }
     #f04-bascule-mark {
       position: absolute;
       left: -287.7px;
       top: -46px;
       width: 86px;
       height: 86px;
+    }
+    #f04-bascule-mark-pop {
+      position: absolute;
+      inset: 0;
     }
     #f04-bascule-mark svg {
       display: block;
@@ -239,7 +265,7 @@
       top: -53px;
       width: 470px;
       height: 130px;
-      clip-path: inset(-20px 100% -20px -40px);
+      clip-path: inset(-20px 100% -20px 0px);
     }
     #f04-bascule-word-inner {
       position: absolute;
@@ -261,13 +287,41 @@
       font-weight: 400;
     }
 
-    /* visitor → Claire: zero-size anchor at the avatar centre */
+    /* visitor → Claire + data chips */
+    #f04-bascule-group {
+      position: absolute;
+      inset: 0;
+      transform-origin: 900px 520px;
+    }
     #f04-bascule-visitor {
       position: absolute;
       left: 560px;
-      top: 500px;
+      top: 520px;
       width: 0;
       height: 0;
+    }
+    #f04-bascule-halo {
+      position: absolute;
+      left: -230px;
+      top: -230px;
+      width: 460px;
+      height: 460px;
+      border-radius: 50%;
+      background:
+        radial-gradient(closest-side at 44% 50%, rgba(248, 87, 31, 0.5), rgba(248, 87, 31, 0) 100%),
+        radial-gradient(closest-side at 60% 46%, rgba(172, 204, 233, 0.9), rgba(172, 204, 233, 0) 100%);
+      opacity: 0;
+    }
+    .f04-bascule-ripple {
+      position: absolute;
+      left: -70px;
+      top: -70px;
+      width: 140px;
+      height: 140px;
+      box-sizing: border-box;
+      border-radius: 50%;
+      border: 2px solid rgba(36, 31, 32, 0.2);
+      opacity: 0;
     }
     #f04-bascule-dashring {
       position: absolute;
@@ -306,8 +360,8 @@
     }
     #f04-bascule-badge {
       position: absolute;
-      left: 26px;
-      top: 34px;
+      left: 28px;
+      top: 36px;
       height: 44px;
       display: flex;
       align-items: center;
@@ -332,7 +386,7 @@
     .f04-bascule-tagslot {
       position: absolute;
       left: 0;
-      top: 124px;
+      top: 126px;
       width: 0;
       height: 0;
       display: flex;
@@ -456,13 +510,13 @@
   </style>
 
   <div id="root" data-composition-id="f04-bascule" data-width="1920" data-height="1080" data-duration="7.63">
-    <!-- Track 0 · AVANT stage: dark, blurred, rewinding -->
+    <!-- Track 0 · AVANT stage: dark, blurred, rewinding (hidden once the flood has covered it) -->
     <div id="f04-bascule-avant" class="clip" data-start="0" data-duration="2.1" data-track-index="0">
       <div class="f04-bascule-avant-ground"></div>
       <div id="f04-bascule-avant-cam">
         <div id="f04-bascule-avant-base" class="f04-bascule-avant-layer">
           <div class="f04-bascule-scrub">
-            <div class="f04-bascule-panels">
+            <div id="f04-bascule-panels" class="f04-bascule-panels">
               <!-- spend card (left) -->
               <div class="f04-bascule-panel" style="left: 96px; top: 176px; width: 620px; height: 300px">
                 <div class="f04-bascule-bar is-mute" style="left: 44px; top: 46px; width: 300px; height: 18px"></div>
@@ -514,8 +568,8 @@
       <div id="f04-bascule-flood">
         <div class="f04-bascule-canvas"></div>
         <div id="f04-bascule-mesh"></div>
-        <div id="f04-bascule-vlines"></div>
-        <div id="f04-bascule-hlines"></div>
+        <div id="f04-bascule-gridlines"></div>
+        <div id="f04-bascule-grid"></div>
       </div>
       <div id="f04-bascule-ring"></div>
     </div>
@@ -524,50 +578,58 @@
     <div id="f04-bascule-content" class="clip" data-start="0" data-duration="7.63" data-track-index="2">
       <div id="f04-bascule-scene">
         <div id="f04-bascule-drift">
+          <div id="f04-bascule-glow"></div>
+
           <div id="f04-bascule-lockup">
-            <div id="f04-bascule-glow"></div>
             <div id="f04-bascule-mark">
-              <svg viewBox="0 0 100 100" aria-label="ask-it.ai">
-                <defs>
-                  <mask id="f04-bascule-markmask" maskUnits="userSpaceOnUse" x="-10" y="-10" width="120" height="120">
-                    <rect x="-10" y="-10" width="120" height="120" fill="#ffffff"></rect>
-                    <rect id="f04-bascule-bar1" x="20" y="31.7" width="60" height="13.32" rx="6.66" fill="#000000"></rect>
-                    <rect id="f04-bascule-bar2" x="20" y="53.72" width="39.54" height="14.64" rx="7.32" fill="#000000"></rect>
-                    <circle id="f04-bascule-dot" cx="72.47" cy="60.83" r="7.53" fill="#000000"></circle>
-                  </mask>
-                </defs>
-                <rect width="100" height="100" rx="22" fill="#241F20" mask="url(#f04-bascule-markmask)"></rect>
-              </svg>
+              <div id="f04-bascule-mark-pop">
+                <svg viewBox="0 0 100 100" aria-label="ask-it.ai">
+                  <defs>
+                    <mask id="f04-bascule-markmask" maskUnits="userSpaceOnUse" x="-10" y="-10" width="120" height="120">
+                      <rect x="-10" y="-10" width="120" height="120" fill="#ffffff"></rect>
+                      <rect id="f04-bascule-bar1" x="20" y="31.7" width="60" height="13.32" rx="6.66" fill="#000000"></rect>
+                      <rect id="f04-bascule-bar2" x="20" y="53.72" width="39.54" height="14.64" rx="7.32" fill="#000000"></rect>
+                      <circle id="f04-bascule-dot" cx="72.47" cy="60.83" r="7.53" fill="#000000"></circle>
+                    </mask>
+                  </defs>
+                  <rect width="100" height="100" rx="22" fill="#241F20" mask="url(#f04-bascule-markmask)"></rect>
+                </svg>
+              </div>
             </div>
             <div id="f04-bascule-word">
               <div id="f04-bascule-word-inner"><span class="f04-bascule-ch is-strong">a</span><span class="f04-bascule-ch is-strong">s</span><span class="f04-bascule-ch is-strong">k</span><span class="f04-bascule-ch is-strong">-</span><span class="f04-bascule-ch is-strong">i</span><span class="f04-bascule-ch is-strong">t</span><span class="f04-bascule-ch is-light">.</span><span class="f04-bascule-ch is-light">a</span><span class="f04-bascule-ch is-light">i</span></div>
             </div>
           </div>
 
-          <div id="f04-bascule-visitor">
-            <div id="f04-bascule-dashring"></div>
-            <div id="f04-bascule-avatar">
-              <svg class="f04-bascule-silhouette" viewBox="0 0 140 140" aria-hidden="true">
-                <circle cx="70" cy="57" r="25" fill="#bdb6ae"></circle>
-                <path d="M22 140c0-28 21.5-48 48-48s48 20 48 48z" fill="#bdb6ae"></path>
-              </svg>
-              <img class="f04-bascule-photo" src="assets/personas/claire.webp" alt="Claire" />
+          <div id="f04-bascule-group">
+            <div id="f04-bascule-visitor">
+              <div id="f04-bascule-halo"></div>
+              <div class="f04-bascule-ripple"></div>
+              <div class="f04-bascule-ripple"></div>
+              <div id="f04-bascule-dashring"></div>
+              <div id="f04-bascule-avatar">
+                <svg class="f04-bascule-silhouette" viewBox="0 0 140 140" aria-hidden="true">
+                  <circle cx="70" cy="57" r="25" fill="#bdb6ae"></circle>
+                  <path d="M22 140c0-28 21.5-48 48-48s48 20 48 48z" fill="#bdb6ae"></path>
+                </svg>
+                <img class="f04-bascule-photo" src="assets/personas/claire.webp" alt="Claire" />
+              </div>
+              <div id="f04-bascule-badge">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M5.2 8h13.6l-1.1 11.6a1.6 1.6 0 0 1-1.6 1.4H7.9a1.6 1.6 0 0 1-1.6-1.4z"></path>
+                  <path d="M9 10.5V7a3 3 0 0 1 6 0v3.5"></path>
+                </svg>
+                <span>Cliente</span>
+              </div>
+              <div class="f04-bascule-tagslot"><div id="f04-bascule-tag-anon" class="f04-bascule-tag"><i></i><span>Visiteuse anonyme</span></div></div>
+              <div class="f04-bascule-tagslot"><div id="f04-bascule-tag-name" class="f04-bascule-tag"><span>Claire</span></div></div>
             </div>
-            <div id="f04-bascule-badge">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M5.2 8h13.6l-1.1 11.6a1.6 1.6 0 0 1-1.6 1.4H7.9a1.6 1.6 0 0 1-1.6-1.4z"></path>
-                <path d="M9 10.5V7a3 3 0 0 1 6 0v3.5"></path>
-              </svg>
-              <span>Cliente</span>
-            </div>
-            <div class="f04-bascule-tagslot"><div id="f04-bascule-tag-anon" class="f04-bascule-tag"><i></i><span>Visiteuse anonyme</span></div></div>
-            <div class="f04-bascule-tagslot"><div id="f04-bascule-tag-name" class="f04-bascule-tag"><span>Claire</span></div></div>
-          </div>
 
-          <div id="f04-bascule-chip-1" class="f04-bascule-chip" style="left: 724px; top: 438px; width: 148px"><i></i><span><span class="f04-bascule-num">35</span>&nbsp;ans</span></div>
-          <div id="f04-bascule-chip-2" class="f04-bascule-chip" style="left: 886px; top: 438px; width: 206px"><i></i><span>Peau mixte</span></div>
-          <div id="f04-bascule-chip-3" class="f04-bascule-chip" style="left: 764px; top: 508px; width: 200px"><i></i><span>Teint terne</span></div>
-          <div id="f04-bascule-chip-4" class="f04-bascule-chip" style="left: 978px; top: 508px; width: 300px"><i></i><span>Routine essentielle</span></div>
+            <div id="f04-bascule-chip-1" class="f04-bascule-chip" style="left: 740px; top: 458px; width: 148px"><i></i><span><span class="f04-bascule-num">35</span>&nbsp;ans</span></div>
+            <div id="f04-bascule-chip-2" class="f04-bascule-chip" style="left: 906px; top: 458px; width: 206px"><i></i><span>Peau mixte</span></div>
+            <div id="f04-bascule-chip-3" class="f04-bascule-chip" style="left: 790px; top: 528px; width: 200px"><i></i><span>Teint terne</span></div>
+            <div id="f04-bascule-chip-4" class="f04-bascule-chip" style="left: 1008px; top: 528px; width: 300px"><i></i><span>Routine essentielle</span></div>
+          </div>
         </div>
       </div>
 
@@ -593,6 +655,9 @@
       var $ = function (id) {
         return document.getElementById(ID + "-" + id);
       };
+      var $$ = function (sel) {
+        return Array.prototype.slice.call(document.querySelectorAll(sel));
+      };
       var tl = gsap.timeline({ paused: true });
 
       // Deterministic hash — every glitch value is a pure function of (step, index).
@@ -602,8 +667,8 @@
       };
 
       /* ════════ Scene 1 · 0.0–1.1 s · « Bon… ça, c'était » — rewind glitch ════════ */
-      // Build the slice bands: full copies of the blurred panels, each clipped to one band.
       var base = $("avant-base");
+      var scrubSrc = base.firstElementChild;
       var slicesWrap = $("slices");
       var SLICES = 8;
       var slices = [];
@@ -613,23 +678,29 @@
         var top = (i * 100) / SLICES;
         var bottom = 100 - ((i + 1) * 100) / SLICES;
         s.style.clipPath = "inset(" + top.toFixed(3) + "% -10% " + bottom.toFixed(3) + "% -10%)";
-        s.appendChild(base.firstElementChild.cloneNode(true));
-        if (i === 2 || i === 6) {
-          var tint = document.createElement("div");
-          tint.className = "f04-bascule-slice-tint";
-          tint.style.background = i === 2 ? "rgba(172,204,233,0.10)" : "rgba(248,87,31,0.07)";
-          s.appendChild(tint);
-        }
+        var c = scrubSrc.cloneNode(true);
+        c.firstElementChild.removeAttribute("id");
+        s.appendChild(c);
         slicesWrap.appendChild(s);
         slices.push(s);
       }
-      var scrubs = Array.prototype.slice.call(document.querySelectorAll("#" + ID + "-avant .f04-bascule-scrub"));
-      var tracks = Array.prototype.slice.call(document.querySelectorAll("#" + ID + "-avant .f04-bascule-track"));
+      // warm + cool chromatic ghosts (RGB split of the blurred content), screen-blended above
+      var ghosts = ["is-warm", "is-cool"].map(function (cls) {
+        var g = document.createElement("div");
+        g.className = "f04-bascule-avant-layer f04-bascule-ghost " + cls;
+        var c = scrubSrc.cloneNode(true);
+        c.firstElementChild.removeAttribute("id");
+        g.appendChild(c);
+        slicesWrap.appendChild(g);
+        return g;
+      });
+      var scrubs = $$("#" + ID + "-avant .f04-bascule-scrub");
+      var tracks = $$("#" + ID + "-avant .f04-bascule-track");
 
       // The f03 camera push (scale 1.08) rewinds while the tape scrubs.
       tl.fromTo($("avant-cam"), { scale: 1.08 }, { scale: 1.0, duration: 0.9, ease: "power2.inOut" }, 0.1);
 
-      // Panel scrub: x −40 then +60, twice (stepped = tape, not jelly), then settle.
+      // Panel scrub: x −40 then +60, twice — stepped like a tape, then settles.
       var scrubMoves = [
         [0.12, -40, 0.08, "steps(3)"],
         [0.27, 60, 0.1, "steps(4)"],
@@ -638,22 +709,19 @@
         [0.88, 0, 0.16, "power3.out"],
       ];
       scrubMoves.forEach(function (m, k) {
-        if (k === 0) {
-          tl.fromTo(scrubs, { x: 0 }, { x: m[1], duration: m[2], ease: m[3] }, m[0]);
-        } else {
-          tl.to(scrubs, { x: m[1], duration: m[2], ease: m[3] }, m[0]);
-        }
+        if (k === 0) tl.fromTo(scrubs, { x: 0 }, { x: m[1], duration: m[2], ease: m[3] }, m[0]);
+        else tl.to(scrubs, { x: m[1], duration: m[2], ease: m[3] }, m[0]);
       });
 
-      // Two slice bursts — horizontal bands tear on a quantized hash, amplitude decaying.
+      // Two bursts: bands tear on a quantized hash, RGB ghosts jitter, tracking lines flicker.
       var JITTER = 1 / 15;
-      var bursts = [
+      [
         { start: 0.12, steps: 6, seed: 3 },
         { start: 0.56, steps: 6, seed: 17 },
-      ];
-      bursts.forEach(function (b) {
+      ].forEach(function (b) {
         tl.set(base, { autoAlpha: 0 }, b.start);
         tl.set(slices, { autoAlpha: 1 }, b.start);
+        tl.set(ghosts, { autoAlpha: 0.6 }, b.start);
         tl.set(tracks, { autoAlpha: 1 }, b.start);
         for (var k = 0; k < b.steps; k++) {
           var t = b.start + k * JITTER;
@@ -665,6 +733,11 @@
             var off = still ? 0 : dir * (14 + h * 58) * amp;
             tl.set(sl, { x: off, scaleX: 1 + (still ? 0 : h * 0.06 * amp) }, t);
           });
+          ghosts.forEach(function (g, idx) {
+            var jx = (idx === 0 ? -1 : 1) * (8 + hash(k * 19 + idx * 13 + b.seed) * 16) * amp;
+            var jy = (hash(k * 37 + idx * 3 + b.seed) * 2 - 1) * 5 * amp;
+            tl.set(g, { x: jx, y: jy, opacity: 0.35 + 0.35 * amp }, t);
+          });
           tracks.forEach(function (tr, idx) {
             var y = 60 + hash(k * 17 + idx * 31 + b.seed) * 960;
             var o = (0.08 + hash(k * 23 + idx * 5 + b.seed) * 0.22) * (0.4 + amp * 0.6);
@@ -673,11 +746,12 @@
         }
         var end = b.start + b.steps * JITTER;
         tl.set(slices, { x: 0, scaleX: 1, autoAlpha: 0 }, end);
+        tl.set(ghosts, { x: 0, y: 0, autoAlpha: 0 }, end);
         tl.set(tracks, { autoAlpha: 0 }, end);
         tl.set(base, { autoAlpha: 1 }, end);
       });
 
-      /* ════════ Scene 2 · 1.1–2.1 s · « avant » — circular colour flood ════════ */
+      /* ════════ Scene 2 · 1.1–2.2 s · « avant » — circular colour flood ════════ */
       var FLOOD_AT = 1.1;
       var FLOOD_DUR = 0.7;
       tl.fromTo(
@@ -686,71 +760,95 @@
         { clipPath: "circle(1400px at 960px 540px)", duration: FLOOD_DUR, ease: "power3.inOut" },
         FLOOD_AT,
       );
-      // Glowing rim riding the flood edge (same ease + duration → locked to the radius).
+      // glowing rim riding the flood edge (same ease + duration → locked to the radius)
       tl.fromTo($("ring"), { scale: 0, opacity: 1 }, { scale: 1, duration: FLOOD_DUR, ease: "power3.inOut" }, FLOOD_AT);
-      tl.to($("ring"), { opacity: 0, duration: 0.3, ease: "power1.in" }, FLOOD_AT + 0.4);
-      // The old world falls away behind the flood.
+      tl.to($("ring"), { opacity: 0, duration: 0.3, ease: "power1.in" }, FLOOD_AT + 0.42);
+      // the old world falls away behind the flood
       tl.to($("avant-cam"), { scale: 0.9, duration: FLOOD_DUR, ease: "power2.in" }, FLOOD_AT);
-      tl.to(
-        base.firstElementChild.firstElementChild,
-        { filter: "blur(34px) brightness(0.4)", duration: FLOOD_DUR, ease: "power2.in" },
-        FLOOD_AT,
-      );
-      // Grid lines draw outward from the centre axes.
-      tl.fromTo($("vlines"), { scaleY: 0 }, { scaleY: 1, duration: 0.95, ease: "power3.out" }, 1.15);
-      tl.fromTo($("hlines"), { scaleX: 0 }, { scaleX: 1, duration: 0.95, ease: "power3.out" }, 1.19);
-      // Brand mesh blooms in, then drifts and lands exactly on its canonical state at the seam.
-      tl.fromTo($("mesh"), { opacity: 0, scale: 0.84, x: 0, y: 0 }, { opacity: 1, scale: 1, duration: 1.2, ease: "power2.out" }, 1.25);
-      tl.to($("mesh"), { scale: 1.035, x: -26, y: 12, duration: 2.6, ease: "sine.inOut" }, 2.45);
-      tl.to($("mesh"), { scale: 1, x: 0, y: 0, duration: 2.58, ease: "sine.inOut" }, 5.05);
+      tl.to($("panels"), { filter: "blur(34px) brightness(0.4)", duration: FLOOD_DUR, ease: "power2.in" }, FLOOD_AT);
 
-      /* ════════ Scene 3 · 1.85–3.1 s · « Ask-it » — lockup assembles, then rises ════════ */
-      // ambient glow behind the lockup lands with the logo (≤ 0.45 peak)
-      tl.fromTo($("glow"), { opacity: 0, scale: 0.8 }, { opacity: 0.34, scale: 1, duration: 0.9, ease: "power2.out" }, 1.55);
-      tl.to($("glow"), { opacity: 0.4, scale: 1.03, duration: 1.5, ease: "sine.inOut" }, 2.45);
-      tl.to($("glow"), { opacity: 0.32, scale: 1, duration: 1.6, ease: "sine.inOut" }, 3.95);
+      // Grid lines draw outward from the centre axes, nearest lines first.
+      var gl = $("gridlines");
+      var lines = [];
+      for (var vx = 0; vx < 1920; vx += 44) {
+        var v = document.createElement("div");
+        v.className = "f04-bascule-vl";
+        v.style.left = vx + "px";
+        gl.appendChild(v);
+        lines.push([v, "scaleY", Math.abs(vx - 960)]);
+      }
+      for (var hy = 0; hy < 1080; hy += 44) {
+        var hl = document.createElement("div");
+        hl.className = "f04-bascule-hl";
+        hl.style.top = hy + "px";
+        gl.appendChild(hl);
+        lines.push([hl, "scaleX", Math.abs(hy - 540)]);
+      }
+      lines.forEach(function (L) {
+        var from = {};
+        var to = { duration: 0.8, ease: "power3.out" };
+        from[L[1]] = 0;
+        to[L[1]] = 1;
+        tl.fromTo(L[0], from, to, 1.12 + (L[2] / 960) * 0.34);
+      });
+      // hand the drawn lines over to the canonical background grid (pixel-identical)
+      tl.set($("grid"), { autoAlpha: 1 }, 2.3);
+      tl.set(gl, { autoAlpha: 0 }, 2.3);
 
-      // Mark: pops at 120 px on the centre, then slides into its lockup slot (86 px).
-      var MARK_SLOT_CX = -287.7 + 43; // mark centre in the lockup
-      var MARK_SLOT_CY = -46 + 43;
-      var POP_SCALE = 120 / 86;
+      // colour arrives with the flood: brand mesh blooms, then drifts and lands canonical at 7.63
+      tl.fromTo($("mesh"), { opacity: 0, scale: 0.82, x: 0, y: 0 }, { opacity: 1, scale: 1, duration: 1.0, ease: "power2.out" }, 1.08);
+      tl.to($("mesh"), { scale: 1.035, x: -26, y: 12, duration: 2.9, ease: "sine.inOut" }, 2.08);
+      tl.to($("mesh"), { scale: 1, x: 0, y: 0, duration: 2.65, ease: "sine.inOut" }, 4.98);
+      // ambient glow blooms behind the centre (pulse-on-arrival, ≤ 0.45), then breathes
+      tl.fromTo($("glow"), { opacity: 0, scale: 0.75 }, { opacity: 0.45, scale: 1.04, duration: 0.6, ease: "power2.out" }, 1.14);
+      tl.to($("glow"), { opacity: 0.34, scale: 1, duration: 0.7, ease: "sine.inOut" }, 1.74);
+
+      /* ════════ Scene 3 · 1.84–3.1 s · « Ask-it » — lockup assembles, then rises ════════ */
+      // The mark pops at 120 px on the frame centre; the whole lockup then slides left as
+      // the wordmark is pulled out from behind its mask (they never cross).
+      var LOCK_SHIFT = 244.7; // lockup x-offset that puts the mark's centre on x = 960
+      tl.fromTo($("lockup"), { x: LOCK_SHIFT }, { x: 0, duration: 0.52, ease: "expo.inOut" }, 2.0);
+      tl.fromTo($("mark"), { scale: 120 / 86 }, { scale: 1, duration: 0.52, ease: "expo.inOut" }, 2.0);
       tl.fromTo(
-        $("mark"),
-        { x: -MARK_SLOT_CX, y: -MARK_SLOT_CY, scale: 0, rotation: -14, opacity: 0 },
-        { scale: POP_SCALE, rotation: 0, opacity: 1, duration: 0.42, ease: "back.out(1.6)" },
-        1.86,
+        $("mark-pop"),
+        { scale: 0, rotation: -14, opacity: 0 },
+        { scale: 1, rotation: 0, opacity: 1, duration: 0.42, ease: "back.out(1.6)" },
+        1.84,
       );
-      tl.fromTo($("bar1"), { scaleX: 0 }, { scaleX: 1, transformOrigin: "0% 50%", duration: 0.24, ease: "power3.out" }, 1.97);
-      tl.fromTo($("bar2"), { scaleX: 0 }, { scaleX: 1, transformOrigin: "0% 50%", duration: 0.22, ease: "power3.out" }, 2.03);
-      tl.fromTo($("dot"), { scale: 0 }, { scale: 1, transformOrigin: "50% 50%", duration: 0.3, ease: "back.out(2.2)" }, 2.09);
-      tl.to($("mark"), { x: 0, y: 0, scale: 1, duration: 0.46, ease: "expo.inOut" }, 2.02);
-      // Wordmark: mask reveal behind the travelling mark + slide from x −30, letters pale → ink.
+      tl.fromTo($("bar1"), { scaleX: 0 }, { scaleX: 1, transformOrigin: "0% 50%", duration: 0.24, ease: "power3.out" }, 1.96);
+      tl.fromTo($("bar2"), { scaleX: 0 }, { scaleX: 1, transformOrigin: "0% 50%", duration: 0.22, ease: "power3.out" }, 2.02);
+      tl.fromTo($("dot"), { scale: 0 }, { scale: 1, transformOrigin: "50% 50%", duration: 0.3, ease: "back.out(2.2)" }, 2.08);
       tl.fromTo(
         $("word"),
-        { clipPath: "inset(-20px 100% -20px -40px)" },
-        { clipPath: "inset(-20px 0% -20px -40px)", duration: 0.5, ease: "expo.out" },
-        2.12,
+        { clipPath: "inset(-20px 100% -20px 0px)" },
+        { clipPath: "inset(-20px 0% -20px 0px)", duration: 0.55, ease: "expo.inOut" },
+        2.02,
       );
-      tl.fromTo($("word-inner"), { x: -30 }, { x: 0, duration: 0.55, ease: "expo.out" }, 2.12);
-      var chars = Array.prototype.slice.call(document.querySelectorAll("#" + ID + "-word-inner .f04-bascule-ch"));
-      chars.forEach(function (c, k) {
-        tl.fromTo(c, { color: "#d6cfc7" }, { color: "#241f20", duration: 0.28, ease: "power1.out" }, 2.14 + k * 0.035);
+      tl.fromTo($("word-inner"), { x: -30 }, { x: 0, duration: 0.6, ease: "expo.out" }, 2.06);
+      $$("#" + ID + "-word-inner .f04-bascule-ch").forEach(function (ch, k) {
+        tl.fromTo(ch, { color: "#d6cfc7" }, { color: "#241f20", duration: 0.26, ease: "power1.out" }, 2.1 + k * 0.035);
       });
-      // « transforme » — the lockup rises to y 230 and settles at 0.7.
-      tl.fromTo(
-        $("lockup"),
-        { y: 0, scale: 1 },
-        { y: -310, scale: 0.7, transformOrigin: "0px 0px", duration: 0.55, ease: "power3.inOut" },
-        2.54,
-      );
+      // « transforme » — the lockup rises to y 230 and settles at 0.7; the glow follows it
+      tl.to($("lockup"), { y: -310, scale: 0.7, transformOrigin: "0px 0px", duration: 0.56, ease: "power3.inOut" }, 2.54);
+      tl.to($("glow"), { y: -310, scale: 0.72, opacity: 0.26, duration: 0.56, ease: "power3.inOut" }, 2.54);
 
-      // A slow camera drift keeps the Ask-it world breathing until the step pills take over.
-      tl.fromTo($("drift"), { scale: 1 }, { scale: 1.025, duration: 3.9, ease: "sine.inOut" }, 2.0);
+      // a slow camera drift keeps the Ask-it world breathing until the step pills take over
+      tl.fromTo($("drift"), { scale: 1 }, { scale: 1.025, duration: 3.86, ease: "sine.inOut" }, 2.0);
 
-      /* ════════ Scene 4 · 3.1–5.9 s · visitor → client → data ════════ */
+      /* ════════ Scene 4 · 3.1–5.9 s · anonymous visitor → client → data ════════ */
+      tl.fromTo($("group"), { scale: 1 }, { scale: 1.07, duration: 2.8, ease: "sine.inOut" }, 3.06);
       tl.fromTo($("avatar"), { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.48, ease: "power3.out" }, 3.12);
-      tl.fromTo($("dashring"), { scale: 0.7, opacity: 0, rotation: -40 }, { scale: 1, opacity: 1, rotation: 0, duration: 0.6, ease: "power3.out" }, 3.18);
+      tl.fromTo(
+        $("dashring"),
+        { scale: 0.7, opacity: 0, rotation: -40 },
+        { scale: 1, opacity: 1, rotation: 0, duration: 0.6, ease: "power3.out" },
+        3.18,
+      );
       tl.to($("dashring"), { rotation: 70, duration: 1.3, ease: "none" }, 3.78);
+      // two "who is she?" sonar pings
+      $$("#" + ID + "-visitor .f04-bascule-ripple").forEach(function (r, k) {
+        tl.fromTo(r, { scale: 1, opacity: 0.55 }, { scale: 1.75, opacity: 0, duration: 0.7, ease: "power2.out" }, 3.5 + k * 0.42);
+      });
       tl.fromTo(
         $("tag-anon"),
         { y: 18, opacity: 0, filter: "blur(6px)" },
@@ -780,59 +878,47 @@
         MORPH_AT + MORPH_DUR * 0.45,
       );
       tl.to($("dashring"), { opacity: 0, scale: 1.18, duration: 0.3, ease: "power2.in" }, MORPH_AT);
+      tl.fromTo($("halo"), { opacity: 0, scale: 0.7 }, { opacity: 0.32, scale: 1, duration: 0.8, ease: "power2.out" }, MORPH_AT + 0.2);
       // tag swap: « Visiteuse anonyme » rolls out, « Claire » rolls in
       tl.to($("tag-anon"), { y: -14, opacity: 0, filter: "blur(4px)", duration: 0.22, ease: "power2.in" }, MORPH_AT + 0.04);
       tl.fromTo($("tag-name"), { y: 16, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: "expo.out" }, MORPH_AT + 0.22);
       // green « Cliente » badge pops off the ring
-      tl.fromTo(
-        $("badge"),
-        { scale: 0, opacity: 0, x: -14 },
-        { scale: 1, opacity: 1, x: 0, duration: 0.45, ease: "back.out(1.7)" },
-        MORPH_AT + 0.42,
-      );
+      tl.fromTo($("badge"), { scale: 0, opacity: 0, x: -14 }, { scale: 1, opacity: 1, x: 0, duration: 0.45, ease: "back.out(1.7)" }, MORPH_AT + 0.42);
 
       // « data » — four answer chips spring out of her into a 2×2 cluster.
-      var CHIP_FROM = { x: 560, y: 500 };
-      var chipDefs = [
-        ["chip-1", 724, 148, 466],
-        ["chip-2", 886, 206, 466],
-        ["chip-3", 764, 200, 536],
-        ["chip-4", 978, 300, 536],
-      ];
-      chipDefs.forEach(function (c, k) {
-        var el = $(c[0]);
-        var cx = c[1] + c[2] / 2;
+      var FROM_X = 560;
+      var FROM_Y = 520;
+      [
+        ["chip-1", 740, 148, 486],
+        ["chip-2", 906, 206, 486],
+        ["chip-3", 790, 200, 556],
+        ["chip-4", 1008, 300, 556],
+      ].forEach(function (cd, k) {
+        var el = $(cd[0]);
         var at = 5.24 + k * 0.07;
-        tl.fromTo(
-          el,
-          { x: CHIP_FROM.x - cx, y: CHIP_FROM.y - c[3] },
-          { x: 0, y: 0, duration: 0.55, ease: "expo.out" },
-          at,
-        );
+        tl.fromTo(el, { x: FROM_X - (cd[1] + cd[2] / 2), y: FROM_Y - cd[3] }, { x: 0, y: 0, duration: 0.55, ease: "expo.out" }, at);
         tl.fromTo(el, { scale: 0.2 }, { scale: 1, duration: 0.5, ease: "back.out(1.5)" }, at);
         tl.fromTo(el, { opacity: 0 }, { opacity: 1, duration: 0.14, ease: "none" }, at);
       });
 
       /* ════════ Scene 5 · 5.86–7.63 s · « en trois étapes » — PILLS_ROW ════════ */
-      tl.to(
-        $("scene"),
-        { scale: 0.9, opacity: 0, filter: "blur(8px)", duration: 0.32, ease: "power2.in" },
-        5.86,
-      );
+      tl.to($("scene"), { scale: 0.9, opacity: 0, filter: "blur(8px)", duration: 0.32, ease: "power2.in" }, 5.86);
       tl.set($("scene"), { autoAlpha: 0, filter: "none" }, 6.2);
-
       [1, 2, 3].forEach(function (n, k) {
         var at = 5.96 + k * 0.08;
         var pill = $("pill-" + n);
         tl.fromTo(pill, { scale: 0.3, y: 40 }, { scale: 1, y: 0, duration: 0.52, ease: "back.out(1.6)" }, at);
         tl.fromTo(pill, { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.3, ease: "power2.out" }, at);
         tl.set(pill, { filter: "none" }, at + 0.3);
-        var num = pill.querySelector(".f04-bascule-pill-num");
-        var label = pill.querySelector(".f04-bascule-pill-label");
-        tl.fromTo(num, { scale: 0 }, { scale: 1, duration: 0.4, ease: "back.out(2)" }, at + 0.1);
-        tl.fromTo(label, { x: -16, opacity: 0 }, { x: 0, opacity: 1, duration: 0.42, ease: "power3.out" }, at + 0.12);
+        tl.fromTo(pill.querySelector(".f04-bascule-pill-num"), { scale: 0 }, { scale: 1, duration: 0.4, ease: "back.out(2)" }, at + 0.1);
+        tl.fromTo(
+          pill.querySelector(".f04-bascule-pill-label"),
+          { x: -16, opacity: 0 },
+          { x: 0, opacity: 1, duration: 0.42, ease: "power3.out" },
+          at + 0.12,
+        );
       });
-      // Hold on PILLS_ROW with a slow drift that lands exactly on the canonical layout at 7.63.
+      // hold on PILLS_ROW with a slow drift that lands exactly on the canonical layout at 7.63
       tl.fromTo($("pills-drift"), { scale: 0.98 }, { scale: 1, duration: 1.77, ease: "none" }, 5.86);
 
       window.__timelines[ID] = tl;
