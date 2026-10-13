@@ -150,3 +150,12 @@ Rapport détaillé avec visuels : artefact privé « Revue vidéo Ask-it » (lie
   - « Peau sensible 3/10 » d'après la capture réelle ;
   - chiffres du dashboard repris de la maquette.
 - **Suite** : commentaires Frame de Pierre, puis musique Eleven Music (deux sections avant/après), puis déclinaison 30 s.
+
+## Analyse image par image du 13/10
+
+Pierre l'a demandée avant de donner ses retours sur la v3. Elle compare les 5 références et la v3 avec les mêmes mesures. Détail dans `docs/motion-avance.md`.
+
+Constat principal : la v3 est plus statique que les références et que la v2 :
+- 36 % d'images figées, contre 5 à 12 % ;
+- 14,8 pauses de 0,5 s par minute, contre environ 1 ;
+- une interface trop petite à l'écran.
