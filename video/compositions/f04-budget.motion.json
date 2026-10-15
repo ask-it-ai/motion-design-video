@@ -1,0 +1,13 @@
+{
+  "scene": "f04-budget",
+  "duration_s": 7.72,
+  "rules": ["MK.drift", "MK.enterBig", "MK.words", "MK.snapZoom", "MK.count", "MK.pan", "MK.pop", "MK.anticipate", "MK.enter", "MK.click", "MK.suck", "MK.toss", "MK.blurFilter", "MK.each"],
+  "exit": {
+    "vector": "down: the card of the past falls with gravity, +86.5 px on the last frame (~5190 px/s, power2.in = cubic, still accelerating), x -1.6 px/frame, rotation -0.89 deg/frame (-8.2 deg at the cut), vertical SVG blur 0 -> 20 px over the last 8 frames; its top edge is still in frame (y 940) on the last frame",
+    "still_moving": true
+  },
+  "entry": {
+    "vector": "oversized entry braking out of the dive: stage scale 1.45 -> 1.379 -> 1.319 on frames 0-2 (x0.951/frame, ~-4.3 scale/s; frame edge moves inward ~2800 px/s), expo.out over 40 frames, xy SVG blur 12 -> 0 in 6 frames",
+    "from_rest": false
+  }
+}

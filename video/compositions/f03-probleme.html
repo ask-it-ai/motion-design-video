@@ -199,7 +199,7 @@
         var pin = document.createElement("div");
         pin.className = "f03-probleme-pin";
         pin.style.left = ((i % 5) * (PW + GX) + PW / 2 - 36) + "px"; pin.style.top = (Math.floor(i / 5) * (PH + GY) + PH / 2 - 36) + "px";
-        pin.innerHTML = '<div class="f03-probleme-bub"><div class="f03-probleme-bubin">?</div></div>';
+        pin.innerHTML = '<div class="f03-probleme-bub"><div class="f03-probleme-bubin" data-layout-allow-occlusion>?</div></div>';   // dimmed on purpose by the lens vignette
         grid.appendChild(pin); bubs.push(pin.firstChild); bubins.push(pin.firstChild.firstChild);
       }
       gsap.set(plane, { rotationX: 60 });

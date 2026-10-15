@@ -1,7 +1,0 @@
-{
-  "scene": "f09-elle-revient",
-  "duration_s": 11.61,
-  "rules": ["cursor-click-ripple", "physics-press-reaction", "spring-pop-entrance", "discrete-text-sequence", "scale-swap-transition", "svg-path-draw", "multi-phase-camera", "viewport-change", "gsap-effects"],
-  "exit": { "vector": "commit push-in still running at +1.7 %/s (scale 1.045→1.055, linear) anchored on the add-to-cart button (≈795,653); finger and tag at rest; brand mesh drifting right ~5 px/s", "still_moving": true },
-  "entry": { "vector": "phone at rest (camera offset so the phone sits at x=860, slow push +0.29 %/s); only the in-screen Endro page coasts up ~137 px/s (scroll 262→300, cubic-out 0.75 s); touch + visitor-tag fade in from 0.12 s", "from_rest": false }
-}

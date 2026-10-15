@@ -4,6 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=1920, height=1080" />
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script src="lib/motionkit.js"></script>
+    <script src="lib/motion-blur.js"></script>
     <style>
       * {
         margin: 0;
@@ -29,20 +31,17 @@
   </head>
   <body>
     <!--
-      Ask-it — explainer v3 (Endro). 10 scenes mounted at the voice-over line starts.
-      Slot windows overlap only where a root-level transition needs both scenes on screen:
-        f02 → f03  crossfade 0.40 s in the pause before « Résultat »
-        f06 → f07  push      (f07 carries a 0.35 s lead-in pad)
-        f07 → f08  blur      (f08 carries a 0.30 s lead-in pad)
-        f08 → f09  push      (f09 carries a 0.40 s lead-in pad)
-        f09 → f10  blur      (f10 carries a 0.40 s lead-in pad)
-      Every other seam is a designed match cut (each scene starts on the previous one's last frame).
+      Ask-it — explainer v4 (Endro), 60 fps, 98 s. 14 scenes mounted back to back at their voice cues.
+      Every seam is a hard cut on the fastest frame: each scene ends with its own accelerating exit and the
+      next one starts already moving (launched or oversized entry). No root transitions, no fades.
+      Motion blur: lib/motion-blur.js attaches to every data-hf-motion-blur element of every scene.
     -->
     <div
       id="root"
       data-composition-id="main"
       data-start="0"
-      data-duration="105.5"
+      data-duration="98"
+      data-fps="60"
       data-width="1920"
       data-height="1080"
     >
@@ -52,7 +51,7 @@
         data-composition-id="f01-hesitation"
         data-composition-src="compositions/f01-hesitation.html"
         data-start="0"
-        data-duration="12.39"
+        data-duration="9.25"
         data-track-index="1"
         data-width="1920"
         data-height="1080"
@@ -62,107 +61,151 @@
         class="clip"
         data-composition-id="f02-soixante-dix"
         data-composition-src="compositions/f02-soixante-dix.html"
-        data-start="12.39"
-        data-duration="11.01"
+        data-start="9.25"
+        data-duration="3.75"
         data-track-index="2"
         data-width="1920"
         data-height="1080"
       ></div>
       <div
-        id="f03-budget"
+        id="f03-probleme"
         class="clip"
-        data-composition-id="f03-budget"
-        data-composition-src="compositions/f03-budget.html"
-        data-start="23"
-        data-duration="6.85"
+        data-composition-id="f03-probleme"
+        data-composition-src="compositions/f03-probleme.html"
+        data-start="13"
+        data-duration="6.9"
         data-track-index="1"
         data-width="1920"
         data-height="1080"
       ></div>
       <div
-        id="f04-bascule"
+        id="f04-budget"
         class="clip"
-        data-composition-id="f04-bascule"
-        data-composition-src="compositions/f04-bascule.html"
-        data-start="29.85"
-        data-duration="7.63"
+        data-composition-id="f04-budget"
+        data-composition-src="compositions/f04-budget.html"
+        data-start="19.9"
+        data-duration="7.72"
         data-track-index="2"
         data-width="1920"
         data-height="1080"
       ></div>
       <div
-        id="f05-diagnostic"
+        id="f05-askit"
         class="clip"
-        data-composition-id="f05-diagnostic"
-        data-composition-src="compositions/f05-diagnostic.html"
-        data-start="37.48"
-        data-duration="14.75"
+        data-composition-id="f05-askit"
+        data-composition-src="compositions/f05-askit.html"
+        data-start="27.62"
+        data-duration="5.83"
         data-track-index="1"
         data-width="1920"
         data-height="1080"
       ></div>
       <div
-        id="f06-recommandation"
+        id="f06-diagnostic"
         class="clip"
-        data-composition-id="f06-recommandation"
-        data-composition-src="compositions/f06-recommandation.html"
-        data-start="52.23"
-        data-duration="12.46"
+        data-composition-id="f06-diagnostic"
+        data-composition-src="compositions/f06-diagnostic.html"
+        data-start="33.45"
+        data-duration="9.25"
         data-track-index="2"
         data-width="1920"
         data-height="1080"
       ></div>
       <div
-        id="f07-dashboard"
+        id="f07-profil"
         class="clip"
-        data-composition-id="f07-dashboard"
-        data-composition-src="compositions/f07-dashboard.html"
-        data-start="64.24"
-        data-duration="11.78"
+        data-composition-id="f07-profil"
+        data-composition-src="compositions/f07-profil.html"
+        data-start="42.7"
+        data-duration="4.7"
         data-track-index="1"
         data-width="1920"
         data-height="1080"
       ></div>
       <div
-        id="f08-zero-effort"
+        id="f08-recommandation"
         class="clip"
-        data-composition-id="f08-zero-effort"
-        data-composition-src="compositions/f08-zero-effort.html"
-        data-start="75.52"
-        data-duration="7.76"
+        data-composition-id="f08-recommandation"
+        data-composition-src="compositions/f08-recommandation.html"
+        data-start="47.4"
+        data-duration="6.8"
         data-track-index="2"
         data-width="1920"
         data-height="1080"
       ></div>
       <div
-        id="f09-elle-revient"
+        id="f09-chiffres"
         class="clip"
-        data-composition-id="f09-elle-revient"
-        data-composition-src="compositions/f09-elle-revient.html"
-        data-start="82.83"
-        data-duration="12.21"
+        data-composition-id="f09-chiffres"
+        data-composition-src="compositions/f09-chiffres.html"
+        data-start="54.2"
+        data-duration="5.25"
         data-track-index="1"
         data-width="1920"
         data-height="1080"
       ></div>
       <div
-        id="f10-fin"
+        id="f10-dashboard"
         class="clip"
-        data-composition-id="f10-fin"
-        data-composition-src="compositions/f10-fin.html"
-        data-start="94.44"
-        data-duration="11.06"
+        data-composition-id="f10-dashboard"
+        data-composition-src="compositions/f10-dashboard.html"
+        data-start="59.45"
+        data-duration="6.5"
+        data-track-index="2"
+        data-width="1920"
+        data-height="1080"
+      ></div>
+      <div
+        id="f11-insights"
+        class="clip"
+        data-composition-id="f11-insights"
+        data-composition-src="compositions/f11-insights.html"
+        data-start="65.95"
+        data-duration="4.3"
+        data-track-index="1"
+        data-width="1920"
+        data-height="1080"
+      ></div>
+      <div
+        id="f12-zero-effort"
+        class="clip"
+        data-composition-id="f12-zero-effort"
+        data-composition-src="compositions/f12-zero-effort.html"
+        data-start="70.25"
+        data-duration="7.15"
+        data-track-index="2"
+        data-width="1920"
+        data-height="1080"
+      ></div>
+      <div
+        id="f13-elle-revient"
+        class="clip"
+        data-composition-id="f13-elle-revient"
+        data-composition-src="compositions/f13-elle-revient.html"
+        data-start="77.4"
+        data-duration="11.1"
+        data-track-index="1"
+        data-width="1920"
+        data-height="1080"
+      ></div>
+      <div
+        id="f14-fin"
+        class="clip"
+        data-composition-id="f14-fin"
+        data-composition-src="compositions/f14-fin.html"
+        data-start="88.5"
+        data-duration="9.5"
         data-track-index="2"
         data-width="1920"
         data-height="1080"
       ></div>
 
-      <!-- Voice-over + sound design, pre-mixed and mastered (-14 LUFS, -1 dBTP) by scripts/mix.py from scripts/cues.json -->
+      <!-- Voice-over + sound design + music, pre-mixed and mastered (-14 LUFS, -1 dBTP) by scripts/mix4.py -->
       <audio
         id="soundtrack"
-        src="assets/audio/mix.wav"
+        src="assets/audio/mix_v4.wav"
         data-start="0"
-        data-duration="105.5"
+        data-duration="98"
         data-track-index="10"
         data-volume="1"
       ></audio>
@@ -170,54 +213,7 @@
     <script>
       window.__timelines = window.__timelines || {};
       const tl = gsap.timeline({ paused: true });
-      const W = 1920;
-
-      // f02 → f03 · crossfade in the pause before « Résultat » (f03 sits on top)
-      tl.fromTo("#f03-budget", { opacity: 0 }, { opacity: 1, duration: 0.4, ease: "sine.inOut" }, 23.0);
-
-      // f06 → f07 · push left, finished before « Et enfin »
-      const T7 = 64.24;
-      tl.fromTo("#f06-recommandation", { x: 0 }, { x: -W, duration: 0.45, ease: "power3.inOut" }, T7);
-      tl.fromTo("#f07-dashboard", { x: W }, { x: 0, duration: 0.45, ease: "power3.inOut" }, T7);
-      tl.fromTo(
-        ["#f06-recommandation", "#f07-dashboard"],
-        { filter: "blur(0px)" },
-        { filter: "blur(6px)", duration: 0.2, ease: "power2.in", yoyo: true, repeat: 1, immediateRender: false },
-        T7 + 0.025,
-      );
-
-      // f07 → f08 · blur crossfade: the dashboard dissolves out of focus while the form comes into focus on top
-      const T8 = 75.52;
-      tl.fromTo("#f07-dashboard", { filter: "blur(0px)" }, { filter: "blur(16px)", duration: 0.4, ease: "power2.in", immediateRender: false }, T8);
-      tl.fromTo(
-        "#f08-zero-effort",
-        { opacity: 0, filter: "blur(16px)" },
-        { opacity: 1, filter: "blur(0px)", duration: 0.45, ease: "power2.out" },
-        T8 + 0.05,
-      );
-
-      // f08 → f09 · push left (same grammar as f06 → f07)
-      const T9 = 82.83;
-      tl.fromTo("#f08-zero-effort", { x: 0 }, { x: -W, duration: 0.45, ease: "power3.inOut", immediateRender: false }, T9);
-      tl.fromTo("#f09-elle-revient", { x: W }, { x: 0, duration: 0.45, ease: "power3.inOut" }, T9);
-      tl.fromTo(
-        ["#f08-zero-effort", "#f09-elle-revient"],
-        { filter: "blur(0px)" },
-        { filter: "blur(6px)", duration: 0.2, ease: "power2.in", yoyo: true, repeat: 1, immediateRender: false },
-        T9 + 0.025,
-      );
-
-      // f09 → f10 · slower blur crossfade into the ending (wind-down)
-      const T10 = 94.44;
-      tl.fromTo("#f09-elle-revient", { filter: "blur(0px)" }, { filter: "blur(20px)", duration: 0.5, ease: "sine.in", immediateRender: false }, T10);
-      tl.fromTo(
-        "#f10-fin",
-        { opacity: 0, filter: "blur(20px)" },
-        { opacity: 1, filter: "blur(0px)", duration: 0.55, ease: "sine.out" },
-        T10 + 0.05,
-      );
-
-      tl.set({}, {}, 105.5);
+      tl.set({}, {}, 98);
       window.__timelines["main"] = tl;
     </script>
   </body>

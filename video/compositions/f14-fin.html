@@ -41,7 +41,7 @@
     #f14-fin-cta { height: 120px; display: flex; align-items: center; gap: 22px; padding: 0 62px; background: #241F20; color: #FFFFFF; border-radius: 999px; font-weight: 600; font-size: 44px; letter-spacing: -0.01em; white-space: nowrap; box-shadow: 0 26px 50px -20px rgba(36,31,32,0.55), 0 6px 14px -6px rgba(36,31,32,0.25); }
     #f14-fin-cta svg { width: 40px; height: 26px; display: block; }
     #f14-fin-labelrow { position: absolute; left: 0; top: 728px; width: 1920px; height: 40px; display: flex; justify-content: center; }
-    #f14-fin-label { font-weight: 500; font-size: 30px; line-height: 40px; letter-spacing: 0.02em; color: #A39C95; }
+    #f14-fin-label { white-space: nowrap; font-weight: 500; font-size: 30px; line-height: 40px; letter-spacing: 0.02em; color: #A39C95; }
     #f14-fin-cursorgrp { position: absolute; left: 0; top: 0; width: 0; height: 0; visibility: hidden; opacity: 0; }
     #f14-fin-cursor { position: absolute; left: -5px; top: -4px; width: 46px; height: 58px; transform-origin: 5px 4px; filter: drop-shadow(0 8px 12px rgba(36,31,32,0.28)); }
     #f14-fin-cursor svg { display: block; }
@@ -76,9 +76,9 @@
             <div id="f14-fin-card" class="f14-fin-full">
               <div id="f14-fin-lockrow"><div id="f14-fin-lockup"><img id="f14-fin-mark" src="assets/askit/askit-logo-mark.svg" alt="" data-hf-motion-blur='{"shutterAngle":360,"samplesPerFrame":12}' /><div id="f14-fin-word"></div></div></div>
               <div id="f14-fin-ctarow"><div id="f14-fin-cta"><span>Réserver une démo</span><svg viewBox="0 0 40 26"><path d="M3 13 H35 M24.5 3.5 L35.5 13 L24.5 22.5" fill="none" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
-              <div id="f14-fin-labelrow"><div id="f14-fin-label" data-hf-motion-blur='{"shutterAngle":360,"samplesPerFrame":12}'>ask-it.ai</div></div>
+              <div id="f14-fin-labelrow"><div id="f14-fin-label">ask-it.ai</div></div>
               <div id="f14-fin-cfx" class="f14-fin-full"></div>
-              <div id="f14-fin-cursorgrp" data-hf-motion-blur='{"shutterAngle":360,"samplesPerFrame":12}'><div id="f14-fin-cursor"><svg width="46" height="58" viewBox="0 0 46 58"><path d="M5 4 L5 46 L15.6 36.4 L22.4 52.6 L29.6 49.6 L22.8 33.6 L37 33.6 Z" fill="#241F20" stroke="#FFFFFF" stroke-width="3" stroke-linejoin="round"/></svg></div></div>
+              <div id="f14-fin-cursorgrp"><div id="f14-fin-cursor"><svg width="46" height="58" viewBox="0 0 46 58"><path d="M5 4 L5 46 L15.6 36.4 L22.4 52.6 L29.6 49.6 L22.8 33.6 L37 33.6 Z" fill="#241F20" stroke="#FFFFFF" stroke-width="3" stroke-linejoin="round"/></svg></div></div>
             </div>
           </div>
         </div>
@@ -111,7 +111,7 @@
       /* continuous life: calm drift on everything, extra drift on the world while it is on screen, mesh glide */
       MK.drift(tl, $("drift"), 0, D, { seed: 41, calm: 0.5 });
       MK.drift(tl, $("wdrift"), 0, 5.3, { seed: 7, calm: 0.8 });
-      tl.fromTo($("mesh"), { x: 30, y: -20, scale: 1.02 }, { x: -36, y: 24, scale: 1.09, duration: D, ease: "sine.inOut" }, 0);
+      tl.fromTo($("mesh"), { x: 30, y: -20, scale: 1.02 }, { x: -36, y: 24, scale: 1.09, duration: D, ease: "none" }, 0);
 
       /* Scene 1 (0-2.25) - Claire arrives big and brakes; « restée »: anticipation, pop, ring, coral glow */
       MK.enterBig(tl, $("av"), 0, { from: 1.5, frames: 40 });
@@ -154,7 +154,7 @@
       var chosen = pool.slice(0, 69).sort(function (a, b) { return (dist[a] + 0.7 * MK.hash(a + 101)) - (dist[b] + 0.7 * MK.hash(b + 101)); });
       MK.each(chosen, impact, 1, function (idx, t) { MK.pop(tl, lit[idx], t, { over: 0.25 }); });
       MK.words(tl, $("words"), [{ w: "de", t: 4.19 }, { w: "vos", t: 4.26 }, { w: "visiteurs", t: 4.39 }], { lead: 0.1 });
-      tl.set($("words"), { visibility: "visible" }, 4.09);
+      tl.set($("words"), { visibility: "inherit" }, 4.09);
 
       /* Scene 4 (5.00-6.40) - everything is sucked to the centre; the lockup builds; the CTA pops */
       var CV = [668, 414];   // everything is sucked into the spot where the mark will pop
@@ -188,7 +188,7 @@
       tl.to($("cursorgrp"), { x: CX + 92, y: CY + 58, duration: 0.7, ease: "sine.inOut" }, 7.02);
 
       /* Scene 6 (7.40-9.50) - END CARD: no exit, a slow push, the glow breathing, the drift never stops */
-      tl.to(RIG, { scale: 1.05 * 1.02, duration: 2.1, ease: "sine.inOut" }, 7.40);
+      tl.to(RIG, { scale: 1.05 * 1.02, duration: 2.1, ease: "none" }, 7.40);
       tl.to($("endglow"), { opacity: 0.42, scale: 1.05, duration: 1.05, ease: "sine.inOut" }, 7.40);
       tl.to($("endglow"), { opacity: 0.52, scale: 1.02, duration: 1.05, ease: "sine.inOut" }, 8.45);
 

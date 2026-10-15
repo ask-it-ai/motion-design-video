@@ -41,11 +41,11 @@
     }
     #f06-diagnostic-screen { position: absolute; left: 28px; top: 28px; width: 780px; height: 1688px; border-radius: 78px; overflow: hidden; background: #ffffff; }
     .f06-diagnostic-page { position: absolute; left: 0; top: 0; width: 780px; height: 1688px; display: block; visibility: hidden; opacity: 0; }
-    #f06-diagnostic-p00 { visibility: visible; opacity: 1; }
+    #f06-diagnostic-p00 { visibility: inherit; opacity: 1; }
     .f06-diagnostic-island { position: absolute; left: 290px; top: 26px; width: 200px; height: 56px; border-radius: 999px; background: #000000; }
     #f06-diagnostic-shimmer {
-      position: absolute; left: 0; top: -360px; width: 230px; height: 2400px; visibility: hidden; opacity: 0;
-      background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.34) 50%, rgba(255, 255, 255, 0) 100%);
+      position: absolute; left: 0; top: -360px; width: 300px; height: 2400px; visibility: hidden; opacity: 0;
+      background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.22) 30%, rgba(255, 255, 255, 0.5) 50%, rgba(255, 255, 255, 0.22) 70%, rgba(255, 255, 255, 0) 100%);
     }
 
     /* overlays drawn in screenshot pixels */
@@ -74,6 +74,7 @@
       background: #ffffff; border: 1.5px solid rgba(36, 31, 32, 0.1); box-shadow: 0 18px 40px -18px rgba(36, 31, 32, 0.18), 0 2px 6px rgba(36, 31, 32, 0.05);
     }
     .f06-diagnostic-skin img.f06-diagnostic-endro { display: block; height: 34px; width: auto; }
+    .f06-diagnostic-endrobg { display: block; width: 110px; height: 34px; background: url("assets/endro/logo-noir.png") 50% 50% / contain no-repeat; }
     #f06-diagnostic-bLpp { background: #fbf6ef; }
     .f06-diagnostic-lppcrop { position: relative; width: 84px; height: 38px; overflow: hidden; }
     .f06-diagnostic-lppcrop img { position: absolute; left: -309.4px; top: -219.7px; width: 850px; height: auto; filter: grayscale(1) brightness(1.1) contrast(1.8); mix-blend-mode: multiply; }
@@ -190,8 +191,8 @@
               <div id="f06-diagnostic-badge">
                 <div id="f06-diagnostic-bEndroA" class="f06-diagnostic-skin"><img class="f06-diagnostic-endro" src="assets/endro/logo-noir.png" alt="" /></div>
                 <div id="f06-diagnostic-bLpp" class="f06-diagnostic-skin"><div class="f06-diagnostic-lppcrop"><img src="assets/lpp/logo-lpp.png" alt="" /></div></div>
-                <div id="f06-diagnostic-bEndroB" class="f06-diagnostic-skin"><img class="f06-diagnostic-endro" src="assets/endro/logo-noir.png" alt="" /></div>
-                <div id="f06-diagnostic-bEndroC" class="f06-diagnostic-skin"><img class="f06-diagnostic-endro" src="assets/endro/logo-noir.png" alt="" /></div>
+                <div id="f06-diagnostic-bEndroB" class="f06-diagnostic-skin"><i class="f06-diagnostic-endrobg"></i></div>
+                <div id="f06-diagnostic-bEndroC" class="f06-diagnostic-skin"><i class="f06-diagnostic-endrobg"></i></div>
               </div>
 
               <div id="f06-diagnostic-cardsh"></div>
@@ -201,9 +202,9 @@
                   <div class="f06-diagnostic-cname">Claire</div>
                   <div class="f06-diagnostic-csub">Profil Endro</div>
                   <div class="f06-diagnostic-cdiv"></div>
-                  <div id="f06-diagnostic-sk1" class="f06-diagnostic-skel" style="left: 32px; top: 172px; width: 203px"></div>
-                  <div id="f06-diagnostic-sk2" class="f06-diagnostic-skel" style="left: 32px; top: 240px; width: 297px"></div>
-                  <div id="f06-diagnostic-sk3" class="f06-diagnostic-skel" style="left: 32px; top: 308px; width: 304px"></div>
+                  <div id="f06-diagnostic-sk1" class="f06-diagnostic-skel" style="left: 32px; top: 172px; width: 205px"></div>
+                  <div id="f06-diagnostic-sk2" class="f06-diagnostic-skel" style="left: 32px; top: 240px; width: 299px"></div>
+                  <div id="f06-diagnostic-sk3" class="f06-diagnostic-skel" style="left: 32px; top: 308px; width: 306px"></div>
                   <div class="f06-diagnostic-plab">Profil complété</div>
                   <div id="f06-diagnostic-pval">0 %</div>
                   <div class="f06-diagnostic-ptrack"><div id="f06-diagnostic-pfill"></div></div>
@@ -211,9 +212,9 @@
                 </div>
               </div>
 
-              <div id="f06-diagnostic-chip1" class="f06-diagnostic-chip" style="top: 342px" data-hf-motion-blur='{"shutterAngle":360,"samplesPerFrame":12}'><i></i><span>Peau mixte</span></div>
-              <div id="f06-diagnostic-chip2" class="f06-diagnostic-chip" style="top: 410px" data-hf-motion-blur='{"shutterAngle":360,"samplesPerFrame":12}'><i></i><span>Routine essentielle</span></div>
-              <div id="f06-diagnostic-chip3" class="f06-diagnostic-chip" style="top: 478px" data-hf-motion-blur='{"shutterAngle":360,"samplesPerFrame":12}'><i></i><span>Peau sensible · <span class="f06-diagnostic-dm">3/10</span></span></div>
+              <div id="f06-diagnostic-chip1" class="f06-diagnostic-chip" style="top: 342px; width: 205px" data-hf-motion-blur='{"shutterAngle":360,"samplesPerFrame":12}'><i></i><span>Peau mixte</span></div>
+              <div id="f06-diagnostic-chip2" class="f06-diagnostic-chip" style="top: 410px; width: 299px" data-hf-motion-blur='{"shutterAngle":360,"samplesPerFrame":12}'><i></i><span>Routine essentielle</span></div>
+              <div id="f06-diagnostic-chip3" class="f06-diagnostic-chip" style="top: 478px; width: 306px" data-hf-motion-blur='{"shutterAngle":360,"samplesPerFrame":12}'><i></i><span>Peau sensible · <span class="f06-diagnostic-dm">3/10</span></span></div>
 
               <div id="f06-diagnostic-step"><span class="f06-diagnostic-stepnum">01</span><span class="f06-diagnostic-steplab">Diagnostic</span></div>
 
@@ -288,8 +289,6 @@
         tl.to(cardin, { scale: 1, duration: 12 * F, ease: "power2.inOut" }, t + 3 * F);
         tl.set(skel, { autoAlpha: 0 }, t);
       }
-      // skeleton slots take the exact width of the chip that will land on them
-      ["1", "2", "3"].forEach(function (n) { $("sk" + n).style.width = $("chip" + n).offsetWidth + "px"; });
 
       /* ═══ Scene 1 · 0.00–1.90 · ENTRY + « D'abord, le diagnostic » ═══ */
       MK.enterBig(tl, rig, 0, { from: 1.45, frames: 40 });
@@ -347,10 +346,10 @@
       rippleAt(5.01);
       swapPage("p01", "p04", 5.01);
       // the camera snaps back up to frame the question and the three photos
-      snapCam(5.20, { y: -298 });
-      tl.to(zoom, { scale: 1, duration: 25 * F, ease: sEase(16) }, 5.20);
-      // slow travel across the photos while the touch moves to PEAU MIXTE/NORMALE
-      tl.to(cam, { x: -80, duration: 0.88, ease: "sine.inOut" }, 5.62);
+      snapCam(5.10, { x: 60, y: -298 });
+      tl.to(zoom, { scale: 1, duration: 20 * F, ease: "power3.inOut" }, 5.20);
+      // slow travel across the photos (−80 px) while the touch moves to PEAU MIXTE/NORMALE
+      tl.to(cam, { x: -20, duration: 0.88, ease: "sine.inOut" }, 5.62);
       var tile = Z(560, 820);
       tl.to(touch, { x: tile[0], y: tile[1], duration: 0.83, ease: "power2.inOut" }, 5.62);
 
@@ -363,7 +362,7 @@
       tl.set($("tileBase"), { autoAlpha: 0 }, 6.82);
       tl.set($("tileChoix"), { autoAlpha: 1 }, 6.82);
       tl.set($("tile"), { autoAlpha: 0 }, 7.22);
-      var land1 = flyChip($("chip1"), 6.84, toDrift(560, 820, -80, -298, 6.84), -160, 28); // → 7.307
+      var land1 = flyChip($("chip1"), 6.84, toDrift(560, 820, -20, -298, 6.84), -160, 28); // → 7.307
       progress(land1, 0, 33, $("sk1"));
 
       /* ═══ Scene 5 · 7.43–8.15 · « sa routine » ═══ */

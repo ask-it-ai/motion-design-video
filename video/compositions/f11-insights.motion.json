@@ -1,0 +1,7 @@
+{
+  "scene": "f11-insights",
+  "duration_s": 4.30,
+  "rules": ["MK.drift", "MK.enter", "MK.blurFilter", "MK.each", "MK.snapZoom", "MK.ring", "MK.pan", "MK.count", "MK.slam", "MK.shake", "MK.type", "MK.pop", "MK.click", "MK.exit"],
+  "exit": { "vector": "left, ~21,700 px/s on the last frame (t=4.283): campaign card -362 px between the last two frames (-166, -244, -362 px/frame, x1.48 per frame), MK.exit(rig, 4.00, left 1600 px, 18 frames, expo.in) with x-blur ramping to 18 px; the dashboard leaves to the left and uncovers the grid canvas on the right", "still_moving": true },
+  "entry": { "vector": "up, ~12,300 px/s at the first frame: the whole dashboard scroll (revenue card then the personas card) is launched up 900 px, personas card +206 px between frames 0 and 1, then 83 and 62 px/frame (circ.out, 38 frames); frame 0 carries a 16 px vertical blur that clears in 6 frames", "from_rest": false }
+}

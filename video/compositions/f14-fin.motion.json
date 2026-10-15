@@ -1,0 +1,13 @@
+{
+  "scene": "f14-fin",
+  "duration_s": 9.5,
+  "rules": ["MK.drift", "MK.enterBig", "MK.anticipate", "MK.pop", "MK.ring", "MK.snapZoom", "MK.pan", "MK.blurFilter", "MK.slam", "MK.shake", "MK.each", "MK.words", "MK.suck", "MK.click"],
+  "exit": {
+    "vector": "none (final scene): calm end card, no fade; at the last frame the rig push (+2 % linear over 7.40-9.50) and the calm drift still move the lockup and CTA ~0.1-0.3 px/frame",
+    "still_moving": true
+  },
+  "entry": {
+    "vector": "oversized entry that brakes: Claire's avatar group at x1.5 -> 1 (MK.enterBig expo.out, 40 frames) centred on (960,500): 414 -> 392 px wide on the first frame (-5.2 % per frame, edges moving inward ~650 px/s), coral glow braking with it",
+    "from_rest": false
+  }
+}

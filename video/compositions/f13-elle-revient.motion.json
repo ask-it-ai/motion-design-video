@@ -1,0 +1,13 @@
+{
+  "scene": "f13-elle-revient",
+  "duration_s": 11.1,
+  "rules": ["MK.drift", "MK.enter", "MK.blurFilter", "MK.pop", "MK.ring", "MK.snapZoom", "MK.click", "MK.shake", "MK.type", "MK.pan", "MK.each", "MK.anticipate", "MK.fly", "MK.zoomThrough"],
+  "exit": {
+    "vector": "zoom-through into the basket icon (origin 1560,200), expo.in over the last 18 frames to scale 9 with xy blur: basket 757 -> 1033 px wide on the last frame (x1.37 per frame, x1.39 into the cut); the phone flies away up-left from the basket at ~2250 px/frame (~135000 px/s); a white halo from the basket fills the frame on the last frame",
+    "still_moving": true
+  },
+  "entry": {
+    "vector": "up: the phone is launched from +900 px (MK.enter circ.out, 38 frames, vertical blur 16 -> 0 in 6 frames); phone centre -213 px on the first frame (~12800 px/s), -86 px on the second; the page also scrolls up inside the screen (400 -> 900 source px, expo.out 1.0 s)",
+    "from_rest": false
+  }
+}

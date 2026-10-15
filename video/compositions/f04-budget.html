@@ -73,10 +73,10 @@
     <div id="f04-budget-bg" class="clip" data-start="0" data-duration="7.72" data-track-index="0"></div>
     <div id="f04-budget-layer" class="clip" data-start="0" data-duration="7.72" data-track-index="1">
       <div id="f04-budget-toss">
-        <div id="f04-budget-card">
-          <div id="f04-budget-shake">
+        <div id="f04-budget-card" data-layout-allow-overflow>
+          <div id="f04-budget-shake" data-layout-allow-overflow>
             <div id="f04-budget-stage">
-              <div id="f04-budget-ground"></div>
+              <div id="f04-budget-ground" data-layout-allow-overflow></div>
               <div id="f04-budget-rig" data-layout-allow-overflow>
                 <div id="f04-budget-drift" data-layout-allow-overflow>
                   <div id="f04-budget-kin"></div>
@@ -111,7 +111,7 @@
             </div>
           </div>
           <div id="f04-budget-avig"></div>
-          <div id="f04-budget-vig"></div>
+          <div id="f04-budget-vig" data-layout-allow-overflow></div>
           <div id="f04-budget-rim"></div>
         </div>
       </div>
@@ -263,11 +263,17 @@
       // ════ Scene 7 (6.99–7.72) · « ça, c'était avant » — EXIT: tossed away with gravity ════
       var T7 = DUR - 44 * F;                                                        // the fall ends exactly at the cut
       MK.toss(tl, toss, T7, { rise: 90, fall: 700, rotation: -16, fallFrames: 26, x: -70 });
-      // the kit's lagging rotation runs 6 frames past the fall: replace it with the identical power2.in curve cut at the cut
+      // the kit's lagging rotation runs 6 frames past the fall: replace it with the identical power2.in (cubic) curve, cut at the cut
       tl.getTweensOf(toss).forEach(function (tw) { if (tw.vars.rotation === -16) tl.remove(tw); });
       var tR = T7 + 24 * F, pR = (DUR - tR) / (26 * F);
-      tl.to(toss, { rotation: -2 - 14 * pR * pR, duration: DUR - tR, ease: "power2.in" }, tR);
+      tl.to(toss, { rotation: -2 - 14 * pR * pR * pR, duration: DUR - tR, ease: "power2.in" }, tR);
       bfToss.ramp(tl, toss, DUR - 8 * F, 8 * F, 0, 20, "y", "power2.in");          // vertical blur ramp 0 → 20 px (the toss wrapper is unscaled)
+
+      // layering by design: the profile card sits behind the settings card, and the whole stage goes blind under the
+      // vignette (« à l'aveugle »), so every text of the stage is allowed to be covered
+      Array.prototype.forEach.call(stage.querySelectorAll("*"), function (el) {
+        for (var n = el.firstChild; n; n = n.nextSibling) if (n.nodeType === 3 && n.textContent.trim()) { el.setAttribute("data-layout-allow-occlusion", ""); break; }
+      });
 
       window.__timelines = window.__timelines || {};
       window.__timelines[ID] = tl;

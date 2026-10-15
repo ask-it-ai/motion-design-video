@@ -1,7 +1,0 @@
-{
-  "scene": "f08-zero-effort",
-  "duration_s": 7.41,
-  "rules": ["discrete-text-sequence", "physics-press-reaction", "spring-pop-entrance", "scale-swap-transition", "svg-path-draw", "sine-wave-loop", "depth-of-field-blur", "viewport-change", "gsap-effects"],
-  "exit": { "vector": "slow push-in +0.4 %/s (camera drift, linear) with the order-notification stack drifting up ~9 px/s and the brand mesh drifting right ~7 px/s; stage held dimmed (opacity 0.5, blur 6 px, scale 0.94)", "still_moving": true },
-  "entry": { "vector": "form card rising up ~720 px/s on screen at t=0 (y 56→0, expo.out 0.6 s, under a 1.12 camera), scaling 0.94→1 and de-blurring 10→0 px; camera otherwise static with a +0.4 %/s push", "from_rest": false }
-}

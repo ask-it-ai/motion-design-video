@@ -72,7 +72,7 @@ add([(42.92, 'slam_big', {'gain': -15}), (43.58, 'timer', {'gain': -20}), (44.00
      (46.47, 'whoosh_soft', {'gain': -22}), (46.41, 'pop', {'gain': -19, 'pitch': -2}), (46.56, 'ui_select', {'pitch': -4, 'gain': -22}),
      (46.81, 'ui_select', {'pitch': -4, 'gain': -23}), (47.36, 'whoosh_fast', {'gain': -16})])
 # ---------------- f08 Recommandation (47.40)
-add([(47.45, 'swipe', {'gain': -22}), (47.62, 'pop', {'gain': -22}), (48.70, 'whoosh_soft', {'gain': -20})])
+add([(47.45, 'swipe', {'gain': -22}), (47.62, 'pop', {'gain': -22}), (48.70, 'whoosh_soft', {'gain': -20}), (48.98, 'sparkle', {'gain': -24})])
 add(slam(49.66))
 add([(50.40, 'whoosh_soft', {'gain': -22}), (50.40, 'swipe', {'gain': -24}), (50.47, 'swipe', {'gain': -25, 'pitch': 2}),
      (51.28, 'whoosh_fast', {'gain': -20}), (51.22, 'swipe', {'align': 'start', 'gain': -22})])
@@ -84,13 +84,13 @@ add([(53.52, 'sparkle', {'gain': -22}), (54.18, 'suck', {'gain': -14})])
 add([(54.21, 'pop', {'gain': -20})])
 add(slam(54.92))
 add([(55.84, 'pop', {'pitch': 2, 'gain': -22}), (57.33, 'pop', {'gain': -20}),
-     (57.45, 'land', {'gain': -18}), (57.52, 'land', {'gain': -19, 'pitch': 2}), (57.60, 'land', {'gain': -20, 'pitch': 4})])
+     (57.61, 'land', {'gain': -18}), (57.64, 'land', {'gain': -20, 'pitch': 3})])
 add(slam(57.81))
 add([(58.77, 'whoosh_soft', {'pitch': 3, 'gain': -24}), (58.77, 'land', {'gain': -20}), (59.41, 'whoosh_fast', {'gain': -16})])
 # ---------------- f10 Dashboard (59.45)
 add([(59.62, 'pop', {'gain': -22}), (60.50, 'whoosh_soft', {'gain': -20}), (61.42, 'suck', {'gain': -22}), (61.44, 'number_slam', {}),
      (62.31, 'paper_crumple', {}), (62.61, 'fall', {'align': 'start', 'gain': -18}), (63.15, 'whoosh_soft', {'gain': -20}),
-     (63.40, 'counter_tick', {'align': 'start', 'trim': (0.0, 1.0), 'gain': -22}), (64.40, 'pop', {'gain': -23}), (64.52, 'cart_add', {}),
+     (63.40, 'counter_tick', {'align': 'start', 'trim': (0.0, 1.0), 'gain': -22}), (64.40, 'pop', {'gain': -23}), (64.52, 'cart_add', {}), (64.87, 'sparkle', {'gain': -24}),
      (65.91, 'whoosh_fast', {'gain': -17})])
 # ---------------- f11 Insights (65.95)
 add([(66.00, 'swipe', {'gain': -24}), (66.14, 'ui_select', {'gain': -18}), (66.15, 'sparkle', {'gain': -24}), (66.93, 'whoosh_soft', {'gain': -21})])
@@ -109,7 +109,7 @@ add([(77.36, 'whoosh_fast', {'gain': -17})])
 add([(77.45, 'swipe', {'gain': -24}), (77.55, 'pop', {'gain': -23}), (77.70, 'pop', {'gain': -19}), (77.72, 'sparkle', {'gain': -24}),
      (78.41, 'whoosh_soft', {'gain': -21}), (78.71, 'pop', {'pitch': -2, 'gain': -22}), (80.05, 'ui_tap', {'gain': -13}),
      (80.06, 'skin_swap', {}), (80.35, 'typing', {'align': 'start', 'trim': (0.0, 0.2), 'gain': -20}),
-     (82.10, 'ui_tap', {'gain': -16}), (82.52, 'ui_tap', {'pitch': 1, 'gain': -16}), (82.92, 'whoosh_fast', {'gain': -20}),
+     (82.10, 'ui_tap', {'gain': -16}), (82.24, 'whoosh_fast', {'gain': -21}), (82.52, 'ui_tap', {'pitch': 1, 'gain': -16}), (82.92, 'whoosh_fast', {'gain': -20}),
      (83.18, 'swipe', {'align': 'start', 'pitch': 3, 'gain': -20}), (83.38, 'ui_select', {'gain': -20}), (83.82, 'whoosh_fast', {'gain': -20}),
      (84.21, 'ui_tap', {'pitch': 2, 'gain': -16}), (84.62, 'whoosh_fast', {'gain': -21})])
 add([(84.60 + i * 0.067, 'ui_select', {'gain': -26, 'pitch': 2 * i}) for i in range(4)])

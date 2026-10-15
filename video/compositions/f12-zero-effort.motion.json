@@ -1,0 +1,7 @@
+{
+  "scene": "f12-zero-effort",
+  "duration_s": 7.15,
+  "rules": ["MK.drift", "MK.enter", "MK.blurFilter", "MK.words", "MK.exit", "MK.type", "MK.pop", "MK.pan", "MK.click", "MK.each", "MK.shake"],
+  "exit": { "vector": "up, ~18,600 px/s on the last frame (t=7.133) for the foreground order notifications (-146, -212, -310 px/frame, x1.46 per frame) and ~11,000 px/s for the out-of-focus form + checklist (-86, -125, -183 px/frame, 0.6x depth parallax so the last frame still carries them); MK.exit(rig, 6.85, up 1400 px, 18 frames, expo.in) with y-blur ramping to 18 px", "still_moving": true },
+  "entry": { "vector": "left, ~12,200 px/s at the first frame: the text block « Le mieux ? » is launched left 900 px, -204 px between frames 0 and 1, then 82 and 62 px/frame (circ.out, 38 frames); frame 0 carries a 16 px horizontal blur that clears in 6 frames", "from_rest": false }
+}

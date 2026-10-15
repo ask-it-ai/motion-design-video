@@ -268,6 +268,8 @@
       var MK = window.MK, F = MK.F;
       var $ = function (s) { return document.getElementById(ID + "-" + s); };
       var tl = gsap.timeline({ paused: true });
+      var fr = function (t) { return Math.round(t * 60) / 60; };   // instant events sit on the 60 fps grid
+      var T_SLAM = fr(1.46), T_CLICK = fr(3.44);                     // impact 1.617 on « bloque », click 3.433 on « ensuite »
 
       var stage = $("stage"), shake = $("shake"), tilt = $("tilt"), rig = $("rig"), drift = $("drift");
       var scroll = $("scroll"), panel = $("panel"), fx = $("fx"), rfx = $("rfx"), touch = $("touch"), touchsh = $("touchsh");
@@ -342,8 +344,8 @@
         MK.count(tl, t, { from: 0, to: FUN[i], dur: 0.42, render: setters[i] });
       });
       // friction alert slammed: impact on « bloque » (1.61)
-      var impact = MK.slam(tl, $("alert"), 1.46, { from: 2.2, shakeEl: shake, shakePx: 10 });
-      MK.slam(tl, $("alertsh"), 1.46, { from: 2.2 });   // its shadow rides an unmarked twin (no blur copies of a box-shadow)
+      var impact = MK.slam(tl, $("alert"), T_SLAM, { from: 2.2, shakeEl: shake, shakePx: 10 });
+      MK.slam(tl, $("alertsh"), T_SLAM, { from: 2.2 });   // its shadow rides an unmarked twin (no blur copies of a box-shadow)
       tl.fromTo($("zone"), { clipPath: "inset(0% 0% 100% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 7 * F, ease: "power3.out" }, impact);
       tl.fromTo($("lead"), { scaleY: 0 }, { scaleY: 1, duration: 6 * F, ease: "power2.out" }, impact + 2 * F);
       var pulses = Array.prototype.slice.call($("adot").children);
@@ -380,26 +382,27 @@
       // the touch arrives already moving (from below-right) and decelerates onto the toggle
       [touch, touchsh].forEach(function (el) {
         tl.set(el, { autoAlpha: 1 }, 3.10);
-        tl.fromTo(el, { x: TOG.x + 300, y: TOG.y + 470 }, { x: TOG.x + 4, y: TOG.y + 6, duration: 17 * F, ease: "power2.out", immediateRender: false }, 3.10);
-        tl.to(el, { x: TOG.x, y: TOG.y, duration: 4 * F, ease: "sine.inOut" }, 3.10 + 17 * F);
+        // travel 15 frames + settle 2 frames: it rests on the toggle exactly when the 3-frame press starts
+        tl.fromTo(el, { x: TOG.x + 300, y: TOG.y + 470 }, { x: TOG.x + 4, y: TOG.y + 6, duration: 15 * F, ease: "power2.out", immediateRender: false }, 3.10);
+        tl.to(el, { x: TOG.x, y: TOG.y, duration: (T_CLICK - 3 * F) - (3.10 + 15 * F), ease: "sine.inOut" }, 3.10 + 15 * F);
       });
       // the shadow twin follows the kit's touch press (MK.click drives the disc itself)
-      tl.to(touchsh, { scale: 0.82, duration: 3 * F, ease: "power2.in" }, 3.44 - 3 * F);
-      tl.to(touchsh, { scale: 1, duration: 8 * F, ease: "back.out(2)" }, 3.44);
+      tl.to(touchsh, { scale: 0.82, duration: 3 * F, ease: "power2.in" }, T_CLICK - 3 * F);
+      tl.to(touchsh, { scale: 1, duration: 8 * F, ease: "back.out(2)" }, T_CLICK);
       // the snap zoom re-centres on the toggle: keep the frame still at the origin swap (rig is at x1.1)
       var O1 = { x: 960, y: 373 }, S1 = 1.1;
-      tl.set(rig, { transformOrigin: TOG.x + "px " + TOG.y + "px", x: (S1 - 1) * (TOG.x - O1.x), y: -700 + (S1 - 1) * (TOG.y - O1.y) }, 3.44);
-      MK.click(tl, { t: 3.44, x: TOG.x, y: TOG.y, layer: fx, component: $("campwrap"), shakeEl: shake, touch: touch, rig: rig, snap: 0.15, rigScale: S1,
+      tl.set(rig, { transformOrigin: TOG.x + "px " + TOG.y + "px", x: (S1 - 1) * (TOG.x - O1.x), y: -700 + (S1 - 1) * (TOG.y - O1.y) }, T_CLICK);
+      MK.click(tl, { t: T_CLICK, x: TOG.x, y: TOG.y, layer: fx, component: $("campwrap"), shakeEl: shake, touch: touch, rig: rig, snap: 0.15, rigScale: S1,
         dashLen: 40, dashW: 7, r0: 44, r1: 116 });
-      MK.ring(tl, fx, 3.44, { x: TOG.x, y: TOG.y, r0: 20, r1: 84, width: 3, color: "rgba(36,31,32,0.45)", alpha: 0.8, frames: 20 });
+      MK.ring(tl, fx, T_CLICK, { x: TOG.x, y: TOG.y, r0: 20, r1: 84, width: 3, color: "rgba(36,31,32,0.45)", alpha: 0.8, frames: 20 });
       // instant state change on the click frame
-      tl.set($("togon"), { autoAlpha: 1 }, 3.44);
-      tl.set($("knob"), { x: 46 }, 3.44);
-      tl.set($("stoff"), { autoAlpha: 0 }, 3.44);
-      tl.set($("campok"), { autoAlpha: 1 }, 3.44);
-      tl.set($("ston"), { autoAlpha: 1 }, 3.44);
-      tl.fromTo($("ston"), { scale: 0.85 }, { scale: 1.1, duration: 4 * F, ease: "power2.out", immediateRender: false }, 3.44);
-      tl.to($("ston"), { scale: 1, duration: 16 * F, ease: "power2.inOut" }, 3.44 + 4 * F);
+      tl.set($("togon"), { autoAlpha: 1 }, T_CLICK);
+      tl.set($("knob"), { x: 46 }, T_CLICK);
+      tl.set($("stoff"), { autoAlpha: 0 }, T_CLICK);
+      tl.set($("campok"), { autoAlpha: 1 }, T_CLICK);
+      tl.set($("ston"), { autoAlpha: 1 }, T_CLICK);
+      tl.fromTo($("ston"), { scale: 0.85 }, { scale: 1.1, duration: 4 * F, ease: "power2.out", immediateRender: false }, T_CLICK);
+      tl.to($("ston"), { scale: 1, duration: 16 * F, ease: "power2.inOut" }, T_CLICK + 4 * F);
       // the touch lifts away after the lock
       tl.to([touch, touchsh], { x: TOG.x + 170, y: TOG.y + 260, autoAlpha: 0, duration: 20 * F, ease: "power2.in" }, 3.70);
 

@@ -1,0 +1,13 @@
+{
+  "scene": "f03-probleme",
+  "duration_s": 6.9,
+  "rules": ["MK.drift", "MK.enter", "MK.words", "MK.pop", "MK.pan", "MK.legs", "MK.zoomThrough", "MK.blurFilter"],
+  "exit": {
+    "vector": "zoom-in (expo.in dive) into the central « ? » at screen (976, 484): rig scale 4.73 -> 6.45 between the last two frames (x1.36/frame, ~+103 scale/s), radial outflow ~16*R px/s (~8000 px/s at 500 px from the centre), xy SVG blur ~7 px local, iris closing to dark around the « ? »",
+    "still_moving": true
+  },
+  "entry": {
+    "vector": "up: traffic card launched from +900 px, -205 px on the first frame (~12300 px/s), -83 px on the second (~5000 px/s), circ.out braking over 38 frames, y blur 16 -> 0 in 6 frames; kinetic text container rises from +560 px (-128 px on the first frame, ~7700 px/s)",
+    "from_rest": false
+  }
+}

@@ -30,6 +30,7 @@
     .f12-zero-effort-l1 .mk-accent { font-weight: 700; color: #F8571F; }
     #f12-zero-effort-line2 { position: absolute; left: 0; top: 400px; width: 1920px; height: 120px; text-align: center; white-space: nowrap;
       font: 500 120px/1 "Lufga", sans-serif; letter-spacing: -0.03em; }
+    #f12-zero-effort-l2a, #f12-zero-effort-l2b { display: inline-block; white-space: pre; }
     #f12-zero-effort-line2 .mk-w { font-weight: 500; color: #6C6560; }
     #f12-zero-effort-line2 .mk-accent { font-weight: 700; color: #241F20; }
     #f12-zero-effort-line2 .mk-accent.f12-zero-effort-coral { color: #F8571F; }
@@ -104,7 +105,7 @@
                   <!-- « Le mieux ? » — « presque rien à faire. » -->
                   <div id="f12-zero-effort-text">
                     <div id="f12-zero-effort-line1" class="f12-zero-effort-l1"></div>
-                    <div id="f12-zero-effort-line2"></div>
+                    <div id="f12-zero-effort-line2"><span id="f12-zero-effort-l2a"></span> <span id="f12-zero-effort-l2b"></span></div>
                   </div>
 
                   <!-- « Un formulaire » -->
@@ -168,6 +169,8 @@
       var mk = function (tag, cls, txt) { var e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; };
       var MB = '{"shutterAngle":360,"samplesPerFrame":12}';
       var tl = gsap.timeline({ paused: true });
+      var fr = function (t) { return Math.round(t * 60) / 60; };   // instant events sit on the 60 fps grid
+      var T_CLICK = fr(3.47);                                        // 3.467, end of « formulaire »
 
       var stage = $("stage"), shake = $("shake"), tilt = $("tilt"), rig = $("rig"), drift = $("drift"), snap = $("snap"), dof = $("dof");
       var text = $("text"), form = $("form"), panel = $("panel"), fx = $("fx"), touch = $("touch"), touchsh = $("touchsh");
@@ -180,7 +183,7 @@
       /* ---------- build-time content (synchronous, deterministic) ---------- */
       var CHECK = '<svg viewBox="0 0 24 24"><path d="M6.4 12.4l3.6 3.5 7.6-7.8" fill="none" stroke="#FFFFFF" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
       var TASKS = ["Catalogue importé", "Diagnostic construit", "Page de résultat générée", "Installé sur votre site"];
-      var TICK = [3.94, 4.19, 4.45, 4.70];
+      var TICK = [3.94, 4.19, 4.45, 4.70].map(fr);
       var rows = TASKS.map(function (label, i) {
         var r = mk("div", ID + "-task"); r.style.top = (160 + i * 86) + "px";
         var fl = mk("div", ID + "-tflash"), sp = mk("div", ID + "-tspin"), ck = mk("div", ID + "-tchk"), lb = mk("div", ID + "-tlab", label);
@@ -220,7 +223,8 @@
       /* ---------- Scene 1 (0.00–0.95): ENTRY — « Le mieux ? » launched LEFT, brakes ---------- */
       MK.enter(tl, text, 0, { dir: "left", dist: 900, frames: 38, blur: bfText });
       gsap.set(text, { filter: bfText.ref }); bfText.node.setAttribute("stdDeviation", "16 0");   // frame 0 carries the launch blur
-      MK.words(tl, $("line1"), [{ w: "Le", t: 0.17 }, { w: "mieux ?", t: 0.30, accent: true, letters: true }], { lead: 0.1 });
+      // « Le » rises from frame 0 (voice 0.17) so the hero reads by 0.10 s; « mieux ? » builds letter by letter on its syllable
+      MK.words(tl, $("line1"), [{ w: "Le", t: 0.10 }, { w: "mieux ?", t: 0.30, accent: true, letters: true }], { lead: 0.1 });
       // static twin of the built line: it carries the fly-up so its motion-blur copies show the finished words
       var twin = $("line1").cloneNode(true);
       twin.id = ID + "-line1twin";
@@ -236,11 +240,15 @@
       tl.set(twin, { autoAlpha: 1 }, 0.95);
       tl.set(twin, { autoAlpha: 0 }, 0);
       tl.to(twin, { y: -260, scale: 0.55, duration: 20 * F, ease: "power3.inOut" }, 0.95);
-      var w2 = MK.words(tl, $("line2"), [
+      var w2 = MK.words(tl, $("l2a"), [
         { w: "presque", t: 1.34, accent: true, letters: true },
-        { w: "rien", t: 1.74, accent: true, letters: true },
-        { w: "à", t: 2.10 }, { w: "faire.", t: 2.20 }], { lead: 0.1 });
+        { w: "rien", t: 1.74, accent: true, letters: true }], { lead: 0.1 });
       w2[1].classList.add(ID + "-coral");
+      MK.words(tl, $("l2b"), [{ w: "à", t: 2.10 }, { w: "faire.", t: 2.20 }], { lead: 0.1 });
+      // neutral words would otherwise sit at their faint start state from frame 0: their container appears with « à »
+      gsap.set($("l2b"), { autoAlpha: 0 });
+      tl.set($("l2b"), { autoAlpha: 0 }, 0);
+      tl.set($("l2b"), { autoAlpha: 1 }, 2.00);
       // the whole text block exits up (14 frames, expo.in)
       MK.exit(tl, text, 2.41, { dir: "up", dist: 1000, frames: 14, blur: bfText });
 
@@ -257,26 +265,27 @@
       var BTN = { x: 310 + 900 - 56 - 116.5, y: 250 + 404 + 38 };
       [touch, touchsh].forEach(function (el) {
         tl.set(el, { autoAlpha: 1 }, 3.25);
+        // reaches the button at 3.40, settles until the 3-frame press starts
         tl.fromTo(el, { x: BTN.x + 300, y: BTN.y + 480 }, { x: BTN.x + 5, y: BTN.y + 7, duration: 9 * F, ease: "power2.out", immediateRender: false }, 3.25);
-        tl.to(el, { x: BTN.x, y: BTN.y, duration: 4 * F, ease: "sine.inOut" }, 3.25 + 9 * F);
+        tl.to(el, { x: BTN.x, y: BTN.y, duration: (T_CLICK - 3 * F) - (3.25 + 9 * F), ease: "sine.inOut" }, 3.25 + 9 * F);
       });
-      tl.to(touchsh, { scale: 0.82, duration: 3 * F, ease: "power2.in" }, 3.47 - 3 * F);
-      tl.to(touchsh, { scale: 1, duration: 8 * F, ease: "back.out(2)" }, 3.47);
+      tl.to(touchsh, { scale: 0.82, duration: 3 * F, ease: "power2.in" }, T_CLICK - 3 * F);
+      tl.to(touchsh, { scale: 1, duration: 8 * F, ease: "back.out(2)" }, T_CLICK);
       tl.set(snap, { transformOrigin: BTN.x + "px " + BTN.y + "px" }, 0);
       gsap.set(snap, { transformOrigin: BTN.x + "px " + BTN.y + "px" });
-      MK.click(tl, { t: 3.47, x: BTN.x, y: BTN.y, layer: fx, component: $("btnwrap"), shakeEl: shake, touch: touch, rig: snap, snap: 0.15,
+      MK.click(tl, { t: T_CLICK, x: BTN.x, y: BTN.y, layer: fx, component: $("btnwrap"), shakeEl: shake, touch: touch, rig: snap, snap: 0.15,
         dashLen: 40, dashW: 7, r0: 50, r1: 124 });
       // instant state: the button turns good-green « Demande envoyée ✓ »
-      tl.set($("btnsend"), { autoAlpha: 0 }, 3.47);
-      tl.set($("btndone"), { autoAlpha: 1 }, 3.47);
-      tl.fromTo($("btndone"), { scale: 0.9 }, { scale: 1.06, duration: 4 * F, ease: "power2.out", immediateRender: false }, 3.47);
-      tl.to($("btndone"), { scale: 1, duration: 14 * F, ease: "power2.inOut" }, 3.47 + 4 * F);
+      tl.set($("btnsend"), { autoAlpha: 0 }, T_CLICK);
+      tl.set($("btndone"), { autoAlpha: 1 }, T_CLICK);
+      tl.fromTo($("btndone"), { scale: 0.9 }, { scale: 1.06, duration: 4 * F, ease: "power2.out", immediateRender: false }, T_CLICK);
+      tl.to($("btndone"), { scale: 1, duration: 14 * F, ease: "power2.inOut" }, T_CLICK + 4 * F);
       tl.to([touch, touchsh], { x: BTN.x + 210, y: BTN.y + 330, autoAlpha: 0, duration: 18 * F, ease: "power2.in" }, 3.66);
 
       /* ---------- Scene 4 (3.55–5.05): « et notre équipe s'occupe du reste » ---------- */
       MK.pan(tl, rig, 3.55, { x: -180, frames: 28 });
       MK.enter(tl, panel, 3.55, { dir: "left", dist: 700, frames: 30, blur: bfPanel });
-      MK.each([$("av1"), $("av2"), $("av3")], 3.72, 1, function (el, t) { MK.pop(tl, el, t, { over: 0.22 }); });
+      MK.each([$("av1"), $("av2"), $("av3")], fr(3.72), 1, function (el, t) { MK.pop(tl, el, t, { over: 0.22 }); });
       rows.forEach(function (r, i) {
         var T = TICK[i];
         tl.fromTo(r.spin, { rotation: 0 }, { rotation: 430 * (T - 3.55), duration: T - 3.55, ease: "none" }, 3.55);
@@ -306,6 +315,8 @@
 
       /* ---------- Scene 6 (6.85–7.15): EXIT — everything accelerates UP, last frame = fastest ---------- */
       MK.exit(tl, rig, 6.85, { dir: "up", dist: 1400, frames: 18, blur: bfRig });
+      // depth: the out-of-focus stage travels ~0.6x the foreground orders, so the fastest (last) frame still carries it
+      tl.to(dof, { y: "+=480", duration: 18 * F, ease: "expo.in" }, 6.85);
 
       window.__timelines = window.__timelines || {};
       window.__timelines[ID] = tl;

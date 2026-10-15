@@ -1,0 +1,13 @@
+{
+  "scene": "f06-diagnostic",
+  "duration_s": 9.25,
+  "rules": ["MK.enterBig", "MK.drift", "MK.pop", "MK.pan", "MK.blurFilter", "MK.anticipate", "MK.ring", "MK.enter", "MK.type", "MK.click", "MK.fly", "MK.count", "MK.exit"],
+  "exit": {
+    "vector": "left, ~19,400 px/s at the last frame (rig x -699 -> -1023 = -324 px/frame; previous frame -222 px/frame), expo.in over 18 frames from 8.95 s, horizontal blur ramp 0 -> 18 px; the whole stage (phone, profile card, badge, step chip, grid) leaves together",
+    "still_moving": true
+  },
+  "entry": {
+    "vector": "oversized entry braking toward rest: rig scale 1.45 -> 1.379 on the first frame (-4.3/s, expo.out, 40 frames, origin frame centre); content at the frame edges converging inward ~2,840 px/s (x) / ~1,600 px/s (y); macro phone (Endro Nuancier) fills the left 60 % from frame 0",
+    "from_rest": false
+  }
+}

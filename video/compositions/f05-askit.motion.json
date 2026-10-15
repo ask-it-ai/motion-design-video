@@ -1,0 +1,13 @@
+{
+  "scene": "f05-askit",
+  "duration_s": 5.83,
+  "rules": ["MK.enterBig", "MK.drift", "MK.ring", "MK.pop", "MK.blurFilter", "MK.enter", "MK.type", "MK.pan", "MK.snapZoom", "MK.anticipate", "MK.each", "MK.fly", "MK.suck", "MK.slam", "MK.click", "MK.zoomThrough"],
+  "exit": {
+    "vector": "zoom-in (expanding) about pill 01 at screen (377, 544): rig scale 5.03 -> 6.89 on the last frame (+1.86/frame = +112/s, +16.2/s relative; previous frame +1.28/frame), expo.in over 18 frames from 5.53 s; radial edge speed at the last frame ~25,000 px/s (right edge), ~8,800 px/s (top/bottom), ~6,100 px/s (left); xy blur ramp 0 -> 14 px",
+    "still_moving": true
+  },
+  "entry": {
+    "vector": "oversized entry braking toward rest: rig scale 1.40 -> 1.337 on the first frame (-3.8/s, expo.out, 40 frames, origin frame centre); content at the frame edges converging inward ~2,600 px/s (x) / ~1,470 px/s (y); brand mesh blooming (opacity 0.3 -> 1, scale 0.7 -> 1) and a coral ring expanding from the centre",
+    "from_rest": false
+  }
+}
