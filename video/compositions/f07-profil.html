@@ -55,7 +55,7 @@
     #f07-profil-track div { width: 888px; height: 12px; border-radius: 6px; background: #F8571F; }
     .f07-profil-sw { position: absolute; left: 900px; top: 70px; width: 200px; height: 200px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
       background: radial-gradient(circle at 34% 28%, #EC916A 0%, #DF764C 52%, #D1663D 100%);
-      box-shadow: 0 0 0 6px #fff, 0 28px 54px -18px rgba(150,60,25,0.55); font: 800 30px 'Archivo', sans-serif; color: #fff; letter-spacing: 0.01em; }
+      box-shadow: 0 0 0 6px #fff, 0 28px 54px -18px rgba(150,60,25,0.55); font: 800 30px 'Archivo', sans-serif; color: #1A1A1A; letter-spacing: 0.01em; }
     #f07-profil-cfx { position: absolute; left: 0; top: 0; width: 1000px; height: 560px; overflow: visible; pointer-events: none; }
 
     /* links + chips under the card */
@@ -63,10 +63,10 @@
     .f07-profil-cw { position: absolute; top: 854px; width: 560px; height: 72px; display: flex; justify-content: center; }
     .f07-profil-chip { height: 72px; display: flex; align-items: center; gap: 14px; padding: 0 32px 0 22px; border-radius: 999px; box-sizing: border-box;
       font: 600 30px 'Lufga', sans-serif; white-space: nowrap; box-shadow: 0 24px 44px -20px rgba(36,31,32,0.28), 0 2px 6px rgba(36,31,32,0.06); }
-    #f07-profil-chipA { background: #FDEEE7; color: #F8571F; border: 1.5px solid rgba(248,87,31,0.32); }
+    #f07-profil-chipA { background: #FDEEE7; color: #D74B1B; border: 1.5px solid rgba(248,87,31,0.32); }
     #f07-profil-chipA svg { width: 32px; height: 32px; flex: none; }
     #f07-profil-chipB { background: #FFF3E0; color: #241F20; border: 1.5px solid rgba(232,162,59,0.45); }
-    #f07-profil-bang { width: 38px; height: 38px; border-radius: 50%; background: #E8A23B; color: #fff; display: flex; align-items: center; justify-content: center; flex: none;
+    #f07-profil-bang { width: 38px; height: 38px; border-radius: 50%; background: #E8A23B; color: #241F20; display: flex; align-items: center; justify-content: center; flex: none;
       font: 800 26px 'DM Sans', sans-serif; box-shadow: 0 4px 10px rgba(232,162,59,0.45); }
   </style>
 
@@ -157,7 +157,7 @@
       // ---- Scene 1 (0.00–1.00): launched entry of the timer, « 30 s » slams on « trente », the ring runs ----
       var bfIn = MK.blurFilter($("stage"), ID + "-blur1");
       gsap.set(timer, { filter: bfIn.ref }); bfIn.node.setAttribute("stdDeviation", "16 0");   // frame 0 is already smeared (a set at exactly 0 does not render)
-      MK.enter(tl, timer, 0, { dir: "left", dist: 1100, frames: 30, blur: bfIn });
+      MK.enter(tl, timer, 0, { dir: "left", dist: 560, frames: 30, blur: bfIn });
       var impact = MK.slam(tl, $("ttext"), 0.07, { shakeEl: shake });          // impact 0.22
       tl.to($("arc"), { strokeDashoffset: 0, duration: 0.88 - impact, ease: "power1.inOut" }, impact);
       tl.fromTo($("knobrot"), { rotation: 0 }, { rotation: 360, duration: 0.88 - impact, ease: "power1.inOut" }, impact);

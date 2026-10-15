@@ -224,7 +224,7 @@
       MK.enter(tl, text, 0, { dir: "left", dist: 900, frames: 38, blur: bfText });
       gsap.set(text, { filter: bfText.ref }); bfText.node.setAttribute("stdDeviation", "16 0");   // frame 0 carries the launch blur
       // « Le » rises from frame 0 (voice 0.17) so the hero reads by 0.10 s; « mieux ? » builds letter by letter on its syllable
-      MK.words(tl, $("line1"), [{ w: "Le", t: 0.10 }, { w: "mieux ?", t: 0.30, accent: true, letters: true }], { lead: 0.1 });
+      MK.words(tl, $("line1"), [{ w: "Le", t: 0.10 }, { w: "mieux ?", t: 0.30, accent: true, letters: true }], { lead: 0.1, alpha0: 0.75 });
       // static twin of the built line: it carries the fly-up so its motion-blur copies show the finished words
       var twin = $("line1").cloneNode(true);
       twin.id = ID + "-line1twin";
@@ -319,6 +319,8 @@
       tl.to(dof, { y: "+=480", duration: 18 * F, ease: "expo.in" }, 6.85);
 
       window.__timelines = window.__timelines || {};
+      // layout checker: the notifications drop over the blurred form and checklist on purpose
+      document.querySelectorAll("#f12-zero-effort-form *, #f12-zero-effort-panel *, #f12-zero-effort-notifs *").forEach(function (n) { n.setAttribute("data-layout-allow-overlap", ""); n.setAttribute("data-layout-allow-occlusion", ""); });
       window.__timelines[ID] = tl;
     })();
   </script>

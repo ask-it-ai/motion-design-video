@@ -120,8 +120,8 @@
       MK.drift(tl, drift, 0, DUR, { seed: SEED });
 
       // ════ Scene 1 (0.00–2.30) · ENTRY launched UP + « Le problème, ce n'est pas votre trafic. » ════
-      MK.enter(tl, $("card"), 0, { dir: "up", dist: 900, frames: 38, blur: bfCard });
-      MK.enter(tl, $("head"), 0, { dir: "up", dist: 560, frames: 38 });          // the first words rise with the card (parallax)
+      MK.enter(tl, $("card"), 0, { dir: "up", dist: 480, frames: 38, blur: bfCard });
+      MK.enter(tl, $("head"), 0, { dir: "up", dist: 300, frames: 38 });          // the first words rise with the card (parallax)
       gsap.set($("tilt"), { transformPerspective: 2200 });
       tl.fromTo($("tilt"), { rotationX: 14, rotationY: -7 }, { rotationX: 2, rotationY: 5, duration: 2.3, ease: "sine.out" }, 0);
 

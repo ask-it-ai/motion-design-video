@@ -131,7 +131,7 @@
       // ---- Scene 1 (0.00–0.57): oversized entry braking + « À la clé : » ----
       MK.enterBig(tl, rig, 0, { from: 1.4, frames: 40 });
       MK.pop(tl, $("badge"), 0, { over: 0.25, inner: $("keyw") });
-      MK.words(tl, $("hwords"), [{ w: "À", t: 0.15 }, { w: "la", t: 0.23 }, { w: "clé :", t: 0.36 }], { lead: 0.15 });
+      MK.words(tl, $("hwords"), [{ w: "À", t: 0.15 }, { w: "la", t: 0.23 }, { w: "clé :", t: 0.36 }], { lead: 0.15, alpha0: 0.6 });
       // the key turns in the lock on « clé »
       tl.to($("key"), { rotation: -28, svgOrigin: "28 28", duration: 6 * F, ease: "power2.out" }, 0.36);
       tl.to($("key"), { rotation: 0, svgOrigin: "28 28", duration: 16 * F, ease: "back.out(2.2)" }, 0.36 + 6 * F);

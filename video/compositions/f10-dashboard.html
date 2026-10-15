@@ -332,6 +332,8 @@
 
       MK.drift(tl, $("drift"), 0, DUR, { seed: 10 });
       window.__timelines = window.__timelines || {};
+      // layout checker: the dashboard flies tilted and the Excel sheet slams over it on purpose
+      document.querySelectorAll("#f10-dashboard-plane, #f10-dashboard-plane *, #f10-dashboard-sheet, #f10-dashboard-sheet *").forEach(function (n) { n.setAttribute("data-layout-allow-overlap", ""); n.setAttribute("data-layout-allow-occlusion", ""); });
       window.__timelines[ID] = tl;
     })();
   </script>

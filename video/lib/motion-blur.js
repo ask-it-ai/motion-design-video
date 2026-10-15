@@ -186,6 +186,8 @@
       function attachOne(el) {
         var group = document.createElement("div");
         group.setAttribute("data-hf-motion-blur-group", "hf-mb-" + window._hfMbUid++);
+        // the copies sit under the sharp element by design: tell the layout checker this overlap is intended
+        group.setAttribute("data-layout-allow-occlusion", ""); group.setAttribute("data-layout-allow-overlap", "");
         group.style.cssText =
           "position:absolute;left:0;top:0;width:0;height:0;isolation:isolate;pointer-events:none;display:none;";
 
@@ -194,6 +196,10 @@
           var clone = el.cloneNode(true);
           clone.removeAttribute("id");
           stripCopyAttrs(clone);
+          // Ask-it v4: copies are under the sharp element on purpose — mark every node for the layout checker
+          [clone].concat(Array.prototype.slice.call(clone.querySelectorAll("*"))).forEach(function (n) {
+            n.setAttribute("data-layout-allow-occlusion", ""); n.setAttribute("data-layout-allow-overlap", "");
+          });
           clones.push(clone);
           group.appendChild(clone);
         }

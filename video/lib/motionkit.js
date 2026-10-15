@@ -229,7 +229,7 @@
   /* ---------- 14. Words: kinetic captions locked to the voice (Gojiberry/Slack/Taapit) ----------
    * items: [{ w: "le", t: 12.3, accent: false, letters: false }, ...] times = voice attack of each word.
    * Neutral words land up to `lead` s before the voice (5–8 frames per word cadence is the caller's job);
-   * each rises 40 px and goes from faint to ink (50 % in 6 frames, 90 % in 22). Accent words wait for their
+   * each rises 40 px and goes from faint (o.alpha0, default 0.12) to ink (50 % in 6 frames, 90 % in 22). Accent words wait for their
    * syllable and build letter by letter on a slowing cadence (3, 4, 5, 6, 10 frames). Returns the spans. */
   function words(tl, container, items, o) {
     o = o || {};
@@ -249,7 +249,7 @@
       } else {
         s.textContent = it.w;
         var t0 = it.accent ? it.t : it.t - lead;
-        tl.fromTo(s, { y: 40, autoAlpha: 0.12 }, { y: 0, autoAlpha: 1, duration: 30 * F, ease: "power2.out" }, t0);
+        tl.fromTo(s, { y: 40, autoAlpha: o.alpha0 == null ? 0.12 : o.alpha0 }, { y: 0, autoAlpha: 1, duration: 30 * F, ease: "power2.out" }, t0);
       }
       container.appendChild(s);
       if (i < items.length - 1) container.appendChild(document.createTextNode(" "));
