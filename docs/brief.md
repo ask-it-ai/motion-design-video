@@ -194,3 +194,18 @@ Demande de Pierre : nouvelle version de 100 s maximum, construite sur l'analyse 
   - Musique à −9 LU de la voix et atténuée de 6 dB quand la voix parle, soit environ 15 dB sous la voix.
   - Creux de −3 dB vers 2,5 kHz dans la musique.
   - Master à −14 LUFS et −1 dBTP.
+- **Construction (15/10)** : 14 scènes livrées par 7 agents (`compositions/f01-hesitation` … `f14-fin` et leurs `.motion.json`).
+  - Chaque scène s'auto-contrôle avec `scene_snap.mjs` : 0 à 4,2 % d'images figées par scène, pour un budget de 10 %.
+  - Assemblage `index.html` v4 : coupes franches, sans transition au niveau racine.
+  - Corrections à l'assemblage :
+    - `visibility: visible` remplacé par `inherit` (f06, f14) : une capture de f06 serait apparue par-dessus les autres scènes ;
+    - entrées de f03, f07, f09 et f12 visibles dès l'image de coupe (option `alpha0` ajoutée à `MK.words`) ;
+    - contrastes AA corrigés (CORAIL02 en texte foncé, comme sur le site Endro) ;
+    - copies du flou de mouvement marquées comme superpositions voulues.
+  - `hyperframes check` (délai 90 s, 28 échantillons) : 0 erreur, 7 avertissements décoratifs.
+  - Repères son recalés sur les timelines réelles : `tweens4.js` sort les clics (traits `.mk-dash`), les slams et les anneaux. 251 repères.
+- **Écarts assumés des agents** (détail dans leurs rapports) :
+  - l'ordre d'empilement des notifications dans f12 ;
+  - le logo des Petits Prodiges recadré depuis le visuel produit (pas de logo seul dans les assets) ;
+  - la ligne d'indicateurs (KPI) ajoutée au dashboard f10, avec des chiffres issus du tunnel v3 et de f09 ;
+  - pas de prix par produit dans f08, seul le total réel de 72,50 € est affiché.
