@@ -1,13 +1,13 @@
 {
   "scene": "f02-soixante-dix",
-  "duration_s": 10.61,
-  "rules": ["counting-dynamic-scale", "spring-pop-entrance", "depth-of-field-blur", "svg-path-draw"],
+  "duration_s": 3.75,
+  "rules": ["MK.drift", "MK.enter", "MK.pop", "MK.anticipate", "MK.toss", "MK.slam", "MK.words", "MK.exit", "MK.blurFilter"],
   "exit": {
-    "vector": "radial outward push-in on the phone wall at ~3.2%/s scale (power1.in, accelerating, about x=960 y=200): ~16-24 px/s at the wall edges; « ? » bubbles settled",
+    "vector": "up ~18120 px/s at the last frame (f223->f224, measured on screen): the whole rig (grid, « 70 % », words) on MK.exit expo.in 1400 px over the last 18 frames, ending exactly at 3.75, vertical SVG blur ramping to 18 px; leaving dots are still falling inside it",
     "still_moving": true
   },
   "entry": {
-    "vector": "near-static cut: GRID_100 visible at frame 0 under a linear 0.69%/s camera drift (~5 px/s at the grid); her dot drops 8 px (power2.out, ~32 px/s) from 0.04s",
+    "vector": "down ~10930 px/s at the first frame (f0->f1, measured on screen): GRID_100 launched down (MK.enter circ.out, 800 px over 38 frames), braking to ~4420 px/s by f1->f2; bottom row already in frame on f0 under a 16 px vertical SVG blur clearing in 6 frames",
     "from_rest": false
   }
 }

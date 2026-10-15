@@ -47,7 +47,6 @@
     #f14-fin-cursor svg { display: block; }
 
     /* HUD (frame space): the stat and its words */
-    #f14-fin-statw, #f14-fin-wordsw { transform-origin: 960px 420px; }
     #f14-fin-stat { position: absolute; left: 940px; top: 350px; width: 800px; height: 300px; display: flex; align-items: center; justify-content: center; font-family: "DM Sans", sans-serif; font-weight: 700; font-size: 300px; line-height: 1; letter-spacing: -0.05em; color: #F8571F; white-space: nowrap; }
     #f14-fin-words { position: absolute; left: 940px; top: 640px; width: 800px; height: 70px; visibility: hidden; text-align: center; font-weight: 500; font-size: 56px; line-height: 70px; letter-spacing: -0.01em; color: #6C6560; white-space: nowrap; }
   </style>
@@ -158,12 +157,14 @@
       tl.set($("words"), { visibility: "visible" }, 4.09);
 
       /* Scene 4 (5.00-6.40) - everything is sucked to the centre; the lockup builds; the CTA pops */
-      var wo = [HX + (960 - PX - HX) / 0.2, HY + (420 - PY - HY) / 0.2];   // rig point that sits at frame (960, 420)
+      var CV = [668, 414];   // everything is sucked into the spot where the mark will pop
+      var wo = [HX + (CV[0] - PX - HX) / 0.2, HY + (CV[1] - PY - HY) / 0.2];   // rig point that sits on that spot
       gsap.set(WORLD, { transformOrigin: wo[0] + "px " + wo[1] + "px" });
+      gsap.set([$("statw"), $("wordsw")], { transformOrigin: CV[0] + "px " + CV[1] + "px" });
       MK.suck(tl, [WORLD, $("statw"), $("wordsw")], 5.00);
       tl.set(RIG, { x: 0, y: 0, scale: 1, transformOrigin: "960px 540px" }, 5.30);
       tl.fromTo($("endglow"), { autoAlpha: 0, scale: 0.6 }, { autoAlpha: 0.55, scale: 1, duration: 0.9, ease: "power2.out" }, 5.00);
-      MK.ring(tl, $("under"), 5.27, { x: 960, y: 420, r1: 280, width: 4, alpha: 0.75 });
+      MK.ring(tl, $("under"), 5.27, { x: CV[0], y: CV[1], r1: 240, width: 4, alpha: 0.75 });
       MK.pop(tl, $("mark"), 5.32 - F);
       var word = $("word"), CH = ["a", "s", "k", "-", "i", "t", ".ai"];
       CH.forEach(function (ch) {
@@ -184,8 +185,7 @@
       MK.click(tl, { t: 6.81, x: CX, y: CY, layer: CFX, component: CTA, shakeEl: SHAKE, shakePx: 6, touch: $("cursor"), rig: RIG, snap: 0.05, rigScale: 1 });
       tl.set(CTA, { backgroundColor: "#F8571F" }, 6.81);
       MK.pop(tl, $("label"), 6.95, { over: 0.2 });
-      tl.to($("cursorgrp"), { x: CX + 70, y: CY + 46, duration: 0.6, ease: "sine.inOut" }, 7.02);
-      tl.to($("cursorgrp"), { x: CX + 560, y: CY + 520, duration: 0.7, ease: "power2.in" }, 7.70);
+      tl.to($("cursorgrp"), { x: CX + 92, y: CY + 58, duration: 0.7, ease: "sine.inOut" }, 7.02);
 
       /* Scene 6 (7.40-9.50) - END CARD: no exit, a slow push, the glow breathing, the drift never stops */
       tl.to(RIG, { scale: 1.05 * 1.02, duration: 2.1, ease: "sine.inOut" }, 7.40);

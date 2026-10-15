@@ -47,7 +47,8 @@
     .f04-budget-av { position: absolute; inset: 0; border-radius: 50%; overflow: hidden; box-shadow: 0 0 0 4px rgba(255,255,255,0.06); }
     .f04-budget-av svg { display: block; width: 120px; height: 120px; }
     #f04-budget-pname { position: absolute; left: 192px; top: 64px; font: 600 40px/1 "Lufga", sans-serif; color: #F2EFEC; white-space: nowrap; }
-    #f04-budget-pskel { position: absolute; left: 192px; top: 122px; width: 210px; height: 16px; border-radius: 8px; background: rgba(255,255,255,0.08); }
+    #f04-budget-pskel { position: absolute; left: 192px; top: 122px; width: 210px; height: 16px; border-radius: 8px; background: rgba(255,255,255,0.08); overflow: hidden; }
+    #f04-budget-shim { position: absolute; left: 0; top: 0; width: 90px; height: 16px; background: linear-gradient(to right, rgba(255,255,255,0), rgba(255,255,255,0.16), rgba(255,255,255,0)); }
     .f04-budget-row { position: absolute; left: 44px; right: 44px; height: 82px; border-top: 1px solid rgba(255,255,255,0.07); }
     .f04-budget-row span { position: absolute; left: 0; top: 25px; font: 500 32px/1 "Lufga", sans-serif; color: #F2EFEC; white-space: nowrap; }
     .f04-budget-q { position: absolute; right: 0; top: 15px; width: 88px; height: 52px; border-radius: 999px; background: rgba(255,255,255,0.06); box-shadow: inset 0 0 0 1.5px rgba(255,255,255,0.14); font: 600 30px/52px "Lufga", sans-serif; color: #8C8580; text-align: center; }
@@ -89,7 +90,7 @@
                   <div id="f04-budget-profile" class="f04-budget-panel">
                     <div id="f04-budget-avatar"><div id="f04-budget-av0" class="f04-budget-av" data-hf-motion-blur='{"shutterAngle":360,"samplesPerFrame":12}'><svg viewBox="0 0 36 36" aria-hidden="true"><rect width="36" height="36" fill="#3A3435"/><circle cx="18" cy="14" r="6.4" fill="#8C8580"/><path d="M5.5 33c1.7-6.9 6.6-10.2 12.5-10.2S28.8 26.1 30.5 33z" fill="#8C8580"/></svg></div><div id="f04-budget-av1" class="f04-budget-av" data-hf-motion-blur='{"shutterAngle":360,"samplesPerFrame":12}'><svg viewBox="0 0 36 36" aria-hidden="true"><rect width="36" height="36" fill="#3A3435"/><circle cx="18" cy="14" r="6.4" fill="#8C8580"/><path d="M5.5 33c1.7-6.9 6.6-10.2 12.5-10.2S28.8 26.1 30.5 33z" fill="#8C8580"/></svg></div></div>
                     <div id="f04-budget-pname">Visiteuse anonyme</div>
-                    <div id="f04-budget-pskel"></div>
+                    <div id="f04-budget-pskel"><div id="f04-budget-shim"></div></div>
                     <div class="f04-budget-row" style="top:200px"><span>Âge</span><div class="f04-budget-q" data-hf-motion-blur='{"shutterAngle":360,"samplesPerFrame":12}'>?</div></div>
                     <div class="f04-budget-row" style="top:282px"><span>Type de peau</span><div class="f04-budget-q" data-hf-motion-blur='{"shutterAngle":360,"samplesPerFrame":12}'>?</div></div>
                     <div class="f04-budget-row" style="top:364px"><span>Besoin</span><div class="f04-budget-q" data-hf-motion-blur='{"shutterAngle":360,"samplesPerFrame":12}'>?</div></div>
@@ -186,6 +187,15 @@
       gsap.set(profile, { transformPerspective: 1600, transformOrigin: "30% 50%", filter: "blur(8px)" });   // waits ajar at the frame edge, out of focus
       tl.to(profile, { filter: "blur(0px)", duration: 0.3, ease: "power2.out" }, 2.15);
       tl.fromTo(profile, { rotationY: 35 }, { rotationY: 0, duration: 30 * F, ease: "back.out(1.4)" }, 2.30);
+      // the rig's transform-origin follows each target; x/y compensate so the picture never jumps
+      var rs = 1, rx = -760, ry = 0, ro = [632, 483];
+      function reorigin(t, o) {
+        rx += (1 - rs) * (ro[0] - o[0]); ry += (1 - rs) * (ro[1] - o[1]); ro = o;
+        tl.set(rig, { transformOrigin: o[0] + "px " + o[1] + "px", x: rx, y: ry }, t);
+      }
+      reorigin(2.52, [1910, 540]);
+      tl.to(rig, { scale: 1.04, duration: 2.0, ease: "sine.inOut" }, 2.52); rs = 1.04;   // slow push into the unknown visitor
+      MK.each([0, 1, 2, 3], 2.40, 22, function (k, t) { tl.fromTo($("shim"), { x: -100 }, { x: 220, duration: 20 * F, ease: "sine.inOut", immediateRender: k === 0 }, t); });   // the profile "loads"… nothing
       var pills = all(".f04-budget-q");
       MK.each(pills, 2.98, 4, function (p, t) { MK.pop(tl, p, t, { over: 0.25 }); });
       // « rien »: the avatar contracts (anticipation) then springs back. Two stacked layers, because MK.pop renders its
@@ -224,12 +234,6 @@
         MK.click(tl, { t: t, x: k === 0 ? 88 : 510, y: 436, layer: fx, component: tog[k], shakeEl: shake, touch: touch, rig: rig, snap: snap, rigScale: s, color: "#F2EFEC" });
         tl.fromTo(ripples[k], { scale: 1, autoAlpha: 0.5 }, { scale: 2.2, autoAlpha: 0, duration: 20 * F, ease: "power2.out", immediateRender: false }, t);
       }
-      // the rig's transform-origin follows each click target; x/y compensate so the picture never jumps
-      var rs = 1, rx = -760, ry = 0, ro = [632, 483];
-      function reorigin(t, o) {
-        rx += (1 - rs) * (ro[0] - o[0]); ry += (1 - rs) * (ro[1] - o[1]); ro = o;
-        tl.set(rig, { transformOrigin: o[0] + "px " + o[1] + "px", x: rx, y: ry }, t);
-      }
       reorigin(4.56, [1228, 766]);
       tap(4.62, 0, 0.06, rs); rs *= 1.06;                                           // toggle 1
       tl.to(touch, { x: 408 + K0[1], y: 236, duration: 5 * F, ease: "power2.inOut" }, 4.665);
@@ -241,20 +245,24 @@
 
       // ════ Scene 5 (5.10–6.55) · « à l'aveugle » + silence: blind, still alive ════
       tl.fromTo(stage, { filter: "blur(0px) brightness(1)" }, { filter: "blur(18px) brightness(0.55)", duration: 0.45, ease: "power2.in", immediateRender: false }, 5.10);
-      tl.fromTo($("vig"), { opacity: 0, scale: 1.5 }, { opacity: 0.8, scale: 1, duration: 1.45, ease: "power2.out", immediateRender: false }, 5.10);
+      tl.fromTo($("vig"), { opacity: 0, scale: 1.5 }, { opacity: 0.8, scale: 1, duration: 1.45, ease: "sine.out", immediateRender: false }, 5.10);
+      tl.to(touch, { x: 300, y: 260, duration: 0.7, ease: "sine.inOut" }, 5.15);    // the finger keeps wandering, blind
+      tl.to(touch, { x: 640, y: 170, duration: 0.7, ease: "sine.inOut" }, 5.85);
       reorigin(5.14, [ro[0] + (960 - rx - ro[0]) / rs, ro[1] + (540 - ry - ro[1]) / rs]);   // push into the centre of the frame
       tl.to(rig, { scale: rs * 1.06, duration: 0.66, ease: "power1.inOut" }, 5.14);
-      tl.to(rig, { scale: rs * 1.06 * 1.03, duration: 0.75, ease: "sine.out" }, 5.80);
+      tl.to(rig, { scale: rs * 1.06 * 1.03, duration: 0.75, ease: "none" }, 5.80);
 
       // ════ Scene 6 (6.55–6.99) · « Bon, » — the whole blind world is sucked into a card ════
       MK.suck(tl, card, 6.55, { to: 0.42, frames: 18, fade: false });
       tl.fromTo(card, { borderRadius: 0, boxShadow: "0px 143px 286px -71px rgba(0,0,0,0)" }, { borderRadius: 66.7, boxShadow: "0px 143px 286px -71px rgba(0,0,0,0.65)", duration: 18 * F, ease: "power2.in", immediateRender: false }, 6.55);
       tl.fromTo($("rim"), { opacity: 0 }, { opacity: 1, duration: 18 * F, ease: "power2.in", immediateRender: false }, 6.55);
       tl.to(toss, { rotation: -2, duration: 8 * F, ease: "sine.inOut" }, 6.55 + 18 * F);   // lock 8 frames, the card tilts
+      tl.to(card, { scale: 0.405, duration: 3 * F, ease: "power1.out" }, 6.55 + 18 * F);   // the suction lands with an undershoot
+      tl.to(card, { scale: 0.42, duration: 10 * F, ease: "power2.out" }, 6.55 + 21 * F);
 
       // ════ Scene 7 (6.99–7.72) · « ça, c'était avant » — EXIT: tossed away with gravity ════
       var T7 = DUR - 44 * F;                                                        // the fall ends exactly at the cut
-      MK.toss(tl, toss, T7, { rise: 90, fall: 700, rotation: -16, fallFrames: 26 });
+      MK.toss(tl, toss, T7, { rise: 90, fall: 700, rotation: -16, fallFrames: 26, x: -70 });
       // the kit's lagging rotation runs 6 frames past the fall: replace it with the identical power2.in curve cut at the cut
       tl.getTweensOf(toss).forEach(function (tw) { if (tw.vars.rotation === -16) tl.remove(tw); });
       var tR = T7 + 24 * F, pR = (DUR - tR) / (26 * F);

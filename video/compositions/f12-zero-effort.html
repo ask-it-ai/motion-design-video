@@ -1,0 +1,314 @@
+<template>
+  <style>
+    @font-face { font-family: "Lufga"; src: url('assets/fonts/Lufga-Regular.woff2') format('woff2'); font-weight: 400; font-style: normal; font-display: block; }
+    @font-face { font-family: "Lufga"; src: url('assets/fonts/Lufga-Medium.woff2') format('woff2'); font-weight: 500; font-style: normal; font-display: block; }
+    @font-face { font-family: "Lufga"; src: url('assets/fonts/Lufga-SemiBold.woff2') format('woff2'); font-weight: 600; font-style: normal; font-display: block; }
+    @font-face { font-family: "Lufga"; src: url('assets/fonts/Lufga-Bold.woff2') format('woff2'); font-weight: 700; font-style: normal; font-display: block; }
+    @font-face { font-family: "DM Sans"; src: url('assets/fonts/DMSans-normal-latin.woff2') format('woff2'); font-weight: 300 800; font-style: normal; font-display: block; }
+
+    #root { position: relative; width: 1920px; height: 1080px; overflow: hidden; font-family: "Lufga", sans-serif; color: #241F20; }
+    #root * { box-sizing: border-box; }
+
+    /* ---------- ground: grid-bg ---------- */
+    #f12-zero-effort-bg { position: absolute; inset: 0; overflow: hidden; background: #FDFCFC; }
+    #f12-zero-effort-mesh { position: absolute; left: -192px; top: -108px; width: 2304px; height: 1296px;
+      background: radial-gradient(60% 60% at 27% 23%, rgba(248,87,31,0.22) 0%, transparent 60%), radial-gradient(55% 55% at 78% 30%, rgba(172,204,233,0.55) 0%, transparent 62%), radial-gradient(60% 60% at 55% 85%, rgba(167,171,221,0.45) 0%, transparent 65%); }
+    #f12-zero-effort-grid { position: absolute; inset: 0; background-size: 44px 44px;
+      background-image: linear-gradient(rgba(36,31,32,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(36,31,32,0.05) 1px, transparent 1px); }
+
+    /* ---------- skeleton: .shake > tilt > .rig > .drift > snap (click zoom) > dof (focus) > content ---------- */
+    #f12-zero-effort-stage { position: absolute; inset: 0; overflow: hidden; }
+    #f12-zero-effort-shake, #f12-zero-effort-tilt, #f12-zero-effort-rig, #f12-zero-effort-drift, #f12-zero-effort-snap, #f12-zero-effort-dof,
+    #f12-zero-effort-text, #f12-zero-effort-notifs, #f12-zero-effort-fx { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+    #f12-zero-effort-tilt { transform-origin: 960px 540px; }
+    #f12-zero-effort-drift { transform-origin: 960px 540px; }
+
+    /* ---------- kinetic text ---------- */
+    .f12-zero-effort-l1 { position: absolute; left: 0; top: 405px; width: 1920px; height: 150px; text-align: center; white-space: nowrap;
+      font: 500 150px/1 "Lufga", sans-serif; letter-spacing: -0.03em; transform-origin: 50% 50%; }
+    .f12-zero-effort-l1 .mk-w { font-weight: 500; color: #6C6560; }
+    .f12-zero-effort-l1 .mk-accent { font-weight: 700; color: #F8571F; }
+    #f12-zero-effort-line2 { position: absolute; left: 0; top: 400px; width: 1920px; height: 120px; text-align: center; white-space: nowrap;
+      font: 500 120px/1 "Lufga", sans-serif; letter-spacing: -0.03em; }
+    #f12-zero-effort-line2 .mk-w { font-weight: 500; color: #6C6560; }
+    #f12-zero-effort-line2 .mk-accent { font-weight: 700; color: #241F20; }
+    #f12-zero-effort-line2 .mk-accent.f12-zero-effort-coral { color: #F8571F; }
+
+    /* ---------- the form (« Un formulaire ») ---------- */
+    .f12-zero-effort-card { position: absolute; background: #FFFFFF; border: 1.5px solid rgba(36,31,32,0.10); border-radius: 30px;
+      box-shadow: 0 40px 80px -24px rgba(36,31,32,0.22), 0 8px 24px -8px rgba(36,31,32,0.10); }
+    #f12-zero-effort-form { left: 310px; top: 250px; width: 900px; height: 560px; }
+    #f12-zero-effort-flogo { position: absolute; left: 56px; top: 48px; width: 60px; height: 60px; display: block; }
+    #f12-zero-effort-fh3 { position: absolute; left: 136px; top: 52px; font: 500 44px/1.15 "Lufga", sans-serif; letter-spacing: -0.01em; white-space: nowrap; }
+    .f12-zero-effort-field { position: absolute; left: 56px; width: 788px; height: 92px; border-radius: 20px; background: #F5F5F7; border: 1.5px solid rgba(36,31,32,0.07); }
+    .f12-zero-effort-ficon { position: absolute; left: 26px; top: 27px; width: 38px; height: 38px; }
+    .f12-zero-effort-fval { position: absolute; left: 84px; top: 0; height: 92px; display: flex; align-items: center; font: 500 36px/1 "Lufga", sans-serif; white-space: pre; }
+    .f12-zero-effort-caret { display: inline-block; width: 3px; height: 42px; margin-left: 3px; border-radius: 2px; background: #F8571F; }
+    .f12-zero-effort-fring { position: absolute; left: -8px; top: -8px; width: 804px; height: 108px; border-radius: 27px; border: 2px solid #F8571F; box-shadow: 0 0 0 6px rgba(248,87,31,0.12); }
+    #f12-zero-effort-chipslot { position: absolute; left: 56px; top: 404px; height: 76px; }
+    #f12-zero-effort-chip { position: absolute; left: 0; top: 0; height: 76px; display: flex; align-items: center; gap: 14px; padding: 0 30px 0 26px; border-radius: 999px;
+      background: #FDEEE7; border: 2px solid #F8571F; font: 500 30px/1 "Lufga", sans-serif; white-space: nowrap; transform-origin: 20% 50%; }
+    #f12-zero-effort-chip i { width: 14px; height: 14px; border-radius: 50%; background: #F8571F; flex: none; }
+    #f12-zero-effort-btnwrap { position: absolute; left: 464px; top: 404px; width: 380px; height: 76px; transform-origin: 100% 50%; }
+    #f12-zero-effort-btnsend { position: absolute; right: 0; top: 0; height: 76px; padding: 0 40px; border-radius: 999px; background: #241F20; color: #FFFFFF;
+      font: 600 32px/76px "Lufga", sans-serif; white-space: nowrap; box-shadow: 0 14px 28px -14px rgba(36,31,32,0.55); }
+    #f12-zero-effort-btndone { position: absolute; right: 0; top: 0; height: 76px; padding: 0 26px 0 36px; display: flex; align-items: center; gap: 14px; border-radius: 999px; background: #1F8A4C; color: #FFFFFF;
+      font: 600 32px/1 "Lufga", sans-serif; white-space: nowrap; box-shadow: 0 16px 32px -14px rgba(31,138,76,0.6); transform-origin: 100% 50%; }
+    #f12-zero-effort-btndone svg { width: 34px; height: 34px; display: block; }
+
+    /* ---------- the team checklist (« notre équipe s'occupe du reste ») ---------- */
+    #f12-zero-effort-panel { left: 1247px; top: 270px; width: 560px; height: 520px; }
+    #f12-zero-effort-ptitle { position: absolute; left: 40px; top: 38px; font: 600 34px/1.22 "Lufga", sans-serif; letter-spacing: -0.01em; white-space: nowrap; }
+    #f12-zero-effort-ptitle span { display: block; color: #6C6560; }
+    #f12-zero-effort-avs { position: absolute; left: 340px; top: 44px; width: 180px; height: 60px; }
+    .f12-zero-effort-av { position: absolute; top: 0; width: 60px; height: 60px; border-radius: 50%; border: 3px solid #FFFFFF; display: flex; align-items: center; justify-content: center;
+      font: 600 21px/1 "Lufga", sans-serif; letter-spacing: 0.02em; }
+    #f12-zero-effort-pdiv { position: absolute; left: 40px; top: 144px; width: 480px; height: 1.5px; background: rgba(36,31,32,0.08); }
+    .f12-zero-effort-task { position: absolute; left: 22px; width: 516px; height: 84px; border-radius: 18px; }
+    .f12-zero-effort-tflash { position: absolute; left: 0; top: 0; width: 516px; height: 84px; border-radius: 18px; background: #E9F5EE; }
+    .f12-zero-effort-tspin { position: absolute; left: 21px; top: 23px; width: 38px; height: 38px; border-radius: 50%; border: 4px solid #FDEEE7; border-top-color: #F8571F; border-right-color: #F8571F; }
+    .f12-zero-effort-tchk { position: absolute; left: 18px; top: 20px; width: 44px; height: 44px; border-radius: 50%; background: #1F8A4C; display: flex; align-items: center; justify-content: center; }
+    .f12-zero-effort-tchk svg { width: 26px; height: 26px; display: block; }
+    .f12-zero-effort-tlab { position: absolute; left: 82px; top: 0; height: 84px; display: flex; align-items: center; font: 500 30px/1 "Lufga", sans-serif; color: #A39C95; white-space: nowrap; }
+
+    /* ---------- touch ---------- */
+    .f12-zero-effort-tch { position: absolute; left: 0; top: 0; width: 60px; height: 60px; margin-left: -30px; margin-top: -30px; border-radius: 50%; }
+    #f12-zero-effort-touchsh { box-shadow: 0 8px 18px rgba(36,31,32,0.25); }
+    #f12-zero-effort-touch { background: rgba(255,255,255,0.55); border: 2px solid rgba(36,31,32,0.25); }
+
+    /* ---------- order notifications (« vous profitez ») ---------- */
+    .f12-zero-effort-nbox { position: absolute; left: 820px; width: 640px; height: 104px; border-radius: 22px; transform-origin: 50% 100%; }
+    .f12-zero-effort-nsh { box-shadow: 0 40px 80px -24px rgba(36,31,32,0.26), 0 8px 24px -8px rgba(36,31,32,0.12); }
+    .f12-zero-effort-notif { background: #FFFFFF; border: 1.5px solid rgba(36,31,32,0.08); }
+    .f12-zero-effort-nlogo { position: absolute; left: 20px; top: 19px; width: 64px; height: 64px; border-radius: 16px; background: #F5F5F7 url('assets/endro/logo-noir.png') center / 50px auto no-repeat;
+      border: 1.5px solid rgba(36,31,32,0.08); }
+    .f12-zero-effort-ntitle { position: absolute; left: 106px; top: 20px; font: 600 30px/34px "Lufga", sans-serif; white-space: nowrap; }
+    .f12-zero-effort-ntime { position: absolute; left: 106px; top: 58px; font: 500 22px/26px "Lufga", sans-serif; color: #A39C95; white-space: nowrap; }
+    .f12-zero-effort-namt { position: absolute; right: 30px; top: 0; height: 104px; display: flex; align-items: center; font: 700 34px/1 "DM Sans", sans-serif; letter-spacing: -0.02em; color: #1F8A4C; white-space: nowrap; }
+  </style>
+
+  <div id="root" data-composition-id="f12-zero-effort" data-fps="60" data-start="0" data-duration="7.15" data-width="1920" data-height="1080">
+    <div id="f12-zero-effort-bg" class="clip" data-start="0" data-duration="7.15" data-track-index="0">
+      <div id="f12-zero-effort-mesh"></div>
+      <div id="f12-zero-effort-grid"></div>
+    </div>
+
+    <div id="f12-zero-effort-stage" class="clip" data-start="0" data-duration="7.15" data-track-index="1" data-layout-allow-overflow data-layout-allow-overlap data-layout-allow-occlusion>
+      <div id="f12-zero-effort-shake">
+        <div id="f12-zero-effort-tilt">
+          <div id="f12-zero-effort-rig">
+            <div id="f12-zero-effort-drift" data-layout-allow-overflow>
+              <div id="f12-zero-effort-snap">
+                <div id="f12-zero-effort-dof">
+
+                  <!-- « Le mieux ? » — « presque rien à faire. » -->
+                  <div id="f12-zero-effort-text">
+                    <div id="f12-zero-effort-line1" class="f12-zero-effort-l1"></div>
+                    <div id="f12-zero-effort-line2"></div>
+                  </div>
+
+                  <!-- « Un formulaire » -->
+                  <div id="f12-zero-effort-form" class="f12-zero-effort-card">
+                    <img id="f12-zero-effort-flogo" src="assets/askit/askit-logo-mark.svg" alt="">
+                    <div id="f12-zero-effort-fh3">Lancez votre diagnostic</div>
+                    <div id="f12-zero-effort-f1" class="f12-zero-effort-field" style="top:146px">
+                      <div id="f12-zero-effort-ring1" class="f12-zero-effort-fring"></div>
+                      <svg class="f12-zero-effort-ficon" viewBox="0 0 24 24" fill="none" stroke="#A39C95" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9.5l1.6-5h12.8L20 9.5"/><path d="M4 9.5c0 1.5 1.2 2.5 2.7 2.5S9.3 11 9.3 9.5c0 1.5 1.2 2.5 2.7 2.5s2.7-1 2.7-2.5c0 1.5 1.2 2.5 2.6 2.5S20 11 20 9.5"/><path d="M5.5 12v7.5h13V12"/><path d="M10 19.5v-4.5h4v4.5"/></svg>
+                      <div class="f12-zero-effort-fval"><span id="f12-zero-effort-v1"></span><span id="f12-zero-effort-c1" class="f12-zero-effort-caret"></span></div>
+                    </div>
+                    <div id="f12-zero-effort-f2" class="f12-zero-effort-field" style="top:262px">
+                      <div id="f12-zero-effort-ring2" class="f12-zero-effort-fring"></div>
+                      <svg class="f12-zero-effort-ficon" viewBox="0 0 24 24" fill="none" stroke="#A39C95" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17"/><path d="M12 3.5c2.4 2.3 3.6 5.1 3.6 8.5s-1.2 6.2-3.6 8.5c-2.4-2.3-3.6-5.1-3.6-8.5s1.2-6.2 3.6-8.5z"/></svg>
+                      <div class="f12-zero-effort-fval"><span id="f12-zero-effort-v2"></span><span id="f12-zero-effort-c2" class="f12-zero-effort-caret"></span></div>
+                    </div>
+                    <div id="f12-zero-effort-chipslot">
+                      <div id="f12-zero-effort-chip" data-hf-motion-blur='{"shutterAngle":360,"samplesPerFrame":12}'><i></i>Plus de conversions</div>
+                    </div>
+                    <div id="f12-zero-effort-btnwrap">
+                      <div id="f12-zero-effort-btnsend">Envoyer →</div>
+                      <div id="f12-zero-effort-btndone">Demande envoyée<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="rgba(255,255,255,0.22)"/><path d="M6.8 12.4l3.4 3.3 7-7.2" fill="none" stroke="#FFFFFF" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                    </div>
+                  </div>
+
+                  <!-- « notre équipe s'occupe du reste » -->
+                  <div id="f12-zero-effort-panel" class="f12-zero-effort-card">
+                    <div id="f12-zero-effort-ptitle">L'équipe Ask-it<span>s'en occupe</span></div>
+                    <div id="f12-zero-effort-avs">
+                      <div id="f12-zero-effort-av1" class="f12-zero-effort-av" style="left:0;background:#F8571F;color:#FFFFFF" data-hf-motion-blur='{"shutterAngle":360,"samplesPerFrame":12}'>AR</div>
+                      <div id="f12-zero-effort-av2" class="f12-zero-effort-av" style="left:44px;background:#241F20;color:#FFFFFF" data-hf-motion-blur='{"shutterAngle":360,"samplesPerFrame":12}'>BL</div>
+                      <div id="f12-zero-effort-av3" class="f12-zero-effort-av" style="left:88px;background:#DDD7CD;color:#241F20" data-hf-motion-blur='{"shutterAngle":360,"samplesPerFrame":12}'>PC</div>
+                    </div>
+                    <div id="f12-zero-effort-pdiv"></div>
+                    <div id="f12-zero-effort-tasks"></div>
+                  </div>
+
+                  <div id="f12-zero-effort-fx">
+                    <div id="f12-zero-effort-touchsh" class="f12-zero-effort-tch"></div>
+                    <div id="f12-zero-effort-touch" class="f12-zero-effort-tch" data-hf-motion-blur='{"shutterAngle":360,"samplesPerFrame":12}'></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- « Et vous ? Vous profitez. » -->
+              <div id="f12-zero-effort-notifs" data-layout-allow-overflow></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <script src="lib/motionkit.js"></script>
+  <script>
+    (function () {
+      var ID = "f12-zero-effort", DUR = 7.15;
+      var MK = window.MK, F = MK.F;
+      var $ = function (s) { return document.getElementById(ID + "-" + s); };
+      var mk = function (tag, cls, txt) { var e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; };
+      var MB = '{"shutterAngle":360,"samplesPerFrame":12}';
+      var tl = gsap.timeline({ paused: true });
+
+      var stage = $("stage"), shake = $("shake"), tilt = $("tilt"), rig = $("rig"), drift = $("drift"), snap = $("snap"), dof = $("dof");
+      var text = $("text"), form = $("form"), panel = $("panel"), fx = $("fx"), touch = $("touch"), touchsh = $("touchsh");
+
+      var bfText = MK.blurFilter(stage, ID + "-blur-text");
+      var bfForm = MK.blurFilter(stage, ID + "-blur-form");
+      var bfPanel = MK.blurFilter(stage, ID + "-blur-panel");
+      var bfRig = MK.blurFilter(stage, ID + "-blur-rig");
+
+      /* ---------- build-time content (synchronous, deterministic) ---------- */
+      var CHECK = '<svg viewBox="0 0 24 24"><path d="M6.4 12.4l3.6 3.5 7.6-7.8" fill="none" stroke="#FFFFFF" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+      var TASKS = ["Catalogue importé", "Diagnostic construit", "Page de résultat générée", "Installé sur votre site"];
+      var TICK = [3.94, 4.19, 4.45, 4.70];
+      var rows = TASKS.map(function (label, i) {
+        var r = mk("div", ID + "-task"); r.style.top = (160 + i * 86) + "px";
+        var fl = mk("div", ID + "-tflash"), sp = mk("div", ID + "-tspin"), ck = mk("div", ID + "-tchk"), lb = mk("div", ID + "-tlab", label);
+        ck.innerHTML = CHECK; ck.setAttribute("data-hf-motion-blur", MB);
+        r.appendChild(fl); r.appendChild(sp); r.appendChild(ck); r.appendChild(lb);
+        $("tasks").appendChild(r);
+        return { flash: fl, spin: sp, chk: ck, lab: lb };
+      });
+      // notifications: each card is a pair — an unmarked shadow box + the motion-blurred card (no box-shadow on blurred copies)
+      var ORDERS = [{ amt: "72,50 €", top: 488, land: 5.55 }, { amt: "58,00 €", top: 368, land: 5.80 }, { amt: "91,30 €", top: 248, land: 6.05 }];
+      var notes = ORDERS.map(function (o, i) {
+        var sh = mk("div", ID + "-nbox " + ID + "-nsh"), card = mk("div", ID + "-nbox " + ID + "-notif");
+        sh.style.top = card.style.top = o.top + "px";
+        card.appendChild(mk("div", ID + "-nlogo"));
+        card.appendChild(mk("div", ID + "-ntitle", "Nouvelle commande"));
+        card.appendChild(mk("div", ID + "-ntime", "à l’instant"));
+        card.appendChild(mk("div", ID + "-namt", o.amt));
+        card.setAttribute("data-hf-motion-blur", MB);
+        $("notifs").appendChild(sh); $("notifs").appendChild(card);
+        return { sh: sh, card: card, o: o };
+      });
+      [form, panel].forEach(function (el) {
+        el.setAttribute("data-layout-allow-overlap", ""); el.setAttribute("data-layout-allow-occlusion", "");
+      });
+
+      /* late elements start hidden (at build and at t=0 so any seek order agrees) */
+      var late = [$("ring1"), $("ring2"), $("c1"), $("c2"), $("btndone"), touch, touchsh];
+      notes.forEach(function (n) { late.push(n.sh, n.card); });
+      gsap.set(late, { autoAlpha: 0 });
+      tl.set(late, { autoAlpha: 0 }, 0);
+
+      /* ---------- camera life for the whole scene ---------- */
+      MK.drift(tl, drift, 0, DUR, { seed: 12 });
+      tl.fromTo(tilt, { rotationX: 1.8, rotationY: -2.4, transformPerspective: 2200 }, { rotationX: -1.2, rotationY: 2.8, duration: DUR, ease: "sine.inOut" }, 0);
+      tl.fromTo($("mesh"), { x: -36, y: 18, scale: 1 }, { x: 36, y: -20, scale: 1.06, duration: DUR, ease: "none" }, 0);
+
+      /* ---------- Scene 1 (0.00–0.95): ENTRY — « Le mieux ? » launched LEFT, brakes ---------- */
+      MK.enter(tl, text, 0, { dir: "left", dist: 900, frames: 38, blur: bfText });
+      gsap.set(text, { filter: bfText.ref }); bfText.node.setAttribute("stdDeviation", "16 0");   // frame 0 carries the launch blur
+      MK.words(tl, $("line1"), [{ w: "Le", t: 0.17 }, { w: "mieux ?", t: 0.30, accent: true, letters: true }], { lead: 0.1 });
+      // static twin of the built line: it carries the fly-up so its motion-blur copies show the finished words
+      var twin = $("line1").cloneNode(true);
+      twin.id = ID + "-line1twin";
+      [twin].concat(Array.prototype.slice.call(twin.querySelectorAll("*"))).forEach(function (n) {
+        n.style.removeProperty("transform"); n.style.removeProperty("opacity"); n.style.removeProperty("visibility"); n.style.removeProperty("translate");
+      });
+      twin.setAttribute("data-hf-motion-blur", MB);
+      text.appendChild(twin);
+      gsap.set(twin, { autoAlpha: 0 });
+
+      /* ---------- Scene 2 (0.95–2.65): « presque rien à faire » ---------- */
+      tl.set($("line1"), { autoAlpha: 0 }, 0.95);
+      tl.set(twin, { autoAlpha: 1 }, 0.95);
+      tl.set(twin, { autoAlpha: 0 }, 0);
+      tl.to(twin, { y: -260, scale: 0.55, duration: 20 * F, ease: "power3.inOut" }, 0.95);
+      var w2 = MK.words(tl, $("line2"), [
+        { w: "presque", t: 1.34, accent: true, letters: true },
+        { w: "rien", t: 1.74, accent: true, letters: true },
+        { w: "à", t: 2.10 }, { w: "faire.", t: 2.20 }], { lead: 0.1 });
+      w2[1].classList.add(ID + "-coral");
+      // the whole text block exits up (14 frames, expo.in)
+      MK.exit(tl, text, 2.41, { dir: "up", dist: 1000, frames: 14, blur: bfText });
+
+      /* ---------- Scene 3 (2.55–3.60): « Un formulaire » ---------- */
+      MK.enter(tl, form, 2.55, { dir: "up", dist: 900, frames: 30, blur: bfForm });
+      tl.set([$("ring1"), $("c1")], { autoAlpha: 1 }, 2.76);
+      MK.type(tl, $("v1"), "Endro", 2.80, { cps: 60 });
+      tl.set([$("ring1"), $("c1")], { autoAlpha: 0 }, 2.90);
+      tl.set([$("ring2"), $("c2")], { autoAlpha: 1 }, 2.90);
+      MK.type(tl, $("v2"), "endro-cosmetiques.com", 2.92, { cps: 90 });
+      tl.set([$("ring2"), $("c2")], { autoAlpha: 0 }, 3.18);
+      MK.pop(tl, $("chip"), 3.20, { over: 0.22 });
+      // the touch reaches « Envoyer → » already moving (3.25–3.40), presses, clicks at 3.47
+      var BTN = { x: 310 + 900 - 56 - 116.5, y: 250 + 404 + 38 };
+      [touch, touchsh].forEach(function (el) {
+        tl.set(el, { autoAlpha: 1 }, 3.25);
+        tl.fromTo(el, { x: BTN.x + 300, y: BTN.y + 480 }, { x: BTN.x + 5, y: BTN.y + 7, duration: 9 * F, ease: "power2.out", immediateRender: false }, 3.25);
+        tl.to(el, { x: BTN.x, y: BTN.y, duration: 4 * F, ease: "sine.inOut" }, 3.25 + 9 * F);
+      });
+      tl.to(touchsh, { scale: 0.82, duration: 3 * F, ease: "power2.in" }, 3.47 - 3 * F);
+      tl.to(touchsh, { scale: 1, duration: 8 * F, ease: "back.out(2)" }, 3.47);
+      tl.set(snap, { transformOrigin: BTN.x + "px " + BTN.y + "px" }, 0);
+      gsap.set(snap, { transformOrigin: BTN.x + "px " + BTN.y + "px" });
+      MK.click(tl, { t: 3.47, x: BTN.x, y: BTN.y, layer: fx, component: $("btnwrap"), shakeEl: shake, touch: touch, rig: snap, snap: 0.15,
+        dashLen: 40, dashW: 7, r0: 50, r1: 124 });
+      // instant state: the button turns good-green « Demande envoyée ✓ »
+      tl.set($("btnsend"), { autoAlpha: 0 }, 3.47);
+      tl.set($("btndone"), { autoAlpha: 1 }, 3.47);
+      tl.fromTo($("btndone"), { scale: 0.9 }, { scale: 1.06, duration: 4 * F, ease: "power2.out", immediateRender: false }, 3.47);
+      tl.to($("btndone"), { scale: 1, duration: 14 * F, ease: "power2.inOut" }, 3.47 + 4 * F);
+      tl.to([touch, touchsh], { x: BTN.x + 210, y: BTN.y + 330, autoAlpha: 0, duration: 18 * F, ease: "power2.in" }, 3.66);
+
+      /* ---------- Scene 4 (3.55–5.05): « et notre équipe s'occupe du reste » ---------- */
+      MK.pan(tl, rig, 3.55, { x: -180, frames: 28 });
+      MK.enter(tl, panel, 3.55, { dir: "left", dist: 700, frames: 30, blur: bfPanel });
+      MK.each([$("av1"), $("av2"), $("av3")], 3.72, 1, function (el, t) { MK.pop(tl, el, t, { over: 0.22 }); });
+      rows.forEach(function (r, i) {
+        var T = TICK[i];
+        tl.fromTo(r.spin, { rotation: 0 }, { rotation: 430 * (T - 3.55), duration: T - 3.55, ease: "none" }, 3.55);
+        tl.set(r.spin, { autoAlpha: 0 }, T);
+        MK.pop(tl, r.chk, T, { over: 0.22 });
+        tl.set(r.lab, { color: "#241F20" }, T);
+        tl.fromTo(r.flash, { autoAlpha: 0.9 }, { autoAlpha: 0, duration: 22 * F, ease: "power2.out", immediateRender: false }, T);
+        tl.set(r.flash, { autoAlpha: 0 }, 0);
+      });
+      gsap.set(rows.map(function (r) { return r.flash; }), { autoAlpha: 0 });
+
+      /* ---------- Scene 5 (5.10–6.85): « Et vous ? Vous profitez. » ---------- */
+      // the form + checklist go out of focus before the first drop
+      gsap.set(dof, { transformOrigin: "1127px 560px" });
+      tl.fromTo(dof, { filter: "blur(0px)", scale: 1, autoAlpha: 1 }, { filter: "blur(8px)", scale: 0.94, autoAlpha: 0.82, duration: 27 * F, ease: "power2.out", immediateRender: false }, 5.10);
+      // three orders drop from above with gravity and stack (each lands on the pile)
+      notes.forEach(function (n, i) {
+        var land = n.o.land, fall = 16 * F, d0 = -(n.o.top + 104 + 120);
+        [n.sh, n.card].forEach(function (el) {
+          tl.set(el, { autoAlpha: 1 }, land - fall);
+          tl.fromTo(el, { y: d0 }, { y: 0, duration: fall, ease: "power2.in", immediateRender: false }, land - fall);
+          tl.fromTo(el, { scaleY: 1, scaleX: 1 }, { scaleY: 0.9, scaleX: 1.035, duration: 2 * F, ease: "power2.out", immediateRender: false }, land);
+          tl.to(el, { scaleY: 1, scaleX: 1, duration: 8 * F, ease: "power2.out" }, land + 3 * F);
+        });
+        MK.shake(tl, shake, land, { px: 5 });
+      });
+
+      /* ---------- Scene 6 (6.85–7.15): EXIT — everything accelerates UP, last frame = fastest ---------- */
+      MK.exit(tl, rig, 6.85, { dir: "up", dist: 1400, frames: 18, blur: bfRig });
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines[ID] = tl;
+    })();
+  </script>
+</template>

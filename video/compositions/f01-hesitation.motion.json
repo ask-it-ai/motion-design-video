@@ -1,13 +1,13 @@
 {
   "scene": "f01-hesitation",
-  "duration_s": 12.39,
-  "rules": ["cursor-click-ripple", "depth-of-field-blur", "center-outward-expansion"],
+  "duration_s": 9.25,
+  "rules": ["MK.drift", "MK.click", "MK.pan", "MK.snapZoom", "MK.pop", "MK.words", "MK.suck", "MK.toss", "MK.blurFilter", "MK.ring", "MK.legs"],
   "exit": {
-    "vector": "radial inward: camera still pulling back at ~1.1%/s scale (sine.in, about x=860 y=520) under a +0.24%/s phone drift; ~3 px/s at the phone edges, ~9 px/s at the outer packshots; tab card, thumb and visitor-tag already gone (empty dark phone)",
+    "vector": "down ~6740 px/s at the last frame (f553->f554, measured on screen): the page card (MK.toss, cubic fall, fall ends exactly at 9.25) leaves through the bottom edge, top edge at y~894 on the last frame, rotating ~6 deg, vertical SVG blur ramped 0->20 px over the last 8 frames; visitor-tag ~5360 px/s and « ? » ~6180 px/s falling behind it; camera (.rig) following the fall so the empty phone rises ~1840 px/s",
     "still_moving": true
   },
   "entry": {
-    "vector": "up ~460 px/s: PHONE_AVANT rises from y+60 (expo.out 0.9s) with blur 12px->0 and opacity 0->1 over 0.3s; phone scale drift 0.9->0.93 linear across the frame",
+    "vector": "up ~9380 px/s at the first frame (f0->f1, measured on screen): the serums page is mid-fling (expo.out 300->1510 source px over 1.0 s), vertical SVG blur 16 px on frame 0 clearing over 10 frames; thumb finishing the flick up ~5230 px/s",
     "from_rest": false
   }
 }
