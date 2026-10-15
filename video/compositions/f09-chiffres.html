@@ -1,0 +1,197 @@
+<template>
+  <style>
+    @font-face { font-family: 'Lufga'; src: url('assets/fonts/Lufga-Medium.woff2') format('woff2'); font-weight: 500; font-style: normal; }
+    @font-face { font-family: 'Lufga'; src: url('assets/fonts/Lufga-SemiBold.woff2') format('woff2'); font-weight: 600; font-style: normal; }
+    @font-face { font-family: 'Lufga'; src: url('assets/fonts/Lufga-Bold.woff2') format('woff2'); font-weight: 700; font-style: normal; }
+    @font-face { font-family: 'DM Sans'; src: url('assets/fonts/DMSans-normal-latin.woff2') format('woff2'); font-weight: 300 800; font-style: normal; }
+
+    #root { position: absolute; inset: 0; width: 1920px; height: 1080px; overflow: hidden; font-family: 'Lufga', sans-serif; color: #241F20; }
+
+    /* ground: grid-bg (canvas + 44 px grid + drifting brand mesh) */
+    #f09-chiffres-bg { position: absolute; inset: 0; overflow: hidden; background: #FDFCFC; }
+    #f09-chiffres-mesh { position: absolute; left: -1920px; top: -1080px; width: 5760px; height: 3240px; transform-origin: 2880px 1620px;
+      background: radial-gradient(1152px 648px at 2438.4px 1328.4px, rgba(248,87,31,0.22) 0%, rgba(248,87,31,0) 60%), radial-gradient(1056px 594px at 3417.6px 1404px, rgba(172,204,233,0.55) 0%, rgba(172,204,233,0) 62%), radial-gradient(1152px 648px at 2976px 1998px, rgba(167,171,221,0.45) 0%, rgba(167,171,221,0) 65%); }
+    #f09-chiffres-grid { position: absolute; inset: 0; background-size: 44px 44px;
+      background-image: linear-gradient(rgba(36,31,32,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(36,31,32,0.05) 1px, transparent 1px); }
+
+    /* camera skeleton: stage (clip) > shake > rig > drift > content */
+    #f09-chiffres-stage { position: absolute; inset: 0; overflow: hidden; }
+    #f09-chiffres-shake, #f09-chiffres-rig, #f09-chiffres-drift, #f09-chiffres-x4grp { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+    #f09-chiffres-x4grp { transform-origin: 960px 580px; }
+
+    /* « À la clé : » */
+    #f09-chiffres-badge { position: absolute; left: 520px; top: 205px; width: 90px; height: 90px; border-radius: 50%; background: #F8571F; display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 18px 36px -16px rgba(248,87,31,0.65), 0 2px 6px rgba(36,31,32,0.08); }
+    #f09-chiffres-keyw { width: 56px; height: 56px; }
+    #f09-chiffres-keyw svg { display: block; width: 56px; height: 56px; }
+    #f09-chiffres-hwords { position: absolute; left: 638px; top: 204px; font: 600 84px/1.08 'Lufga', sans-serif; letter-spacing: -0.02em; color: #6C6560; white-space: nowrap; }
+
+    /* « ×4 » */
+    #f09-chiffres-x4 { position: absolute; left: 480px; top: 410px; width: 480px; height: 340px; display: flex; align-items: center; justify-content: center;
+      font: 700 340px/1 'DM Sans', sans-serif; letter-spacing: -0.05em; color: #241F20; white-space: nowrap; }
+    .f09-chiffres-sign { color: #F8571F; }
+    #f09-chiffres-l1 { position: absolute; left: 1100px; top: 316px; font: 500 64px/1.1 'Lufga', sans-serif; letter-spacing: -0.02em; color: #6C6560; white-space: nowrap; }
+    #f09-chiffres-l2 { position: absolute; left: 1097px; top: 390px; font: 700 76px/1.1 'Lufga', sans-serif; letter-spacing: -0.03em; color: #F8571F; white-space: nowrap; }
+    #f09-chiffres-l3 { position: absolute; left: 1102px; top: 482px; font: 500 44px/1.1 'Lufga', sans-serif; letter-spacing: -0.01em; color: #A39C95; white-space: nowrap; }
+    #f09-chiffres-chart { position: absolute; left: 1080px; top: 560px; width: 400px; height: 320px; }
+    #f09-chiffres-base { position: absolute; left: 0; top: 260px; width: 340px; height: 2px; border-radius: 1px; background: rgba(36,31,32,0.14); transform-origin: 0 50%; }
+    .f09-chiffres-bar { position: absolute; bottom: 60px; width: 120px; border-radius: 16px 16px 4px 4px; transform-origin: 50% 100%; }
+    #f09-chiffres-bar0 { left: 20px; height: 60px; background: #DDD7CD; }
+    #f09-chiffres-bar1 { left: 180px; height: 240px; background: #F8571F; box-shadow: 0 20px 40px -18px rgba(248,87,31,0.7); }
+    .f09-chiffres-lab { position: absolute; top: 276px; width: 220px; text-align: center; font: 500 26px/1.2 'Lufga', sans-serif; color: #6C6560; white-space: nowrap; }
+    #f09-chiffres-lab0 { left: -30px; }
+    #f09-chiffres-lab1 { left: 130px; font-weight: 600; color: #241F20; }
+
+    /* basket: cart + falling packshots */
+    #f09-chiffres-cartzone { position: absolute; left: 500px; top: 500px; width: 240px; height: 200px; transform-origin: 50% 100%; }
+    #f09-chiffres-cart { position: absolute; left: 0; top: 0; width: 240px; height: 200px; transform-origin: 50% 60%; }
+    #f09-chiffres-cart svg { display: block; width: 240px; height: 200px; overflow: visible; }
+    .f09-chiffres-pk { position: absolute; width: 90px; height: 90px; border-radius: 18px; overflow: hidden; background: #DDD7CD; transform-origin: 50% 100%;
+      box-shadow: 0 0 0 3px #FFFFFF, 0 14px 26px -10px rgba(36,31,32,0.45); }
+    .f09-chiffres-pk img { display: block; width: 100%; height: 100%; object-fit: cover; }
+    #f09-chiffres-pk1 { left: 55px; top: -11px; }
+    #f09-chiffres-pk2 { left: 131px; top: -13px; }
+    #f09-chiffres-pk3 { left: 93px; top: -45px; }
+
+    /* « +36 % » */
+    #f09-chiffres-p36 { position: absolute; left: 790px; top: 390px; width: 940px; height: 300px; display: flex; align-items: center; justify-content: center;
+      font: 700 300px/1 'DM Sans', sans-serif; letter-spacing: -0.05em; color: #241F20; white-space: nowrap; }
+    #f09-chiffres-pct { display: inline-block; margin-left: 0.07em; transform-origin: 50% 70%; }
+    #f09-chiffres-l4 { position: absolute; left: 860px; top: 690px; width: 800px; height: 80px; display: flex; align-items: center; justify-content: center; gap: 20px; }
+    #f09-chiffres-l4w { font: 700 64px/1.1 'Lufga', sans-serif; letter-spacing: -0.02em; color: #241F20; white-space: nowrap; }
+    #f09-chiffres-arrow { width: 58px; height: 74px; transform-origin: 50% 100%; }
+    #f09-chiffres-arrow svg { display: block; width: 58px; height: 74px; }
+  </style>
+  <div id="root" data-composition-id="f09-chiffres" data-fps="60" data-start="0" data-duration="5.25" data-width="1920" data-height="1080">
+    <div id="f09-chiffres-bg" class="clip" data-start="0" data-duration="5.25" data-track-index="0" data-layout-allow-overflow>
+      <div id="f09-chiffres-mesh"></div>
+      <div id="f09-chiffres-grid"></div>
+    </div>
+    <div id="f09-chiffres-stage" class="clip" data-start="0" data-duration="5.25" data-track-index="1" data-layout-allow-overflow data-layout-allow-overlap data-layout-allow-occlusion>
+      <div id="f09-chiffres-shake">
+        <div id="f09-chiffres-rig">
+          <div id="f09-chiffres-drift">
+            <!-- « À la clé : » -->
+            <div id="f09-chiffres-badge" data-hf-motion-blur='{"shutterAngle":360,"samplesPerFrame":12}'>
+              <div id="f09-chiffres-keyw"><svg viewBox="0 0 56 56"><g id="f09-chiffres-key" fill="none" stroke="#FFFFFF" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="17" cy="28" r="8.5"/><path d="M25.5 28H46M39.5 28v7.5M45.5 28v5.5"/></g></svg></div>
+            </div>
+            <div id="f09-chiffres-hwords"></div>
+            <!-- « ×4 » + kinetic words + 1-vs-4 bars (sucked together) -->
+            <div id="f09-chiffres-x4grp">
+              <div id="f09-chiffres-x4" data-hf-motion-blur='{"shutterAngle":360,"samplesPerFrame":12}'><span class="f09-chiffres-sign">×</span><span>4</span></div>
+              <div id="f09-chiffres-l1"></div>
+              <div id="f09-chiffres-l2"></div>
+              <div id="f09-chiffres-l3"></div>
+              <div id="f09-chiffres-chart">
+                <div id="f09-chiffres-base"></div>
+                <div id="f09-chiffres-bar0" class="f09-chiffres-bar"></div>
+                <div id="f09-chiffres-bar1" class="f09-chiffres-bar"></div>
+                <div id="f09-chiffres-lab0" class="f09-chiffres-lab">Sans</div>
+                <div id="f09-chiffres-lab1" class="f09-chiffres-lab">Avec Ask-it</div>
+              </div>
+            </div>
+            <!-- the basket fills -->
+            <div id="f09-chiffres-cartzone">
+              <div id="f09-chiffres-pk1" class="f09-chiffres-pk" data-hf-motion-blur='{"shutterAngle":360,"samplesPerFrame":12}'><img src="assets/endro/products/serum-bonne-mine.jpg" alt=""></div>
+              <div id="f09-chiffres-pk2" class="f09-chiffres-pk" data-hf-motion-blur='{"shutterAngle":360,"samplesPerFrame":12}'><img src="assets/endro/products/gelee-nettoyante.jpg" alt=""></div>
+              <div id="f09-chiffres-pk3" class="f09-chiffres-pk" data-hf-motion-blur='{"shutterAngle":360,"samplesPerFrame":12}'><img src="assets/endro/products/creme-bonne-mine.jpg" alt=""></div>
+              <div id="f09-chiffres-cart" data-hf-motion-blur='{"shutterAngle":360,"samplesPerFrame":12}'><svg viewBox="0 0 240 200">
+                <path d="M49 56H226L206 140H68Z" fill="#FFFFFF"/>
+                <path d="M57 84H218M63 112H212" stroke="rgba(36,31,32,0.16)" stroke-width="5" stroke-linecap="round"/>
+                <path d="M12 22H44L68 140Q71 152 84 152H190Q203 152 206 140L226 56H49" fill="none" stroke="#241F20" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="94" cy="178" r="13" fill="#241F20"/><circle cx="184" cy="178" r="13" fill="#241F20"/>
+              </svg></div>
+            </div>
+            <!-- « +36 % » -->
+            <div id="f09-chiffres-p36" data-hf-motion-blur='{"shutterAngle":360,"samplesPerFrame":12}'><span class="f09-chiffres-sign">+</span><span>36</span><span id="f09-chiffres-pct" class="f09-chiffres-sign">%</span></div>
+            <div id="f09-chiffres-l4">
+              <div id="f09-chiffres-l4w"></div>
+              <div id="f09-chiffres-arrow"><svg viewBox="0 0 58 74"><path d="M29 68V14M9 33L29 11L49 33" fill="none" stroke="#F8571F" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <script src="lib/motionkit.js"></script>
+  <script>
+    (function () {
+      var ID = "f09-chiffres", DUR = 5.25;
+      var MK = window.MK, F = MK.F;
+      var $ = function (s) { return document.getElementById(ID + "-" + s); };
+      var root = document.querySelector('[data-composition-id="' + ID + '"]');
+      var tl = gsap.timeline({ paused: true });
+      var shake = $("shake"), rig = $("rig");
+      gsap.set(rig, { transformOrigin: "960px 540px" });
+
+      // background mesh drifts slowly (grid-bg)
+      tl.fromTo($("mesh"), { x: 0, y: 0, scale: 1 }, { x: 40, y: -18, scale: 1.06, duration: DUR, ease: "sine.inOut" }, 0);
+
+      // ---- Scene 1 (0.00–0.57): oversized entry braking + « À la clé : » ----
+      MK.enterBig(tl, rig, 0, { from: 1.4, frames: 40 });
+      MK.pop(tl, $("badge"), 0, { over: 0.25, inner: $("keyw") });
+      MK.words(tl, $("hwords"), [{ w: "À", t: 0.15 }, { w: "la", t: 0.23 }, { w: "clé :", t: 0.36 }], { lead: 0.15 });
+      // the key turns in the lock on « clé »
+      tl.to($("key"), { rotation: -28, svgOrigin: "28 28", duration: 6 * F, ease: "power2.out" }, 0.36);
+      tl.to($("key"), { rotation: 0, svgOrigin: "28 28", duration: 16 * F, ease: "back.out(2.2)" }, 0.36 + 6 * F);
+
+      // ---- Scene 2 (0.57–2.80): « ×4 » slams, kinetic words, 1-vs-4 bars ----
+      MK.slam(tl, $("x4"), 0.57, { shakeEl: shake }); // impact 0.72 on « quatre »
+      [["l1", 1.20], ["l2", 1.64], ["l3", 2.07]].forEach(function (p) {
+        tl.fromTo($(p[0]), { autoAlpha: 0 }, { autoAlpha: 1, duration: F, ease: "none" }, p[1]);
+      });
+      MK.words(tl, $("l1"), [{ w: "plus", t: 1.30 }, { w: "de", t: 1.51 }]);
+      MK.words(tl, $("l2"), [{ w: "conversions", t: 1.64, accent: true, letters: true }]);
+      MK.words(tl, $("l3"), [{ w: "en", t: 2.17 }, { w: "moyenne", t: 2.29 }]);
+      tl.fromTo($("base"), { scaleX: 0 }, { scaleX: 1, duration: 16 * F, ease: "power2.out" }, 1.22);
+      tl.fromTo($("bar0"), { scaleY: 0 }, { scaleY: 1, duration: 10 * F, ease: "power2.out" }, 1.34);
+      tl.fromTo($("lab0"), { y: 24, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 16 * F, ease: "power2.out" }, 1.30);
+      tl.fromTo($("bar1"), { scaleY: 0 }, { scaleY: 1.08, duration: 16 * F, ease: "power3.out" }, 1.64);
+      tl.to($("bar1"), { scaleY: 1, duration: 12 * F, ease: "power2.inOut" }, 1.64 + 16 * F);
+      tl.fromTo($("lab1"), { y: 24, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 16 * F, ease: "power2.out" }, 1.62);
+      // « moyenne »: the ×4 breathes once so the hero never sits dead
+      tl.to($("x4"), { scale: 1.035, duration: 8 * F, ease: "sine.out" }, 2.29);
+      tl.to($("x4"), { scale: 1, duration: 18 * F, ease: "sine.inOut" }, 2.29 + 8 * F);
+
+      // ---- Scene 3 (2.91–3.55): suction, the cart pops, packshots drop in with gravity ----
+      MK.suck(tl, $("x4grp"), 2.95);
+      MK.pop(tl, $("cart"), 3.13);
+      // local helper (MK.toss always rises first): pure gravity drop from 500 px above, lagging tilt, squash on landing
+      function drop(el, t, rot, dx) {
+        var n = 16, land = t + n * F;
+        tl.fromTo(el, { autoAlpha: 0 }, { autoAlpha: 1, duration: F, ease: "none" }, t);
+        tl.fromTo(el, { y: -500, x: dx, rotation: rot + (rot < 0 ? -24 : 24) }, { y: 0, x: 0, rotation: rot, duration: n * F, ease: "power2.in" }, t);
+        tl.to(el, { scaleX: 1.16, scaleY: 0.78, duration: 3 * F, ease: "power2.out" }, land);
+        tl.to(el, { scaleX: 1, scaleY: 1, duration: 14 * F, ease: "back.out(2.4)" }, land + 3 * F);
+        return land;
+      }
+      var land1 = drop($("pk1"), 3.14, -9, -40);
+      drop($("pk2"), 3.14 + F, 7, 36);
+      drop($("pk3"), 3.14 + 2 * F, -2, 10);
+      // the cart takes the weight
+      tl.to($("cartzone"), { y: 9, duration: 3 * F, ease: "power2.out" }, land1);
+      tl.to($("cartzone"), { y: 0, duration: 16 * F, ease: "back.out(2)" }, land1 + 3 * F);
+
+      // ---- Scene 4 (3.46–4.95): « +36 % » slams, « plus élevés », arrow, cart squash ----
+      MK.slam(tl, $("p36"), 3.46, { shakeEl: shake }); // impact 3.61 on « trente-six »
+      tl.to($("pct"), { scale: 1.16, rotation: -6, duration: 5 * F, ease: "power2.out" }, 4.02);
+      tl.to($("pct"), { scale: 1, rotation: 0, duration: 16 * F, ease: "back.out(2)" }, 4.02 + 5 * F);
+      MK.words(tl, $("l4w"), [{ w: "plus", t: 4.36, accent: true, letters: true }, { w: "élevés", t: 4.57, accent: true, letters: true }]);
+      tl.fromTo($("arrow"), { scaleY: 0, autoAlpha: 0 }, { scaleY: 1.18, autoAlpha: 1, duration: 8 * F, ease: "power3.out" }, 4.57);
+      tl.to($("arrow"), { scaleY: 1, duration: 16 * F, ease: "power2.inOut" }, 4.57 + 8 * F);
+      tl.to($("cartzone"), { scaleY: 0.9, scaleX: 1.04, duration: 4 * F, ease: "power2.in" }, 4.57);
+      tl.to($("cartzone"), { scaleY: 1, scaleX: 1, duration: 18 * F, ease: "back.out(2.6)" }, 4.57 + 4 * F);
+
+      // ---- Scene 5 (4.95–5.25): push left, the last frame is the fastest ----
+      var blur = MK.blurFilter(root, ID + "-blur1");
+      MK.exit(tl, rig, 4.95, { dir: "left", dist: 1600, frames: 18, blur: blur });
+
+      // camera life for the whole scene
+      MK.drift(tl, $("drift"), 0, DUR, { seed: 9 });
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines[ID] = tl;
+    })();
+  </script>
+</template>
