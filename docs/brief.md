@@ -209,3 +209,13 @@ Demande de Pierre : nouvelle version de 100 s maximum, construite sur l'analyse 
   - le logo des Petits Prodiges recadré depuis le visuel produit (pas de logo seul dans les assets) ;
   - la ligne d'indicateurs (KPI) ajoutée au dashboard f10, avec des chiffres issus du tunnel v3 et de f09 ;
   - pas de prix par produit dans f08, seul le total réel de 72,50 € est affiché.
+- **Rendu v4 (15/10)** : `renders/ask-it-v4-master.mp4`, 1920×1080, 60 i/s, 5 880 images, 98,0 s, 94 Mo (hors git).
+  - Le rendu sur 3 processus s'est bloqué à 5 841/5 880 images. Le moteur a repris seul, sur un processus en mode capture d'écran : 117 min au total.
+  - Les dernières images se rendent normalement à part (`snapshot`). Le blocage venait du parallélisme, pas du contenu.
+- **Mesures v4** (`fbf.py`, 30 i/s, mêmes réglages que pour les références) :
+  - 4,9 % d'images figées et une seule pause de 0,5 s ou plus (le carton final) ;
+  - surface en mouvement 2,7 %, zoom caméra 28,5 %, éléments autonomes 37,1 %, 28,8 rafales de flou par minute.
+  - Trellis et Gojiberry sont au même niveau. La v3 était à 35,7 % d'images figées.
+- **Copie de revue** : `renders/Ask-it_v4_Endro_review.mp4`, 28,5 Mio, 1080p60, H.264 en deux passes à 2,3 Mbit/s (réglage animation), envoyée à Pierre.
+  - SSIM moyen 0,995 par rapport au master, 0,975 au pire, pendant la plongée floutée vers le « ? » à 19,8 s.
+- **Transcription du mixage final** : texte complet et intelligible. Les trois « pourcent » sont prononcés en entier.

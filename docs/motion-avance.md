@@ -19,9 +19,11 @@ Synthèse illustrée (page privée) : https://claude.ai/artifact/RGqT8o2XcambcD7
 | Slack | 22,6 % | 9,2 | 1,2 % | 14,8 % | 27,7 % | 20,7 |
 | v2 | 21,8 % | 11,0 | 2,4 % | 22,8 % | 35,1 % | 26,8 |
 | **v3** | **35,7 %** | **14,8** | **0,4 %** | **7,4 %** | **15,7 %** | **12,5** |
+| **v4 (15/10)** | **4,9 %** | **0,6** | **2,7 %** | **28,5 %** | **37,1 %** | **28,8** |
 
 - **Slack** : ses pauses sont des noirs et des cartons comiques voulus. Hors noirs, moins de 4 % de ses images sont figées.
 - **v3, par scène** : 40 à 47 % d'images figées, sauf le dashboard (9 %).
+- **v4, par scène** : de 0 à 9 %, sauf les chiffres f09 (21 %, gros textes sur fond clair, plus longue pause 0,40 s) et le carton final f14 (18 %, pause voulue de 0,67 s).
 
 ## Les 10 écarts
 
