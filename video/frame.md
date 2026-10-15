@@ -2,7 +2,7 @@
 version: 1
 name: Ask-it × Endro — Frame (video / frame layer)
 description: >
-  Frame-scale design system for the Ask-it explainer (1920×1080, 30 fps, ~105 s). Two worlds
+  Frame-scale design system for the Ask-it explainer v4 (1920×1080, 60 fps, 98 s). Two worlds
   share one canvas: the AVANT world (a brand site drained of color, anonymous, cold) and the ASK-IT
   world (off-white canvas, faint 44px grid, warm near-black ink, Ask-it coral as the one accent,
   pastel brand mesh). Real client UI (Endro diagnostic, Endro shop, Ask-it dashboard) is shown
@@ -84,16 +84,18 @@ typography:
   stat:      { fontFamily: "DM Sans", px: 140, weight: 700, lineHeight: 0.95, tracking: "-0.04em", color: "ink" }
   ui-number: { fontFamily: "DM Sans", px: 56, weight: 600, tracking: "-0.02em", color: "ink", note: "tabular-nums" }
   endro-h:   { fontFamily: "Archivo", px: 30, weight: 800, upper: true, tracking: "-0.01em", color: "#1A1A1A", note: "inside the phone, at phone scale" }
+  kinetic:   { fontFamily: "Lufga", px: 96–150, neutral: "weight 500, ink-soft (AVANT: avant-mute)", accent: "weight 700, coral (AVANT: avant-ink)", tracking: "-0.03em", note: "two weights only; MK.words" }
 
 components:
   phone:
     description: >
-      iPhone-style device. Body 470×1000 px at 1:1 (scale freely), radius {radii.phone-body}, body
-      #111 with a 2px inner rim rgba(255,255,255,0.12), screen inset 14px, screen radius
-      {radii.phone-screen}, dynamic island 120×34 pill #000 centered 20px from the top, status bar
-      (time "9:41", signal/wifi/battery glyphs) 22px Lufga 600 ink. Screen content is either a real
-      2x screenshot (390-pt wide = 780 px source) sized to the screen width, or rebuilt HTML.
-      Shadow {shadows.phone}. In AVANT scenes the screen gets filter: grayscale(0.85) brightness(0.85).
+      iPhone-style device at MACRO scale (layout PHONE_MACRO): screen 780 px wide showing a real 2x
+      screenshot (780 px source) at 1:1, so its text reads 26–30 px on screen; body = screen + 28 px rim
+      (#111 with a 2 px inner rim rgba(255,255,255,0.12)), outer radius 96 px, screen radius 78 px, dynamic
+      island 200×56 #000 pill 26 px from the top. The 2x screenshots already contain the status bar area:
+      do not draw a second one. Shadow {shadows.phone} (AVANT: {shadows.avant-phone}). In AVANT scenes the
+      screenshot gets filter: grayscale(0.75) brightness(0.88) contrast(1.05). Overlays (typed text, selection
+      rings, the Ask-it entry pill, buttons turning green) are HTML drawn in screenshot pixels inside the screen.
   browser-window:
     description: >
       Desktop window for the dashboard: radius {radii.window}, white, 1.5px {colors.line} border,
@@ -150,14 +152,13 @@ spacing:
   gap: "32px"
 
 layout:
-  # Shared handoff constants — neighbouring frames must match these exactly at their seams.
-  # All times in storyboard blocks are LOCAL to the frame (0 = frame start).
-  PHONE: "body 470×1000 px, screen inset 14 px → screen 442×972 px. A real 2x screenshot (780 px wide) is drawn at width 442 px (scale 0.5667) under a 44 px iOS status bar ('9:41', signal/wifi/battery, ink on white). Pages scroll by translating the screenshot inside the screen (overflow hidden). Scroll amounts in the storyboard are in SCREEN px (after the 0.5667 scale)."
-  PHONE_HERO: "light world: phone scaled 0.9 (423×900 rendered), center x=700 y=520, no tilt"
-  PHONE_AVANT: "dark world (frame 1): phone scaled 0.9, center x=860 y=520"
-  PILLS_ROW: "the three step pills on one row, vertically centered at y=540, pill height 88 px, centers x=520 (01 Diagnostic), x=960 (02 Recommandation), x=1400 (03 Dashboard)"
-  GRID_100: "10×10 visitor dots, 26 px circles, 18 px gap (pitch 44 px), grid centered at x=520 y=520"
-  BACKGROUNDS: "each frame paints its own full-duration class='clip' background layer: grid-bg (Ask-it world) or avant-bg (AVANT world)"
+  # Shared constants (v4). All times inside a storyboard block are LOCAL to that scene (0 = scene start), at 60 fps.
+  PHONE_MACRO: "the v4 default. Phone drawn at 1:1 of the 2x screenshots: screen 780 px wide (a 780×1688 screenshot fills it 1:1, so body text reads 26–30 px), body = screen + 28 px rim (836 px wide, radius 96 px outer / 78 px screen), dynamic island 200×56. The phone is taller than the frame: the camera (.rig) frames the part that matters. Pages scroll by translating the screenshot inside the screen (overflow hidden). Text the viewer must read is ≥ 26 px ON SCREEN."
+  PHONE_WIDE: "when the whole phone must be seen (≤ 1.5 s per scene): PHONE_MACRO under a rig scale of 0.52–0.6."
+  PILLS_ROW: "the three step pills on one row, vertically centred at y=540, pill height 120 px, label Lufga 600 44 px, number in a 64 px coral circle (DM Sans 700 34 px white); centres x=430 (01 Diagnostic), x=960 (02 Recommandation), x=1490 (03 Dashboard)"
+  GRID_100: "10×10 visitor dots, 40 px circles, pitch 62 px (grid box 598×598), grid centred at x=600 y=540; the visitor 'Claire' is row 4 / col 6 (0-based: r=3, c=5)"
+  STEP_CHIP: "small active step marker for steps 01–03: white pill 64 px tall at top-left (left 96 px, top 72 px), coral number circle 44 px + label Lufga 600 28 px ink"
+  BACKGROUNDS: "each scene paints its own full-duration class='clip' background layer: grid-bg (Ask-it world, f05–f14) or avant-bg (AVANT world, f01–f04)"
 ---
 
 # Ask-it × Endro — Frame
@@ -172,11 +173,12 @@ Endro shop and of the Endro diagnostic, real product packshots, real Nuancier te
 
 ## The two worlds
 
-- **AVANT (scenes 1–2):** the same Endro site drained of color (grayscale 85 %), anonymous visitor,
-  dark warm-charcoal stage, vignette, slow heavy camera. Nobody guides her. Coral never appears here
-  except as the single colored figure « 70 % ».
-- **ASK-IT (scenes 3–9):** the switch happens on « Bon… ça, c'était avant » — color floods back from
-  the center, the 44px grid draws itself, the brand mesh blooms. From here on the canvas is light.
+- **AVANT (scenes f01–f04):** the same Endro site drained of color (grayscale 75 %), anonymous visitor,
+  dark warm-charcoal stage, vignette. The camera is just as alive as in the Ask-it world (v4: nothing
+  freezes) but colder. Coral never appears here except as the single colored figure « 70 % ».
+- **ASK-IT (scenes f05–f14):** the switch happens on « Bon… ça, c'était avant »: the dark world is sucked
+  into a card and tossed away; f05 opens on the light canvas (44 px grid, brand mesh blooming). From here
+  on the canvas is light.
 
 ## Composition rules
 
@@ -188,40 +190,80 @@ Endro shop and of the Endro diagnostic, real product packshots, real Nuancier te
 - Keep the bottom band (y > 900 px) free of key content.
 - Real faces humanize the data: persona portraits (assets/personas/*.webp) in circles with a white ring.
 
-## Motion language (calibrated on the Agence 1600 references, measured frame by frame)
+## Motion language v4 (measured frame by frame on Trellis, Gojiberry, lemlist, Taapit, Slack)
 
-The reference films never hard-cut and never freeze: a new composition every ~1.25 s (median), about
-one visual attack per second, and every hold carries a slow scale drift. Match that energy.
+v3 froze 36 % of its frames; the references freeze 5–12 %. v4 is built so that **nothing ever stops**.
+Every recipe below exists as a builder in `lib/motionkit.js` (`window.MK`) — use the builder, do not
+re-invent the curve. Times in frames are at **60 fps** (`MK.F` = 1/60 s).
 
-- **Lead the voice:** an element appears 150–300 ms BEFORE the word it illustrates is spoken.
-- **Entrances (UI, cards, words):** 0.25–0.45 s, expo.out or back.out(1.6), combined transform
-  (y 30–60 px + scale 0.9 → 1 + blur 10 px → 0). Groups stagger 20–60 ms (≤ 0.5 s total).
-- **Number slam** (stats like 70 %, ×4, +36 %): fromTo yPercent −120 + blur 12 px → 0 in ~70 ms
-  (power4.in), land with back.out(2) (slight undershoot, settle in ~270 ms), then 10–12 thin radial
-  impact lines (SVG strokes) scale 1 → 1.6 and fade 1 → 0 in 250 ms. Then the digits may count.
-- **Word slam** (interjection / pivot): scale 6 → 1 with blur 30 → 0 px, back.out(2), 0.47 s; the
-  previous element is first sucked out (scale 0.8, blur 6 px, opacity 0 in ~70 ms).
-- **UI rising in perspective:** perspective 1400 px; fromTo rotationX 35° → 10° (or rotationY 70° → 12°)
-  + yPercent 60 → 0 in 0.45 s power3.out, then settles to 5–10° over 0.5 s (sine.out); the UI may be
-  cropped by the frame edge. A giant keyword can sit BEHIND a tilted UI (lower z-index).
-- **Inside-scene camera** (world wrapper translate/scale): 0.4–0.7 s power2.inOut with blur at peak
-  speed; between moves a slow drift (scale −3 to +4 % per second-ish) keeps every frame alive.
-- **Whip / zoom-through inside a frame** (when a frame changes its own layout): outgoing group
-  translates 100–120 % of the width in 0.15–0.25 s (expo.in) with directional blur, or scales 1 → 1.3 with
-  blur 0 → 20 px in 0.1–0.25 s; the next layout arrives calmly (0.3 s fade/typing) 0–1 frame later.
-- **Persistent objects:** prefer re-arranging the same objects (FLIP-style position/scale moves,
-  expo.out 0.35–0.6 s, stagger 20–40 ms) over replacing them.
-- **Logo build:** mark drawn or popped in ~200 ms, letters staggered 33–50 ms, pale → brand color.
-- **Taps:** cursor/touch travels power2.inOut 0.25 s, press scale 0.95 for 0.1 s, ring r 0 → 60 px with
-  opacity 1 → 0 in 0.35 s; the tapped element reacts in the same beat.
-- **Two-tone headlines:** hierarchy by color, not weight — main words ink, complement ink-soft.
-- Counters roll in DM Sans tabular-nums and land exactly on the voice cue.
-- No CSS transitions, no exits on non-final scenes (the assembler owns scene seams).
+### Scene skeleton (every composition)
+
+`#root` (data-fps="60") › background `.clip` (static ground) › `.shake` (tremor only) › `.rig` (the camera:
+pans, snaps, zooms, dives) › `.drift` (`MK.drift` for the WHOLE scene, never off) › content layers.
+One transform channel per wrapper — never tween the same property of one element from two places.
+
+### The 10 laws
+
+1. **Never frozen.** Action comes in bursts of ~0.2 s separated by slow drift. After a result lands, a
+   lock of 14–17 frames, then drift again. No more than 0.5 s without a burst. Budget: ≤ 1 still frame in 10.
+2. **UI in macro, filmed by a camera.** PHONE_MACRO (screen text 26–34 px on screen). The rig snaps and
+   pans between targets; the secondary is cropped by the frame edge. The camera has a slight 3D attitude
+   (rotateY/rotateX drifting −4° → +7° over a shot, perspective 1800–2400 px).
+3. **A click is an event** — `MK.click`: touch pressed 3 frames before; on the click frame the UI state
+   changes INSTANTLY (`tl.set`), the component pulses (0.97 → 1.025 → 1), the frame trembles (−8/+4 px),
+   3 coral dashes radiate (17 frames) and the camera snaps +10–20 % toward the target (65 % in 1 frame).
+4. **Exits accelerate, the cut lands on the fastest frame, the next scene arrives launched.** Each scene
+   ENDS with its own exit (last 18 frames, `MK.exit` / `MK.zoomThrough` / `MK.suck` / `MK.toss`) whose fastest
+   frame is the scene's last frame. Each scene STARTS in motion: launched entry in the same direction
+   (`MK.enter`, circ.out, half the way in 6 frames) or oversized entry that brakes (`MK.enterBig` 1.36–1.48 → 1).
+   Never an empty background for more than 1 frame. There are NO root transitions in v4.
+5. **Real motion blur.** `data-hf-motion-blur='{"shutterAngle":360,"samplesPerFrame":12}'` on compact
+   movers (numbers, words, chips, cards, icons, tossed objects) — never on an element that contains a
+   large image. Large layers (phone, screenshots, panels, the whole stage) get the directional SVG blur
+   from `MK.blurFilter` during their exits/entries/pans. Never both on the same element.
+6. **Slam for every key number** (`MK.slam` after `MK.suck`): the previous content is sucked 100 → 55 %
+   accelerating over 18 frames; the number arrives at ×6.5 and reaches 100 % in 9 frames without braking;
+   −16.5 % undershoot 2 frames later; back in 14 frames; ±25 px frame shake on the impact frame. The impact
+   frame sits on the stressed syllable (± 1 frame).
+7. **Anticipation, overshoot, gravity.** Before every expansion, contract to 45–70 % over the 8 frames before
+   (`MK.anticipate`). Pops (`MK.pop`): full size in 4 frames, +20–25 % at frames 7–8, back to 1 by frame ~26,
+   never below 1. Tossed objects rise, hang, fall accelerating with a lagging rotation (`MK.toss`).
+8. **Overlap.** A layer starts at the speed peak of the previous one, never after it ends. Offsets:
+   1 frame (icons/dots), 3–5 frames (letters), 4 frames (a series of cards/chips/pills), 6–8 frames (words).
+9. **Text carries the rhythm** (`MK.words`). Only the short key phrase named in the storyboard is written —
+   never a full narration sentence. Neutral words: Lufga 500, land 0.1 s ahead of the voice, rise 40 px.
+   Accent words: Lufga 700 (or DM Sans 700 for numbers), build letter by letter ON their syllable
+   (cadence 3/4/5/6/10 frames), coral in the Ask-it world, avant-ink in the AVANT world.
+10. **Depth and matter.** Planes tilted at rotateX 58–64° with rotateZ ±12° for the recommendation and the
+    dashboard flights; floating cards drift ×1.4 faster than the plane (parallax); the background goes out of
+    focus 5 frames BEFORE a foreground gesture (depth-of-field 6–14 px), never after.
+
+### MK builders (signatures, times in seconds, scene-local)
+
+- `MK.drift(tl, el, t0, dur, {zoom=.03, float=14, period=2.6, seed})` — continuous camera life
+- `MK.pop(tl, el, t, {over=.22, from=0, inner})` · `MK.anticipate(tl, el, t, {to=.7, frames=8})`
+- `MK.shake(tl, shakeEl, t, {px=8})` · `MK.slam(tl, el, t, {from=6.5, shakeEl, shakePx=25})` → impact time = t + 9 frames
+- `MK.suck(tl, el, t, {to=.55, frames=18})` → end time
+- `MK.click(tl, {t, x, y, layer, component, shakeEl, touch, rig, snap, rigScale})` (x/y in `layer` px)
+- `MK.blurFilter(scopeEl, uniqueId)` → handle `{ramp, clear}` for directional blur on big layers
+- `MK.exit(tl, el, t, {dir, dist=1400, frames=18, blur})` → cut time · `MK.enter(tl, el, t, {dir, dist=900, frames=38, blur})`
+- `MK.enterBig(tl, el, t, {from=1.4, frames=40})` · `MK.zoomThrough(tl, rig, t, {origin:"x y", to=8, frames=18, blur})` → cut time
+- `MK.snapZoom(tl, el, t, {from, to, origin, tail=16})` (S-curve: 5 % / 65 % in 2 frames / tail)
+- `MK.pan(tl, el, t, {x, y, scale, frames=24, blur, axis})` (camera travel, blur at the speed peak)
+- `MK.toss(tl, el, t, {rise=120, fall=1500, rotation=24, fallFrames=26, x})` → end of fall (= cut when it exits)
+- `MK.words(tl, container, [{w, t, accent, letters}], {lead=.1})` → spans
+- `MK.count(tl, t, {from, to, dur, penultimate, holdFrames=10, render})` → time of the final value
+- `MK.type(tl, el, text, t, {cps=40})` · `MK.fly(tl, el, t, {dx, dy, arc=-140, frames=30})` → landing time
+- `MK.ring(tl, layer, t, {x, y, r1=120, color})` · `MK.each(list, t, frames, fn)` · `MK.hash(n)` (deterministic 0–1)
+
+Load it in every composition right after GSAP: `<script src="lib/motionkit.js"></script>` (inside the template).
 
 ## Do / Don't
 
 - Do use the real assets listed in each storyboard block (paths under assets/).
 - Do keep Endro UI faithful (Archivo uppercase headings, forest green buttons) when rebuilding it.
-- Don't put narration sentences on screen; use short labels, numbers and single accent words.
+- Don't put narration sentences on screen; use short labels, numbers and the short key phrases the storyboard names (kinetic text).
+- Don't fade between scenes, don't start a scene from rest, don't end a scene at rest (except the very last one).
+- Don't use CSS transitions, Math.random, Date or timers; derive every pseudo-random value from MK.hash(index).
 - Don't use pure black or pure white surfaces outside device screens; don't use gradient text.
 - Don't invent claims or numbers: only those named in the storyboard.

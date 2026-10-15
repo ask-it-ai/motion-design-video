@@ -159,3 +159,38 @@ Constat principal : la v3 est plus statique que les références et que la v2 :
 - 36 % d'images figées, contre 5 à 12 % ;
 - 14,8 pauses de 0,5 s par minute, contre environ 1 ;
 - une interface trop petite à l'écran.
+
+## v4 en cours (15/10) : refonte du mouvement d'après l'analyse
+
+Demande de Pierre : nouvelle version de 100 s maximum, construite sur l'analyse image par image, et « pourcent » prononcé en entier par la voix.
+
+- **Voix** : `assets/audio/vo_v4.wav` (96,2 s, hors git) et sa timeline mot à mot.
+  - « % » est écrit « pourcent » dans le script.
+  - Les jetons « % » et la ponctuation de la transcription sont rattachés au mot précédent. Plus aucune coupe ne tombe dans un mot.
+  - Scripts : `scripts/vo_gen4.py`, `scripts/vo_assemble4.py`, textes dans `audio-src/vo_lines_v4.json`.
+- **Durée** : 98,0 s, 60 i/s.
+- **Langage de mouvement** : `frame.md` → « Motion language v4 ». Les recettes mesurées sont codées dans `lib/motionkit.js` (`window.MK`) :
+  - dérive caméra continue ;
+  - pop à ressort, slam précédé d'une aspiration, clic à 4 réponses ;
+  - sortie accélérée puis entrée lancée, traversée par zoom, gravité ;
+  - texte cinétique, compteur avec retenue, vol en arc.
+  - La dérive seule garde 0 % d'images figées sur un plan d'interface, avec la même mesure que pour les références.
+- **Storyboard** : `STORYBOARD.md` v4, 14 scènes de f01 à f14, chaque geste calé sur la voix.
+  - Les raccords sont dans les scènes : coupe franche sur l'image la plus rapide. Il n'y a plus de transitions dans `index.html`.
+  - Les scènes ont été construites par 7 agents, 2 scènes chacun, à partir de `.hyperframes/frame-packets-v4/` (hors git).
+  - Outil de contrôle des scènes : `scene_snap.mjs` dans le scratchpad. Il produit des captures et mesure la part d'images figées.
+- **Flou de mouvement** : composant registre `motion-blur`, chargé une fois via `lib/motion-blur.js`. Il s'applique aux éléments qui portent `data-hf-motion-blur`.
+- **Musique** : Eleven Music `music_v2_5`, avec un plan de composition aux durées imposées.
+  - Lit AVANT de 26 s, sombre et minimal, à 100 BPM.
+  - Lit APRÈS de 71,4 s, lumineux, à 112 BPM.
+  - Aucune voix détectée par la transcription.
+  - `scripts/music_edit.py` cale la musique sur l'image :
+    - silence de 0,28 s avant chaque slam, puis reprise sur un coup de grosse caisse à l'image d'impact (écart de 0 à 20 ms) ;
+    - chute de 30 dB après « à l'aveugle » ;
+    - le premier coup du lit APRÈS tombe sur « It » de « Ask-it ».
+- **Bruitages** : 6 sons ajoutés au fichier `audio-src/sfx_library.json` : `suck`, `switch_light`, `fall`, `zoom_dive`, `land`, `slam_big`.
+  - `scripts/cues_gen4.py` produit la feuille de 249 repères, en temps global.
+- **Mixage** : `scripts/mix4.py` (voix, bruitages, musique).
+  - Musique à −9 LU de la voix et atténuée de 6 dB quand la voix parle, soit environ 15 dB sous la voix.
+  - Creux de −3 dB vers 2,5 kHz dans la musique.
+  - Master à −14 LUFS et −1 dBTP.

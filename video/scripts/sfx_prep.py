@@ -13,6 +13,8 @@ PICK = {
  'muffle_drone': ('v1', 0), 'rewind': ('v1', 100), 'color_flood': ('v1', 80), 'logo_sting': ('v2', 80),
  'success': ('v2', 120), 'paper_crumple': ('v1', 150), 'typing': ('v1', 200), 'notif': ('v1', 200),
  'timer': ('v1', 200), 'sparkle': ('v1', 400), 'skin_swap': ('v1', 120), 'cart_add': ('v1', 120),
+ # v4 additions
+ 'suck': ('v1', 150), 'switch_light': ('v2', 40), 'fall': ('v2', 60), 'zoom_dive': ('v1', 100), 'land': ('v2', 80), 'slam_big': ('v2', 0),
 }
 def decode(f, hp):
     af = [f'aresample={SR}']
