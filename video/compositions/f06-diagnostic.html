@@ -1,0 +1,423 @@
+<template id="f06-diagnostic-template">
+  <style>
+    @font-face { font-family: "Lufga"; src: url("assets/fonts/Lufga-Medium.woff2") format("woff2"); font-weight: 500; font-style: normal; font-display: block; }
+    @font-face { font-family: "Lufga"; src: url("assets/fonts/Lufga-SemiBold.woff2") format("woff2"); font-weight: 600; font-style: normal; font-display: block; }
+    @font-face { font-family: "DM Sans"; src: url("assets/fonts/DMSans-normal-latin.woff2") format("woff2"); font-weight: 300 800; font-style: normal; font-display: block; }
+    @font-face { font-family: "Mulish"; src: url("assets/fonts/Mulish-normal-latin.woff2") format("woff2"); font-weight: 300 800; font-style: normal; font-display: block; }
+
+    #root { position: relative; width: 1920px; height: 1080px; overflow: hidden; font-family: "Lufga", sans-serif; color: #241f20; }
+
+    /* ── ground: canvas + brand mesh drifting ── */
+    #f06-diagnostic-bg { position: absolute; inset: 0; overflow: hidden; background: #fdfcfc; }
+    #f06-diagnostic-mesh {
+      position: absolute; left: -1920px; top: -1080px; width: 5760px; height: 3240px; transform-origin: 2880px 1620px;
+      background:
+        radial-gradient(1152px 648px at 2438.4px 1328.4px, rgba(248, 87, 31, 0.22) 0%, rgba(248, 87, 31, 0) 60%),
+        radial-gradient(1056px 594px at 3417.6px 1404px, rgba(172, 204, 233, 0.55) 0%, rgba(172, 204, 233, 0) 62%),
+        radial-gradient(1152px 648px at 2976px 1998px, rgba(167, 171, 221, 0.45) 0%, rgba(167, 171, 221, 0) 65%);
+    }
+
+    /* ── skeleton: stage(clip) › shake › rig (camera) › drift › content ──
+       the rig box is widened (−240 … 2700) so its directional blur filter region still covers the frame
+       during the whips and the exit; #rigin puts frame coordinates back at its origin. */
+    #f06-diagnostic-stage { position: absolute; inset: 0; overflow: hidden; }
+    .f06-diagnostic-full { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+    #f06-diagnostic-rig { position: absolute; left: -240px; top: 0; width: 2940px; height: 1080px; transform-origin: 1200px 540px; }
+    #f06-diagnostic-rigin { position: absolute; left: 240px; top: 0; width: 1920px; height: 1080px; }
+    #f06-diagnostic-drift { transform-origin: 960px 540px; }
+    #f06-diagnostic-grid {
+      position: absolute; left: -440px; top: -264px; width: 3872px; height: 1628px;
+      background-image: linear-gradient(to right, rgba(36, 31, 32, 0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(36, 31, 32, 0.05) 1px, transparent 1px);
+      background-size: 44px 44px;
+    }
+
+    /* ── PHONE_MACRO (screen 780 × 1688 at 1:1, rim 28, centred x = 700) inside a 3D attitude ── */
+    #f06-diagnostic-p3d { perspective: 2200px; perspective-origin: 700px 540px; }
+    #f06-diagnostic-tilt { transform-origin: 700px 540px; }
+    .f06-diagnostic-cambox { position: absolute; left: 0; top: 0; width: 1920px; height: 1800px; }
+    #f06-diagnostic-phone {
+      position: absolute; left: 282px; top: 0; width: 836px; height: 1744px; border-radius: 96px; background: #111111; transform-origin: 418px 1656px;
+      box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.12), 0 60px 120px -30px rgba(36, 31, 32, 0.35), 0 20px 40px -20px rgba(36, 31, 32, 0.25);
+    }
+    #f06-diagnostic-screen { position: absolute; left: 28px; top: 28px; width: 780px; height: 1688px; border-radius: 78px; overflow: hidden; background: #ffffff; }
+    .f06-diagnostic-page { position: absolute; left: 0; top: 0; width: 780px; height: 1688px; display: block; visibility: hidden; opacity: 0; }
+    #f06-diagnostic-p00 { visibility: visible; opacity: 1; }
+    .f06-diagnostic-island { position: absolute; left: 290px; top: 26px; width: 200px; height: 56px; border-radius: 999px; background: #000000; }
+    #f06-diagnostic-shimmer {
+      position: absolute; left: 0; top: -360px; width: 230px; height: 2400px; visibility: hidden; opacity: 0;
+      background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.34) 50%, rgba(255, 255, 255, 0) 100%);
+    }
+
+    /* overlays drawn in screenshot pixels */
+    #f06-diagnostic-field { position: absolute; left: 45px; top: 1428px; width: 690px; height: 101px; background: #173221; display: flex; align-items: center; justify-content: center; visibility: hidden; opacity: 0; }
+    #f06-diagnostic-ftext { display: block; font-family: "Mulish", sans-serif; font-weight: 400; font-size: 32px; line-height: 40px; color: #ffffff; white-space: pre; }
+    .f06-diagnostic-fcaret { flex: none; width: 2px; height: 34px; margin-left: 3px; background: #ffffff; }
+    .f06-diagnostic-slotbox { position: absolute; visibility: hidden; opacity: 0; }
+    .f06-diagnostic-patch { position: absolute; inset: 0; background: #ffffff; }
+    .f06-diagnostic-comp { position: absolute; inset: 0; }
+    .f06-diagnostic-crop { position: absolute; inset: 0; background-size: 780px 1688px; background-repeat: no-repeat; }
+    .f06-diagnostic-hide { visibility: hidden; opacity: 0; }
+    #f06-diagnostic-slider { position: absolute; left: 20px; top: 1274px; width: 740px; height: 52px; background: #ffffff; visibility: hidden; opacity: 0; }
+    .f06-diagnostic-strack { position: absolute; left: 20px; top: 22px; width: 700px; height: 10px; border-radius: 5px; background: #e5e2dc; }
+    #f06-diagnostic-sfill { position: absolute; left: 20px; top: 22px; width: 700px; height: 10px; border-radius: 5px; background: #1a1a1a; transform-origin: 0% 50%; }
+    #f06-diagnostic-sknob { position: absolute; left: 4px; top: 11px; width: 32px; height: 32px; border-radius: 50%; background: #1a1a1a; box-shadow: 0 0 0 3px #ffffff, 0 4px 10px rgba(0, 0, 0, 0.28); }
+
+    /* touch indicator (frame.md touch), positioned by x/y at its centre */
+    #f06-diagnostic-touch { position: absolute; left: -27px; top: -27px; width: 54px; height: 54px; visibility: hidden; opacity: 0; }
+    .f06-diagnostic-tdot { position: absolute; inset: 0; border-radius: 50%; background: rgba(255, 255, 255, 0.55); box-shadow: 0 0 0 2px rgba(36, 31, 32, 0.25), 0 8px 18px rgba(36, 31, 32, 0.22); }
+    .f06-diagnostic-ripple { position: absolute; inset: 0; box-sizing: border-box; border-radius: 50%; border: 2px solid rgba(255, 255, 255, 0.95); box-shadow: 0 0 0 1px rgba(36, 31, 32, 0.22); opacity: 0; }
+
+    /* ── brand badge (white pill outside the screen's top-right, logo 34 px tall) ── */
+    #f06-diagnostic-badge { position: absolute; left: 1135px; top: 70px; width: 190px; height: 64px; transform-origin: 50% 50%; }
+    .f06-diagnostic-skin {
+      position: absolute; inset: 0; box-sizing: border-box; border-radius: 999px; display: flex; align-items: center; justify-content: center; overflow: hidden;
+      background: #ffffff; border: 1.5px solid rgba(36, 31, 32, 0.1); box-shadow: 0 18px 40px -18px rgba(36, 31, 32, 0.18), 0 2px 6px rgba(36, 31, 32, 0.05);
+    }
+    .f06-diagnostic-skin img.f06-diagnostic-endro { display: block; height: 34px; width: auto; }
+    #f06-diagnostic-bLpp { background: #fbf6ef; }
+    .f06-diagnostic-lppcrop { position: relative; width: 84px; height: 38px; overflow: hidden; }
+    .f06-diagnostic-lppcrop img { position: absolute; left: -309.4px; top: -219.7px; width: 850px; height: auto; filter: grayscale(1) brightness(1.1) contrast(1.8); mix-blend-mode: multiply; }
+
+    /* ── STEP_CHIP « 01 Diagnostic » ── */
+    #f06-diagnostic-step {
+      position: absolute; left: 96px; top: 72px; height: 64px; display: flex; align-items: center; gap: 14px; padding: 0 28px 0 10px; box-sizing: border-box;
+      background: #ffffff; border: 1.5px solid rgba(36, 31, 32, 0.1); border-radius: 999px; white-space: nowrap; transform-origin: 20% 50%;
+      box-shadow: 0 18px 40px -18px rgba(36, 31, 32, 0.18), 0 2px 6px rgba(36, 31, 32, 0.05);
+    }
+    .f06-diagnostic-stepnum { flex: none; width: 44px; height: 44px; border-radius: 50%; background: #f8571f; color: #ffffff; display: flex; align-items: center; justify-content: center; font-family: "DM Sans", sans-serif; font-weight: 600; font-size: 20px; line-height: 1; }
+    .f06-diagnostic-steplab { display: block; font-weight: 600; font-size: 28px; line-height: 36px; color: #241f20; }
+
+    /* ── profile card (x 1220–1780, y 170–620) ── */
+    #f06-diagnostic-card { position: absolute; left: 1220px; top: 170px; width: 560px; height: 450px; visibility: hidden; opacity: 0; transform-origin: 50% 50%; }
+    #f06-diagnostic-cardin { position: absolute; inset: 0; border-radius: 22px; background: #ffffff; transform-origin: 50% 50%; box-shadow: 0 0 0 1.5px rgba(36, 31, 32, 0.1); }
+    /* the card's soft float shadow rides on a twin layer outside the motion-blurred card (blur copies would double it) */
+    #f06-diagnostic-cardsh {
+      position: absolute; left: 1220px; top: 170px; width: 560px; height: 450px; border-radius: 22px; visibility: hidden; opacity: 0; transform-origin: 50% 50%;
+      box-shadow: 0 40px 80px -24px rgba(36, 31, 32, 0.22), 0 8px 24px -8px rgba(36, 31, 32, 0.1);
+    }
+    .f06-diagnostic-cav { position: absolute; left: 32px; top: 32px; width: 96px; height: 96px; border-radius: 50%; overflow: hidden; background: #efe6de; box-shadow: 0 0 0 4px #ffffff, 0 10px 22px -8px rgba(36, 31, 32, 0.35); }
+    .f06-diagnostic-cav img { position: absolute; left: -4px; top: -1px; width: 104px; height: 104px; display: block; }
+    .f06-diagnostic-cname { position: absolute; left: 152px; top: 38px; font-weight: 600; font-size: 40px; line-height: 48px; letter-spacing: -0.01em; white-space: nowrap; }
+    .f06-diagnostic-csub { position: absolute; left: 153px; top: 90px; font-weight: 500; font-size: 22px; line-height: 28px; color: #f8571f; white-space: nowrap; }
+    .f06-diagnostic-cdiv { position: absolute; left: 32px; top: 152px; width: 496px; height: 1.5px; background: rgba(36, 31, 32, 0.08); }
+    .f06-diagnostic-skel { position: absolute; height: 56px; border-radius: 999px; background: #f4f1ed; }
+    .f06-diagnostic-plab { position: absolute; left: 32px; top: 382px; font-weight: 500; font-size: 22px; line-height: 28px; color: #6c6560; white-space: nowrap; }
+    #f06-diagnostic-pval { position: absolute; right: 32px; top: 381px; font-family: "DM Sans", sans-serif; font-weight: 600; font-size: 22px; line-height: 28px; color: #241f20; font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .f06-diagnostic-ptrack { position: absolute; left: 32px; top: 420px; width: 496px; height: 10px; border-radius: 5px; background: #f1eeea; overflow: hidden; }
+    #f06-diagnostic-pfill { position: absolute; left: 0; top: 0; width: 496px; height: 10px; border-radius: 5px; background: #f8571f; transform-origin: 0% 50%; }
+    #f06-diagnostic-check {
+      position: absolute; left: 491px; top: 32px; width: 40px; height: 40px; border-radius: 50%; background: #1f8a4c; display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 0 0 4px #ffffff, 0 8px 18px -6px rgba(31, 138, 76, 0.6);
+    }
+    #f06-diagnostic-check svg { display: block; width: 22px; height: 22px; }
+
+    /* ── answer chips (fly from the tap point into the card's chip row) ── */
+    .f06-diagnostic-chip {
+      position: absolute; left: 1252px; height: 56px; display: flex; align-items: center; gap: 12px; padding: 0 22px 0 18px; box-sizing: border-box;
+      background: #ffffff; border: 1.5px solid rgba(36, 31, 32, 0.1); border-radius: 999px; white-space: nowrap;
+      box-shadow: 0 18px 40px -18px rgba(36, 31, 32, 0.24), 0 2px 6px rgba(36, 31, 32, 0.06);
+      font-weight: 500; font-size: 26px; line-height: 34px; color: #241f20;
+    }
+    .f06-diagnostic-chip i { flex: none; display: block; width: 10px; height: 10px; border-radius: 50%; background: #f8571f; }
+    .f06-diagnostic-dm { font-family: "DM Sans", sans-serif; font-weight: 500; }
+
+    #f06-diagnostic-fx, #f06-diagnostic-pfx { pointer-events: none; }
+  </style>
+
+  <div id="root" data-composition-id="f06-diagnostic" data-fps="60" data-start="0" data-duration="9.25" data-width="1920" data-height="1080">
+    <!-- track 0 · grid-bg ground -->
+    <div id="f06-diagnostic-bg" class="clip" data-start="0" data-duration="9.25" data-track-index="0">
+      <div id="f06-diagnostic-mesh"></div>
+    </div>
+
+    <!-- track 1 · stage -->
+    <div id="f06-diagnostic-stage" class="clip" data-start="0" data-duration="9.25" data-track-index="1">
+      <div id="f06-diagnostic-shake" class="f06-diagnostic-full">
+        <div id="f06-diagnostic-rig">
+          <div id="f06-diagnostic-rigin">
+            <div id="f06-diagnostic-drift" class="f06-diagnostic-full">
+              <div id="f06-diagnostic-grid"></div>
+
+              <div id="f06-diagnostic-p3d" class="f06-diagnostic-full">
+                <div id="f06-diagnostic-tilt" class="f06-diagnostic-full">
+                  <div id="f06-diagnostic-cam" class="f06-diagnostic-cambox">
+                    <div id="f06-diagnostic-zoom" class="f06-diagnostic-cambox">
+                      <div id="f06-diagnostic-phone">
+                        <div id="f06-diagnostic-screen">
+                          <img id="f06-diagnostic-p00" class="f06-diagnostic-page" src="assets/screens/endro-diag/00-intro.png" alt="" />
+                          <img id="f06-diagnostic-plpp" class="f06-diagnostic-page" src="assets/screens/lpp-diag/00-intro-mobile.png" alt="" />
+                          <img id="f06-diagnostic-p01" class="f06-diagnostic-page" src="assets/screens/endro-diag/01-prenom.png" alt="" />
+                          <img id="f06-diagnostic-p04" class="f06-diagnostic-page" src="assets/screens/endro-diag/04-claire-actuellement-comment-se-comporte-votre-pe.png" alt="" />
+                          <img id="f06-diagnostic-p04c" class="f06-diagnostic-page" src="assets/screens/endro-diag/04-claire-actuellement-comment-se-comporte-votre-pe-choix.png" alt="" />
+                          <img id="f06-diagnostic-p12" class="f06-diagnostic-page" src="assets/screens/endro-diag/12-claire-quel-type-de-routine-recherchez-vous.png" alt="" />
+                          <img id="f06-diagnostic-p12c" class="f06-diagnostic-page" src="assets/screens/endro-diag/12-claire-quel-type-de-routine-recherchez-vous-choix.png" alt="" />
+                          <img id="f06-diagnostic-p05" class="f06-diagnostic-page" src="assets/screens/endro-diag/05-claire-votre-peau-est-elle-sensible.png" alt="" />
+                          <img id="f06-diagnostic-p05c" class="f06-diagnostic-page" src="assets/screens/endro-diag/05-claire-votre-peau-est-elle-sensible-choix.png" alt="" />
+
+                          <div id="f06-diagnostic-shimmer"></div>
+                          <div id="f06-diagnostic-field"><span id="f06-diagnostic-ftext"></span><span class="f06-diagnostic-fcaret"></span></div>
+                          <div id="f06-diagnostic-tile" class="f06-diagnostic-slotbox" style="left: 394px; top: 624px; width: 354px; height: 354px">
+                            <div class="f06-diagnostic-patch"></div>
+                            <div id="f06-diagnostic-tilecomp" class="f06-diagnostic-comp">
+                              <div id="f06-diagnostic-tileBase" class="f06-diagnostic-crop" style="background-image: url('assets/screens/endro-diag/04-claire-actuellement-comment-se-comporte-votre-pe.png'); background-position: -394px -624px"></div>
+                              <div id="f06-diagnostic-tileChoix" class="f06-diagnostic-crop f06-diagnostic-hide" style="background-image: url('assets/screens/endro-diag/04-claire-actuellement-comment-se-comporte-votre-pe-choix.png'); background-position: -394px -624px"></div>
+                            </div>
+                          </div>
+                          <div id="f06-diagnostic-opt" class="f06-diagnostic-slotbox" style="left: 40px; top: 1022px; width: 700px; height: 160px">
+                            <div class="f06-diagnostic-patch"></div>
+                            <div id="f06-diagnostic-optcomp" class="f06-diagnostic-comp">
+                              <div id="f06-diagnostic-optBase" class="f06-diagnostic-crop" style="background-image: url('assets/screens/endro-diag/12-claire-quel-type-de-routine-recherchez-vous.png'); background-position: -40px -1022px"></div>
+                              <div id="f06-diagnostic-optChoix" class="f06-diagnostic-crop f06-diagnostic-hide" style="background-image: url('assets/screens/endro-diag/12-claire-quel-type-de-routine-recherchez-vous-choix.png'); background-position: -40px -1022px"></div>
+                            </div>
+                          </div>
+                          <div id="f06-diagnostic-slider">
+                            <div class="f06-diagnostic-strack"></div>
+                            <div id="f06-diagnostic-sfill"></div>
+                            <div id="f06-diagnostic-sknob"></div>
+                          </div>
+                          <div class="f06-diagnostic-island"></div>
+                        </div>
+                      </div>
+                      <div id="f06-diagnostic-pfx" class="f06-diagnostic-cambox"></div>
+                      <div id="f06-diagnostic-touch" data-hf-motion-blur='{"shutterAngle":360,"samplesPerFrame":12}'>
+                        <div class="f06-diagnostic-tdot"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div id="f06-diagnostic-badge">
+                <div id="f06-diagnostic-bEndroA" class="f06-diagnostic-skin"><img class="f06-diagnostic-endro" src="assets/endro/logo-noir.png" alt="" /></div>
+                <div id="f06-diagnostic-bLpp" class="f06-diagnostic-skin"><div class="f06-diagnostic-lppcrop"><img src="assets/lpp/logo-lpp.png" alt="" /></div></div>
+                <div id="f06-diagnostic-bEndroB" class="f06-diagnostic-skin"><img class="f06-diagnostic-endro" src="assets/endro/logo-noir.png" alt="" /></div>
+                <div id="f06-diagnostic-bEndroC" class="f06-diagnostic-skin"><img class="f06-diagnostic-endro" src="assets/endro/logo-noir.png" alt="" /></div>
+              </div>
+
+              <div id="f06-diagnostic-cardsh"></div>
+              <div id="f06-diagnostic-card" data-hf-motion-blur='{"shutterAngle":360,"samplesPerFrame":12}'>
+                <div id="f06-diagnostic-cardin">
+                  <div class="f06-diagnostic-cav"><img src="assets/personas/claire.webp" alt="" /></div>
+                  <div class="f06-diagnostic-cname">Claire</div>
+                  <div class="f06-diagnostic-csub">Profil Endro</div>
+                  <div class="f06-diagnostic-cdiv"></div>
+                  <div id="f06-diagnostic-sk1" class="f06-diagnostic-skel" style="left: 32px; top: 172px; width: 203px"></div>
+                  <div id="f06-diagnostic-sk2" class="f06-diagnostic-skel" style="left: 32px; top: 240px; width: 297px"></div>
+                  <div id="f06-diagnostic-sk3" class="f06-diagnostic-skel" style="left: 32px; top: 308px; width: 304px"></div>
+                  <div class="f06-diagnostic-plab">Profil complété</div>
+                  <div id="f06-diagnostic-pval">0 %</div>
+                  <div class="f06-diagnostic-ptrack"><div id="f06-diagnostic-pfill"></div></div>
+                  <div id="f06-diagnostic-check"><svg viewBox="0 0 22 22" aria-hidden="true"><path d="M5 11.5l4 4 8-9" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path></svg></div>
+                </div>
+              </div>
+
+              <div id="f06-diagnostic-chip1" class="f06-diagnostic-chip" style="top: 342px" data-hf-motion-blur='{"shutterAngle":360,"samplesPerFrame":12}'><i></i><span>Peau mixte</span></div>
+              <div id="f06-diagnostic-chip2" class="f06-diagnostic-chip" style="top: 410px" data-hf-motion-blur='{"shutterAngle":360,"samplesPerFrame":12}'><i></i><span>Routine essentielle</span></div>
+              <div id="f06-diagnostic-chip3" class="f06-diagnostic-chip" style="top: 478px" data-hf-motion-blur='{"shutterAngle":360,"samplesPerFrame":12}'><i></i><span>Peau sensible · <span class="f06-diagnostic-dm">3/10</span></span></div>
+
+              <div id="f06-diagnostic-step"><span class="f06-diagnostic-stepnum">01</span><span class="f06-diagnostic-steplab">Diagnostic</span></div>
+
+              <div id="f06-diagnostic-fx" class="f06-diagnostic-full"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <script src="lib/motionkit.js"></script>
+  <script>
+    (function () {
+      var ID = "f06-diagnostic", DUR = 9.25, SEED = 6;
+      var MK = window.MK, F = MK.F, CORAL = "#F8571F";
+      var root = document.querySelector('[data-composition-id="' + ID + '"]');
+      var $ = function (s) { return document.getElementById(ID + "-" + s); };
+      var tl = gsap.timeline({ paused: true });
+
+      var shake = $("shake"), rig = $("rig"), drift = $("drift"), tilt = $("tilt"), cam = $("cam"), zoom = $("zoom");
+      var phone = $("phone"), pfx = $("pfx"), fx = $("fx"), touch = $("touch"), mesh = $("mesh");
+      var bfRig = MK.blurFilter(root, ID + "-blur-rig"), bfCam = MK.blurFilter(root, ID + "-blur-cam");
+
+      // screenshot px (780 × 1688) → zoom-local px (the phone body sits at x 282, the screen at +28)
+      var SX = 310, SY = 28;
+      var Z = function (sx, sy) { return [SX + sx, SY + sy]; };
+      // drift-space position of a screen point, given the camera translation and the 3D attitude at time t
+      // (the point is also the zoom origin when it is used, so the zoom scale never moves it)
+      function toDrift(sx, sy, cx, cy, t) {
+        var X = SX + sx + cx, Y = SY + sy + cy;
+        var p = t / DUR, th = (-6 + 10 * (1 - Math.cos(Math.PI * p)) / 2) * Math.PI / 180;
+        var k = 2200 / (2200 + (X - 700) * Math.sin(th));
+        return [700 + (X - 700) * Math.cos(th) * k, 540 + (Y - 540) * k];
+      }
+      // the S-curve of MK.snapZoom as one ease: 7 frames to 5 %, 2 frames to 70 %, tail to 100 %
+      function sEase(tail) {
+        var tot = 9 + tail;
+        return function (p) {
+          var f = p * tot;
+          if (f <= 7) return 0.05 * (1 - Math.cos((f / 7) * Math.PI / 2));
+          if (f <= 9) return 0.05 + 0.65 * (f - 7) / 2;
+          return 0.7 + 0.3 * (1 - Math.pow(1 - (f - 9) / tail, 4));
+        };
+      }
+      function snapCam(t, vars) {
+        var v = { duration: 25 * F, ease: sEase(16) };
+        for (var k in vars) v[k] = vars[k];
+        tl.to(cam, v, t);
+        bfCam.ramp(tl, cam, t + 5 * F, 2 * F, 0, 16, "y", "power2.in");
+        bfCam.ramp(tl, cam, t + 9 * F, 6 * F, 16, 0, "y", "power2.out");
+        bfCam.clear(tl, cam, t + 15 * F);
+      }
+      function swapPage(a, b, t) { tl.set($(b), { autoAlpha: 1 }, t); tl.set($(a), { autoAlpha: 0 }, t); }
+      function rippleAt(t) {
+        var r = document.createElement("div");
+        r.className = "f06-diagnostic-ripple";
+        touch.appendChild(r);
+        tl.fromTo(r, { scale: 1, opacity: 0.6 }, { scale: 2.2, opacity: 0, duration: 22 * F, ease: "power2.out", immediateRender: false }, t);
+      }
+      function flyChip(el, t, from, arc, frames) {
+        var cx = el.offsetLeft + el.offsetWidth / 2, cy = el.offsetTop + el.offsetHeight / 2;
+        return MK.fly(tl, el, t, { dx: from[0] - cx, dy: from[1] - cy, arc: arc, frames: frames });
+      }
+      var pval = $("pval"), pfill = $("pfill"), cardin = $("cardin");
+      gsap.set(pfill, { scaleX: 0 });
+      function progress(t, a, b, skel) {
+        tl.to(pfill, { scaleX: b / 100, duration: 10 * F, ease: "power2.out" }, t);
+        MK.count(tl, t, { from: a, to: b, dur: 10 * F, render: function (v) { pval.textContent = Math.round(v) + " %"; } });
+        tl.to(cardin, { scale: 1.03, duration: 3 * F, ease: "power2.out" }, t);
+        tl.to(cardin, { scale: 1, duration: 12 * F, ease: "power2.inOut" }, t + 3 * F);
+        tl.set(skel, { autoAlpha: 0 }, t);
+      }
+      // skeleton slots take the exact width of the chip that will land on them
+      ["1", "2", "3"].forEach(function (n) { $("sk" + n).style.width = $("chip" + n).offsetWidth + "px"; });
+
+      /* ═══ Scene 1 · 0.00–1.90 · ENTRY + « D'abord, le diagnostic » ═══ */
+      MK.enterBig(tl, rig, 0, { from: 1.45, frames: 40 });
+      MK.drift(tl, drift, 0, DUR, { seed: SEED });
+      tl.fromTo(tilt, { rotationY: -6 }, { rotationY: 4, duration: DUR, ease: "sine.inOut" }, 0);
+      tl.fromTo(mesh, { scale: 1, x: 0, y: 0 }, { scale: 1.06, x: -40, y: 28, duration: DUR, ease: "sine.inOut" }, 0);
+      MK.pop(tl, $("step"), 0.20);
+      // the camera glides down the Nuancier
+      tl.fromTo(cam, { x: 0, y: -60 }, { y: -280, duration: 1.2, ease: "sine.inOut" }, 0.25);
+      // a white shimmer band sweeps diagonally across the screen on « diagnostic »
+      var shim = $("shimmer");
+      tl.set(shim, { autoAlpha: 1 }, 0.94);
+      tl.fromTo(shim, { x: -560, rotation: 20 }, { x: 1060, rotation: 20, duration: 0.46, ease: "power2.inOut" }, 0.94);
+      tl.set(shim, { autoAlpha: 0 }, 1.40);
+      // the brand badge (Endro) lands at the end of « diagnostic »
+      MK.pop(tl, $("bEndroA"), 1.60);
+
+      /* ═══ Scene 2 · 1.94–3.95 · « Intégré à votre site, à votre image »: skin swaps on whip-pan peaks ═══ */
+      MK.pan(tl, rig, 1.98, { x: "+=240", frames: 16, blur: bfRig });
+      var pkA = 1.98 + 8 * F; // speed peak 2.113
+      swapPage("p00", "plpp", pkA);
+      tl.set($("bEndroA"), { autoAlpha: 0 }, pkA);
+      MK.pop(tl, $("bLpp"), pkA);
+      MK.pan(tl, rig, 2.80, { x: "-=240", frames: 16, blur: bfRig });
+      var pkB = 2.80 + 8 * F; // speed peak 2.933
+      swapPage("plpp", "p00", pkB);
+      tl.set($("bLpp"), { autoAlpha: 0 }, pkB);
+      MK.pop(tl, $("bEndroB"), pkB);
+      tl.to(cam, { y: -310, duration: 1.3, ease: "sine.inOut" }, 2.95);
+      // « image »: anticipation of the badge, then pop + coral ring
+      var badge = $("badge");
+      MK.anticipate(tl, badge, 3.48, { to: 0.6 });
+      tl.set(badge, { scale: 1 }, 3.48);
+      tl.set($("bEndroB"), { autoAlpha: 0 }, 3.48);
+      MK.pop(tl, $("bEndroC"), 3.48, { from: 0.6 });
+      MK.ring(tl, fx, 3.48, { x: 1230, y: 102, r1: 170, r0: 60, color: CORAL, width: 5 });
+
+      /* ═══ Scene 3 · 4.24–6.60 · « Il pose à chaque visiteuse les bonnes questions » ═══ */
+      [$("cardsh"), $("card")].forEach(function (el) {
+        tl.set(el, { autoAlpha: 1 }, 4.24);
+        MK.enter(tl, el, 4.24, { dir: "left", dist: 700, frames: 38 });
+        tl.fromTo(el, { rotationY: 28, transformPerspective: 1600 }, { rotationY: 0, transformPerspective: 1600, duration: 38 * F, ease: "back.out(1.4)" }, 4.24);
+      });
+      // the camera snaps down to the first-name field + CTA
+      snapCam(4.41, { y: -880 });
+      tl.set($("field"), { autoAlpha: 1 }, 4.40);
+      MK.type(tl, $("ftext"), "Claire", 4.45, { cps: 30 });
+      swapPage("p00", "p01", 4.65);
+      tl.set($("field"), { autoAlpha: 0 }, 4.65);
+      // the touch comes onto « COMMENCER MON DIAGNOSTIC »
+      var cta = Z(390, 1628);
+      tl.fromTo(touch, { x: cta[0] + 150, y: cta[1] + 170, scale: 0.7, autoAlpha: 0 }, { x: cta[0], y: cta[1], scale: 1, autoAlpha: 1, duration: 0.3, ease: "power2.out" }, 4.62);
+      tl.set(zoom, { transformOrigin: cta[0] + "px " + cta[1] + "px" }, 4.90);
+      MK.click(tl, { t: 5.01, x: cta[0], y: cta[1], layer: pfx, component: phone, shakeEl: shake, touch: touch, rig: zoom, snap: 0.12, rigScale: 1 });
+      rippleAt(5.01);
+      swapPage("p01", "p04", 5.01);
+      // the camera snaps back up to frame the question and the three photos
+      snapCam(5.20, { y: -298 });
+      tl.to(zoom, { scale: 1, duration: 25 * F, ease: sEase(16) }, 5.20);
+      // slow travel across the photos while the touch moves to PEAU MIXTE/NORMALE
+      tl.to(cam, { x: -80, duration: 0.88, ease: "sine.inOut" }, 5.62);
+      var tile = Z(560, 820);
+      tl.to(touch, { x: tile[0], y: tile[1], duration: 0.83, ease: "power2.inOut" }, 5.62);
+
+      /* ═══ Scene 4 · 6.82–7.40 · « ses besoins » ═══ */
+      tl.set($("tile"), { autoAlpha: 1 }, 6.66);
+      tl.set(zoom, { transformOrigin: tile[0] + "px " + tile[1] + "px" }, 6.70);
+      MK.click(tl, { t: 6.82, x: tile[0], y: tile[1], layer: pfx, component: $("tilecomp"), shakeEl: shake, touch: touch, rig: zoom, snap: 0.08, rigScale: 1 });
+      rippleAt(6.82);
+      swapPage("p04", "p04c", 6.82);
+      tl.set($("tileBase"), { autoAlpha: 0 }, 6.82);
+      tl.set($("tileChoix"), { autoAlpha: 1 }, 6.82);
+      tl.set($("tile"), { autoAlpha: 0 }, 7.22);
+      var land1 = flyChip($("chip1"), 6.84, toDrift(560, 820, -80, -298, 6.84), -160, 28); // → 7.307
+      progress(land1, 0, 33, $("sk1"));
+
+      /* ═══ Scene 5 · 7.43–8.15 · « sa routine » ═══ */
+      MK.pan(tl, cam, 7.40, { x: 30, y: -529, frames: 14, blur: bfCam, axis: "y" });
+      tl.to(zoom, { scale: 1, duration: 0.2, ease: "power2.inOut" }, 7.40);
+      var pkF = 7.40 + 7 * F; // speed peak 7.517
+      swapPage("p04c", "p12", pkF);
+      var ess = Z(330, 1100);
+      tl.to(touch, { x: ess[0], y: ess[1], duration: 0.16, ease: "power2.inOut" }, 7.40);
+      tl.set($("opt"), { autoAlpha: 1 }, pkF);
+      tl.set(zoom, { transformOrigin: ess[0] + "px " + ess[1] + "px" }, 7.605);
+      MK.click(tl, { t: 7.62, x: ess[0], y: ess[1], layer: pfx, component: $("optcomp"), shakeEl: shake, touch: touch, rig: zoom, snap: 0.08, rigScale: 1 });
+      rippleAt(7.62);
+      swapPage("p12", "p12c", 7.62);
+      tl.set($("optBase"), { autoAlpha: 0 }, 7.62);
+      tl.set($("optChoix"), { autoAlpha: 1 }, 7.62);
+      tl.set($("opt"), { autoAlpha: 0 }, 8.0);
+      var land2 = flyChip($("chip2"), 7.623, toDrift(330, 1100, 30, -529, 7.623), -160, 28); // → 8.09
+      progress(land2, 33, 66, $("sk2"));
+
+      /* ═══ Scene 6 · 8.20–8.95 · « ses habitudes » ═══ */
+      MK.pan(tl, cam, 8.20, { x: -30, y: -688, frames: 12, blur: bfCam, axis: "y" });
+      tl.to(zoom, { scale: 1, duration: 0.16, ease: "power2.inOut" }, 8.20);
+      var pkG = 8.20 + 6 * F; // speed peak 8.30
+      swapPage("p12c", "p05", pkG);
+      tl.set($("slider"), { autoAlpha: 1 }, pkG);
+      var k0 = Z(40, 1300), k3 = Z(250, 1300), res = Z(620, 1210);
+      tl.to(touch, { x: k0[0], y: k0[1], duration: 0.24, ease: "power2.inOut" }, 8.12);
+      tl.to(touch, { scale: 0.82, duration: 3 * F, ease: "power2.in" }, 8.36);
+      tl.to(touch, { x: k3[0], duration: 0.18, ease: "power2.inOut" }, 8.40);
+      tl.fromTo($("sknob"), { x: 0 }, { x: 210, duration: 0.18, ease: "power2.inOut" }, 8.40);
+      tl.fromTo($("sfill"), { scaleX: 0 }, { scaleX: 0.3, duration: 0.18, ease: "power2.inOut" }, 8.40);
+      tl.set(zoom, { transformOrigin: res[0] + "px " + res[1] + "px" }, 8.45);
+      // release = the event: the page answers (3/10), dashes, tremor, small camera snap toward the result
+      tl.to(touch, { scale: 1, duration: 8 * F, ease: "back.out(2)" }, 8.60);
+      rippleAt(8.60);
+      MK.click(tl, { t: 8.60, x: k3[0], y: k3[1], layer: pfx, shakeEl: shake, rig: zoom, snap: 0.05, rigScale: 1 });
+      swapPage("p05", "p05c", 8.60);
+      tl.set($("slider"), { autoAlpha: 0 }, 8.60);
+      tl.to(touch, { autoAlpha: 0, scale: 0.8, duration: 0.18, ease: "power2.in" }, 8.74);
+      var land3 = flyChip($("chip3"), 8.60, toDrift(620, 1210, -30, -688, 8.60), -140, 19); // → 8.917
+      progress(land3, 66, 100, $("sk3"));
+      MK.pop(tl, $("check"), land3, { over: 0.25 });
+      // the pop's 18-frame settle would outlive the scene: end it on the cut (9.25)
+      var ck = tl.getTweensOf($("check")), ckLast = ck[ck.length - 1];
+      ckLast.duration(DUR - ckLast.startTime());
+      pval.textContent = "0 %";
+
+      /* ═══ Scene 7 · 8.95–9.25 · EXIT: whip left, last frame = fastest ═══ */
+      MK.exit(tl, rig, 8.95, { dir: "left", dist: 1500, frames: 18, blur: bfRig });
+
+      tl.set({}, {}, DUR);
+      window.__timelines = window.__timelines || {};
+      window.__timelines[ID] = tl;
+    })();
+  </script>
+</template>

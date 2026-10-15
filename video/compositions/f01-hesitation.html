@@ -466,8 +466,10 @@
       wordMovers.forEach(function (el) { el.setAttribute("data-hf-motion-blur", MB); });
 
       // ════ Scene 6 (7.78–8.40) « Bon, » — lock, then suction, words out, camera back on the phone ════
-      items.slice().reverse().forEach(function (it, k) {
-        tl.to(it.el, { x: Qs.x - it.x, y: Qs.y - it.y, scale: 0.3, autoAlpha: 0, duration: 18 * F, ease: "power2.in" }, 7.92 + Math.floor(k / 2) * F);
+      items.slice().reverse().forEach(function (it, k) {             // reverse pop order, two per frame
+        var ts = 7.92 + Math.floor(k / 2) * F;
+        MK.suck(tl, it.el, ts, { to: 0.3, frames: 18 });
+        tl.to(it.el, { x: Qs.x - it.x, y: Qs.y - it.y, duration: 18 * F, ease: "power2.in" }, ts);
       });
       wordMovers.forEach(function (el, i) {
         tl.to(el, { y: "-=720", duration: 12 * F, ease: "expo.in" }, 7.92 + i * 0.5 * F);

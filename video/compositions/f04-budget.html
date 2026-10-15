@@ -1,0 +1,268 @@
+<template id="f04-budget-template">
+  <style>
+    @font-face { font-family: "Lufga"; src: url('assets/fonts/Lufga-Medium.woff2') format('woff2'); font-weight: 500; font-style: normal; font-display: block; }
+    @font-face { font-family: "Lufga"; src: url('assets/fonts/Lufga-SemiBold.woff2') format('woff2'); font-weight: 600; font-style: normal; font-display: block; }
+    @font-face { font-family: "Lufga"; src: url('assets/fonts/Lufga-Bold.woff2') format('woff2'); font-weight: 700; font-style: normal; font-display: block; }
+    @font-face { font-family: "DM Sans"; src: url('assets/fonts/DMSans-normal-latin.woff2') format('woff2'); font-weight: 300 800; font-style: normal; font-display: block; }
+
+    #root { position: relative; width: 1920px; height: 1080px; overflow: hidden; font-family: "Lufga", sans-serif; color: #F2EFEC; }
+
+    /* AVANT ground (static, sharp): avant-bg + 44px grid + avant-vignette */
+    #f04-budget-bg, #f04-budget-ground {
+      position: absolute; inset: 0; background-color: #1B1718;
+      background-image: linear-gradient(to right, rgba(255,255,255,0.08) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.08) 1px, transparent 1px);
+      background-size: 44px 44px; background-position: 36px 36px;
+    }
+    #f04-budget-bg::after, #f04-budget-avig { content: ""; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse 70% 70% at 50% 45%, rgba(0,0,0,0) 40%, rgba(0,0,0,0.55) 100%); }
+    #f04-budget-ground { inset: -240px; background-position: 12px 12px; }   /* the stage's own copy of the ground: it goes blind with the stage */
+
+    /* layer (clip) > toss (gravity) > card (suction: scale, corners, rim, shadow) > shake > stage (oversized entry, blind) > rig (camera) > drift */
+    #f04-budget-layer, #f04-budget-toss, #f04-budget-shake, #f04-budget-stage { position: absolute; inset: 0; }
+    #f04-budget-toss, #f04-budget-card, #f04-budget-stage { transform-origin: 960px 540px; }
+    #f04-budget-card { position: absolute; inset: 0; overflow: hidden; background: #1B1718; border-radius: 0px; }
+    #f04-budget-rig, #f04-budget-drift { position: absolute; left: 0; top: 0; width: 2800px; height: 1080px; }
+    #f04-budget-vig { position: absolute; inset: -160px; pointer-events: none; opacity: 0; background: radial-gradient(ellipse 58% 58% at 50% 50%, rgba(8,6,7,0) 28%, rgba(8,6,7,0.96) 100%); }
+    #f04-budget-rim { position: absolute; inset: 0; border-radius: inherit; pointer-events: none; opacity: 0; box-shadow: inset 0 0 0 4.8px rgba(255,255,255,0.14); }
+
+    .f04-budget-panel { position: absolute; border-radius: 28px; background: #2A2526; border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 60px 120px -30px rgba(0,0,0,0.65), 0 8px 24px -8px rgba(0,0,0,0.4); }
+
+    /* kinetic « Résultat : » above the spend card's left edge (y ≈ 190) */
+    #f04-budget-kin { position: absolute; left: 330px; top: 150px; height: 80px; white-space: nowrap; font: 700 72px/80px "Lufga", sans-serif; letter-spacing: -0.03em; color: #F2EFEC; }
+
+    /* spend card: 980×460, centre (820, 520) */
+    #f04-budget-spend { left: 330px; top: 290px; width: 980px; height: 460px; overflow: hidden; }
+    #f04-budget-heat { position: absolute; left: 0; right: 0; bottom: 0; height: 240px; opacity: 0; background: linear-gradient(to top, rgba(224,118,58,0.42), rgba(224,118,58,0.12) 45%, rgba(224,118,58,0) 100%); box-shadow: inset 0 -26px 40px -18px rgba(224,118,58,0.9); }
+    #f04-budget-embers { position: absolute; left: 0; top: 0; width: 0; height: 0; }
+    .f04-budget-ember { position: absolute; left: 0; top: 0; border-radius: 50%; background: #E0763A; box-shadow: 0 0 9px 2px rgba(224,118,58,0.65); }
+    #f04-budget-stitle { position: absolute; left: 52px; top: 48px; font: 500 34px/1 "Lufga", sans-serif; color: #8C8580; white-space: nowrap; }
+    #f04-budget-count { position: absolute; left: 52px; top: 112px; height: 150px; white-space: nowrap; font: 700 150px/150px "DM Sans", sans-serif; color: #F2EFEC; transform-origin: 0% 60%; }
+    .f04-budget-d { display: inline-block; width: 0.66em; text-align: center; }   /* emulated tabular figures (the shipped subset has no tnum) */
+    .f04-budget-sep { display: inline-block; width: 0.2em; }
+    #f04-budget-eur { display: inline-block; margin-left: 0.12em; font-size: 0.6em; color: #8C8580; }
+    #f04-budget-spark { position: absolute; left: 52px; top: 318px; width: 876px; height: 104px; overflow: visible; }
+
+    /* profile card: 620×580 */
+    #f04-budget-profile { left: 1600px; top: 250px; width: 620px; height: 580px; }
+    #f04-budget-avatar { position: absolute; left: 44px; top: 44px; width: 120px; height: 120px; }
+    .f04-budget-av { position: absolute; inset: 0; border-radius: 50%; overflow: hidden; box-shadow: 0 0 0 4px rgba(255,255,255,0.06); }
+    .f04-budget-av svg { display: block; width: 120px; height: 120px; }
+    #f04-budget-pname { position: absolute; left: 192px; top: 64px; font: 600 40px/1 "Lufga", sans-serif; color: #F2EFEC; white-space: nowrap; }
+    #f04-budget-pskel { position: absolute; left: 192px; top: 122px; width: 210px; height: 16px; border-radius: 8px; background: rgba(255,255,255,0.08); }
+    .f04-budget-row { position: absolute; left: 44px; right: 44px; height: 82px; border-top: 1px solid rgba(255,255,255,0.07); }
+    .f04-budget-row span { position: absolute; left: 0; top: 25px; font: 500 32px/1 "Lufga", sans-serif; color: #F2EFEC; white-space: nowrap; }
+    .f04-budget-q { position: absolute; right: 0; top: 15px; width: 88px; height: 52px; border-radius: 999px; background: rgba(255,255,255,0.06); box-shadow: inset 0 0 0 1.5px rgba(255,255,255,0.14); font: 600 30px/52px "Lufga", sans-serif; color: #8C8580; text-align: center; }
+
+    /* campaign settings card: 900×520 */
+    #f04-budget-settings { left: 1140px; top: 330px; width: 900px; height: 520px; }
+    #f04-budget-settitle { position: absolute; left: 48px; top: 42px; font: 600 38px/1 "Lufga", sans-serif; color: #F2EFEC; white-space: nowrap; }
+    .f04-budget-sl { position: absolute; left: 48px; right: 48px; height: 50px; }
+    .f04-budget-sl span { position: absolute; left: 0; top: 10px; font: 500 30px/1 "Lufga", sans-serif; color: #8C8580; white-space: nowrap; }
+    .f04-budget-track { position: absolute; left: 360px; top: 21px; width: 444px; height: 8px; border-radius: 4px; background: rgba(255,255,255,0.10); }
+    .f04-budget-fill { position: absolute; left: 0; top: 0; width: 444px; height: 8px; border-radius: 4px; background: #8C8580; transform-origin: 0% 50%; }
+    .f04-budget-knob { position: absolute; left: -17px; top: -13px; width: 34px; height: 34px; border-radius: 50%; background: #F2EFEC; box-shadow: 0 4px 12px rgba(0,0,0,0.5); }
+    .f04-budget-tog { position: absolute; top: 414px; width: 80px; height: 44px; border-radius: 22px; background: rgba(255,255,255,0.10); }
+    .f04-budget-tog i { position: absolute; left: 5px; top: 5px; width: 34px; height: 34px; border-radius: 50%; background: #F2EFEC; box-shadow: 0 2px 6px rgba(0,0,0,0.45); }
+    .f04-budget-toglab { position: absolute; top: 421px; font: 500 30px/1 "Lufga", sans-serif; color: #F2EFEC; white-space: nowrap; }
+    #f04-budget-fx { position: absolute; inset: 0; pointer-events: none; }
+    #f04-budget-touch { position: absolute; left: -27px; top: -27px; width: 54px; height: 54px; border-radius: 50%; background: rgba(255,255,255,0.55); box-shadow: inset 0 0 0 2px rgba(36,31,32,0.25), 0 6px 18px rgba(0,0,0,0.45); }
+    .f04-budget-ripple { position: absolute; left: 0; top: 0; width: 54px; height: 54px; border-radius: 50%; box-shadow: inset 0 0 0 2px rgba(255,255,255,0.9); opacity: 0; }
+  </style>
+
+  <div id="root" data-composition-id="f04-budget" data-fps="60" data-start="0" data-duration="7.72" data-width="1920" data-height="1080">
+    <div id="f04-budget-bg" class="clip" data-start="0" data-duration="7.72" data-track-index="0"></div>
+    <div id="f04-budget-layer" class="clip" data-start="0" data-duration="7.72" data-track-index="1">
+      <div id="f04-budget-toss">
+        <div id="f04-budget-card">
+          <div id="f04-budget-shake">
+            <div id="f04-budget-stage">
+              <div id="f04-budget-ground"></div>
+              <div id="f04-budget-rig" data-layout-allow-overflow>
+                <div id="f04-budget-drift" data-layout-allow-overflow>
+                  <div id="f04-budget-kin"></div>
+                  <div id="f04-budget-spend" class="f04-budget-panel">
+                    <div id="f04-budget-heat"></div>
+                    <div id="f04-budget-embers"></div>
+                    <div id="f04-budget-stitle">Budget publicitaire · ce mois</div>
+                    <div id="f04-budget-count"><span class="f04-budget-d"></span><span class="f04-budget-d"></span><span class="f04-budget-sep"></span><span class="f04-budget-d"></span><span class="f04-budget-d"></span><span class="f04-budget-d"></span><span id="f04-budget-eur">€</span></div>
+                    <svg id="f04-budget-spark" viewBox="0 0 876 104" aria-hidden="true"><path id="f04-budget-sparkline" fill="none" stroke="rgba(242,239,236,0.6)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" d="M0 0"/></svg>
+                  </div>
+                  <div id="f04-budget-profile" class="f04-budget-panel">
+                    <div id="f04-budget-avatar"><div id="f04-budget-av0" class="f04-budget-av" data-hf-motion-blur='{"shutterAngle":360,"samplesPerFrame":12}'><svg viewBox="0 0 36 36" aria-hidden="true"><rect width="36" height="36" fill="#3A3435"/><circle cx="18" cy="14" r="6.4" fill="#8C8580"/><path d="M5.5 33c1.7-6.9 6.6-10.2 12.5-10.2S28.8 26.1 30.5 33z" fill="#8C8580"/></svg></div><div id="f04-budget-av1" class="f04-budget-av" data-hf-motion-blur='{"shutterAngle":360,"samplesPerFrame":12}'><svg viewBox="0 0 36 36" aria-hidden="true"><rect width="36" height="36" fill="#3A3435"/><circle cx="18" cy="14" r="6.4" fill="#8C8580"/><path d="M5.5 33c1.7-6.9 6.6-10.2 12.5-10.2S28.8 26.1 30.5 33z" fill="#8C8580"/></svg></div></div>
+                    <div id="f04-budget-pname">Visiteuse anonyme</div>
+                    <div id="f04-budget-pskel"></div>
+                    <div class="f04-budget-row" style="top:200px"><span>Âge</span><div class="f04-budget-q" data-hf-motion-blur='{"shutterAngle":360,"samplesPerFrame":12}'>?</div></div>
+                    <div class="f04-budget-row" style="top:282px"><span>Type de peau</span><div class="f04-budget-q" data-hf-motion-blur='{"shutterAngle":360,"samplesPerFrame":12}'>?</div></div>
+                    <div class="f04-budget-row" style="top:364px"><span>Besoin</span><div class="f04-budget-q" data-hf-motion-blur='{"shutterAngle":360,"samplesPerFrame":12}'>?</div></div>
+                    <div class="f04-budget-row" style="top:446px"><span>Frein</span><div class="f04-budget-q" data-hf-motion-blur='{"shutterAngle":360,"samplesPerFrame":12}'>?</div></div>
+                  </div>
+                  <div id="f04-budget-settings" class="f04-budget-panel">
+                    <div id="f04-budget-settitle">Réglages campagne</div>
+                    <div class="f04-budget-sl" style="top:125px"><span>Âge ciblé</span><div class="f04-budget-track"><div class="f04-budget-fill"></div><div class="f04-budget-knob"></div></div></div>
+                    <div class="f04-budget-sl" style="top:211px"><span>Centres d’intérêt</span><div class="f04-budget-track"><div class="f04-budget-fill"></div><div class="f04-budget-knob"></div></div></div>
+                    <div class="f04-budget-sl" style="top:297px"><span>Budget / jour</span><div class="f04-budget-track"><div class="f04-budget-fill"></div><div class="f04-budget-knob"></div></div></div>
+                    <div class="f04-budget-tog" id="f04-budget-tog1" style="left:48px"><i></i></div><div class="f04-budget-toglab" style="left:148px">Lookalike</div>
+                    <div class="f04-budget-tog" id="f04-budget-tog2" style="left:470px"><i></i></div><div class="f04-budget-toglab" style="left:570px">Retargeting</div>
+                    <div id="f04-budget-fx"></div>
+                    <div id="f04-budget-touch" data-hf-motion-blur='{"shutterAngle":360,"samplesPerFrame":12}'><div class="f04-budget-ripple"></div><div class="f04-budget-ripple"></div></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="f04-budget-avig"></div>
+          <div id="f04-budget-vig"></div>
+          <div id="f04-budget-rim"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <script src="lib/motionkit.js"></script>
+  <script>
+    (function () {
+      var ID = "f04-budget", DUR = 7.72, MK = window.MK, F = MK.F;
+      var MB = '{"shutterAngle":360,"samplesPerFrame":12}';
+      var $ = function (s) { return document.getElementById(ID + "-" + s); };
+      var all = function (sel) { return Array.prototype.slice.call($("layer").querySelectorAll(sel)); };
+      var tl = gsap.timeline({ paused: true });
+      var layer = $("layer"), toss = $("toss"), card = $("card"), shake = $("shake"), stage = $("stage"), rig = $("rig"), drift = $("drift");
+      var bfStage = MK.blurFilter(layer, ID + "-blur-stage"), bfRig = MK.blurFilter(layer, ID + "-blur-rig");
+      var bfSet = MK.blurFilter(layer, ID + "-blur-settings"), bfToss = MK.blurFilter(layer, ID + "-blur-toss");
+
+      MK.drift(tl, drift, 0, DUR, { seed: 4 });                                    // never frozen
+
+      // ════ Scene 1 (0.00–1.05) · ENTRY: oversized, braking out of the « ? » dive ════
+      MK.enterBig(tl, stage, 0, { from: 1.45, frames: 40 });
+      gsap.set(stage, { filter: bfStage.ref }); gsap.set(bfStage.node, { attr: { stdDeviation: "12 12" } });   // frame 0 already carries the dive's blur
+      tl.fromTo(bfStage.node, { attr: { stdDeviation: "12 12" } }, { attr: { stdDeviation: "0 0" }, duration: 6 * F, ease: "power2.out" }, 0);
+      bfStage.clear(tl, stage, 6 * F);
+      var kin = MK.words(tl, $("kin"), [{ w: "Résultat", t: 0.25, accent: true, letters: true }, { w: ":", t: 0.88, accent: true, letters: true }]);
+      kin.forEach(function (w) { Array.prototype.forEach.call(w.children, function (l) { l.setAttribute("data-hf-motion-blur", MB); }); });
+      // sparkline: the month's spend so far (drawn 0.10–1.00), its steep end burns with the counter (1.23–2.15)
+      var SP = [[0, 84], [56, 80], [112, 82], [168, 74], [224, 76], [280, 68], [336, 70], [392, 62], [448, 64], [504, 56], [560, 57], [620, 50], [700, 40], [780, 24], [876, 6]];
+      var spark = $("sparkline"), segL = [0], sd = "M0,84";
+      for (var i = 1; i < SP.length; i++) { segL.push(segL[i - 1] + Math.hypot(SP[i][0] - SP[i - 1][0], SP[i][1] - SP[i - 1][1])); sd += "L" + SP[i][0] + "," + SP[i][1]; }
+      var SL = segL[SP.length - 1], SB = segL[11];
+      spark.setAttribute("d", sd);
+      spark.style.strokeDasharray = SL.toFixed(1) + " " + (SL + 10).toFixed(1);
+      var sp = { u: 0 }, drawSpark = function () { spark.style.strokeDashoffset = (SL - sp.u).toFixed(1); };
+      drawSpark();
+      tl.fromTo(sp, { u: 0 }, { u: SB, duration: 0.9, ease: "sine.out", onUpdate: drawSpark, immediateRender: false }, 0.10);
+      tl.fromTo(sp, { u: SB }, { u: SL, duration: 0.92, ease: "power3.out", onUpdate: drawSpark, immediateRender: false }, 1.23);
+
+      // ════ Scene 2 (1.08–2.15) · « vous brûlez votre budget » ════
+      MK.snapZoom(tl, rig, 1.08, { from: 1, to: 1.3, origin: "632px 483px", blurEl: rig });
+      var dg = all(".f04-budget-d"), countEl = $("count");
+      function renderCount(v) {
+        var s = String(Math.round(v)), th = s.slice(0, s.length - 3), h = s.slice(-3);
+        dg[0].style.display = th.length > 1 ? "" : "none"; dg[0].textContent = th.length > 1 ? th[0] : "";
+        dg[1].textContent = th[th.length - 1]; dg[2].textContent = h[0]; dg[3].textContent = h[1]; dg[4].textContent = h[2];
+      }
+      var tFinal = MK.count(tl, 1.23, { from: 8240, to: 24960, dur: 0.75, penultimate: 24950, holdFrames: 10, render: renderCount });
+      tl.to(countEl, { scale: 1.07, duration: 3 * F, ease: "power2.out" }, tFinal);    // the final value lands on its own frame
+      tl.to(countEl, { scale: 1, duration: 12 * F, ease: "power2.inOut" }, tFinal + 3 * F);
+      // the bottom edge glows, then smoulders
+      var heat = $("heat");
+      tl.fromTo(heat, { opacity: 0 }, { opacity: 0.8, duration: 1.6 - 1.23, ease: "power2.out", immediateRender: false }, 1.23);
+      MK.each([0.62, 0.86, 0.66, 0.84, 0.7, 0.82, 0.68, 0.8, 0.72, 0.78, 0.7], 1.6, 24, function (o, t) { tl.to(heat, { opacity: o, duration: 24 * F, ease: "sine.inOut" }, t); });
+      // embers: 24 particles rise from the bottom edge (2-frame offsets from 1.23)
+      var emb = $("embers");
+      for (i = 0; i < 24; i++) {
+        var e = document.createElement("div"), sz = 6 + 4 * MK.hash(i * 3 + 1), life = 0.8 + 0.4 * MK.hash(i * 13 + 5), t0 = 1.23 + i * 2 * F;
+        var x0 = 70 + MK.hash(i * 5 + 2) * 840 - sz / 2, rise = 200 + 220 * MK.hash(i * 7 + 3), dx = (MK.hash(i * 11 + 4) - 0.5) * 80;
+        e.className = "f04-budget-ember"; e.style.width = sz + "px"; e.style.height = sz + "px";
+        e.setAttribute("data-hf-motion-blur", MB);
+        emb.appendChild(e);
+        tl.fromTo(e, { x: x0, y: 452, scale: 1, autoAlpha: 0 }, { x: x0 + dx, y: 452 - rise, scale: 0.4, duration: life, ease: "sine.out" }, t0);
+        tl.to(e, { autoAlpha: 0.7, duration: 4 * F, ease: "none" }, t0);
+        tl.to(e, { autoAlpha: 0, duration: life - 10 * F, ease: "power1.in" }, t0 + 10 * F);
+      }
+
+      // ════ Scene 3 (2.15–3.95) · « sur des visiteurs dont vous ne savez rien » ════
+      MK.pan(tl, rig, 2.15, { x: -760, scale: 1, frames: 22, blur: bfRig });
+      var profile = $("profile"), spend = $("spend");
+      tl.fromTo(spend, { filter: "blur(0px)" }, { filter: "blur(5px)", duration: 0.4, ease: "power2.inOut", immediateRender: false }, 2.32);   // depth of field: the secondary goes soft
+      gsap.set(profile, { transformPerspective: 1600, transformOrigin: "30% 50%", filter: "blur(8px)" });   // waits ajar at the frame edge, out of focus
+      tl.to(profile, { filter: "blur(0px)", duration: 0.3, ease: "power2.out" }, 2.15);
+      tl.fromTo(profile, { rotationY: 35 }, { rotationY: 0, duration: 30 * F, ease: "back.out(1.4)" }, 2.30);
+      var pills = all(".f04-budget-q");
+      MK.each(pills, 2.98, 4, function (p, t) { MK.pop(tl, p, t, { over: 0.25 }); });
+      // « rien »: the avatar contracts (anticipation) then springs back. Two stacked layers, because MK.pop renders its
+      // hidden from-state at build time: the base layer anticipates, the pop layer takes over on the impact frame.
+      MK.anticipate(tl, $("av0"), 3.70, { to: 0.7 });
+      tl.set($("av0"), { autoAlpha: 0 }, 3.70);
+      MK.pop(tl, $("av1"), 3.70, { from: 0.7, over: 0.22 });
+      MK.each(pills, 3.70, 1, function (p, t) {                                    // every « ? » trembles ±6 px (3 legs)
+        tl.to(p, { x: 6, duration: 2 * F, ease: "sine.out" }, t);
+        tl.to(p, { x: -6, duration: 3 * F, ease: "sine.inOut" }, t + 2 * F);
+        tl.to(p, { x: 0, duration: 3 * F, ease: "sine.in" }, t + 5 * F);
+      });
+
+      // ════ Scene 4 (4.05–5.10) · « et vous optimisez » — the settings card, poked at random ════
+      tl.to(profile, { filter: "blur(8px)", duration: 0.3, ease: "power2.inOut" }, 4.05 - 5 * F);   // the background defocuses 5 frames before the gesture
+      var settings = $("settings"), touch = $("touch"), fx = $("fx"), tog = [$("tog1"), $("tog2")];
+      MK.enter(tl, settings, 4.05, { dir: "up", dist: 900, frames: 30, blur: bfSet });
+      var knobs = all(".f04-budget-knob"), fills = all(".f04-budget-fill"), K0 = [178, 320, 244];
+      knobs.forEach(function (k, j) { gsap.set(k, { x: K0[j] }); gsap.set(fills[j], { scaleX: K0[j] / 444 }); });
+      gsap.set(tog[1], { backgroundColor: "#8C8580" }); gsap.set(tog[1].firstChild, { x: 36 });
+      function slide(j, to, t, dur) {                                              // knob + fill + the finger dragging it
+        tl.to(knobs[j], { x: to, duration: dur, ease: "power2.inOut" }, t);
+        tl.to(fills[j], { scaleX: to / 444, duration: dur, ease: "power2.inOut" }, t);
+        tl.to(touch, { x: 408 + to, duration: dur, ease: "power2.inOut" }, t);
+      }
+      gsap.set(touch, { x: 408 + K0[0], y: 150 });
+      tl.fromTo(touch, { autoAlpha: 0, scale: 0.6 }, { autoAlpha: 1, scale: 1, duration: 6 * F, ease: "back.out(2)" }, 4.22);
+      tl.to(touch, { scale: 0.86, duration: 3 * F, ease: "power2.in" }, 4.33);
+      slide(0, 318, 4.38, 0.10);                                                    // slider 1: +140 …
+      slide(0, 258, 4.48, 0.07);                                                    // … then −60
+      tl.to(touch, { x: 88, y: 436, duration: 5 * F, ease: "power2.inOut" }, 4.55);
+      var ripples = all(".f04-budget-ripple");
+      function tap(t, k, snap, s) {                                                 // a click: instant state change + kit response + ripple
+        tl.set(tog[k], { backgroundColor: k === 0 ? "#8C8580" : "rgba(255,255,255,0.10)" }, t);
+        tl.set(tog[k].firstChild, { x: k === 0 ? 36 : 0 }, t);
+        MK.click(tl, { t: t, x: k === 0 ? 88 : 510, y: 436, layer: fx, component: tog[k], shakeEl: shake, touch: touch, rig: rig, snap: snap, rigScale: s, color: "#F2EFEC" });
+        tl.fromTo(ripples[k], { scale: 1, autoAlpha: 0.5 }, { scale: 2.2, autoAlpha: 0, duration: 20 * F, ease: "power2.out", immediateRender: false }, t);
+      }
+      // the rig's transform-origin follows each click target; x/y compensate so the picture never jumps
+      var rs = 1, rx = -760, ry = 0, ro = [632, 483];
+      function reorigin(t, o) {
+        rx += (1 - rs) * (ro[0] - o[0]); ry += (1 - rs) * (ro[1] - o[1]); ro = o;
+        tl.set(rig, { transformOrigin: o[0] + "px " + o[1] + "px", x: rx, y: ry }, t);
+      }
+      reorigin(4.56, [1228, 766]);
+      tap(4.62, 0, 0.06, rs); rs *= 1.06;                                           // toggle 1
+      tl.to(touch, { x: 408 + K0[1], y: 236, duration: 5 * F, ease: "power2.inOut" }, 4.665);
+      tl.to(touch, { scale: 0.86, duration: 3 * F, ease: "power2.in" }, 4.755);
+      slide(1, 200, 4.75, 0.15);                                                    // slider 2: −120
+      tl.to(touch, { x: 510, y: 436, duration: 3 * F, ease: "power2.inOut" }, 4.90);
+      reorigin(4.90, [1650, 766]);
+      tap(4.95, 1, 0.05, rs); rs *= 1.05;                                           // toggle 2
+
+      // ════ Scene 5 (5.10–6.55) · « à l'aveugle » + silence: blind, still alive ════
+      tl.fromTo(stage, { filter: "blur(0px) brightness(1)" }, { filter: "blur(18px) brightness(0.55)", duration: 0.45, ease: "power2.in", immediateRender: false }, 5.10);
+      tl.fromTo($("vig"), { opacity: 0, scale: 1.5 }, { opacity: 0.8, scale: 1, duration: 1.45, ease: "power2.out", immediateRender: false }, 5.10);
+      reorigin(5.14, [ro[0] + (960 - rx - ro[0]) / rs, ro[1] + (540 - ry - ro[1]) / rs]);   // push into the centre of the frame
+      tl.to(rig, { scale: rs * 1.06, duration: 0.66, ease: "power1.inOut" }, 5.14);
+      tl.to(rig, { scale: rs * 1.06 * 1.03, duration: 0.75, ease: "sine.out" }, 5.80);
+
+      // ════ Scene 6 (6.55–6.99) · « Bon, » — the whole blind world is sucked into a card ════
+      MK.suck(tl, card, 6.55, { to: 0.42, frames: 18, fade: false });
+      tl.fromTo(card, { borderRadius: 0, boxShadow: "0px 143px 286px -71px rgba(0,0,0,0)" }, { borderRadius: 66.7, boxShadow: "0px 143px 286px -71px rgba(0,0,0,0.65)", duration: 18 * F, ease: "power2.in", immediateRender: false }, 6.55);
+      tl.fromTo($("rim"), { opacity: 0 }, { opacity: 1, duration: 18 * F, ease: "power2.in", immediateRender: false }, 6.55);
+      tl.to(toss, { rotation: -2, duration: 8 * F, ease: "sine.inOut" }, 6.55 + 18 * F);   // lock 8 frames, the card tilts
+
+      // ════ Scene 7 (6.99–7.72) · « ça, c'était avant » — EXIT: tossed away with gravity ════
+      var T7 = DUR - 44 * F;                                                        // the fall ends exactly at the cut
+      MK.toss(tl, toss, T7, { rise: 90, fall: 700, rotation: -16, fallFrames: 26 });
+      // the kit's lagging rotation runs 6 frames past the fall: replace it with the identical power2.in curve cut at the cut
+      tl.getTweensOf(toss).forEach(function (tw) { if (tw.vars.rotation === -16) tl.remove(tw); });
+      var tR = T7 + 24 * F, pR = (DUR - tR) / (26 * F);
+      tl.to(toss, { rotation: -2 - 14 * pR * pR, duration: DUR - tR, ease: "power2.in" }, tR);
+      bfToss.ramp(tl, toss, DUR - 8 * F, 8 * F, 0, 20, "y", "power2.in");          // vertical blur ramp 0 → 20 px (the toss wrapper is unscaled)
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines[ID] = tl;
+    })();
+  </script>
+</template>

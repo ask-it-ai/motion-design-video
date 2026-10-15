@@ -68,10 +68,11 @@
     .f11-insights-ss { display: inline-block; width: 0.3em; }
     .f11-insights-flab { position: absolute; top: 612px; width: 300px; text-align: center; font: 500 28px/1.2 "Lufga", sans-serif; color: #6C6560; white-space: nowrap; }
     #f11-insights-zone { position: absolute; left: 0; top: 0; width: 1300px; height: 700px; overflow: visible; }
-    #f11-insights-lead { position: absolute; left: 351px; top: 180px; width: 3px; height: 108px; border-radius: 2px; background: #241F20; transform-origin: 50% 0%; }
-    #f11-insights-alwrap { position: absolute; left: 0; top: 112px; width: 706px; height: 66px; display: flex; justify-content: center; }
-    #f11-insights-alert { height: 66px; padding: 0 30px 0 26px; border-radius: 999px; background: #241F20; color: #FFFFFF; display: flex; align-items: center; gap: 16px; white-space: nowrap;
-      font: 500 30px/1 "Lufga", sans-serif; box-shadow: 0 18px 36px -14px rgba(36,31,32,0.55); transform-origin: 50% 50%; }
+    #f11-insights-lead { position: absolute; left: 351px; top: 192px; width: 3px; height: 97px; border-radius: 2px; background: #241F20; transform-origin: 50% 0%; }
+    #f11-insights-alwrap { position: absolute; left: 63px; top: 124px; width: 580px; height: 66px; }
+    #f11-insights-alertsh { position: absolute; left: 0; top: 0; width: 580px; height: 66px; border-radius: 999px; box-shadow: 0 18px 36px -14px rgba(36,31,32,0.55); transform-origin: 50% 50%; }
+    #f11-insights-alert { position: absolute; left: 0; top: 0; width: 580px; height: 66px; border-radius: 999px; background: #241F20; color: #FFFFFF; display: flex; align-items: center; justify-content: center; gap: 16px; white-space: nowrap;
+      font: 500 30px/1 "Lufga", sans-serif; transform-origin: 50% 50%; }
     #f11-insights-alert span { color: rgba(255,255,255,0.66); }
     #f11-insights-adot { position: relative; width: 16px; height: 16px; border-radius: 50%; background: #F8571F; flex: none; }
     .f11-insights-pulse { position: absolute; left: -3px; top: -3px; width: 22px; height: 22px; border-radius: 50%; border: 2.5px solid #F8571F; }
@@ -99,11 +100,11 @@
     #f11-insights-ghost { visibility: hidden; }
     #f11-insights-typed { position: absolute; left: 30px; top: 26px; width: 617px; }
     #f11-insights-campwrap { position: absolute; left: 34px; top: 340px; width: 677px; height: 236px; transform-origin: 80% 70%; }
-    #f11-insights-camp { position: absolute; left: 0; top: 0; width: 677px; height: 236px; border-radius: 26px; background: #FFFFFF; border: 1.5px solid rgba(36,31,32,0.10);
-      box-shadow: 0 24px 50px -24px rgba(36,31,32,0.28), 0 3px 8px rgba(36,31,32,0.06); transform-origin: 50% 30%; }
+    #f11-insights-campsh { position: absolute; left: 0; top: 0; width: 677px; height: 236px; border-radius: 26px; box-shadow: 0 24px 50px -24px rgba(36,31,32,0.28), 0 3px 8px rgba(36,31,32,0.06); transform-origin: 50% 30%; }
+    #f11-insights-camp { position: absolute; left: 0; top: 0; width: 677px; height: 236px; border-radius: 26px; background: #FFFFFF; border: 1.5px solid rgba(36,31,32,0.10); transform-origin: 50% 30%; }
     #f11-insights-campok { position: absolute; left: -1.5px; top: -1.5px; width: 677px; height: 236px; border-radius: 26px; box-shadow: 0 0 0 3px #1F8A4C, 0 18px 40px -16px rgba(31,138,76,0.45); }
-    #f11-insights-cav { position: absolute; left: 28px; top: 30px; width: 88px; height: 88px; border-radius: 50%; overflow: hidden; box-shadow: 0 0 0 4px #FFFFFF, 0 6px 14px rgba(36,31,32,0.2); }
-    #f11-insights-cav img { display: block; width: 100%; height: 100%; object-fit: cover; }
+    #f11-insights-cav { position: absolute; left: 28px; top: 30px; width: 88px; height: 88px; border-radius: 50%; background: #DDD7CD url('assets/personas/claire.webp') center / cover no-repeat;
+      box-shadow: 0 0 0 4px #FFFFFF, 0 6px 14px rgba(36,31,32,0.2); }
     #f11-insights-cbadge { position: absolute; left: 86px; top: 88px; width: 38px; height: 38px; border-radius: 50%; background: #F8571F; box-shadow: 0 0 0 3px #FFFFFF; display: flex; align-items: center; justify-content: center; }
     #f11-insights-cbadge svg { width: 22px; height: 22px; display: block; }
     #f11-insights-cname { position: absolute; left: 146px; top: 36px; font: 600 33px/1.15 "Lufga", sans-serif; letter-spacing: -0.01em; white-space: nowrap; }
@@ -123,8 +124,9 @@
 
     /* ---------- click overlay (dashes, touch) ---------- */
     #f11-insights-fx { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
-    #f11-insights-touch { position: absolute; left: 0; top: 0; width: 54px; height: 54px; margin-left: -27px; margin-top: -27px; border-radius: 50%;
-      background: rgba(255,255,255,0.55); box-shadow: 0 0 0 2px rgba(36,31,32,0.25), 0 8px 18px rgba(36,31,32,0.25); }
+    .f11-insights-tch { position: absolute; left: 0; top: 0; width: 58px; height: 58px; margin-left: -29px; margin-top: -29px; border-radius: 50%; }
+    #f11-insights-touchsh { box-shadow: 0 8px 18px rgba(36,31,32,0.25); }
+    #f11-insights-touch { background: rgba(255,255,255,0.55); border: 2px solid rgba(36,31,32,0.25); }
   </style>
 
   <div id="root" data-composition-id="f11-insights" data-fps="60" data-start="0" data-duration="4.30" data-width="1920" data-height="1080">
@@ -203,6 +205,7 @@
                   <div class="f11-insights-flab" style="left:648px">Terminés</div><div class="f11-insights-flab" style="left:945px">Achats</div>
                   <div id="f11-insights-lead"></div>
                   <div id="f11-insights-alwrap">
+                    <div id="f11-insights-alertsh"></div>
                     <div id="f11-insights-alert" data-hf-motion-blur='{"shutterAngle":360,"samplesPerFrame":12}'>
                       <div id="f11-insights-adot"><div class="f11-insights-pulse"></div><div class="f11-insights-pulse"></div><div class="f11-insights-pulse"></div></div>
                       <div><span>Frein détecté&#160;:</span> l’écran de contact</div>
@@ -230,9 +233,10 @@
                 <div id="f11-insights-dots"><div class="f11-insights-dot" style="left:30px"></div><div class="f11-insights-dot" style="left:60px"></div><div class="f11-insights-dot" style="left:90px"></div></div>
                 <div id="f11-insights-bubble"><div id="f11-insights-ghost"></div><div id="f11-insights-typed"></div></div>
                 <div id="f11-insights-campwrap">
+                  <div id="f11-insights-campsh"></div>
                   <div id="f11-insights-camp" data-hf-motion-blur='{"shutterAngle":360,"samplesPerFrame":12}'>
                     <div id="f11-insights-campok"></div>
-                    <div id="f11-insights-cav"><img src="assets/personas/claire.webp" alt=""></div>
+                    <div id="f11-insights-cav"></div>
                     <div id="f11-insights-cbadge"><svg viewBox="0 0 24 24"><path d="M3.5 10v4a1 1 0 0 0 1 1h2.2l5.3 4.2V4.8L6.7 9H4.5a1 1 0 0 0-1 1z" fill="#FFFFFF"/><path d="M15.6 8.6a4.8 4.8 0 0 1 0 6.8M18.2 6.2a8.2 8.2 0 0 1 0 11.6" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"/></svg></div>
                     <div id="f11-insights-cname">Campagne · Teint terne</div>
                     <div id="f11-insights-csub">Meta · audience 30–44 ans</div>
@@ -245,7 +249,8 @@
               </div>
 
               <div id="f11-insights-fx">
-                <div id="f11-insights-touch" data-hf-motion-blur='{"shutterAngle":360,"samplesPerFrame":12}'></div>
+                <div id="f11-insights-touchsh" class="f11-insights-tch"></div>
+                <div id="f11-insights-touch" class="f11-insights-tch" data-hf-motion-blur='{"shutterAngle":360,"samplesPerFrame":12}'></div>
               </div>
 
             </div>
@@ -265,7 +270,7 @@
       var tl = gsap.timeline({ paused: true });
 
       var stage = $("stage"), shake = $("shake"), tilt = $("tilt"), rig = $("rig"), drift = $("drift");
-      var scroll = $("scroll"), panel = $("panel"), fx = $("fx"), rfx = $("rfx"), touch = $("touch");
+      var scroll = $("scroll"), panel = $("panel"), fx = $("fx"), rfx = $("rfx"), touch = $("touch"), touchsh = $("touchsh");
 
       /* one directional-blur filter per moving layer */
       var bfScroll = MK.blurFilter(stage, ID + "-blur-scroll");
@@ -298,7 +303,7 @@
       });
 
       /* late elements start hidden (set at build and at t=0 so any seek order agrees) */
-      var late = [panel, $("scrim"), $("bubble"), $("ston"), $("togon"), $("campok"), touch, $("alert")];
+      var late = [panel, $("scrim"), $("bubble"), $("ston"), $("togon"), $("campok"), touch, touchsh, $("alert"), $("alertsh")];
       gsap.set(late, { autoAlpha: 0 });
       tl.set(late, { autoAlpha: 0 }, 0);
 
@@ -309,6 +314,8 @@
 
       /* ---------- Scene 1 (0.00–0.80): ENTRY — the dashboard scroll is launched UP, the personas card brakes ---------- */
       MK.enter(tl, scroll, 0, { dir: "up", dist: 900, frames: 38, blur: bfScroll });
+      // frame 0 already carries the launch blur (a set at t=0 is not rendered before the first seek)
+      gsap.set(scroll, { filter: bfScroll.ref }); bfScroll.node.setAttribute("stdDeviation", "0 16");
       // share bars: scaleX 0 -> 1.04 -> 1, 4-frame offsets from 0.05
       var fills = Array.prototype.slice.call($("per").getElementsByClassName(ID + "-fill"));
       MK.each(fills, 0.05, 4, function (el, t) {
@@ -336,6 +343,7 @@
       });
       // friction alert slammed: impact on « bloque » (1.61)
       var impact = MK.slam(tl, $("alert"), 1.46, { from: 2.2, shakeEl: shake, shakePx: 10 });
+      MK.slam(tl, $("alertsh"), 1.46, { from: 2.2 });   // its shadow rides an unmarked twin (no blur copies of a box-shadow)
       tl.fromTo($("zone"), { clipPath: "inset(0% 0% 100% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 7 * F, ease: "power3.out" }, impact);
       tl.fromTo($("lead"), { scaleY: 0 }, { scaleY: 1, duration: 6 * F, ease: "power2.out" }, impact + 2 * F);
       var pulses = Array.prototype.slice.call($("adot").children);
@@ -365,13 +373,19 @@
       MK.type(tl, $("typed"), MSG, 2.25, { cps: 70 });
       // campaign card pops at 3.10 (OFF toggle)
       MK.pop(tl, $("camp"), 3.10, { over: 0.16 });
+      MK.pop(tl, $("campsh"), 3.10, { over: 0.16 });
 
       /* ---------- Scene 4 (3.44–4.00): « ensuite » — the toggle is clicked ---------- */
       var TOG = { x: 1033 + 34 + 545 + 52, y: 735 + 340 + 158 + 29 };   // toggle centre in world px
       // the touch arrives already moving (from below-right) and decelerates onto the toggle
-      tl.set(touch, { autoAlpha: 1 }, 3.10);
-      tl.fromTo(touch, { x: TOG.x + 300, y: TOG.y + 470 }, { x: TOG.x + 4, y: TOG.y + 6, duration: 17 * F, ease: "power2.out", immediateRender: false }, 3.10);
-      tl.to(touch, { x: TOG.x, y: TOG.y, duration: 4 * F, ease: "sine.inOut" }, 3.10 + 17 * F);
+      [touch, touchsh].forEach(function (el) {
+        tl.set(el, { autoAlpha: 1 }, 3.10);
+        tl.fromTo(el, { x: TOG.x + 300, y: TOG.y + 470 }, { x: TOG.x + 4, y: TOG.y + 6, duration: 17 * F, ease: "power2.out", immediateRender: false }, 3.10);
+        tl.to(el, { x: TOG.x, y: TOG.y, duration: 4 * F, ease: "sine.inOut" }, 3.10 + 17 * F);
+      });
+      // the shadow twin follows the kit's touch press (MK.click drives the disc itself)
+      tl.to(touchsh, { scale: 0.82, duration: 3 * F, ease: "power2.in" }, 3.44 - 3 * F);
+      tl.to(touchsh, { scale: 1, duration: 8 * F, ease: "back.out(2)" }, 3.44);
       // the snap zoom re-centres on the toggle: keep the frame still at the origin swap (rig is at x1.1)
       var O1 = { x: 960, y: 373 }, S1 = 1.1;
       tl.set(rig, { transformOrigin: TOG.x + "px " + TOG.y + "px", x: (S1 - 1) * (TOG.x - O1.x), y: -700 + (S1 - 1) * (TOG.y - O1.y) }, 3.44);
@@ -383,9 +397,11 @@
       tl.set($("knob"), { x: 46 }, 3.44);
       tl.set($("stoff"), { autoAlpha: 0 }, 3.44);
       tl.set($("campok"), { autoAlpha: 1 }, 3.44);
-      MK.pop(tl, $("ston"), 3.44, { from: 0.85, over: 0.1 });
+      tl.set($("ston"), { autoAlpha: 1 }, 3.44);
+      tl.fromTo($("ston"), { scale: 0.85 }, { scale: 1.1, duration: 4 * F, ease: "power2.out", immediateRender: false }, 3.44);
+      tl.to($("ston"), { scale: 1, duration: 16 * F, ease: "power2.inOut" }, 3.44 + 4 * F);
       // the touch lifts away after the lock
-      tl.to(touch, { x: TOG.x + 170, y: TOG.y + 260, autoAlpha: 0, duration: 20 * F, ease: "power2.in" }, 3.70);
+      tl.to([touch, touchsh], { x: TOG.x + 170, y: TOG.y + 260, autoAlpha: 0, duration: 20 * F, ease: "power2.in" }, 3.70);
 
       /* ---------- Scene 5 (4.00–4.30): EXIT — push left, last frame = fastest ---------- */
       MK.exit(tl, rig, 4.00, { dir: "left", dist: 1600, frames: 18, blur: bfRig });

@@ -336,7 +336,7 @@
       /* Scene 6 (10.80-11.10) - EXIT: zoom-through into the basket, cut on the fastest frame */
       MK.zoomThrough(tl, DIVE, 10.80, { origin: org(BASKET), to: 9, frames: 18, blur: BF_DIVE });
       tl.set($("halo"), { autoAlpha: 1 }, 10.80);
-      tl.to($("halo"), { scale: 3.2, duration: 18 * F, ease: "expo.in" }, 10.80);
+      tl.to($("halo"), { scale: 5, duration: 18 * F, ease: "expo.in" }, 10.80);
 
       window.__timelines = window.__timelines || {};
       window.__timelines[ID] = tl;

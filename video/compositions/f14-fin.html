@@ -19,7 +19,7 @@
     /* world (rig space): GRID_100 at x5 around Claire so that rig 0.2 reads as 40 px dots, pitch 62 */
     #f14-fin-glow { position: absolute; left: 410px; top: -50px; width: 1100px; height: 1100px; border-radius: 50%; background: radial-gradient(closest-side, rgba(248,87,31,0.85) 0%, rgba(248,87,31,0.32) 45%, rgba(248,87,31,0) 100%); opacity: 0.2; }
     .f14-fin-dot { position: absolute; width: 200px; height: 200px; border-radius: 50%; background: rgba(36,31,32,0.15); }
-    .f14-fin-lit { position: absolute; width: 200px; height: 200px; border-radius: 50%; background: #F8571F; }
+    .f14-fin-lit { position: absolute; width: 200px; height: 200px; border-radius: 50%; background: #F8571F; visibility: hidden; opacity: 0; }
     #f14-fin-av { position: absolute; left: 822px; top: 362px; width: 276px; height: 276px; }
     #f14-fin-avpop { position: absolute; inset: 0; }
     #f14-fin-avring { position: absolute; inset: 0; border-radius: 50%; background: #FFFFFF; box-shadow: 0 30px 60px -20px rgba(36,31,32,0.35), 0 6px 16px -6px rgba(36,31,32,0.18); }
@@ -33,7 +33,7 @@
     #f14-fin-endglow { position: absolute; left: 360px; top: 80px; width: 1200px; height: 800px; border-radius: 50%; background: radial-gradient(closest-side, rgba(248,87,31,0.55) 0%, rgba(248,87,31,0.20) 40%, rgba(167,171,221,0.22) 70%, rgba(167,171,221,0) 100%); visibility: hidden; opacity: 0; }
     #f14-fin-lockrow { position: absolute; left: 0; top: 345px; width: 1920px; height: 150px; display: flex; justify-content: center; align-items: center; }
     #f14-fin-lockup { display: flex; align-items: center; gap: 46px; }
-    #f14-fin-mark { width: 106px; height: 106px; display: block; margin-top: -2px; }
+    #f14-fin-mark { width: 106px; height: 106px; display: block; margin-top: -14px; }
     #f14-fin-word { display: flex; align-items: baseline; font-size: 150px; line-height: 150px; letter-spacing: -0.03em; white-space: nowrap; }
     .f14-fin-ch { display: inline-block; font-weight: 600; color: #241F20; transform-origin: 50% 100%; }
     .f14-fin-ch.f14-fin-light { font-weight: 400; }
@@ -49,7 +49,7 @@
     /* HUD (frame space): the stat and its words */
     #f14-fin-statw, #f14-fin-wordsw { transform-origin: 960px 420px; }
     #f14-fin-stat { position: absolute; left: 940px; top: 350px; width: 800px; height: 300px; display: flex; align-items: center; justify-content: center; font-family: "DM Sans", sans-serif; font-weight: 700; font-size: 300px; line-height: 1; letter-spacing: -0.05em; color: #F8571F; white-space: nowrap; }
-    #f14-fin-words { position: absolute; left: 940px; top: 640px; width: 800px; height: 70px; text-align: center; font-weight: 500; font-size: 56px; line-height: 70px; letter-spacing: -0.01em; color: #6C6560; white-space: nowrap; }
+    #f14-fin-words { position: absolute; left: 940px; top: 640px; width: 800px; height: 70px; visibility: hidden; text-align: center; font-weight: 500; font-size: 56px; line-height: 70px; letter-spacing: -0.01em; color: #6C6560; white-space: nowrap; }
   </style>
 
   <div id="root" data-composition-id="f14-fin" data-fps="60" data-start="0" data-duration="9.50" data-width="1920" data-height="1080">
@@ -57,6 +57,7 @@
 
     <div id="f14-fin-stage" class="clip" data-start="0" data-duration="9.50" data-track-index="1">
       <div id="f14-fin-shake" class="f14-fin-full">
+        <div id="f14-fin-under" class="f14-fin-full"><div id="f14-fin-endglow"></div></div>
         <div id="f14-fin-rig" class="f14-fin-full">
           <div id="f14-fin-drift" class="f14-fin-full">
             <div id="f14-fin-world" class="f14-fin-full">
@@ -74,7 +75,6 @@
               </div>
             </div>
             <div id="f14-fin-card" class="f14-fin-full">
-              <div id="f14-fin-endglow"></div>
               <div id="f14-fin-lockrow"><div id="f14-fin-lockup"><img id="f14-fin-mark" src="assets/askit/askit-logo-mark.svg" alt="" data-hf-motion-blur='{"shutterAngle":360,"samplesPerFrame":12}' /><div id="f14-fin-word"></div></div></div>
               <div id="f14-fin-ctarow"><div id="f14-fin-cta"><span>Réserver une démo</span><svg viewBox="0 0 40 26"><path d="M3 13 H35 M24.5 3.5 L35.5 13 L24.5 22.5" fill="none" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
               <div id="f14-fin-labelrow"><div id="f14-fin-label" data-hf-motion-blur='{"shutterAngle":360,"samplesPerFrame":12}'>ask-it.ai</div></div>
@@ -155,15 +155,16 @@
       var chosen = pool.slice(0, 69).sort(function (a, b) { return (dist[a] + 0.7 * MK.hash(a + 101)) - (dist[b] + 0.7 * MK.hash(b + 101)); });
       MK.each(chosen, impact, 1, function (idx, t) { MK.pop(tl, lit[idx], t, { over: 0.25 }); });
       MK.words(tl, $("words"), [{ w: "de", t: 4.19 }, { w: "vos", t: 4.26 }, { w: "visiteurs", t: 4.39 }], { lead: 0.1 });
+      tl.set($("words"), { visibility: "visible" }, 4.09);
 
       /* Scene 4 (5.00-6.40) - everything is sucked to the centre; the lockup builds; the CTA pops */
       var wo = [HX + (960 - PX - HX) / 0.2, HY + (420 - PY - HY) / 0.2];   // rig point that sits at frame (960, 420)
       gsap.set(WORLD, { transformOrigin: wo[0] + "px " + wo[1] + "px" });
       MK.suck(tl, [WORLD, $("statw"), $("wordsw")], 5.00);
       tl.set(RIG, { x: 0, y: 0, scale: 1, transformOrigin: "960px 540px" }, 5.30);
-      tl.set($("endglow"), { autoAlpha: 1 }, 5.30);
-      tl.fromTo($("endglow"), { opacity: 0, scale: 0.75 }, { opacity: 0.55, scale: 1, duration: 0.9, ease: "power2.out", immediateRender: false }, 5.30);
-      MK.pop(tl, $("mark"), 5.32);
+      tl.fromTo($("endglow"), { autoAlpha: 0, scale: 0.6 }, { autoAlpha: 0.55, scale: 1, duration: 0.9, ease: "power2.out" }, 5.00);
+      MK.ring(tl, $("under"), 5.27, { x: 960, y: 420, r1: 280, width: 4, alpha: 0.75 });
+      MK.pop(tl, $("mark"), 5.32 - F);
       var word = $("word"), CH = ["a", "s", "k", "-", "i", "t", ".ai"];
       CH.forEach(function (ch) {
         var s = document.createElement("span"); s.className = P + "ch" + (ch === ".ai" ? " " + P + "light" : ""); s.textContent = ch;

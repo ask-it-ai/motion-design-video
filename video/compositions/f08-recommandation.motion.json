@@ -1,0 +1,13 @@
+{
+  "scene": "f08-recommandation",
+  "duration_s": 6.80,
+  "rules": ["MK.drift", "MK.enter", "MK.blurFilter", "MK.pop", "MK.ring", "MK.slam", "MK.shake", "MK.suck", "MK.snapZoom", "MK.exit", "MK.anticipate", "MK.fly", "MK.count", "MK.each"],
+  "exit": {
+    "vector": "inward suction toward (1040,470): whole rig scale 0.660 -> 0.608 on the last frame (t=6.783, -3.1 /s; frame-edge points ~3000 px/s inward, 3350 px/s into the cut at scale 0.55), opacity 0.11 on the last frame (MK.suck power2.in 18 f from 6.50, with fade)",
+    "still_moving": true
+  },
+  "entry": {
+    "vector": "left 13900 px/s on frame 0->1 (result-page plane tilted rotateX 58 / rotateZ -12 at x1.3, launched from x+1000, MK.enter circ.out 38 f; 5600 px/s on frame 1->2), frame 0 already carries a 16 px horizontal blur",
+    "from_rest": false
+  }
+}

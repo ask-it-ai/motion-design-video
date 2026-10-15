@@ -199,7 +199,7 @@
 
       // total counter: fixed-width digit slots (DM Sans digits are proportional)
       var tnum = $("tnum"), slots = [];
-      ["d", "d", ",", "d", "d", " €"].forEach(function (k) {
+      ["d", "d", ",", "d", "d", "eur"].forEach(function (k) {
         var s = document.createElement("span");
         if (k === "d") { s.className = ID + "-sd"; slots.push(s); } else if (k === ",") { s.className = ID + "-ss"; s.textContent = ","; } else { s.textContent = "€"; s.style.marginLeft = "0.2em"; }
         tnum.appendChild(s);
@@ -264,14 +264,14 @@
       tl.to($("tnum"), { scale: 1, duration: 14 * F, ease: "power2.inOut" }, fin + 3 * F);
 
       // ---- Scene 6 (5.20–6.50): « et les arguments qui la rassurent » — badges pop, then pulse together on « rassurent » ----
+      MK.snapZoom(tl, rig, 5.20, { from: 1, to: 0.92, origin: "1040px 470px" });   // « et »: small pull-back, room for the badges (rig scale is exactly 1 here)
       var badges = [$("b1"), $("b2"), $("seal"), $("b4")];
       MK.each(badges, 5.46, 4, function (b, t) { MK.pop(tl, b, t); });
       tl.to(badges, { scale: 1.04, duration: 5 * F, ease: "power2.out" }, 6.12);
       tl.to(badges, { scale: 1, duration: 14 * F, ease: "power2.inOut" }, 6.12 + 5 * F);
 
       // ---- Scene 7 (6.50–6.80): SUCTION — the whole stage shrinks to 55 %, accelerating, and fades ----
-      tl.set(rig, { transformOrigin: "960px 540px" }, 6.50);                  // rig scale is exactly 1 here: no jump
-      MK.suck(tl, rig, 6.50, { to: 0.55, frames: 18 });
+      MK.suck(tl, rig, 6.50, { to: 0.55, frames: 18 });                        // converges on the cluster centre (1040, 470)
       MK.suck(tl, $("hud"), 6.50, { to: 0.55, frames: 18 });
 
       tl.set({}, {}, DUR);

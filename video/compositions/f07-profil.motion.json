@@ -1,0 +1,13 @@
+{
+  "scene": "f07-profil",
+  "duration_s": 4.70,
+  "rules": ["MK.drift", "MK.enter", "MK.blurFilter", "MK.slam", "MK.shake", "MK.suck", "MK.enterBig", "MK.anticipate", "MK.pop", "MK.ring", "MK.pan", "MK.snapZoom", "MK.exit"],
+  "exit": {
+    "vector": "left 20700 px/s on the last frame (t=4.683, whole rig at x1.3, MK.exit expo.in 1600 px / 18 f from 4.40), 30500 px/s into the cut at 4.70; horizontal SVG blur 0 -> 18 px over the last 8 frames",
+    "still_moving": true
+  },
+  "entry": {
+    "vector": "left 17700 px/s on frame 0->1 (timer ring launched from x+1100, MK.enter circ.out 30 f; 7000 px/s on frame 1->2), frame 0 already carries a 16 px horizontal blur",
+    "from_rest": false
+  }
+}
