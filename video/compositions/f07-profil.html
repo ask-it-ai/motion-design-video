@@ -1,0 +1,204 @@
+<template>
+  <style>
+    @font-face { font-family: 'Lufga'; src: url('assets/fonts/Lufga-Medium.woff2') format('woff2'); font-weight: 500; font-style: normal; font-display: block; }
+    @font-face { font-family: 'Lufga'; src: url('assets/fonts/Lufga-SemiBold.woff2') format('woff2'); font-weight: 600; font-style: normal; font-display: block; }
+    @font-face { font-family: 'Lufga'; src: url('assets/fonts/Lufga-Bold.woff2') format('woff2'); font-weight: 700; font-style: normal; font-display: block; }
+    @font-face { font-family: 'DM Sans'; src: url('assets/fonts/DMSans-normal-latin.woff2') format('woff2'); font-weight: 300 800; font-style: normal; font-display: block; }
+    @font-face { font-family: 'Archivo'; src: url('assets/fonts/Archivo-normal-latin.woff2') format('woff2'); font-weight: 400 900; font-style: normal; font-display: block; }
+
+    #root { position: absolute; inset: 0; width: 1920px; height: 1080px; overflow: hidden; font-family: 'Lufga', sans-serif; color: #241F20; }
+
+    /* ground: grid-bg (canvas + 44 px grid + drifting brand mesh) */
+    #f07-profil-bg { position: absolute; inset: 0; overflow: hidden; background: #FDFCFC; }
+    #f07-profil-mesh { position: absolute; left: -80px; top: -60px; width: 2080px; height: 1200px;
+      background: radial-gradient(60% 60% at 27% 23%, rgba(248,87,31,0.22) 0%, rgba(248,87,31,0) 60%), radial-gradient(55% 55% at 78% 30%, rgba(172,204,233,0.55) 0%, rgba(172,204,233,0) 62%), radial-gradient(60% 60% at 55% 85%, rgba(167,171,221,0.45) 0%, rgba(167,171,221,0) 65%); }
+    #f07-profil-grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(36,31,32,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(36,31,32,0.05) 1px, transparent 1px); background-size: 44px 44px; }
+
+    /* skeleton: stage(clip) > shake > rig (camera) > drift > att (3D attitude) > content */
+    #f07-profil-stage { position: absolute; inset: 0; overflow: hidden; }
+    .f07-profil-full { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+    #f07-profil-rig, #f07-profil-drift { transform-origin: 1130px 890px; }
+    #f07-profil-drift { perspective: 2200px; perspective-origin: 960px 540px; }
+    #f07-profil-att { transform-origin: 960px 540px; }
+
+    /* timer ring */
+    #f07-profil-timer { position: absolute; left: 770px; top: 330px; width: 380px; height: 380px; }
+    #f07-profil-crown { position: absolute; left: 170px; top: -34px; width: 40px; height: 30px; border-radius: 8px 8px 4px 4px; background: #241F20; }
+    #f07-profil-crown::after { content: ''; position: absolute; left: 14px; top: 26px; width: 12px; height: 14px; background: #241F20; }
+    #f07-profil-disc { position: absolute; left: 0; top: 0; width: 380px; height: 380px; border-radius: 50%; background: #fff;
+      box-shadow: 0 40px 80px -24px rgba(36,31,32,0.22), 0 8px 24px -8px rgba(36,31,32,0.10); }
+    #f07-profil-tsvg { position: absolute; left: 0; top: 0; width: 380px; height: 380px; overflow: visible; }
+    #f07-profil-knobrot { position: absolute; left: 0; top: 0; width: 380px; height: 380px; transform-origin: 190px 190px; }
+    #f07-profil-knob { position: absolute; left: 177px; top: -7px; width: 26px; height: 26px; border-radius: 50%; background: #F8571F; box-shadow: 0 0 0 5px #fff, 0 6px 14px rgba(248,87,31,0.45); }
+    #f07-profil-ttext { position: absolute; left: 0; top: 0; width: 380px; height: 380px; display: flex; align-items: baseline; justify-content: center; gap: 6px;
+      padding-top: 74px; box-sizing: border-box; font-family: 'DM Sans', sans-serif; font-weight: 700; color: #241F20; }
+    #f07-profil-t30 { font-size: 220px; line-height: 1; letter-spacing: -0.06em; }
+    #f07-profil-ts { font-size: 120px; line-height: 1; color: #F8571F; letter-spacing: -0.02em; }
+
+    /* profile card */
+    #f07-profil-card { position: absolute; left: 460px; top: 240px; width: 1000px; height: 560px; border-radius: 28px; background: #fff;
+      box-shadow: 0 0 0 1.5px rgba(36,31,32,0.10), 0 40px 80px -24px rgba(36,31,32,0.22), 0 8px 24px -8px rgba(36,31,32,0.10); }
+    #f07-profil-photo { position: absolute; left: 56px; top: 58px; width: 180px; height: 180px; border-radius: 50%; overflow: hidden; background: #ECE7E2;
+      box-shadow: 0 0 0 6px #fff, 0 18px 36px -12px rgba(36,31,32,0.38); }
+    #f07-profil-photo img { display: block; width: 180px; height: 180px; object-fit: cover; }
+    #f07-profil-name { position: absolute; left: 280px; top: 70px; font: 600 64px/72px 'Lufga', sans-serif; letter-spacing: -0.02em; white-space: nowrap; }
+    #f07-profil-sub { position: absolute; left: 282px; top: 156px; font: 600 34px/40px 'Lufga', sans-serif; color: #F8571F; white-space: nowrap; }
+    .f07-profil-dm { font-family: 'DM Sans', sans-serif; }
+    #f07-profil-achips { position: absolute; left: 56px; top: 292px; display: flex; gap: 14px; }
+    .f07-profil-achip { height: 60px; padding: 0 24px 0 20px; display: flex; align-items: center; gap: 12px; border-radius: 999px; background: #fff; box-sizing: border-box;
+      border: 1.5px solid rgba(36,31,32,0.10); box-shadow: 0 18px 40px -18px rgba(36,31,32,0.18), 0 2px 6px rgba(36,31,32,0.05);
+      font: 500 26px 'Lufga', sans-serif; color: #241F20; white-space: nowrap; }
+    .f07-profil-achip i { width: 10px; height: 10px; border-radius: 50%; background: #F8571F; flex: none; }
+    #f07-profil-plab { position: absolute; left: 56px; top: 428px; font: 500 26px/32px 'Lufga', sans-serif; color: #6C6560; white-space: nowrap; }
+    #f07-profil-pval { position: absolute; right: 56px; top: 426px; font: 700 28px/34px 'DM Sans', sans-serif; color: #241F20; white-space: nowrap; }
+    #f07-profil-track { position: absolute; left: 56px; top: 476px; width: 888px; height: 12px; border-radius: 6px; background: #F1EEEA; overflow: hidden; }
+    #f07-profil-track div { width: 888px; height: 12px; border-radius: 6px; background: #F8571F; }
+    .f07-profil-sw { position: absolute; left: 900px; top: 70px; width: 200px; height: 200px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      background: radial-gradient(circle at 34% 28%, #EC916A 0%, #DF764C 52%, #D1663D 100%);
+      box-shadow: 0 0 0 6px #fff, 0 28px 54px -18px rgba(150,60,25,0.55); font: 800 30px 'Archivo', sans-serif; color: #fff; letter-spacing: 0.01em; }
+    #f07-profil-cfx { position: absolute; left: 0; top: 0; width: 1000px; height: 560px; overflow: visible; pointer-events: none; }
+
+    /* links + chips under the card */
+    #f07-profil-links { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; overflow: visible; }
+    .f07-profil-cw { position: absolute; top: 854px; width: 560px; height: 72px; display: flex; justify-content: center; }
+    .f07-profil-chip { height: 72px; display: flex; align-items: center; gap: 14px; padding: 0 32px 0 22px; border-radius: 999px; box-sizing: border-box;
+      font: 600 30px 'Lufga', sans-serif; white-space: nowrap; box-shadow: 0 24px 44px -20px rgba(36,31,32,0.28), 0 2px 6px rgba(36,31,32,0.06); }
+    #f07-profil-chipA { background: #FDEEE7; color: #F8571F; border: 1.5px solid rgba(248,87,31,0.32); }
+    #f07-profil-chipA svg { width: 32px; height: 32px; flex: none; }
+    #f07-profil-chipB { background: #FFF3E0; color: #241F20; border: 1.5px solid rgba(232,162,59,0.45); }
+    #f07-profil-bang { width: 38px; height: 38px; border-radius: 50%; background: #E8A23B; color: #fff; display: flex; align-items: center; justify-content: center; flex: none;
+      font: 800 26px 'DM Sans', sans-serif; box-shadow: 0 4px 10px rgba(232,162,59,0.45); }
+    .f07-profil-mute { opacity: 0.55; }
+  </style>
+
+  <div id="root" data-composition-id="f07-profil" data-start="0" data-duration="4.70" data-fps="60" data-width="1920" data-height="1080">
+    <div id="f07-profil-bg" class="clip" data-start="0" data-duration="4.70" data-track-index="0">
+      <div id="f07-profil-mesh"></div>
+      <div id="f07-profil-grid"></div>
+    </div>
+
+    <div id="f07-profil-stage" class="clip" data-start="0" data-duration="4.70" data-track-index="1">
+      <div id="f07-profil-shake" class="f07-profil-full">
+        <div id="f07-profil-rig" class="f07-profil-full">
+          <div id="f07-profil-drift" class="f07-profil-full">
+            <div id="f07-profil-att" class="f07-profil-full">
+
+              <div id="f07-profil-timer">
+                <div id="f07-profil-crown"></div>
+                <div id="f07-profil-disc"></div>
+                <svg id="f07-profil-tsvg" viewBox="0 0 380 380">
+                  <circle cx="190" cy="190" r="184" fill="none" stroke="rgba(36,31,32,0.08)" stroke-width="12"/>
+                  <circle id="f07-profil-arc" cx="190" cy="190" r="184" fill="none" stroke="#F8571F" stroke-width="12" stroke-linecap="round" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100" transform="rotate(-90 190 190)"/>
+                </svg>
+                <div id="f07-profil-knobrot"><div id="f07-profil-knob"></div></div>
+                <div id="f07-profil-ttext" data-hf-motion-blur='{"shutterAngle":360,"samplesPerFrame":12}'><span id="f07-profil-t30">30</span><span id="f07-profil-ts">s</span></div>
+              </div>
+
+              <svg id="f07-profil-links" viewBox="0 0 1920 1080">
+                <path id="f07-profil-linkA" d="M 540 800 C 540 832, 600 824, 600 856" fill="none" stroke="#F8571F" stroke-width="3.5" stroke-linecap="round" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"/>
+                <path id="f07-profil-linkB" d="M 1200 800 C 1200 832, 1130 824, 1130 856" fill="none" stroke="#E8A23B" stroke-width="3.5" stroke-linecap="round" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"/>
+                <circle id="f07-profil-dotA" cx="540" cy="800" r="7" fill="#F8571F"/>
+                <circle id="f07-profil-dotB" cx="1200" cy="800" r="7" fill="#E8A23B"/>
+              </svg>
+
+              <div id="f07-profil-card">
+                <div id="f07-profil-photo"><img src="assets/personas/claire.webp" alt=""></div>
+                <div id="f07-profil-name">Claire</div>
+                <div id="f07-profil-sub">Profil CORAIL<span class="f07-profil-dm">02</span></div>
+                <div id="f07-profil-achips">
+                  <div class="f07-profil-achip"><i></i>Peau mixte</div>
+                  <div class="f07-profil-achip"><i></i>Routine essentielle</div>
+                  <div class="f07-profil-achip"><i></i>Peau sensible · <span class="f07-profil-dm">3/10</span></div>
+                </div>
+                <div id="f07-profil-plab">Profil complété</div>
+                <div id="f07-profil-pval">100 %</div>
+                <div id="f07-profil-track"><div></div></div>
+                <div id="f07-profil-seed" class="f07-profil-sw">CORAIL02</div>
+                <div id="f07-profil-swatch" class="f07-profil-sw" data-hf-motion-blur='{"shutterAngle":360,"samplesPerFrame":12}'>CORAIL02</div>
+                <div id="f07-profil-cfx"></div>
+              </div>
+
+              <div class="f07-profil-cw" style="left:320px">
+                <div id="f07-profil-chipA" class="f07-profil-chip" data-hf-motion-blur='{"shutterAngle":360,"samplesPerFrame":12}'>
+                  <svg viewBox="0 0 32 32"><path d="M16 3.5c.9 5.6 3.1 9.2 9.6 12.5-6.5 3.3-8.7 6.9-9.6 12.5-.9-5.6-3.1-9.2-9.6-12.5 6.5-3.3 8.7-6.9 9.6-12.5z" fill="#F8571F"/></svg>
+                  <span>Cherche · un teint lumineux</span>
+                </div>
+              </div>
+              <div class="f07-profil-cw" style="left:850px">
+                <div id="f07-profil-chipB" class="f07-profil-chip" data-hf-motion-blur='{"shutterAngle":360,"samplesPerFrame":12}'>
+                  <div id="f07-profil-bang">!</div>
+                  <span>Frein · peur des réactions</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <script src="lib/motionkit.js"></script>
+  <script>
+    (function () {
+      var ID = "f07-profil", DUR = 4.70, MK = window.MK, F = MK.F;
+      var $ = function (s) { return document.getElementById(ID + "-" + s); };
+      var shake = $("shake"), rig = $("rig"), timer = $("timer"), card = $("card");
+      var tl = gsap.timeline({ paused: true });
+      gsap.set([$("dotA"), $("dotB")], { transformOrigin: "50% 50%" });
+
+      // ground: the brand mesh drifts slowly for the whole scene
+      tl.fromTo($("mesh"), { x: 0, y: 0, scale: 1 }, { x: 40, y: -26, scale: 1.06, duration: DUR, ease: "sine.inOut" }, 0);
+
+      // never frozen: drift on .drift for the whole scene + a slow 3D attitude of the camera
+      MK.drift(tl, $("drift"), 0, DUR, { seed: 71 });
+      tl.fromTo($("att"), { rotationY: -3, rotationX: 2 }, { rotationY: 4, rotationX: -1.5, duration: DUR, ease: "sine.inOut" }, 0);
+
+      // ---- Scene 1 (0.00–1.00): launched entry of the timer, « 30 s » slams on « trente », the ring runs ----
+      var bfIn = MK.blurFilter($("stage"), ID + "-blur1");
+      gsap.set(timer, { filter: bfIn.ref }); bfIn.node.setAttribute("stdDeviation", "16 0");   // frame 0 is already smeared (a set at exactly 0 does not render)
+      MK.enter(tl, timer, 0, { dir: "left", dist: 1100, frames: 30, blur: bfIn });
+      var impact = MK.slam(tl, $("ttext"), 0.07, { shakeEl: shake });          // impact 0.22
+      tl.to($("arc"), { strokeDashoffset: 0, duration: 0.88 - impact, ease: "power1.inOut" }, impact);
+      tl.fromTo($("knobrot"), { rotation: 0 }, { rotation: 360, duration: 0.88 - impact, ease: "power1.inOut" }, impact);
+      tl.fromTo($("knob"), { scale: 0.4 }, { scale: 1, duration: 8 * F, ease: "back.out(3)" }, impact);
+      // lock 10 frames (0.88–1.05) — drift only
+
+      // ---- Scene 2 (1.00–2.10): « vous savez qui elle est » ----
+      MK.suck(tl, timer, 1.00);                                                // timer sucked 100 → 55 %, gone at 1.30
+      MK.enterBig(tl, card, 1.30, { from: 1.45, frames: 40 });
+      tl.fromTo(card, { autoAlpha: 0 }, { autoAlpha: 1, duration: 2 * F, ease: "none" }, 1.30);
+      // CORAIL02 swatch: anticipation (to 0.6) then pop on « qui » + coral ring
+      MK.anticipate(tl, $("seed"), 1.56, { to: 0.6 });
+      MK.pop(tl, $("swatch"), 1.56, { from: 0.6 });
+      tl.set($("seed"), { autoAlpha: 0 }, 1.56 + 4 * F);
+      MK.ring(tl, $("cfx"), 1.56, { x: 1000, y: 170, r0: 100, r1: 200, color: "#F8571F", width: 5 });
+      MK.ring(tl, $("cfx"), 1.56 + 4 * F, { x: 1000, y: 170, r0: 110, r1: 260, color: "#DF764C", width: 3, alpha: 0.6, frames: 28 });
+
+      // ---- Scene 3 (2.18–2.95): « ce qu'elle cherche » ----
+      MK.pan(tl, rig, 2.36, { x: -120, y: -60, scale: 1.08, frames: 20 });
+      MK.pop(tl, $("dotA"), 2.38, { over: 0.3 });
+      tl.fromTo($("linkA"), { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 10 * F, ease: "power2.out" }, 2.38);
+      MK.pop(tl, $("chipA"), 2.54);
+
+      // ---- Scene 4 (3.07–4.40): « et ce qui la fait hésiter » ----
+      MK.pop(tl, $("dotB"), 3.45, { over: 0.3 });
+      tl.fromTo($("linkB"), { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 10 * F, ease: "power2.out" }, 3.45);
+      MK.snapZoom(tl, rig, 3.62, { from: 1.08, to: 1.3, origin: "1130px 890px" });
+      MK.pop(tl, $("chipB"), 3.71);
+      [3.86, 4.11].forEach(function (t) {                                       // « ! » pulses ×1.4 twice, 0.25 s each
+        tl.to($("bang"), { scale: 1.4, duration: 6 * F, ease: "power2.out" }, t);
+        tl.to($("bang"), { scale: 1, duration: 9 * F, ease: "power2.inOut" }, t + 6 * F);
+      });
+
+      // ---- Scene 5 (4.40–4.70): push left, accelerating — the last frame is the fastest ----
+      var bfOut = MK.blurFilter($("stage"), ID + "-blur2");
+      MK.exit(tl, rig, 4.40, { dir: "left", dist: 1600, frames: 18, blur: bfOut });
+
+      tl.set({}, {}, DUR);
+      window.__timelines = window.__timelines || {};
+      window.__timelines[ID] = tl;
+    })();
+  </script>
+</template>

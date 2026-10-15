@@ -1,0 +1,338 @@
+<template>
+  <style>
+    @font-face { font-family: 'Lufga'; src: url('assets/fonts/Lufga-Regular.woff2') format('woff2'); font-weight: 400; font-style: normal; }
+    @font-face { font-family: 'Lufga'; src: url('assets/fonts/Lufga-Medium.woff2') format('woff2'); font-weight: 500; font-style: normal; }
+    @font-face { font-family: 'Lufga'; src: url('assets/fonts/Lufga-SemiBold.woff2') format('woff2'); font-weight: 600; font-style: normal; }
+    @font-face { font-family: 'Lufga'; src: url('assets/fonts/Lufga-Bold.woff2') format('woff2'); font-weight: 700; font-style: normal; }
+    @font-face { font-family: 'DM Sans'; src: url('assets/fonts/DMSans-normal-latin.woff2') format('woff2'); font-weight: 300 800; font-style: normal; }
+
+    #root { position: absolute; inset: 0; width: 1920px; height: 1080px; overflow: hidden; font-family: 'Lufga', sans-serif; color: #241F20; }
+    /* ground: grid-bg */
+    #f10-dashboard-bg { position: absolute; inset: 0; overflow: hidden; background: #FDFCFC; }
+    #f10-dashboard-mesh { position: absolute; left: -1920px; top: -1080px; width: 5760px; height: 3240px; transform-origin: 2880px 1620px;
+      background: radial-gradient(1152px 648px at 2438.4px 1328.4px, rgba(248,87,31,0.22) 0%, rgba(248,87,31,0) 60%), radial-gradient(1056px 594px at 3417.6px 1404px, rgba(172,204,233,0.55) 0%, rgba(172,204,233,0) 62%), radial-gradient(1152px 648px at 2976px 1998px, rgba(167,171,221,0.45) 0%, rgba(167,171,221,0) 65%); }
+    #f10-dashboard-grid { position: absolute; inset: 0; background-size: 44px 44px;
+      background-image: linear-gradient(rgba(36,31,32,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(36,31,32,0.05) 1px, transparent 1px); }
+    /* camera skeleton: stage (clip) > shake > rig > drift > [dof (perspective) > plane > window] + Excel sheet */
+    #f10-dashboard-stage { position: absolute; inset: 0; overflow: hidden; }
+    #f10-dashboard-shake, #f10-dashboard-rig, #f10-dashboard-drift, #f10-dashboard-dof { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+    #f10-dashboard-dof { perspective: 2200px; perspective-origin: 960px 540px; }
+    #f10-dashboard-plane { position: absolute; left: 140px; top: 76px; width: 1640px; height: 960px; transform-origin: 50% 50%; }
+    .f10-dashboard-sd { display: inline-block; width: 0.58em; text-align: center; }
+    .f10-dashboard-ss { display: inline-block; width: 0.3em; }
+    .f10-dashboard-coral { color: #F8571F; }
+    .f10-dashboard-sk { background: #F0EDE9; border-radius: 6px; }
+    /* STEP_CHIP */
+    #f10-dashboard-chip { position: absolute; left: 96px; top: 72px; height: 64px; padding: 0 28px 0 10px; box-sizing: border-box; border-radius: 999px; background: #FFFFFF; border: 1.5px solid rgba(36,31,32,0.10);
+      display: flex; align-items: center; gap: 14px; transform-origin: 32px 50%; box-shadow: 0 18px 40px -18px rgba(36,31,32,0.22), 0 2px 6px rgba(36,31,32,0.05); }
+    #f10-dashboard-chipnum { width: 44px; height: 44px; border-radius: 50%; background: #F8571F; color: #fff; display: flex; align-items: center; justify-content: center; font: 600 20px 'DM Sans', sans-serif; }
+    #f10-dashboard-chiptxt { font: 600 28px 'Lufga', sans-serif; letter-spacing: -0.01em; white-space: nowrap; }
+    /* browser window (v3 markup, 1640×960) */
+    #f10-dashboard-win { position: absolute; left: 0; top: 0; width: 1640px; height: 960px; border-radius: 20px; background: #fff; overflow: hidden; box-sizing: border-box;
+      border: 1.5px solid rgba(36,31,32,0.10); box-shadow: 0 40px 80px -24px rgba(36,31,32,0.22), 0 8px 24px -8px rgba(36,31,32,0.10); }
+    #f10-dashboard-wbar { position: absolute; left: 0; top: 0; width: 1640px; height: 52px; background: #fff; border-bottom: 1.5px solid rgba(36,31,32,0.08); box-sizing: border-box; }
+    .f10-dashboard-dot { position: absolute; top: 20px; width: 12px; height: 12px; border-radius: 50%; }
+    #f10-dashboard-url { position: absolute; left: 650px; top: 10px; width: 340px; height: 32px; border-radius: 999px; background: #F5F5F7; display: flex; align-items: center; justify-content: center; gap: 8px; font: 500 15px 'Lufga', sans-serif; color: #A39C95; }
+    #f10-dashboard-url svg { width: 13px; height: 13px; }
+    #f10-dashboard-side { position: absolute; left: 0; top: 52px; width: 220px; height: 908px; background: #161616; }
+    #f10-dashboard-logo { position: absolute; left: 22px; top: 24px; display: flex; align-items: center; gap: 10px; font: 600 21px 'Lufga', sans-serif; color: #fff; letter-spacing: -0.01em; }
+    #f10-dashboard-logo img { width: 30px; height: 30px; filter: invert(1); }
+    #f10-dashboard-menu { position: absolute; left: 12px; top: 92px; width: 196px; }
+    .f10-dashboard-mi { height: 44px; border-radius: 10px; display: flex; align-items: center; gap: 12px; padding: 0 12px; margin-bottom: 4px; font: 500 16px 'Lufga', sans-serif; color: rgba(255,255,255,0.6); }
+    .f10-dashboard-mi svg { width: 18px; height: 18px; fill: none; stroke: rgba(255,255,255,0.55); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+    .f10-dashboard-mi.f10-dashboard-on { background: rgba(255,255,255,0.09); color: #fff; }
+    .f10-dashboard-mi.f10-dashboard-on svg { stroke: #F8571F; }
+    #f10-dashboard-ws { position: absolute; left: 22px; bottom: 22px; display: flex; align-items: center; gap: 10px; font: 600 15px 'Lufga', sans-serif; color: #fff; }
+    #f10-dashboard-ws i { width: 32px; height: 32px; border-radius: 9px; background: #F8571F; color: #fff; font: 700 15px 'Lufga', sans-serif; font-style: normal; display: flex; align-items: center; justify-content: center; }
+    #f10-dashboard-ws span { display: block; font: 500 12px 'Lufga', sans-serif; color: rgba(255,255,255,0.5); }
+    #f10-dashboard-content { position: absolute; left: 220px; top: 52px; width: 1420px; height: 908px; background: #F5F5F7; }
+    #f10-dashboard-title { position: absolute; left: 36px; top: 20px; font: 600 34px 'Lufga', sans-serif; letter-spacing: -0.02em; }
+    #f10-dashboard-sub { position: absolute; left: 36px; top: 64px; font: 500 20px 'Lufga', sans-serif; color: #A39C95; }
+    #f10-dashboard-askbtn { position: absolute; left: 1270px; top: 28px; height: 44px; padding: 0 18px 0 8px; border-radius: 999px; background: #EEF0FA; display: flex; align-items: center; gap: 10px; font: 600 17px 'Lufga', sans-serif; color: #4A5FC1; }
+    .f10-dashboard-orb { border-radius: 50%; flex: none; background: radial-gradient(circle at 32% 28%, #DCE6FF 0%, #8FA6F0 28%, #4A5FC1 62%, #2B3A8F 100%); box-shadow: inset 0 -3px 8px rgba(20,30,90,0.35), 0 4px 10px rgba(74,95,193,0.35); }
+    .f10-dashboard-card { position: absolute; background: #fff; border: 1.5px solid rgba(36,31,32,0.08); border-radius: 14px; box-sizing: border-box; box-shadow: 0 1px 2px rgba(36,31,32,0.04), 0 10px 26px -16px rgba(36,31,32,0.20); }
+    .f10-dashboard-ctitle { position: absolute; left: 26px; top: 22px; font: 600 18px 'Lufga', sans-serif; letter-spacing: -0.01em; }
+    /* KPI tiles */
+    .f10-dashboard-kpi { top: 106px; width: 322px; height: 98px; }
+    .f10-dashboard-klab { position: absolute; left: 22px; top: 18px; font: 500 15px 'Lufga', sans-serif; color: #6C6560; white-space: nowrap; }
+    .f10-dashboard-kval { position: absolute; left: 20px; top: 40px; display: flex; align-items: baseline; font: 700 36px/1.1 'DM Sans', sans-serif; letter-spacing: -0.02em; transform-origin: 0% 70%; }
+    .f10-dashboard-kico { position: absolute; right: 18px; top: 27px; width: 44px; height: 44px; border-radius: 12px; background: #F5F5F7; display: flex; align-items: center; justify-content: center; }
+    .f10-dashboard-kico svg { width: 22px; height: 22px; fill: none; stroke: #6C6560; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    .f10-dashboard-kico.f10-dashboard-hot { background: #FDEEE7; }
+    .f10-dashboard-kico.f10-dashboard-hot svg { stroke: #F8571F; }
+    /* revenue card */
+    #f10-dashboard-rev { left: 36px; top: 224px; width: 880px; height: 350px; }
+    #f10-dashboard-revlab { position: absolute; left: 28px; top: 24px; font: 500 15px 'Lufga', sans-serif; color: #6C6560; }
+    #f10-dashboard-revnum { position: absolute; left: 22px; top: 46px; display: flex; align-items: baseline; font: 700 66px 'DM Sans', sans-serif; letter-spacing: -0.02em; line-height: 1.1; transform-origin: 0% 80%; }
+    #f10-dashboard-revsk { position: absolute; left: 28px; top: 62px; width: 250px; height: 46px; border-radius: 12px; }
+    #f10-dashboard-coin { position: absolute; left: 320px; top: 56px; width: 52px; height: 52px; }
+    #f10-dashboard-coin svg { display: block; width: 52px; height: 52px; }
+    #f10-dashboard-chart { position: absolute; left: 0; top: 0; width: 880px; height: 350px; overflow: visible; }
+    #f10-dashboard-line { fill: none; stroke: #F8571F; stroke-width: 3.2; stroke-linecap: round; stroke-linejoin: round; }
+    .f10-dashboard-axis { font: 500 12px 'Lufga', sans-serif; fill: #A39C95; }
+    .f10-dashboard-tipwrap { position: absolute; left: 553px; top: 112px; width: 200px; display: flex; justify-content: center; }
+    #f10-dashboard-tip { height: 34px; padding: 0 14px; border-radius: 999px; background: #241F20; color: #fff; display: flex; align-items: center; gap: 8px; white-space: nowrap; transform-origin: 50% 100%; font: 500 14px 'Lufga', sans-serif; box-shadow: 0 10px 24px -10px rgba(36,31,32,0.5); }
+    #f10-dashboard-tip span { color: rgba(255,255,255,0.68); }
+    #f10-dashboard-tip b { font: 700 16px 'DM Sans', sans-serif; }
+    #f10-dashboard-revfx { position: absolute; left: 0; top: 0; width: 880px; height: 350px; pointer-events: none; }
+    /* aski card */
+    #f10-dashboard-askcard { left: 940px; top: 224px; width: 444px; height: 350px; }
+    #f10-dashboard-askhead { position: absolute; left: 24px; top: 22px; display: flex; align-items: center; gap: 12px; }
+    #f10-dashboard-askhead b { display: block; font: 600 18px 'Lufga', sans-serif; }
+    #f10-dashboard-askhead span { display: block; font: 500 13px 'Lufga', sans-serif; color: #4A5FC1; }
+    .f10-dashboard-sugg { position: absolute; left: 24px; height: 22px; border-radius: 11px; background: #EEF0FA; }
+    .f10-dashboard-input { position: absolute; height: 46px; border-radius: 999px; background: #F5F5F7; display: flex; align-items: center; padding: 0 6px 0 18px; box-sizing: border-box; font: 500 14px 'Lufga', sans-serif; color: #A39C95; }
+    .f10-dashboard-send { margin-left: auto; width: 34px; height: 34px; border-radius: 50%; background: #4A5FC1; display: flex; align-items: center; justify-content: center; }
+    .f10-dashboard-send svg { width: 16px; height: 16px; }
+    /* personas card (loading) */
+    #f10-dashboard-per { left: 36px; top: 598px; width: 640px; height: 290px; overflow: hidden; }
+    #f10-dashboard-percol { position: absolute; right: 26px; top: 27px; font: 600 11px 'Lufga', sans-serif; letter-spacing: 0.12em; text-transform: uppercase; color: #A39C95; }
+    #f10-dashboard-rows { position: absolute; left: 14px; top: 62px; width: 612px; }
+    .f10-dashboard-row { position: relative; height: 66px; margin-bottom: 6px; border-radius: 12px; display: flex; align-items: center; gap: 14px; padding: 0 14px; box-sizing: border-box; }
+    .f10-dashboard-av { position: relative; width: 36px; height: 36px; border-radius: 50%; background: #F0EDE9; flex: none; }
+    .f10-dashboard-av img { position: absolute; left: 0; top: 0; display: block; width: 36px; height: 36px; border-radius: 50%; object-fit: cover; background: #DDD7CD; box-shadow: 0 0 0 3px #fff, 0 3px 8px rgba(36,31,32,0.2); }
+    .f10-dashboard-who { position: relative; width: 220px; height: 22px; }
+    .f10-dashboard-who div { position: absolute; left: 0; top: 4px; height: 14px; }
+    .f10-dashboard-who b { position: absolute; left: 0; top: -1px; font: 600 17px 'Lufga', sans-serif; letter-spacing: -0.01em; white-space: nowrap; }
+    #f10-dashboard-shim { position: absolute; left: 0; top: 50px; width: 260px; height: 240px; background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.85) 50%, rgba(255,255,255,0) 100%); }
+    /* funnel card (loading) */
+    #f10-dashboard-fun { left: 700px; top: 598px; width: 684px; height: 290px; }
+    #f10-dashboard-base { position: absolute; left: 40px; top: 238px; width: 604px; height: 1.5px; background: #E6E2DD; }
+    .f10-dashboard-fbar { position: absolute; width: 104px; border-radius: 10px 10px 3px 3px; background: #F0EDE9; }
+    .f10-dashboard-flab { position: absolute; top: 250px; width: 170px; text-align: center; font: 500 14px 'Lufga', sans-serif; color: #6C6560; white-space: nowrap; }
+    /* Excel sheet (the old way) */
+    #f10-dashboard-sheet { position: absolute; left: 730px; top: 260px; width: 900px; height: 600px; transform-origin: 50% 50%; }
+    #f10-dashboard-sheetin { position: absolute; left: 0; top: 0; width: 900px; height: 600px; border-radius: 10px; overflow: hidden; background: #fff; border: 1px solid #C8C8C8; box-sizing: border-box; transform-origin: 50% 50%;
+      box-shadow: 0 50px 100px -30px rgba(36,31,32,0.45), 0 12px 30px -10px rgba(36,31,32,0.2); }
+    #f10-dashboard-xlbar { position: absolute; left: 0; top: 0; width: 900px; height: 46px; background: #1D6F42; display: flex; align-items: center; gap: 12px; padding: 0 18px; box-sizing: border-box; font: 600 19px 'Lufga', sans-serif; color: #fff; }
+    #f10-dashboard-xlbar i { width: 26px; height: 26px; border-radius: 5px; background: #fff; color: #1D6F42; font: 700 16px 'Lufga', sans-serif; font-style: normal; display: flex; align-items: center; justify-content: center; }
+    #f10-dashboard-xlfx { position: absolute; left: 0; top: 46px; width: 900px; height: 34px; border-bottom: 1px solid #D4D4D4; box-sizing: border-box; display: flex; align-items: center; gap: 14px; padding: 0 14px; font: 400 14px 'DM Sans', sans-serif; color: #444; }
+    #f10-dashboard-xlfx b { font: italic 600 14px 'DM Sans', sans-serif; color: #777; }
+    #f10-dashboard-xlgrid { position: absolute; left: 0; top: 80px; width: 900px; height: 476px; background-color: #fff;
+      background-image: linear-gradient(90deg, #DADCE0 1px, transparent 1px), linear-gradient(#DADCE0 1px, transparent 1px); background-size: 85.6px 32px; background-position: 44px 28px; }
+    #f10-dashboard-xlcols { position: absolute; left: 0; top: 0; width: 900px; height: 28px; background: #F3F3F3; border-bottom: 1px solid #C8C8C8; box-sizing: border-box; }
+    #f10-dashboard-xlrows { position: absolute; left: 0; top: 28px; width: 44px; height: 448px; background: #F3F3F3; border-right: 1px solid #C8C8C8; box-sizing: border-box; }
+    .f10-dashboard-xh { position: absolute; font: 500 13px 'DM Sans', sans-serif; color: #666; text-align: center; }
+    .f10-dashboard-xc { position: absolute; height: 32px; line-height: 32px; padding: 0 8px; box-sizing: border-box; width: 85.6px; font: 400 15px 'DM Sans', sans-serif; color: #222; white-space: nowrap; overflow: hidden; text-align: right; }
+    #f10-dashboard-xlsel { position: absolute; left: 300px; top: 60px; width: 88px; height: 258px; border: 2px solid #1D6F42; box-sizing: border-box; background: rgba(29,111,66,0.07); }
+    #f10-dashboard-xltabs { position: absolute; left: 0; top: 556px; width: 900px; height: 44px; background: #F3F3F3; border-top: 1px solid #D4D4D4; box-sizing: border-box; }
+    #f10-dashboard-xltabs span { position: absolute; left: 44px; top: 0; height: 40px; padding: 0 20px; background: #fff; border-bottom: 3px solid #1D6F42; box-sizing: border-box; line-height: 38px; font: 500 14px 'DM Sans', sans-serif; color: #1D6F42; }
+    #f10-dashboard-crease { position: absolute; left: 0; top: 0; width: 900px; height: 600px; }
+    #f10-dashboard-crease path { fill: none; stroke: rgba(0,0,0,0.22); stroke-width: 2.5; stroke-linejoin: round; }
+    #f10-dashboard-crease path.f10-dashboard-hi { stroke: rgba(255,255,255,0.9); stroke-width: 2; }
+  </style>
+  <div id="root" data-composition-id="f10-dashboard" data-fps="60" data-start="0" data-duration="6.5" data-width="1920" data-height="1080">
+    <div id="f10-dashboard-bg" class="clip" data-start="0" data-duration="6.5" data-track-index="0" data-layout-allow-overflow><div id="f10-dashboard-mesh"></div><div id="f10-dashboard-grid"></div></div>
+    <div id="f10-dashboard-stage" class="clip" data-start="0" data-duration="6.5" data-track-index="1" data-layout-allow-overflow data-layout-allow-overlap data-layout-allow-occlusion>
+      <div id="f10-dashboard-shake"><div id="f10-dashboard-rig"><div id="f10-dashboard-drift">
+        <div id="f10-dashboard-dof">
+          <div id="f10-dashboard-plane"><div id="f10-dashboard-win">
+            <div id="f10-dashboard-wbar">
+              <div class="f10-dashboard-dot" style="left:22px;background:#FF5F57"></div><div class="f10-dashboard-dot" style="left:42px;background:#FEBC2E"></div><div class="f10-dashboard-dot" style="left:62px;background:#28C840"></div>
+              <div id="f10-dashboard-url"><svg viewBox="0 0 16 16"><rect x="3" y="7" width="10" height="7.5" rx="2" fill="#A39C95"/><path d="M5.2 7V5.2a2.8 2.8 0 0 1 5.6 0V7" fill="none" stroke="#A39C95" stroke-width="1.6"/></svg>app.ask-it.ai</div>
+            </div>
+            <div id="f10-dashboard-side">
+              <div id="f10-dashboard-logo"><img src="assets/askit/askit-logo-mark.svg" alt="">ask-it.ai</div>
+              <div id="f10-dashboard-menu">
+                <div class="f10-dashboard-mi f10-dashboard-on"><svg viewBox="0 0 24 24"><path d="M3.5 10.5L12 3.5l8.5 7V20a1 1 0 0 1-1 1h-4.5v-6h-6v6H4.5a1 1 0 0 1-1-1z"/></svg>Accueil</div>
+                <div class="f10-dashboard-mi"><svg viewBox="0 0 24 24"><rect x="5" y="3.5" width="14" height="17" rx="2.5"/><path d="M9 9h6M9 13h6M9 17h3"/></svg>Questionnaire</div>
+                <div class="f10-dashboard-mi"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4.5 20.5c1-4 4-6 7.5-6s6.5 2 7.5 6"/></svg>Persona</div>
+                <div class="f10-dashboard-mi"><svg viewBox="0 0 24 24"><path d="M3.5 17.5l5.5-6 4 4 7.5-8"/><path d="M15.5 7.5h5v5"/></svg>Revenu</div>
+                <div class="f10-dashboard-mi"><svg viewBox="0 0 24 24"><path d="M3.5 4.5h17l-6.5 8v6l-4 2v-8z"/></svg>Conversion</div>
+                <div class="f10-dashboard-mi"><svg viewBox="0 0 24 24"><path d="M4 5.5h16v11H9l-5 4z"/></svg>Aski Chat</div>
+              </div>
+              <div id="f10-dashboard-ws"><i>E</i><div>Endro<span>Espace marque</span></div></div>
+            </div>
+            <div id="f10-dashboard-content">
+              <div id="f10-dashboard-title">Espace Endro</div><div id="f10-dashboard-sub">30 derniers jours</div>
+              <div id="f10-dashboard-askbtn"><div class="f10-dashboard-orb" style="width:28px;height:28px"></div>Aski</div>
+              <div class="f10-dashboard-card f10-dashboard-kpi" style="left:36px"><div class="f10-dashboard-klab">Diagnostics commencés</div><div id="f10-dashboard-k1" class="f10-dashboard-kval"></div>
+                <div class="f10-dashboard-kico"><svg viewBox="0 0 24 24"><rect x="5" y="3.5" width="14" height="17" rx="2.5"/><path d="M9 9h6M9 13h6M9 17h3"/></svg></div></div>
+              <div class="f10-dashboard-card f10-dashboard-kpi" style="left:378px"><div class="f10-dashboard-klab">Achats</div><div id="f10-dashboard-k2" class="f10-dashboard-kval"></div>
+                <div class="f10-dashboard-kico"><svg viewBox="0 0 24 24"><path d="M5 8h14l-1.2 12H6.2z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg></div></div>
+              <div class="f10-dashboard-card f10-dashboard-kpi" style="left:720px"><div class="f10-dashboard-klab">Conversion</div><div id="f10-dashboard-k3" class="f10-dashboard-kval"><span class="f10-dashboard-coral">×</span>4</div>
+                <div class="f10-dashboard-kico f10-dashboard-hot"><svg viewBox="0 0 24 24"><path d="M3.5 17.5l5.5-6 4 4 7.5-8"/><path d="M15.5 7.5h5v5"/></svg></div></div>
+              <div class="f10-dashboard-card f10-dashboard-kpi" style="left:1062px"><div class="f10-dashboard-klab">Panier moyen</div><div id="f10-dashboard-k4" class="f10-dashboard-kval"><span class="f10-dashboard-coral">+</span>36<span class="f10-dashboard-coral" style="margin-left:0.12em">%</span></div>
+                <div class="f10-dashboard-kico f10-dashboard-hot"><svg viewBox="0 0 24 24"><path d="M3 4.5h3l2.2 10.5h10.3l2-7.5H7.2"/><circle cx="9.5" cy="19" r="1.3"/><circle cx="17" cy="19" r="1.3"/></svg></div></div>
+              <!-- « combien ça vous rapporte » -->
+              <div id="f10-dashboard-rev" class="f10-dashboard-card">
+                <svg id="f10-dashboard-chart" viewBox="0 0 880 350">
+                  <defs><linearGradient id="f10-dashboard-grad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F8571F" stop-opacity="0.26"/><stop offset="1" stop-color="#F8571F" stop-opacity="0"/></linearGradient></defs>
+                  <g stroke="#EFECE8" stroke-width="1"><line x1="28" y1="186" x2="852" y2="186" stroke-dasharray="3 6"/><line x1="28" y1="232" x2="852" y2="232" stroke-dasharray="3 6"/><line x1="28" y1="278" x2="852" y2="278" stroke-dasharray="3 6"/></g>
+                  <line x1="28" y1="322" x2="852" y2="322" stroke="#E6E2DD" stroke-width="1.5"/>
+                  <path id="f10-dashboard-area" fill="url(#f10-dashboard-grad)" d="M28.0,304.6 C32.8,305.2 46.6,308.8 56.4,308.3 C66.1,307.8 75.1,302.8 84.9,301.8 C94.6,300.8 103.5,303.6 113.2,302.6 C123.0,301.6 132.0,296.6 141.7,295.8 C151.5,295.0 160.5,297.2 170.1,297.7 C179.7,298.2 188.7,300.1 198.4,299.0 C208.2,297.9 217.2,293.1 226.9,291.3 C236.7,289.5 245.7,288.4 255.3,288.4 C264.9,288.4 273.9,291.6 283.7,291.3 C293.4,291.0 302.4,287.0 312.2,286.5 C321.9,286.0 330.8,289.3 340.5,288.1 C350.3,286.9 359.3,280.3 369.0,279.3 C378.8,278.3 387.8,282.6 397.4,282.2 C407.0,281.8 416.0,277.4 425.7,277.1 C435.5,276.8 444.5,281.3 454.3,280.7 C464.0,280.1 473.0,275.5 482.6,273.7 C492.2,271.9 501.2,270.4 511.0,270.3 C520.7,270.2 529.7,273.4 539.5,273.1 C549.2,272.8 558.1,269.3 567.8,268.5 C577.6,267.7 586.6,269.1 596.3,268.6 C606.1,268.1 615.1,281.4 624.7,265.3 C634.3,249.2 643.3,174.9 653.1,173.9 C662.8,172.9 671.8,244.9 681.6,259.6 C691.3,274.3 700.3,261.2 709.9,260.3 C719.5,259.4 728.5,254.7 738.3,254.3 C748.0,253.9 757.0,258.4 766.8,258.0 C776.5,257.6 785.4,253.1 795.1,252.0 C804.9,250.9 813.9,252.2 823.6,251.8 C833.4,251.4 847.2,249.8 852.0,249.4 L852.0,322 L28.0,322 Z"/>
+                  <path id="f10-dashboard-line" d="M28.0,304.6 C32.8,305.2 46.6,308.8 56.4,308.3 C66.1,307.8 75.1,302.8 84.9,301.8 C94.6,300.8 103.5,303.6 113.2,302.6 C123.0,301.6 132.0,296.6 141.7,295.8 C151.5,295.0 160.5,297.2 170.1,297.7 C179.7,298.2 188.7,300.1 198.4,299.0 C208.2,297.9 217.2,293.1 226.9,291.3 C236.7,289.5 245.7,288.4 255.3,288.4 C264.9,288.4 273.9,291.6 283.7,291.3 C293.4,291.0 302.4,287.0 312.2,286.5 C321.9,286.0 330.8,289.3 340.5,288.1 C350.3,286.9 359.3,280.3 369.0,279.3 C378.8,278.3 387.8,282.6 397.4,282.2 C407.0,281.8 416.0,277.4 425.7,277.1 C435.5,276.8 444.5,281.3 454.3,280.7 C464.0,280.1 473.0,275.5 482.6,273.7 C492.2,271.9 501.2,270.4 511.0,270.3 C520.7,270.2 529.7,273.4 539.5,273.1 C549.2,272.8 558.1,269.3 567.8,268.5 C577.6,267.7 586.6,269.1 596.3,268.6 C606.1,268.1 615.1,281.4 624.7,265.3 C634.3,249.2 643.3,174.9 653.1,173.9 C662.8,172.9 671.8,244.9 681.6,259.6 C691.3,274.3 700.3,261.2 709.9,260.3 C719.5,259.4 728.5,254.7 738.3,254.3 C748.0,253.9 757.0,258.4 766.8,258.0 C776.5,257.6 785.4,253.1 795.1,252.0 C804.9,250.9 813.9,252.2 823.6,251.8 C833.4,251.4 847.2,249.8 852.0,249.4"/>
+                  <g id="f10-dashboard-peak"><circle cx="653" cy="174" r="12" fill="#F8571F" opacity="0.18"/><circle cx="653" cy="174" r="6" fill="#fff" stroke="#F8571F" stroke-width="3"/></g>
+                  <text class="f10-dashboard-axis" x="28" y="342">J-30</text><text class="f10-dashboard-axis" x="852" y="342" text-anchor="end">Aujourd'hui</text>
+                </svg>
+                <div id="f10-dashboard-revlab">Chiffre d'affaires généré par le diagnostic</div>
+                <div id="f10-dashboard-revsk" class="f10-dashboard-sk"></div>
+                <div id="f10-dashboard-revnum"><span id="f10-dashboard-revdig"></span><span>&nbsp;€</span></div>
+                <div id="f10-dashboard-coin" data-hf-motion-blur='{"shutterAngle":360,"samplesPerFrame":12}'><svg viewBox="0 0 52 52"><circle cx="26" cy="26" r="25" fill="#F8571F"/><circle cx="26" cy="26" r="19" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="2"/><text x="26" y="34.5" text-anchor="middle" font-family="DM Sans" font-weight="700" font-size="24" fill="#FFFFFF">€</text></svg></div>
+                <div class="f10-dashboard-tipwrap"><div id="f10-dashboard-tip"><span>Record ·</span><b>8 250 €</b></div></div>
+                <div id="f10-dashboard-revfx"></div>
+              </div>
+              <div id="f10-dashboard-askcard" class="f10-dashboard-card">
+                <div id="f10-dashboard-askhead"><div class="f10-dashboard-orb" style="width:36px;height:36px"></div><div><b>Aski</b><span>Votre assistant IA</span></div></div>
+                <div class="f10-dashboard-sugg" style="top:96px;width:330px"></div><div class="f10-dashboard-sugg" style="top:130px;width:280px"></div><div class="f10-dashboard-sugg" style="top:164px;width:230px"></div>
+                <div class="f10-dashboard-input" style="left:24px;top:280px;width:396px">Posez une question…<div class="f10-dashboard-send"><svg viewBox="0 0 16 16"><path d="M3 8h9M8.5 4.5L12 8l-3.5 3.5" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
+              </div>
+              <div id="f10-dashboard-per" class="f10-dashboard-card">
+                <div class="f10-dashboard-ctitle">Vos meilleurs personas</div><div id="f10-dashboard-percol">Part du CA</div>
+                <div id="f10-dashboard-rows">
+                  <div class="f10-dashboard-row"><div class="f10-dashboard-av"><img id="f10-dashboard-av1" src="assets/personas/claire.webp" alt=""></div><div class="f10-dashboard-who"><div id="f10-dashboard-sk1" class="f10-dashboard-sk" style="width:150px"></div><b id="f10-dashboard-nm1">Claire</b></div><div class="f10-dashboard-sk" style="margin-left:auto;width:200px;height:10px"></div></div>
+                  <div class="f10-dashboard-row"><div class="f10-dashboard-av"><img id="f10-dashboard-av2" src="assets/personas/julie.webp" alt=""></div><div class="f10-dashboard-who"><div id="f10-dashboard-sk2" class="f10-dashboard-sk" style="width:120px"></div><b id="f10-dashboard-nm2">Julie</b></div><div class="f10-dashboard-sk" style="margin-left:auto;width:200px;height:10px"></div></div>
+                  <div class="f10-dashboard-row"><div class="f10-dashboard-av"><img id="f10-dashboard-av3" src="assets/personas/ines.webp" alt=""></div><div class="f10-dashboard-who"><div id="f10-dashboard-sk3" class="f10-dashboard-sk" style="width:132px"></div><b id="f10-dashboard-nm3">Inès</b></div><div class="f10-dashboard-sk" style="margin-left:auto;width:200px;height:10px"></div></div>
+                </div>
+                <div id="f10-dashboard-shim"></div>
+              </div>
+              <div id="f10-dashboard-fun" class="f10-dashboard-card">
+                <div class="f10-dashboard-ctitle">Parcours du diagnostic</div><div id="f10-dashboard-base"></div>
+              </div>
+            </div>
+          </div></div>
+          <div id="f10-dashboard-chip"><div id="f10-dashboard-chipnum">03</div><div id="f10-dashboard-chiptxt">Dashboard</div></div>
+        </div>
+        <!-- « Adieu le tableau Excel » -->
+        <div id="f10-dashboard-sheet"><div id="f10-dashboard-sheetin">
+          <div id="f10-dashboard-xlbar"><i>X</i>Excel</div>
+          <div id="f10-dashboard-xlfx"><b>fx</b>=SOMME(D2:D9)</div>
+          <div id="f10-dashboard-xlgrid"><div id="f10-dashboard-xlcols"></div><div id="f10-dashboard-xlrows"></div><div id="f10-dashboard-xlsel"></div></div>
+          <div id="f10-dashboard-xltabs"><span>Feuil1</span></div>
+          <svg id="f10-dashboard-crease" viewBox="0 0 920 560" preserveAspectRatio="none"><path d="M40 90 L250 210 L330 160 L520 300 L610 250 L880 420"/><path class="f10-dashboard-hi" d="M42 94 L250 214 L330 164 L520 304 L610 254 L878 424"/><path d="M180 540 L300 330 L460 380 L560 120 L700 60"/><path class="f10-dashboard-hi" d="M184 540 L303 334 L462 384 L563 124 L702 64"/><path d="M600 540 L690 400 L900 330"/><path d="M20 380 L160 300 L120 120"/></svg>
+        </div></div>
+      </div></div></div>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <script src="lib/motionkit.js"></script>
+  <script>
+    (function () {
+      var ID = "f10-dashboard", DUR = 6.5;
+      var MK = window.MK, F = MK.F;
+      var $ = function (s) { return document.getElementById(ID + "-" + s); };
+      var mk = function (tag, cls, txt) { var e = document.createElement(tag); if (cls) e.className = ID + "-" + cls; if (txt !== undefined) e.textContent = txt; return e; };
+      var root = document.querySelector('[data-composition-id="' + ID + '"]');
+      var tl = gsap.timeline({ paused: true });
+      var shake = $("shake"), rig = $("rig"), plane = $("plane"), dof = $("dof"), sheet = $("sheet");
+
+      // ---- build-time DOM (synchronous, deterministic) ----
+      // fixed-width digit slots (DM Sans digits are proportional) — v3 counter
+      function makeCounter(el, finalStr) {
+        var slots = [];
+        Array.from(finalStr).forEach(function (ch) {
+          if (/\d/.test(ch)) { var s = mk("span", "sd"); slots.push(s); el.appendChild(s); } else el.appendChild(mk("span", "ss", " "));
+        });
+        return function (v) {
+          var d = String(Math.round(v));
+          for (var i = 0; i < slots.length; i++) { var k = d.length - slots.length + i; slots[i].textContent = k >= 0 ? d[k] : ""; }
+        };
+      }
+      var revSet = makeCounter($("revdig"), "78 343"), k1Set = makeCounter($("k1"), "11 395"), k2Set = makeCounter($("k2"), "1 347");
+      // persona rows (v3 data): loading skeletons, the portraits land at the end of the shot
+      var avs = [$("av1"), $("av2"), $("av3")], names = [$("nm1"), $("nm2"), $("nm3")], sks = [$("sk1"), $("sk2"), $("sk3")];
+      // funnel (loading): skeleton bars at the v3 proportions + labels
+      [["Commencés", 150], ["Arrivées au contact", 139.8], ["Terminés", 127.8], ["Achats", 17.7]].forEach(function (f, i) {
+        var cx = 85.5 + i * 171, bar = mk("div", "fbar"), lab = mk("div", "flab", f[0]);
+        bar.style.cssText = "left:" + (cx - 52) + "px;top:" + (238 - f[1]) + "px;height:" + f[1] + "px";
+        lab.style.left = (cx - 85) + "px";
+        $("fun").appendChild(bar); $("fun").appendChild(lab);
+      });
+      // Excel: 10×14 grid of numbers (deterministic)
+      "ABCDEFGHIJ".split("").forEach(function (c, i) { var h = mk("div", "xh", c); h.style.cssText = "left:" + (44 + i * 85.6) + "px;top:6px;width:85.6px"; $("xlcols").appendChild(h); });
+      for (var r = 1; r <= 14; r++) { var h = mk("div", "xh", String(r)); h.style.cssText = "left:0;top:" + (7 + (r - 1) * 32) + "px;width:44px"; $("xlrows").appendChild(h); }
+      var AMT = ["16,90", "59,60", "10,90", "14,90", "72,50", "29,80", "45,30", "21,80", "33,70"];
+      for (var rr = 0; rr < 14; rr++) for (var c = 0; c < 10; c++) {
+        var q = MK.hash(rr * 13 + c * 7 + 3), t = "";
+        if (q < 0.1 && c > 1) continue;
+        if (c === 0) t = "0" + (1 + Math.floor(rr / 2)) + "/09";
+        else if (c === 1) t = String(10482 + rr * 3 + Math.floor(q * 3));
+        else if (c === 2) t = String(1 + Math.floor(q * 3));
+        else if (c === 5) t = rr === 4 || rr === 9 ? "#N/A" : (q * 40).toFixed(1).replace(".", ",") + " %";
+        else if (c >= 7) t = String(Math.floor(q * 4000 + 120));
+        else t = AMT[Math.floor(q * AMT.length)];
+        var e = mk("div", "xc", t);
+        e.style.cssText = "left:" + (44 + c * 85.6) + "px;top:" + (28 + rr * 32) + "px;" + (t === "#N/A" ? "color:#C0392B;" : "");
+        $("xlgrid").appendChild(e);
+      }
+      // chart line: measured length, two-component dash so the round cap leaves no dot (v3)
+      var line = $("line"), len = line.getTotalLength();
+      gsap.set(line, { strokeDasharray: len + " " + (len + 24), strokeDashoffset: len + 10 });
+      var lo = 0, hi = len;
+      for (var it = 0; it < 30; it++) { var mid = (lo + hi) / 2; if (line.getPointAtLength(mid).x < 653) lo = mid; else hi = mid; }
+      var drawEase = gsap.parseEase("sine.inOut"), fPeak = (lo + 10) / (len + 10), a = 0, b2 = 1;
+      for (var k = 0; k < 30; k++) { var m = (a + b2) / 2; if (drawEase(m) < fPeak) a = m; else b2 = m; }
+      var tPeak = 4.0 + 0.9 * a;
+
+      // initial camera/plane attitude
+      gsap.set(plane, { rotationX: 62, rotation: -12, scale: 1.25 });
+      gsap.set(sheet, { rotation: 4 });
+      gsap.set($("peak"), { transformOrigin: "50% 50%" });
+      tl.fromTo($("mesh"), { x: 0, y: 0, scale: 1 }, { x: -46, y: -16, scale: 1.06, duration: DUR, ease: "sine.inOut" }, 0);
+
+      // ---- Scene 1 (0.00–1.30): launched left on a tilted plane, straightens on « votre dashboard » ----
+      var bfPlane = MK.blurFilter(root, ID + "-blur1");
+      MK.enter(tl, plane, 0, { dir: "left", dist: 1000, frames: 38, blur: bfPlane });
+      MK.pop(tl, $("chip"), 0.17, { inner: $("chipnum") });
+      tl.to(plane, { rotationX: 4, rotation: 0, scale: 0.92, duration: 30 * F, ease: "power3.inOut" }, 0.80);
+      tl.to(plane, { rotationX: 2, rotationY: -2.5, duration: 4.9, ease: "sine.inOut" }, 1.30); // slight 3D attitude, never frozen
+      // the dashboard wakes up on « dashboard »
+      MK.count(tl, 1.16, { from: 0, to: 11395, dur: 0.55, render: k1Set });
+      MK.count(tl, 1.20, { from: 0, to: 1347, dur: 0.55, render: k2Set });
+      MK.pop(tl, $("k3"), 1.24, { over: 0.2 });
+      MK.pop(tl, $("k4"), 1.28, { over: 0.2 });
+
+      // ---- Scene 2 (1.84–3.60): « Adieu le tableau Excel » — slam, crumple, toss ----
+      var bfSheet = MK.blurFilter(root, ID + "-blur3");
+      MK.slam(tl, sheet, 1.84, { from: 3, shakeEl: shake, shakePx: 14 }); // impact 1.99 on « Adieu »
+      bfSheet.ramp(tl, sheet, 1.84, 9 * F, 3, 12, "xy", "power1.in");
+      bfSheet.clear(tl, sheet, 1.84 + 9 * F);
+      tl.fromTo(dof, { filter: "blur(0px)" }, { filter: "blur(6px)", duration: 8 * F, ease: "power2.out" }, 1.90);
+      tl.to(sheet, { rotation: 2.4, duration: 0.7, ease: "sine.inOut" }, 2.0);
+      var SEL = [[2.37, 557.6, 124, 172.2, 130], [2.54, 129.6, 348, 343.4, 98]];
+      SEL.forEach(function (s) { tl.set($("xlsel"), { left: s[1] - 1, top: s[2], width: s[3] + 1, height: s[4] + 1 }, s[0]); });
+      // crumple anticipation over the 8 frames before « Excel », then the toss with gravity
+      MK.anticipate(tl, sheet, 2.86, { to: 0.55 });
+      tl.to(sheet, { rotation: -12, duration: 8 * F, ease: "sine.inOut" }, 2.86 - 8 * F);
+      tl.to($("sheetin"), { scaleY: 0.5, borderRadius: 60, duration: 8 * F, ease: "sine.inOut" }, 2.86 - 8 * F);
+      tl.fromTo($("crease"), { opacity: 0 }, { opacity: 1, duration: 6 * F, ease: "power2.out" }, 2.86 - 7 * F);
+      var gone = MK.toss(tl, sheet, 2.86, { rise: 90, fall: 1400, rotation: -40, fallFrames: 24, x: 300 });
+      bfSheet.ramp(tl, sheet, 2.86 + 18 * F, 24 * F, 0, 16, "y", "power2.in");
+      bfSheet.clear(tl, sheet, gone);
+      tl.set(sheet, { autoAlpha: 0 }, gone);
+      tl.fromTo(dof, { filter: "blur(6px)" }, { filter: "blur(0px)", duration: 12 * F, ease: "power2.out", immediateRender: false }, 2.95);
+
+      // ---- Scene 3 (3.55–5.70): snap onto the revenue card, the count with restraint ----
+      MK.snapZoom(tl, rig, 3.55, { from: 1, to: 1.75, origin: "703px 491px", blurEl: dof });
+      tl.to($("revsk"), { autoAlpha: 0, duration: 6 * F, ease: "power1.out" }, 3.90);
+      tl.fromTo($("revnum"), { autoAlpha: 0, y: 12 }, { autoAlpha: 1, y: 0, duration: 8 * F, ease: "power2.out" }, 3.95);
+      var fin = MK.count(tl, 3.95, { from: 0, to: 78343, dur: 0.95, penultimate: 78290, holdFrames: 10, render: revSet }); // ≈ 5.07 on « rapporte »
+      tl.to(line, { strokeDashoffset: 0, duration: 0.9, ease: "sine.inOut" }, 4.0);
+      tl.fromTo($("area"), { opacity: 0 }, { opacity: 1, duration: 0.55, ease: "power1.out" }, 4.35);
+      MK.pop(tl, $("peak"), tPeak, { over: 0.35 });
+      MK.pop(tl, $("tip"), 4.95, { over: 0.2 });
+      tl.to($("revnum"), { scale: 1.04, duration: 3 * F, ease: "power2.out" }, fin);
+      tl.to($("revnum"), { scale: 1, duration: 14 * F, ease: "power2.inOut" }, fin + 3 * F);
+      MK.pop(tl, $("coin"), fin, { over: 0.25 });
+      MK.ring(tl, $("revfx"), fin, { x: 346, y: 82, r1: 84, color: "#F8571F" });
+      // lock 10 frames, then the record peak breathes and the personas start loading (« qui sont vos »)
+      MK.ring(tl, $("revfx"), 5.42, { x: 653, y: 174, r1: 44, width: 3, color: "#F8571F" });
+      tl.to($("peak"), { scale: 1.4, duration: 4 * F, ease: "power2.out" }, 5.42);
+      tl.to($("peak"), { scale: 1, duration: 16 * F, ease: "power2.inOut" }, 5.42 + 4 * F);
+      tl.fromTo($("shim"), { x: -300 }, { x: 700, duration: 0.5, ease: "sine.inOut" }, 5.66);
+      MK.each(avs, 5.92, 4, function (el, t, i) {
+        MK.pop(tl, el, t, { over: 0.22 });
+        tl.to(sks[i], { autoAlpha: 0, duration: 4 * F, ease: "none" }, t + 2 * F);
+        tl.fromTo(names[i], { autoAlpha: 0, x: -12 }, { autoAlpha: 1, x: 0, duration: 10 * F, ease: "power2.out" }, t + 2 * F);
+      });
+
+      // ---- Scene 4 (6.20–6.50): the camera scrolls down — content accelerates up, last frame fastest ----
+      var bfRig = MK.blurFilter(root, ID + "-blur2");
+      MK.exit(tl, rig, 6.20, { dir: "up", dist: 1400, frames: 18, blur: bfRig });
+
+      MK.drift(tl, $("drift"), 0, DUR, { seed: 10 });
+      window.__timelines = window.__timelines || {};
+      window.__timelines[ID] = tl;
+    })();
+  </script>
+</template>

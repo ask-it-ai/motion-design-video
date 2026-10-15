@@ -1,0 +1,345 @@
+<template>
+  <style>
+    @font-face { font-family: "Lufga"; src: url('assets/fonts/Lufga-Regular.woff2') format('woff2'); font-weight: 400; font-style: normal; font-display: block; }
+    @font-face { font-family: "Lufga"; src: url('assets/fonts/Lufga-Medium.woff2') format('woff2'); font-weight: 500; font-style: normal; font-display: block; }
+    @font-face { font-family: "Lufga"; src: url('assets/fonts/Lufga-SemiBold.woff2') format('woff2'); font-weight: 600; font-style: normal; font-display: block; }
+    @font-face { font-family: "Lufga"; src: url('assets/fonts/Lufga-Bold.woff2') format('woff2'); font-weight: 700; font-style: normal; font-display: block; }
+    @font-face { font-family: "DM Sans"; src: url('assets/fonts/DMSans-normal-latin.woff2') format('woff2'); font-weight: 300 800; font-style: normal; font-display: block; }
+    @font-face { font-family: "Mulish"; src: url('assets/fonts/Mulish-normal-latin.woff2') format('woff2'); font-weight: 300 800; font-style: normal; font-display: block; }
+
+    #root { position: relative; width: 1920px; height: 1080px; overflow: hidden; font-family: "Lufga", sans-serif; color: #241F20; }
+    #root * { box-sizing: border-box; }
+    .f13-elle-revient-full { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+
+    /* grid-bg: canvas + brand mesh (static ground); the 44 px grid lives in the world so the camera films it */
+    #f13-elle-revient-bg { position: absolute; inset: 0; overflow: hidden; background: #FDFCFC; }
+    #f13-elle-revient-mesh { position: absolute; inset: -8%; background: radial-gradient(60% 60% at 27% 23%, rgba(248,87,31,0.22) 0%, transparent 60%), radial-gradient(55% 55% at 78% 30%, rgba(172,204,233,0.55) 0%, transparent 62%), radial-gradient(60% 60% at 55% 85%, rgba(167,171,221,0.45) 0%, transparent 65%); }
+    #f13-elle-revient-stage { position: absolute; inset: 0; overflow: hidden; }
+    #f13-elle-revient-rig { transform-origin: 760px 730px; }
+    #f13-elle-revient-wgrid { position: absolute; left: -748px; top: -1364px; width: 3432px; height: 3168px; background-image: linear-gradient(to right, rgba(36,31,32,0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(36,31,32,0.05) 1px, transparent 1px); background-size: 44px 44px; }
+
+    /* PHONE_MACRO: screen 780 x 1688 at 1:1, rim 28 px, phone centred x = 760 */
+    #f13-elle-revient-phone { position: absolute; left: 342px; top: -882px; width: 836px; height: 1744px; }
+    .f13-elle-revient-body { position: absolute; inset: 0; border-radius: 96px; background: #111111; box-shadow: inset 0 0 0 2px rgba(255,255,255,0.12), 0 60px 120px -30px rgba(36,31,32,0.35), 0 20px 40px -20px rgba(36,31,32,0.25); }
+    #f13-elle-revient-screen { position: absolute; left: 28px; top: 28px; width: 780px; height: 1688px; border-radius: 78px; overflow: hidden; background: #173221; }
+    .f13-elle-revient-layer { position: absolute; left: 0; top: 0; width: 780px; height: 1688px; overflow: hidden; background: #FFFFFF; }
+    .f13-elle-revient-hid { visibility: hidden; opacity: 0; }
+    .f13-elle-revient-shot { position: absolute; left: 0; top: 0; width: 780px; height: auto; display: block; }
+    .f13-elle-revient-island { position: absolute; left: 290px; top: 26px; width: 200px; height: 56px; border-radius: 999px; background: #000000; }
+
+    /* Ask-it entry pill (HTML inside the screen, fixed to the screen bottom) */
+    #f13-elle-revient-pillrow { position: absolute; left: 0; top: 1536px; width: 780px; height: 96px; display: flex; justify-content: center; }
+    #f13-elle-revient-pill { width: 640px; height: 96px; display: flex; align-items: center; justify-content: center; gap: 16px; background: #FFFFFF; border-radius: 999px; box-shadow: 0 26px 50px -18px rgba(36,31,32,0.40), 0 4px 12px rgba(36,31,32,0.10); font-weight: 600; font-size: 30px; letter-spacing: -0.01em; color: #241F20; white-space: nowrap; transform-origin: 50% 100%; }
+    #f13-elle-revient-pdot { position: relative; width: 16px; height: 16px; border-radius: 50%; background: #F8571F; flex: none; }
+    .f13-elle-revient-num { font-family: "DM Sans", sans-serif; font-weight: 700; }
+    .f13-elle-revient-arrow { width: 30px; height: 20px; display: block; flex: none; }
+
+    /* 00-intro overlays: typed first name + the button turning active */
+    #f13-elle-revient-namepatch { position: absolute; left: 54px; top: 1440px; width: 672px; height: 76px; background: #173221; visibility: hidden; opacity: 0; }
+    #f13-elle-revient-namerow { position: absolute; left: 0; top: 1454px; width: 780px; height: 46px; display: flex; justify-content: center; align-items: center; }
+    #f13-elle-revient-name { font-family: "Mulish", sans-serif; font-weight: 500; font-size: 33px; line-height: 46px; color: #FFFFFF; white-space: pre; }
+    #f13-elle-revient-caret { width: 2px; height: 34px; margin-left: 2px; background: #FFFFFF; opacity: 0; }
+    #f13-elle-revient-btnact { position: absolute; left: 40px; top: 1572px; width: 700px; height: 112px; visibility: hidden; opacity: 0; }
+    .f13-elle-revient-bmask { position: absolute; inset: 0; background: #173221; }
+    #f13-elle-revient-btnin { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: #FFFFFF; font-family: "Mulish", sans-serif; font-weight: 800; font-size: 33px; letter-spacing: -0.01em; color: #173221; white-space: nowrap; }
+
+    /* answer tiles rebuilt as crops so the tapped tile itself can pulse */
+    .f13-elle-revient-mask { position: absolute; background: #FFFFFF; }
+    .f13-elle-revient-crop { position: absolute; background-repeat: no-repeat; background-size: 780px 1688px; }
+    .f13-elle-revient-t04 { left: 390px; top: 620px; width: 362px; height: 362px; }
+    .f13-elle-revient-t07 { left: 28px; top: 552px; width: 362px; height: 362px; }
+    #f13-elle-revient-c04a { background-image: url('assets/screens/endro-diag/04-claire-actuellement-comment-se-comporte-votre-pe.png'); background-position: -390px -620px; }
+    #f13-elle-revient-c04b { background-image: url('assets/screens/endro-diag/04-claire-actuellement-comment-se-comporte-votre-pe-choix.png'); background-position: -390px -620px; }
+    #f13-elle-revient-c07a { background-image: url('assets/screens/endro-diag/07-claire-quelles-sont-vos-pre-occupations-pour-vot.png'); background-position: -28px -552px; }
+    #f13-elle-revient-c07b { background-image: url('assets/screens/endro-diag/07-claire-quelles-sont-vos-pre-occupations-pour-vot-choix.png'); background-position: -28px -552px; }
+
+    /* 05 slider rebuilt so it can be dragged 0 -> 3/10 */
+    #f13-elle-revient-slcover { position: absolute; left: 18px; top: 1272px; width: 744px; height: 60px; background: #FFFFFF; }
+    #f13-elle-revient-sltrack { position: absolute; left: 40px; top: 1296px; width: 700px; height: 10px; border-radius: 5px; background: #E5E2DC; }
+    #f13-elle-revient-slfill { position: absolute; left: 40px; top: 1296px; width: 700px; height: 10px; border-radius: 5px; background: #1A1A1A; transform-origin: 0% 50%; }
+    #f13-elle-revient-knob { position: absolute; left: 20px; top: 1281px; width: 40px; height: 40px; border-radius: 50%; background: #1A1A1A; border: 4px solid #F9F8F6; box-shadow: 0 3px 8px rgba(0,0,0,0.25); }
+
+    /* 16 loading: coral selection square hopping across swatches */
+    #f13-elle-revient-sq { position: absolute; left: 190px; top: 886px; width: 78px; height: 78px; border: 5px solid #F8571F; border-radius: 6px; box-shadow: 0 0 0 4px rgba(248,87,31,0.28), 0 0 26px rgba(248,87,31,0.55); }
+
+    /* 17 result: total + add-to-cart rebuilt */
+    #f13-elle-revient-totmask { left: 28px; top: 1598px; width: 134px; height: 44px; }
+    #f13-elle-revient-tot { left: 28px; top: 1598px; width: 134px; height: 44px; background-image: url('assets/screens/endro-diag/17-resultat.png'); background-position: -28px -1598px; transform-origin: 6% 50%; }
+    #f13-elle-revient-btnmask { left: 404px; top: 1562px; width: 344px; height: 86px; }
+    #f13-elle-revient-btn { position: absolute; left: 404px; top: 1562px; width: 344px; height: 86px; overflow: hidden; }
+    .f13-elle-revient-bface { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: 12px; font-family: "Mulish", sans-serif; font-weight: 700; font-size: 20px; letter-spacing: 0.17em; color: #FFFFFF; white-space: nowrap; }
+    #f13-elle-revient-bdef { background: #1D3A26; }
+    #f13-elle-revient-bok { background: #1F8A4C; font-weight: 800; font-size: 27px; letter-spacing: 0.02em; visibility: hidden; opacity: 0; }
+    #f13-elle-revient-bok svg { width: 26px; height: 26px; display: block; }
+    #f13-elle-revient-shine { position: absolute; left: 0; top: 0; width: 90px; height: 86px; background: linear-gradient(100deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.32) 50%, rgba(255,255,255,0) 100%); opacity: 0; }
+
+    /* thumb */
+    #f13-elle-revient-touchgrp { position: absolute; left: 0; top: 0; width: 0; height: 0; }
+    #f13-elle-revient-touch { position: absolute; left: -27px; top: -27px; width: 54px; height: 54px; border-radius: 50%; background: rgba(255,255,255,0.55); border: 2px solid rgba(36,31,32,0.25); box-shadow: 0 8px 18px -6px rgba(36,31,32,0.32); }
+    .f13-elle-revient-spk { position: absolute; width: 0; height: 0; }
+    .f13-elle-revient-spk svg { position: absolute; display: block; overflow: visible; }
+
+    /* HUD (frame space): visitor-tag, basket, flying packshot */
+    #f13-elle-revient-tagw { position: absolute; left: 0; top: 0; width: 0; height: 0; }
+    #f13-elle-revient-tag { position: absolute; left: 0; top: -36px; height: 72px; display: flex; align-items: center; gap: 14px; padding: 0 32px 0 10px; background: #FFFFFF; border: 1.5px solid rgba(36,31,32,0.10); border-radius: 999px; box-shadow: 0 18px 40px -18px rgba(36,31,32,0.30), 0 2px 6px rgba(36,31,32,0.08); font-weight: 600; font-size: 30px; color: #241F20; white-space: nowrap; transform-origin: 18% 50%; }
+    #f13-elle-revient-tag img { width: 52px; height: 52px; border-radius: 50%; object-fit: cover; display: block; box-shadow: 0 0 0 3px #FFFFFF, 0 0 0 4.5px rgba(36,31,32,0.10); }
+    #f13-elle-revient-bubble { position: absolute; right: -34px; top: -60px; width: 78px; height: 78px; border-radius: 50%; background: #FFFFFF; box-shadow: 0 18px 40px -16px rgba(36,31,32,0.35), 0 2px 6px rgba(36,31,32,0.08); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 48px; line-height: 1; color: #F8571F; transform-origin: 20% 100%; }
+    #f13-elle-revient-basket { position: absolute; left: 1480px; top: 120px; width: 160px; height: 160px; border-radius: 50%; background: #FFFFFF; box-shadow: 0 40px 80px -24px rgba(36,31,32,0.30), 0 8px 24px -8px rgba(36,31,32,0.14); display: flex; align-items: center; justify-content: center; }
+    #f13-elle-revient-halo { position: absolute; left: 1480px; top: 120px; width: 160px; height: 160px; border-radius: 50%; background: #FFFFFF; visibility: hidden; opacity: 0; }
+    #f13-elle-revient-bag { width: 110px; height: 110px; display: block; overflow: visible; }
+    #f13-elle-revient-badge { position: absolute; left: 1587px; top: 113px; width: 60px; height: 60px; border-radius: 50%; background: #F8571F; border: 4px solid #FFFFFF; box-shadow: 0 10px 22px -8px rgba(248,87,31,0.6); display: flex; align-items: center; justify-content: center; font-family: "DM Sans", sans-serif; font-weight: 700; font-size: 30px; line-height: 1; color: #FFFFFF; }
+    #f13-elle-revient-pack { position: absolute; left: 1528px; top: 168px; width: 64px; height: 64px; border-radius: 14px; overflow: hidden; box-shadow: 0 16px 30px -12px rgba(36,31,32,0.45); }
+    #f13-elle-revient-pack img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  </style>
+
+  <div id="root" data-composition-id="f13-elle-revient" data-fps="60" data-start="0" data-duration="11.10" data-width="1920" data-height="1080">
+    <div id="f13-elle-revient-bg" class="clip" data-start="0" data-duration="11.10" data-track-index="0"><div id="f13-elle-revient-mesh"></div></div>
+
+    <div id="f13-elle-revient-stage" class="clip" data-start="0" data-duration="11.10" data-track-index="1">
+      <div id="f13-elle-revient-shake" class="f13-elle-revient-full">
+        <div id="f13-elle-revient-dive" class="f13-elle-revient-full">
+          <div id="f13-elle-revient-rig" class="f13-elle-revient-full">
+            <div id="f13-elle-revient-drift" class="f13-elle-revient-full">
+              <div id="f13-elle-revient-wgrid"></div>
+              <div id="f13-elle-revient-tilt" class="f13-elle-revient-full">
+                <div id="f13-elle-revient-phone">
+                  <div class="f13-elle-revient-body"></div>
+                  <div id="f13-elle-revient-screen">
+                    <div class="f13-elle-revient-layer" id="f13-elle-revient-L-serums"><img class="f13-elle-revient-shot" id="f13-elle-revient-serums" src="assets/screens/endro-shop/collection-serums.png" alt="" /></div>
+                    <div class="f13-elle-revient-layer f13-elle-revient-hid" id="f13-elle-revient-L-intro">
+                      <img class="f13-elle-revient-shot" src="assets/screens/endro-diag/00-intro.png" alt="" />
+                      <div id="f13-elle-revient-namepatch"></div>
+                      <div id="f13-elle-revient-namerow"><span id="f13-elle-revient-name"></span><span id="f13-elle-revient-caret"></span></div>
+                      <div id="f13-elle-revient-btnact"><div class="f13-elle-revient-bmask"></div><div id="f13-elle-revient-btnin">COMMENCER MON DIAGNOSTIC</div></div>
+                    </div>
+                    <div class="f13-elle-revient-layer f13-elle-revient-hid" id="f13-elle-revient-L-q04">
+                      <img class="f13-elle-revient-shot" src="assets/screens/endro-diag/04-claire-actuellement-comment-se-comporte-votre-pe.png" alt="" />
+                      <div class="f13-elle-revient-mask f13-elle-revient-t04"></div><div class="f13-elle-revient-crop f13-elle-revient-t04" id="f13-elle-revient-c04a"></div>
+                    </div>
+                    <div class="f13-elle-revient-layer f13-elle-revient-hid" id="f13-elle-revient-L-q04c">
+                      <img class="f13-elle-revient-shot" src="assets/screens/endro-diag/04-claire-actuellement-comment-se-comporte-votre-pe-choix.png" alt="" />
+                      <div class="f13-elle-revient-mask f13-elle-revient-t04"></div><div class="f13-elle-revient-crop f13-elle-revient-t04" id="f13-elle-revient-c04b"></div>
+                    </div>
+                    <div class="f13-elle-revient-layer f13-elle-revient-hid" id="f13-elle-revient-L-q05">
+                      <img class="f13-elle-revient-shot" src="assets/screens/endro-diag/05-claire-votre-peau-est-elle-sensible.png" alt="" />
+                      <div id="f13-elle-revient-slcover"></div><div id="f13-elle-revient-sltrack"></div><div id="f13-elle-revient-slfill"></div><div id="f13-elle-revient-knob"></div>
+                    </div>
+                    <div class="f13-elle-revient-layer f13-elle-revient-hid" id="f13-elle-revient-L-q05c"><img class="f13-elle-revient-shot" src="assets/screens/endro-diag/05-claire-votre-peau-est-elle-sensible-choix.png" alt="" /></div>
+                    <div class="f13-elle-revient-layer f13-elle-revient-hid" id="f13-elle-revient-L-q07">
+                      <img class="f13-elle-revient-shot" src="assets/screens/endro-diag/07-claire-quelles-sont-vos-pre-occupations-pour-vot.png" alt="" />
+                      <div class="f13-elle-revient-mask f13-elle-revient-t07"></div><div class="f13-elle-revient-crop f13-elle-revient-t07" id="f13-elle-revient-c07a"></div>
+                    </div>
+                    <div class="f13-elle-revient-layer f13-elle-revient-hid" id="f13-elle-revient-L-q07c">
+                      <img class="f13-elle-revient-shot" src="assets/screens/endro-diag/07-claire-quelles-sont-vos-pre-occupations-pour-vot-choix.png" alt="" />
+                      <div class="f13-elle-revient-mask f13-elle-revient-t07"></div><div class="f13-elle-revient-crop f13-elle-revient-t07" id="f13-elle-revient-c07b"></div>
+                    </div>
+                    <div class="f13-elle-revient-layer f13-elle-revient-hid" id="f13-elle-revient-L-load" style="transform-origin: 390px 763px;">
+                      <img class="f13-elle-revient-shot" src="assets/screens/endro-diag/16-chargement.png" alt="" />
+                      <div id="f13-elle-revient-sq"></div>
+                    </div>
+                    <div class="f13-elle-revient-layer" id="f13-elle-revient-L-res" style="transform-origin: 390px 560px;">
+                      <img class="f13-elle-revient-shot" src="assets/screens/endro-diag/17-resultat.png" alt="" />
+                      <div class="f13-elle-revient-mask" id="f13-elle-revient-totmask"></div><div class="f13-elle-revient-crop" id="f13-elle-revient-tot"></div>
+                      <div class="f13-elle-revient-mask" id="f13-elle-revient-btnmask"></div>
+                      <div id="f13-elle-revient-btn">
+                        <div class="f13-elle-revient-bface" id="f13-elle-revient-bdef">AJOUTER AU PANIER</div>
+                        <div class="f13-elle-revient-bface" id="f13-elle-revient-bok">Ajoutée<svg viewBox="0 0 26 26"><path d="M4.5 13.5 L10.5 19.5 L21.5 7" fill="none" stroke="#FFFFFF" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                        <div id="f13-elle-revient-shine"></div>
+                      </div>
+                    </div>
+                    <div id="f13-elle-revient-pillrow">
+                      <div id="f13-elle-revient-pill"><div id="f13-elle-revient-pdot"></div><span>Trouvez votre routine en <span class="f13-elle-revient-num">30</span> s</span><svg class="f13-elle-revient-arrow" viewBox="0 0 30 20"><path d="M2 10 H26 M18 2.5 L26.5 10 L18 17.5" fill="none" stroke="#241F20" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                    </div>
+                    <div class="f13-elle-revient-island"></div>
+                  </div>
+                </div>
+                <div id="f13-elle-revient-fx" class="f13-elle-revient-full"></div>
+                <div id="f13-elle-revient-touchgrp"><div id="f13-elle-revient-touch"></div></div>
+              </div>
+              <div id="f13-elle-revient-spark" class="f13-elle-revient-full"></div>
+            </div>
+          </div>
+          <div id="f13-elle-revient-hud" class="f13-elle-revient-full">
+            <div id="f13-elle-revient-tagw"><div id="f13-elle-revient-tag"><img src="assets/personas/claire.webp" alt="" />Claire<div id="f13-elle-revient-bubble">?</div></div></div>
+            <div id="f13-elle-revient-halo"></div>
+            <div id="f13-elle-revient-basket" data-hf-motion-blur='{"shutterAngle":360,"samplesPerFrame":12}'><svg id="f13-elle-revient-bag" viewBox="0 0 110 110"><path d="M21 42 H89 L83.5 96 Q83 101 78 101 H32 Q27 101 26.5 96 Z" fill="none" stroke="#241F20" stroke-width="7" stroke-linejoin="round"/><path d="M39 52 V33 A16 16 0 0 1 71 33 V52" fill="none" stroke="#241F20" stroke-width="7" stroke-linecap="round"/></svg></div>
+            <div id="f13-elle-revient-pack" data-hf-motion-blur='{"shutterAngle":360,"samplesPerFrame":12}'><img src="assets/endro/products/serum-bonne-mine.jpg" alt="" /></div>
+            <div id="f13-elle-revient-badge" data-hf-motion-blur='{"shutterAngle":360,"samplesPerFrame":12}'>4</div>
+            <div id="f13-elle-revient-hudfx" class="f13-elle-revient-full"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <script src="lib/motionkit.js"></script>
+  <script>
+    (function () {
+      var ID = "f13-elle-revient", P = ID + "-", D = 11.1, MK = window.MK, F = MK.F;
+      var $ = function (s) { return document.getElementById(P + s); };
+      var tl = gsap.timeline({ paused: true });
+      var SHAKE = $("shake"), DIVE = $("dive"), RIG = $("rig"), DRIFT = $("drift"), TILT = $("tilt"), PHONE = $("phone");
+      var FX = $("fx"), TG = $("touchgrp"), TOUCH = $("touch"), TAGW = $("tagw"), HUDFX = $("hudfx"), STAGE = $("stage");
+      var BF_PHONE = MK.blurFilter(STAGE, P + "blur1"), BF_RIG = MK.blurFilter(STAGE, P + "blur2"), BF_DIVE = MK.blurFilter(STAGE, P + "blur3");
+
+      /* world = drift space (frame space at rest). Screen px (sx, sy) -> world. */
+      var SX = 370, SY = -854;
+      function W(sx, sy) { return [SX + sx, SY + sy]; }
+      var PILL = W(390, 1584), NAME = W(390, 1478), BTN0 = W(390, 1628), MIXTE = W(571, 801), KNOB0 = W(40, 1301), KNOB1 = W(250, 1301);
+      var KNOBC = W(249, 1135), TEINT = W(209, 733), LOADC = W(390, 640), CORAIL = W(390, 763), CIRCLE = W(390, 510), CHIPS = W(390, 1110), BAR = W(390, 1604), CART = W(576, 1605);
+
+      /* camera model of .rig: frame = O + T + s * (P - O). anchor() moves the origin without moving the image. */
+      var cam = { x: 0, y: 0, s: 1, ox: PILL[0], oy: PILL[1] };
+      function toFrame(w) { return [cam.ox + cam.x + cam.s * (w[0] - cam.ox), cam.oy + cam.y + cam.s * (w[1] - cam.oy)]; }
+      function toWorld(f) { return [cam.ox + (f[0] - cam.x - cam.ox) / cam.s, cam.oy + (f[1] - cam.y - cam.oy) / cam.s]; }
+      function org(w) { return w[0] + "px " + w[1] + "px"; }
+      function anchor(t, w) {
+        var nx = cam.x + (1 - cam.s) * (cam.ox - w[0]), ny = cam.y + (1 - cam.s) * (cam.oy - w[1]);
+        tl.set(RIG, { transformOrigin: org(w), x: nx, y: ny }, t);
+        cam.ox = w[0]; cam.oy = w[1]; cam.x = nx; cam.y = ny;
+      }
+      function frameOn(t, w, f, s, frames, axis, bmax) {
+        var x = f[0] - cam.ox - s * (w[0] - cam.ox), y = f[1] - cam.oy - s * (w[1] - cam.oy);
+        MK.pan(tl, RIG, t, { x: x, y: y, scale: s, frames: frames, blur: bmax ? BF_RIG : null, axis: axis, blurMax: bmax });
+        cam.x = x; cam.y = y; cam.s = s;
+      }
+      function snapTo(t, w, to) { anchor(t, w); MK.snapZoom(tl, RIG, t, { from: cam.s, to: to, origin: org(w) }); cam.s = to; }
+      function clickAt(t, w, snap, comp, extra) {
+        var o = { t: t, x: w[0], y: w[1], layer: FX, component: comp, shakeEl: SHAKE, touch: TOUCH };
+        if (extra) for (var k in extra) o[k] = extra[k];
+        if (snap) { anchor(t, w); o.rig = RIG; o.snap = snap; o.rigScale = cam.s; cam.s *= 1 + snap; }
+        MK.click(tl, o);
+        MK.ring(tl, FX, t, { x: w[0], y: w[1], r1: 60 });
+      }
+      var cur = $("L-serums");
+      function show(t, id) { var n = $(id); tl.set(cur, { autoAlpha: 0 }, t); tl.set(n, { autoAlpha: 1 }, t); cur = n; }
+      function thumb(t, w, dur, ease) { tl.to(TG, { x: w[0], y: w[1], duration: dur, ease: ease || "power2.inOut" }, t); }
+      function tagY(t, y, dur) { tl.to(TAGW, { y: y, duration: dur, ease: "power2.inOut" }, t); }
+
+      /* continuous life: drift for the whole scene, mesh glide, slight 3D attitude of the phone plane */
+      MK.drift(tl, DRIFT, 0, D, { seed: 13 });
+      tl.fromTo($("mesh"), { x: -34, y: 22, scale: 1 }, { x: 30, y: -24, scale: 1.06, duration: D, ease: "none" }, 0);
+      gsap.set(TILT, { transformPerspective: 2200, transformOrigin: "760px -10px" });
+      tl.fromTo(TILT, { rotationY: -3.5, rotationX: 2.2 }, { rotationY: 3.5, rotationX: -1.6, duration: D, ease: "sine.inOut" }, 0);
+
+      /* Scene 1 (0-1.95) - launched UP, the page still scrolling; the Ask-it pill invites her */
+      PHONE.style.filter = BF_PHONE.ref; BF_PHONE.node.setAttribute("stdDeviation", "0 16");
+      MK.enter(tl, PHONE, 0, { dir: "up", dist: 900, frames: 38, blur: BF_PHONE });
+      tl.fromTo($("serums"), { y: -400 }, { y: -900, duration: 1.0, ease: "expo.out" }, 0);
+      tl.fromTo(TG, { x: 935, y: 770 }, { x: 946, y: 480, duration: 10 * F, ease: "power2.out" }, 0);
+      tl.to(TOUCH, { opacity: 0.55, duration: 0.3, ease: "power1.out" }, 0.2);
+      thumb(0.6, [924, 522], 0.9, "sine.inOut"); thumb(1.5, [950, 498], 0.8, "sine.inOut");
+      gsap.set(TAGW, { x: 1500, y: 470 });
+      MK.pop(tl, $("tag"), 0.15, { over: 0.22 });
+      tl.fromTo($("pillrow"), { y: 200 }, { y: 0, duration: 0.36, ease: "power3.out" }, 0.30);
+      MK.pop(tl, $("pill"), 0.30, { from: 0.5, over: 0.22 });
+      [0.75, 1.55, 2.35].forEach(function (t) { MK.ring(tl, $("pdot"), t, { x: 8, y: 8, r1: 26, width: 2.5, alpha: 0.85 }); });
+      snapTo(0.86, PILL, 1.3);
+      tagY(0.86, 450, 0.4);
+      MK.pop(tl, $("bubble"), 1.31, { over: 0.25 });
+      MK.ring(tl, FX, 2.05, { x: PILL[0], y: PILL[1], r1: 230, width: 3, alpha: 0.55, frames: 30 });
+
+      /* Scene 2 (1.95-3.70) - the touch reaches the pill, CLICK 2.65 -> the diagnostic; the camera snaps to the name field */
+      tl.to(TOUCH, { opacity: 1, duration: 0.1, ease: "none" }, 2.25);
+      thumb(2.30, [PILL[0] + 6, PILL[1] + 4], 0.32); tagY(2.30, 700, 0.36);
+      clickAt(2.65, PILL, 0.12, $("pill"));
+      show(2.65, "L-intro"); tl.set($("pillrow"), { autoAlpha: 0 }, 2.65);
+      thumb(2.72, [NAME[0] + 236, NAME[1] + 20], 0.18); tagY(2.72, 580, 0.3);
+      snapTo(2.84, NAME, 1.62);
+      tl.to(TOUCH, { scale: 0.85, duration: 4 * F, ease: "power2.in" }, 2.86);
+      tl.to(TOUCH, { scale: 1, duration: 8 * F, ease: "back.out(2)" }, 2.93);
+      tl.set($("namepatch"), { autoAlpha: 1 }, 2.93);
+      MK.type(tl, $("name"), "Claire", 2.95, { cps: 30 });
+      var caret = $("caret");
+      [2.93, 3.42].forEach(function (t) { tl.set(caret, { opacity: 1 }, t); });
+      [3.25, 3.66].forEach(function (t) { tl.set(caret, { opacity: 0 }, t); });
+      tl.set($("btnact"), { autoAlpha: 1 }, 3.15);
+      tl.fromTo($("btnin"), { scale: 0.94 }, { scale: 1, duration: 14 * F, ease: "back.out(3)" }, 3.15);
+      tl.to($("bubble"), { scale: 0, autoAlpha: 0, duration: 8 * F, ease: "power2.in" }, 3.30);
+
+      /* Scene 3 (3.81-7.20) - rapid fire: every answer is a click, every new screen lands on a whip's speed peak */
+      thumb(3.45, [BTN0[0] + 24, BTN0[1] + 12], 0.5); tagY(3.55, 615, 0.5);
+      frameOn(3.70, BTN0, [780, 600], 1.5, 24);
+      thumb(4.05, [BTN0[0] - 12, BTN0[1] + 8], 0.45, "sine.inOut"); thumb(4.52, BTN0, 0.1);
+      clickAt(4.70, BTN0, 0, $("btnin"));
+      frameOn(4.72, MIXTE, [900, 540], 1.45, 14, "y", 16); show(4.72 + 7 * F, "L-q04");
+      thumb(4.72, [MIXTE[0] + 36, MIXTE[1] + 56], 14 * F, "power3.inOut"); tagY(4.72, 600, 14 * F);
+      thumb(4.96, MIXTE, 0.1);
+      clickAt(5.12, MIXTE, 0.12, [$("c04a"), $("c04b")]); show(5.12, "L-q04c");
+      frameOn(5.40, [620, 400], [640, 500], 1.45, 14, "y", 16); show(5.40 + 7 * F, "L-q05");
+      thumb(5.40, KNOB0, 14 * F, "power3.inOut"); tagY(5.40, 565, 14 * F);
+      gsap.set($("slfill"), { scaleX: 0 });
+      tl.to(TOUCH, { scale: 0.85, duration: 4 * F, ease: "power2.in" }, 5.70);
+      tl.to($("knob"), { x: 210, duration: 12 * F, ease: "power2.inOut" }, 5.78);
+      tl.to($("slfill"), { scaleX: 0.3, duration: 12 * F, ease: "power2.inOut" }, 5.78);
+      thumb(5.78, KNOB1, 12 * F);
+      show(5.98, "L-q05c");
+      tl.to(TOUCH, { scale: 1, duration: 8 * F, ease: "back.out(2)" }, 5.98);
+      MK.click(tl, { t: 5.98, x: KNOBC[0], y: KNOBC[1], layer: FX, shakeEl: SHAKE, shakePx: 6 });
+      MK.ring(tl, FX, 5.98, { x: KNOBC[0], y: KNOBC[1], r1: 60 });
+      thumb(6.04, [KNOBC[0] + 170, KNOBC[1] + 70], 0.22);
+      frameOn(6.30, TEINT, [530, 540], 1.4, 14, "y", 16); show(6.30 + 7 * F, "L-q07");
+      thumb(6.30, [TEINT[0] + 34, TEINT[1] + 50], 14 * F, "power3.inOut"); tagY(6.30, 560, 14 * F);
+      thumb(6.60, TEINT, 0.12);
+      clickAt(6.81, TEINT, 0.1, [$("c07a"), $("c07b")]); show(6.81, "L-q07c");
+
+      /* Scene 4 (7.10-9.50) - loading -> CORAIL02 -> the camera travels to the total */
+      frameOn(7.10, LOADC, [760, 540], 1.3, 14, "xy", 12); show(7.10 + 7 * F, "L-load");
+      thumb(7.10, [LOADC[0] - 60, LOADC[1] + 80], 14 * F, "power3.inOut"); tagY(7.10, 520, 14 * F);
+      tl.to(TOUCH, { opacity: 0, duration: 0.2, ease: "power1.in" }, 7.12);
+      var SQ = [[229, 925], [626, 763], [390, 925], [229, 763], [390, 763]];
+      MK.each(SQ, 7.20, 4, function (p, t) { tl.set($("sq"), { x: p[0] - 229, y: p[1] - 925 }, t); });
+      tl.fromTo($("sq"), { scale: 1.3 }, { scale: 1, duration: 8 * F, ease: "power2.out", immediateRender: false }, 7.20 + 16 * F);
+      MK.ring(tl, $("L-load"), 7.20 + 16 * F, { x: 390, y: 763, r1: 58 });
+      MK.anticipate(tl, $("L-load"), 7.55, { to: 0.92 });
+      MK.pop(tl, $("L-res"), 7.55, { from: 0.92, over: 0.12 });
+      tl.set($("L-load"), { autoAlpha: 0 }, 7.55 + 4 * F);
+      MK.ring(tl, FX, 7.55, { x: CIRCLE[0], y: CIRCLE[1], r1: 250, width: 5 });
+      var SPK = [[205, 245, 22], [168, 560, 15], [226, 868, 19], [1330, 210, 24], [1366, 515, 16], [1312, 842, 13]];
+      var spkHost = $("spark");
+      SPK.forEach(function (s, i) {
+        var w = toWorld([s[0], s[1]]), r = s[2], el = document.createElement("div");
+        el.className = P + "spk"; el.style.left = w[0] + "px"; el.style.top = w[1] + "px";
+        el.innerHTML = '<svg width="' + 2 * r + '" height="' + 2 * r + '" viewBox="-1 -1 2 2" style="left:' + -r + 'px;top:' + -r + 'px"><path d="M0 -1 C0.12 -0.12 0.12 -0.12 1 0 C0.12 0.12 0.12 0.12 0 1 C-0.12 0.12 -0.12 0.12 -1 0 C-0.12 -0.12 -0.12 -0.12 0 -1 Z" fill="' + (i % 2 ? "#DF764C" : "#F8571F") + '"/></svg>';
+        spkHost.appendChild(el);
+        var svg = el.firstChild, t0 = 7.55 + i * F;
+        MK.pop(tl, svg, t0, { over: 0.25 });
+        tl.to(svg, { rotation: i % 2 ? -90 : 90, duration: 1.1, ease: "sine.inOut" }, t0 + 4 * F);
+        tl.to(svg, { scale: 0.62, duration: 0.26, ease: "sine.inOut" }, t0 + 30 * F);
+        tl.to(svg, { scale: 1, duration: 0.26, ease: "sine.inOut" }, t0 + 30 * F + 0.26);
+        tl.to(svg, { scale: 0, autoAlpha: 0, duration: 10 * F, ease: "power2.in" }, 8.62 + i * 2 * F);
+      });
+      frameOn(7.90, CHIPS, [760, 540], 1.3, 20, "y", 7); tagY(7.90, 560, 20 * F);
+      frameOn(8.60, BAR, [760, 690], 1.5, 24, "y", 7); tagY(8.60, 650, 24 * F);
+      tl.to($("tot"), { scale: 1.06, duration: 5 * F, ease: "power2.out" }, 9.26);
+      tl.to($("tot"), { scale: 1, duration: 14 * F, ease: "power2.inOut" }, 9.26 + 5 * F);
+      tl.fromTo($("shine"), { x: -110, opacity: 1 }, { x: 380, opacity: 1, duration: 0.4, ease: "power2.inOut" }, 9.52);
+
+      /* Scene 5 (9.88-10.80) - « au panier »: basket pops, CLICK 10.39, the packshot flies into it */
+      var BASKET = [1560, 200], FC = toFrame(CART);
+      MK.pop(tl, $("basket"), 9.95, { over: 0.22 });
+      tl.set(TG, { x: CART[0] + 70, y: CART[1] + 200 }, 9.70);
+      tl.to(TOUCH, { opacity: 1, duration: 0.15, ease: "none" }, 9.72);
+      thumb(9.88, [CART[0] + 8, CART[1] + 6], 0.42); tagY(9.88, 700, 0.42);
+      clickAt(10.39, CART, 0.2, $("btn"), { shakePx: 8 });
+      tl.set($("bdef"), { autoAlpha: 0 }, 10.39); tl.set($("bok"), { autoAlpha: 1 }, 10.39);
+      thumb(10.45, [CART[0] + 40, CART[1] + 60], 0.3);
+      var land = MK.fly(tl, $("pack"), 10.42, { dx: FC[0] - BASKET[0], dy: FC[1] - BASKET[1], arc: -200, frames: 18, fromScale: 1.875 });
+      tl.to($("pack"), { autoAlpha: 0, duration: 6 * F, ease: "power1.in" }, land + 2 * F);
+      tl.to($("bag"), { scale: 0.86, duration: 3 * F, ease: "power2.in" }, land - 2 * F);
+      tl.to($("bag"), { scale: 1.1, duration: 4 * F, ease: "power2.out" }, land + F);
+      tl.to($("bag"), { scale: 1, duration: 10 * F, ease: "power2.inOut" }, land + 5 * F);
+      MK.pop(tl, $("badge"), land, { over: 0.25 });
+      MK.ring(tl, HUDFX, land, { x: BASKET[0], y: BASKET[1], r1: 150 });
+
+      /* Scene 6 (10.80-11.10) - EXIT: zoom-through into the basket, cut on the fastest frame */
+      MK.zoomThrough(tl, DIVE, 10.80, { origin: org(BASKET), to: 9, frames: 18, blur: BF_DIVE });
+      tl.set($("halo"), { autoAlpha: 1 }, 10.80);
+      tl.to($("halo"), { scale: 3.2, duration: 18 * F, ease: "expo.in" }, 10.80);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines[ID] = tl;
+    })();
+  </script>
+</template>

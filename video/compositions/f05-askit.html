@@ -1,0 +1,266 @@
+<template id="f05-askit-template">
+  <style>
+    @font-face { font-family: "Lufga"; src: url("assets/fonts/Lufga-Regular.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: block; }
+    @font-face { font-family: "Lufga"; src: url("assets/fonts/Lufga-Medium.woff2") format("woff2"); font-weight: 500; font-style: normal; font-display: block; }
+    @font-face { font-family: "Lufga"; src: url("assets/fonts/Lufga-SemiBold.woff2") format("woff2"); font-weight: 600; font-style: normal; font-display: block; }
+    @font-face { font-family: "Lufga"; src: url("assets/fonts/Lufga-Bold.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: block; }
+    @font-face { font-family: "DM Sans"; src: url("assets/fonts/DMSans-normal-latin.woff2") format("woff2"); font-weight: 300 800; font-style: normal; font-display: block; }
+
+    #root { position: relative; width: 1920px; height: 1080px; overflow: hidden; font-family: "Lufga", sans-serif; color: #241f20; }
+
+    /* ── ground: canvas + brand mesh (the mesh blooms, then drifts) ── */
+    #f05-askit-bg { position: absolute; inset: 0; overflow: hidden; background: #fdfcfc; }
+    #f05-askit-mesh {
+      position: absolute; left: -1920px; top: -1080px; width: 5760px; height: 3240px; transform-origin: 2880px 1620px;
+      background:
+        radial-gradient(1152px 648px at 2438.4px 1328.4px, rgba(248, 87, 31, 0.22) 0%, rgba(248, 87, 31, 0) 60%),
+        radial-gradient(1056px 594px at 3417.6px 1404px, rgba(172, 204, 233, 0.55) 0%, rgba(172, 204, 233, 0) 62%),
+        radial-gradient(1152px 648px at 2976px 1998px, rgba(167, 171, 221, 0.45) 0%, rgba(167, 171, 221, 0) 65%);
+    }
+
+    /* ── skeleton: stage(clip) › shake › rig (camera) › drift › content ── */
+    #f05-askit-stage { position: absolute; inset: 0; overflow: hidden; }
+    .f05-askit-full { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+    #f05-askit-rig { transform-origin: 960px 540px; }
+    #f05-askit-drift { transform-origin: 960px 540px; }
+    #f05-askit-grid {
+      position: absolute; left: -176px; top: -176px; width: 2272px; height: 1432px;
+      background-image: linear-gradient(to right, rgba(36, 31, 32, 0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(36, 31, 32, 0.05) 1px, transparent 1px);
+      background-size: 44px 44px;
+    }
+    #f05-askit-cast { transform-origin: 960px 540px; }
+
+    /* ── lockup « ask-it.ai » (mark 150 px + Lufga 170 px) ── */
+    #f05-askit-lockup { position: absolute; left: 0; top: 429px; width: 1920px; height: 222px; display: flex; justify-content: center; align-items: flex-start; transform-origin: 960px 111px; }
+    #f05-askit-mark { position: relative; flex: none; width: 150px; height: 150px; margin-top: 26px; margin-right: 44px; }
+    #f05-askit-mark img { display: block; width: 150px; height: 150px; }
+    #f05-askit-word { position: relative; flex: none; height: 222px; white-space: nowrap; font-size: 170px; line-height: 222px; color: #241f20; }
+    .f05-askit-l { position: relative; display: inline-block; letter-spacing: -0.03em; transform-origin: 50% 74%; }
+
+    /* ── the visitor: avatar 220 px at (640, 560) + visitor-tag under it ── */
+    #f05-askit-visitor { position: absolute; left: 340px; top: 400px; width: 600px; height: 420px; visibility: hidden; opacity: 0; }
+    .f05-askit-av {
+      position: absolute; left: 190px; top: 50px; width: 220px; height: 220px; border-radius: 50%; overflow: hidden;
+      box-shadow: 0 0 0 6px #ffffff, 0 40px 80px -24px rgba(36, 31, 32, 0.28), 0 8px 24px -8px rgba(36, 31, 32, 0.12);
+    }
+    #f05-askit-av-anon { background: #eee9e3; }
+    #f05-askit-av-anon svg { position: absolute; left: 0; top: 0; width: 220px; height: 220px; }
+    #f05-askit-q { position: absolute; left: 0; top: 34px; width: 220px; text-align: center; font-weight: 700; font-size: 90px; line-height: 100px; color: #a39c95; }
+    #f05-askit-av-claire { background: #efe6de; }
+    #f05-askit-av-claire img { position: absolute; left: -8px; top: -2px; width: 236px; height: 236px; display: block; }
+
+    .f05-askit-tagrow { position: absolute; left: 0; top: 302px; width: 600px; height: 64px; display: flex; justify-content: center; }
+    #f05-askit-tag {
+      flex: none; height: 64px; display: flex; align-items: center; gap: 14px; padding: 0 28px 0 10px; box-sizing: border-box;
+      background: #ffffff; border: 1.5px solid rgba(36, 31, 32, 0.1); border-radius: 999px; white-space: nowrap;
+      box-shadow: 0 18px 40px -18px rgba(36, 31, 32, 0.18), 0 2px 6px rgba(36, 31, 32, 0.05);
+      font-weight: 500; font-size: 30px; line-height: 40px; color: #241f20;
+    }
+    .f05-askit-tagav { position: relative; flex: none; width: 44px; height: 44px; border-radius: 50%; overflow: hidden; background: #e7e1da; }
+    .f05-askit-tagav svg, .f05-askit-tagav img { position: absolute; left: 0; top: 0; width: 44px; height: 44px; display: block; }
+    #f05-askit-tagav-claire { visibility: hidden; opacity: 0; background: #efe6de; }
+    #f05-askit-tagtext { display: block; min-width: 2px; }
+    #f05-askit-caret { flex: none; width: 3px; height: 34px; margin-left: -10px; border-radius: 2px; background: #f8571f; visibility: hidden; opacity: 0; }
+
+    #f05-askit-badge {
+      position: absolute; left: 352px; top: 40px; height: 58px; display: flex; align-items: center; gap: 10px; padding: 0 24px 0 16px;
+      border-radius: 999px; background: #1f8a4c; color: #ffffff; font-weight: 600; font-size: 28px; line-height: 36px; white-space: nowrap;
+      box-shadow: 0 0 0 4px #ffffff, 0 18px 36px -14px rgba(31, 138, 76, 0.55); transform-origin: 18% 82%;
+    }
+    #f05-askit-badge svg { flex: none; width: 28px; height: 28px; display: block; }
+
+    /* ── data chips (2×2 cluster, x 1000–1600, y 470–640) ── */
+    .f05-askit-chip {
+      position: absolute; height: 64px; display: flex; align-items: center; gap: 14px; padding: 0 28px 0 24px; box-sizing: border-box;
+      background: #ffffff; border: 1.5px solid rgba(36, 31, 32, 0.1); border-radius: 999px; white-space: nowrap;
+      box-shadow: 0 18px 40px -18px rgba(36, 31, 32, 0.22), 0 2px 6px rgba(36, 31, 32, 0.05);
+      font-weight: 500; font-size: 30px; line-height: 40px; color: #241f20;
+    }
+    .f05-askit-chip i { flex: none; display: block; width: 12px; height: 12px; border-radius: 50%; background: #f8571f; }
+    .f05-askit-dm { font-family: "DM Sans", sans-serif; font-weight: 500; }
+
+    /* ── PILLS_ROW: centred y 540, height 120, centres x 430 / 960 / 1490 ── */
+    .f05-askit-slot { position: absolute; top: 540px; width: 0; height: 0; display: flex; align-items: center; justify-content: center; }
+    .f05-askit-pill {
+      flex: none; height: 120px; display: flex; align-items: center; gap: 22px; padding: 0 44px 0 28px; box-sizing: border-box;
+      background: #ffffff; border: 1.5px solid rgba(36, 31, 32, 0.1); border-radius: 999px; white-space: nowrap;
+      box-shadow: 0 18px 40px -18px rgba(36, 31, 32, 0.18), 0 2px 6px rgba(36, 31, 32, 0.05);
+    }
+    .f05-askit-num {
+      flex: none; width: 64px; height: 64px; border-radius: 50%; background: #f8571f; color: #ffffff;
+      display: flex; align-items: center; justify-content: center; font-family: "DM Sans", sans-serif; font-weight: 700; font-size: 34px; line-height: 1;
+    }
+    .f05-askit-plabel { display: block; font-weight: 600; font-size: 44px; line-height: 56px; letter-spacing: -0.01em; color: #241f20; }
+
+    #f05-askit-fx { pointer-events: none; }
+  </style>
+
+  <div id="root" data-composition-id="f05-askit" data-fps="60" data-start="0" data-duration="5.83" data-width="1920" data-height="1080">
+    <!-- track 0 · grid-bg ground (canvas + brand mesh) -->
+    <div id="f05-askit-bg" class="clip" data-start="0" data-duration="5.83" data-track-index="0">
+      <div id="f05-askit-mesh"></div>
+    </div>
+
+    <!-- track 1 · stage: shake › rig › drift › content -->
+    <div id="f05-askit-stage" class="clip" data-start="0" data-duration="5.83" data-track-index="1">
+      <div id="f05-askit-shake" class="f05-askit-full">
+        <div id="f05-askit-rig" class="f05-askit-full">
+          <div id="f05-askit-drift" class="f05-askit-full">
+            <div id="f05-askit-grid"></div>
+
+            <div id="f05-askit-cast" class="f05-askit-full">
+              <div id="f05-askit-lockup">
+                <div id="f05-askit-mark" data-hf-motion-blur='{"shutterAngle":360,"samplesPerFrame":12}'><img src="assets/askit/askit-logo-mark.svg" alt="" /></div>
+                <div id="f05-askit-word"></div>
+              </div>
+
+              <div id="f05-askit-chips" class="f05-askit-full">
+                <div id="f05-askit-chip1" class="f05-askit-chip" style="left: 1040px; top: 470px" data-hf-motion-blur='{"shutterAngle":360,"samplesPerFrame":12}'><i></i><span><span class="f05-askit-dm">35</span> ans</span></div>
+                <div id="f05-askit-chip2" class="f05-askit-chip" style="left: 1237px; top: 470px" data-hf-motion-blur='{"shutterAngle":360,"samplesPerFrame":12}'><i></i><span>Peau mixte</span></div>
+                <div id="f05-askit-chip3" class="f05-askit-chip" style="left: 1000px; top: 576px" data-hf-motion-blur='{"shutterAngle":360,"samplesPerFrame":12}'><i></i><span>Teint terne</span></div>
+                <div id="f05-askit-chip4" class="f05-askit-chip" style="left: 1257px; top: 576px" data-hf-motion-blur='{"shutterAngle":360,"samplesPerFrame":12}'><i></i><span>Routine essentielle</span></div>
+              </div>
+
+              <div id="f05-askit-visitor" data-hf-motion-blur='{"shutterAngle":360,"samplesPerFrame":12}'>
+                <div id="f05-askit-av-anon" class="f05-askit-av">
+                  <svg viewBox="0 0 220 220" aria-hidden="true"><path d="M26 236 C 30 176, 66 150, 110 150 C 154 150, 190 176, 194 236 Z" fill="#dcd5cd"></path></svg>
+                  <div id="f05-askit-q">?</div>
+                </div>
+                <div id="f05-askit-av-claire" class="f05-askit-av"><img src="assets/personas/claire.webp" alt="" /></div>
+                <div class="f05-askit-tagrow">
+                  <div id="f05-askit-tag">
+                    <span class="f05-askit-tagav">
+                      <svg id="f05-askit-tagav-anon" viewBox="0 0 44 44" aria-hidden="true"><circle cx="22" cy="17" r="8" fill="#c9c1b8"></circle><path d="M6 46 C 7 34, 14 28, 22 28 C 30 28, 37 34, 38 46 Z" fill="#c9c1b8"></path></svg>
+                      <img id="f05-askit-tagav-claire" src="assets/personas/claire.webp" alt="" />
+                    </span>
+                    <span id="f05-askit-tagtext"></span><span id="f05-askit-caret"></span>
+                  </div>
+                </div>
+                <div id="f05-askit-badge">
+                  <svg viewBox="0 0 28 28" aria-hidden="true"><path d="M6.5 10.5h15l-1.2 12.2a2 2 0 0 1-2 1.8H9.7a2 2 0 0 1-2-1.8z" fill="none" stroke="#ffffff" stroke-width="2.4" stroke-linejoin="round"></path><path d="M10.5 10.5V9a3.5 3.5 0 0 1 7 0v1.5" fill="none" stroke="#ffffff" stroke-width="2.4" stroke-linecap="round"></path></svg>
+                  <span>Cliente</span>
+                </div>
+              </div>
+            </div>
+
+            <div id="f05-askit-pills" class="f05-askit-full">
+              <div class="f05-askit-slot" style="left: 430px; z-index: 3"><div id="f05-askit-pill1" class="f05-askit-pill" data-hf-motion-blur='{"shutterAngle":360,"samplesPerFrame":12}'><span class="f05-askit-num">01</span><span class="f05-askit-plabel">Diagnostic</span></div></div>
+              <div class="f05-askit-slot" style="left: 960px; z-index: 2"><div id="f05-askit-pill2" class="f05-askit-pill" data-hf-motion-blur='{"shutterAngle":360,"samplesPerFrame":12}'><span class="f05-askit-num">02</span><span class="f05-askit-plabel">Recommandation</span></div></div>
+              <div class="f05-askit-slot" style="left: 1490px; z-index: 1"><div id="f05-askit-pill3" class="f05-askit-pill" data-hf-motion-blur='{"shutterAngle":360,"samplesPerFrame":12}'><span class="f05-askit-num">03</span><span class="f05-askit-plabel">Dashboard</span></div></div>
+            </div>
+
+            <div id="f05-askit-fx" class="f05-askit-full"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <script src="lib/motionkit.js"></script>
+  <script>
+    (function () {
+      var ID = "f05-askit", DUR = 5.83, SEED = 5;
+      var MK = window.MK, F = MK.F;
+      var CORAL = "#F8571F", INK = "#241F20", PALE = "#FCBCA6";
+      var root = document.querySelector('[data-composition-id="' + ID + '"]');
+      var $ = function (s) { return document.getElementById(ID + "-" + s); };
+      var tl = gsap.timeline({ paused: true });
+
+      var shake = $("shake"), rig = $("rig"), drift = $("drift"), fx = $("fx"), mesh = $("mesh");
+
+      /* ═══ Scene 1 · 0.00–0.40 · ENTRY: the light grid rushes in at ×1.4 and brakes, the mesh blooms ═══ */
+      MK.enterBig(tl, rig, 0, { from: 1.4, frames: 40 });
+      MK.drift(tl, drift, 0, DUR, { seed: SEED });
+      tl.fromTo(mesh, { opacity: 0.3, scale: 0.7 }, { opacity: 1, scale: 1, duration: 0.8, ease: "power2.out" }, 0);
+      tl.to(mesh, { scale: 1.06, duration: DUR - 0.8, ease: "sine.inOut" }, 0.8);
+      tl.fromTo(mesh, { x: 0, y: 0 }, { x: 40, y: -26, duration: DUR, ease: "sine.inOut" }, 0);
+      MK.ring(tl, fx, 0, { x: 960, y: 540, r1: 1100, r0: 40, color: CORAL, alpha: 0.3, frames: 30, width: 12 });
+
+      /* ═══ Scene 2 · 0.40–1.25 · « Ask-it »: mark pops, « ask-it.ai » builds letter by letter ═══ */
+      MK.pop(tl, $("mark"), 0.42);
+      var word = $("word");
+      var LET = [["a", 600], ["s", 600], ["k", 600], ["-", 600], ["i", 600], ["t", 600], [".", 400], ["a", 400], ["i", 400]];
+      LET.forEach(function (L, j) {
+        var s = document.createElement("span");
+        s.className = "f05-askit-l";
+        s.textContent = L[0];
+        s.style.fontWeight = String(L[1]);
+        s.setAttribute("data-hf-motion-blur", '{"shutterAngle":360,"samplesPerFrame":12}');
+        word.appendChild(s);
+        // « ask-it » on a 4-frame cadence from 0.52; the « .ai » suffix snaps in (1-frame offsets) on « It » (0.98)
+        var tj = j < 6 ? 0.52 + j * 4 * F : 0.52 + 24 * F + (j - 6) * F;
+        tl.fromTo(s, { y: 60, scaleY: 0.2, color: PALE, autoAlpha: 0 },
+          { y: 0, scaleY: 1, color: INK, autoAlpha: 1, duration: 5 * F, ease: "power2.out" }, tj);
+      });
+      // lock ≈ 13 frames (1.04 → 1.25)
+
+      /* ═══ Scene 3 · 1.25–2.95 · « transforme vos visiteurs anonymes » ═══ */
+      var lockup = $("lockup");
+      tl.to(lockup, { y: -390, scale: 0.45, duration: 24 * F, ease: "power3.inOut" }, 1.25);
+      var bfLock = MK.blurFilter(root, ID + "-blur-lock");
+      bfLock.ramp(tl, lockup, 1.25 + 8 * F, 4 * F, 0, 9, "y", "power2.in");
+      bfLock.ramp(tl, lockup, 1.25 + 14 * F, 6 * F, 9, 0, "y", "power2.out");
+      bfLock.clear(tl, lockup, 1.25 + 20 * F);
+
+      // at the lockup's speed peak the anonymous visitor is launched up into place
+      var visitor = $("visitor");
+      tl.set(visitor, { autoAlpha: 1 }, 1.45);
+      MK.enter(tl, visitor, 1.45, { dir: "up", dist: 600, frames: 30 });
+      MK.pop(tl, $("q"), 1.93, { over: 0.25 });
+      // the camera leans in on the visitor while she is still anonymous
+      MK.pan(tl, rig, 1.95, { x: 70, y: 0, scale: 1.12, frames: 64, ease: "sine.inOut" });
+      tl.set($("caret"), { autoAlpha: 1 }, 2.34);
+      MK.type(tl, $("tagtext"), "Visiteuse anonyme", 2.40, { cps: 60 });
+      tl.set($("caret"), { autoAlpha: 0 }, 2.76);
+
+      /* ═══ Scene 4 · 3.04–3.70 · « clients »: anticipation, instant swap to Claire, pop + ring ═══ */
+      var anon = $("av-anon"), claire = $("av-claire");
+      MK.snapZoom(tl, rig, 3.04, { from: 1.12, to: 1.17 }); // S-curve jump lands on the swap (3.16–3.19)
+      MK.anticipate(tl, anon, 3.17, { to: 0.6 });
+      MK.pop(tl, claire, 3.17, { from: 0.6, over: 0.22 });
+      tl.set(anon, { autoAlpha: 0 }, 3.17 + 4 * F);
+      MK.ring(tl, fx, 3.17, { x: 640, y: 560, r1: 260, r0: 120, color: CORAL, width: 6 });
+      tl.set($("tagtext"), { textContent: "Claire" }, 3.17);
+      tl.set($("tagav-anon"), { autoAlpha: 0 }, 3.17);
+      tl.set($("tagav-claire"), { autoAlpha: 1 }, 3.17);
+      MK.pop(tl, $("badge"), 3.17 + 4 * F, { over: 0.24 });
+
+      /* ═══ Scene 5 · 3.83–4.45 · « et en data »: four chips burst out of her ═══ */
+      MK.anticipate(tl, claire, 3.96, { to: 0.85 });
+      tl.to(claire, { scale: 1.08, duration: 4 * F, ease: "power2.out" }, 3.96);
+      tl.to(claire, { scale: 1, duration: 16 * F, ease: "power2.inOut" }, 3.96 + 4 * F);
+      MK.pan(tl, rig, 3.92, { x: 0, y: 0, scale: 1, frames: 30 }); // pull back as the data bursts out (rig at rest by 4.42)
+      var chips = [$("chip1"), $("chip2"), $("chip3"), $("chip4")];
+      MK.each(chips, 3.96, 4, function (c, t) {
+        var cx = c.offsetLeft + c.offsetWidth / 2, cy = c.offsetTop + c.offsetHeight / 2;
+        MK.fly(tl, c, t, { dx: 640 - cx, dy: 560 - cy, arc: -80, frames: 22 });
+      });
+
+      /* ═══ Scene 6 · 4.30–5.25 · « en trois étapes »: suction, the three pills slam ═══ */
+      MK.suck(tl, $("cast"), 4.30);
+      var pills = [$("pill1"), $("pill2"), $("pill3")];
+      [4.46, 4.56, 4.66].forEach(function (t, i) {
+        MK.slam(tl, pills[i], t, { from: 3.0, shakeEl: shake, shakePx: 12 });
+      });
+      // lock, then pill 01 turns active (instant) with a component pulse
+      tl.set(pills[0], { backgroundColor: "#FDEEE7", borderColor: CORAL }, 5.25);
+      MK.click(tl, { t: 5.25, component: pills[0] });
+
+      /* ═══ Scene 7 · 5.53–5.83 · EXIT: zoom-through into pill 01 (expo.in, ×9), last frame = fastest ═══ */
+      // aim at pill 01's centre as the drift carries it (drift is deterministic: replay it on a probe)
+      var probe = { x: 0, y: 0, rotation: 0, scale: 1 };
+      var tp = gsap.timeline({ paused: true });
+      MK.drift(tp, probe, 0, DUR, { seed: SEED });
+      tp.time(5.78);
+      var rad = probe.rotation * Math.PI / 180, vx = (430 - 960) * probe.scale;
+      var ox = 960 + vx * Math.cos(rad) + probe.x, oy = 540 + vx * Math.sin(rad) + probe.y;
+      var bfRig = MK.blurFilter(root, ID + "-blur-rig");
+      MK.zoomThrough(tl, rig, 5.53, { origin: ox.toFixed(1) + "px " + oy.toFixed(1) + "px", to: 9, frames: 18, blur: bfRig });
+
+      tl.set({}, {}, DUR);
+      window.__timelines = window.__timelines || {};
+      window.__timelines[ID] = tl;
+    })();
+  </script>
+</template>

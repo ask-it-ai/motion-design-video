@@ -1,0 +1,13 @@
+{
+  "scene": "f10-dashboard",
+  "duration_s": 6.5,
+  "rules": ["MK.enter", "MK.blurFilter", "MK.pop", "MK.count", "MK.slam", "MK.shake", "MK.anticipate", "MK.toss", "MK.snapZoom", "MK.ring", "MK.each", "MK.exit", "MK.drift"],
+  "exit": {
+    "vector": "up: rig y -653 -> -955 px over the last frame (-302 px/frame = -18 100 px/s, expo.in, 18 frames from 6.20, ends at 6.50) at rig scale 1.75, vertical SVG blur ramping 0 -> 18 px over the last 8 frames; the revenue card leaves the top, the personas card (Claire, Julie, Inès) and the window's bottom edge pass upward",
+    "still_moving": true
+  },
+  "entry": {
+    "vector": "left: the dashboard plane (rotateX 62°, rotateZ -12°, scale 1.25, perspective 2200 px) x +1000 -> +772 px on the first frame (-228 px/frame = -13 700 px/s, circ.out over 38 frames), horizontal SVG blur 16 -> 0 px over 6 frames",
+    "from_rest": false
+  }
+}

@@ -1,0 +1,260 @@
+<template id="f03-probleme-template">
+  <style>
+    @font-face { font-family: "Lufga"; src: url('assets/fonts/Lufga-Medium.woff2') format('woff2'); font-weight: 500; font-style: normal; font-display: block; }
+    @font-face { font-family: "Lufga"; src: url('assets/fonts/Lufga-SemiBold.woff2') format('woff2'); font-weight: 600; font-style: normal; font-display: block; }
+    @font-face { font-family: "Lufga"; src: url('assets/fonts/Lufga-Bold.woff2') format('woff2'); font-weight: 700; font-style: normal; font-display: block; }
+
+    #root { position: relative; width: 1920px; height: 1080px; overflow: hidden; font-family: "Lufga", sans-serif; color: #F2EFEC; }
+
+    /* AVANT ground: avant-bg + 44px grid of avant-line + avant-vignette (static) */
+    #f03-probleme-bg {
+      position: absolute; inset: 0; background-color: #1B1718;
+      background-image: linear-gradient(to right, rgba(255,255,255,0.08) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.08) 1px, transparent 1px);
+      background-size: 44px 44px; background-position: 36px 36px;
+    }
+    #f03-probleme-bg::after { content: ""; position: absolute; inset: 0; background: radial-gradient(ellipse 70% 70% at 50% 45%, rgba(0,0,0,0) 40%, rgba(0,0,0,0.55) 100%); }
+
+    /* skeleton: layer (clip) > shake > rig (camera) > drift > content. The rig box is tall so the SVG blur region covers the wall below. */
+    #f03-probleme-layer, #f03-probleme-shake { position: absolute; inset: 0; }
+    #f03-probleme-rig, #f03-probleme-drift { position: absolute; left: 0; top: 0; width: 1920px; height: 2600px; }
+    #f03-probleme-drift { transform-origin: 960px 1550px; }   /* the central « ? » (drift-local): drift zoom/rotation never moves the dive target */
+    #f03-probleme-lens { position: absolute; inset: 0; pointer-events: none; opacity: 0; background: radial-gradient(ellipse 74% 74% at 50% 44%, rgba(14,11,12,0) 44%, rgba(14,11,12,0.8) 100%); }
+    #f03-probleme-preload { position: absolute; left: 0; top: 0; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+
+    /* kinetic text (y ≈ 190, centred) */
+    #f03-probleme-head { position: absolute; left: 0; top: 130px; width: 1920px; height: 120px; }
+    .f03-probleme-line { position: absolute; left: 0; top: 0; width: 1920px; height: 120px; line-height: 120px; text-align: center; white-space: nowrap; font-weight: 500; font-size: 84px; letter-spacing: -0.03em; color: #8C8580; }
+    .f03-probleme-line .mk-accent { font-weight: 700; font-size: 96px; color: #F2EFEC; }
+
+    /* traffic card: avant-panel 1200×520, radius 28, centre (960, 620) */
+    #f03-probleme-card { position: absolute; left: 360px; top: 360px; width: 1200px; height: 520px; }
+    #f03-probleme-tilt { position: absolute; inset: 0; border-radius: 28px; background: #2A2526; border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 60px 120px -30px rgba(0,0,0,0.65), 0 8px 24px -8px rgba(0,0,0,0.4); }
+    #f03-probleme-title { position: absolute; left: 56px; top: 46px; display: flex; align-items: center; gap: 16px; font: 600 40px/1 "Lufga", sans-serif; color: #F2EFEC; white-space: nowrap; }
+    #f03-probleme-title i { display: block; width: 14px; height: 14px; border-radius: 50%; background: #F2EFEC; }
+    #f03-probleme-sub { position: absolute; left: 86px; top: 102px; font: 500 26px/1 "Lufga", sans-serif; color: #8C8580; white-space: nowrap; }
+    #f03-probleme-chart { position: absolute; left: 56px; top: 168px; width: 1088px; height: 292px; overflow: visible; }
+    #f03-probleme-badge { position: absolute; left: 1070px; top: 171.5px; width: 72px; height: 72px; border-radius: 50%; background: #4CC27F; box-shadow: 0 10px 26px -8px rgba(0,0,0,0.6); }
+    #f03-probleme-badge svg { display: block; width: 72px; height: 72px; }
+
+    /* wall of identical phones on a tilted plane (rig-local y 1080): rotateX 60°, rotateZ −12°, perspective 2000 */
+    #f03-probleme-wall { position: absolute; left: 0; top: 1080px; width: 1920px; height: 1080px; perspective: 2000px; perspective-origin: 960px 520px; }
+    #f03-probleme-plane { position: absolute; left: 79.5px; top: -498px; width: 1761px; height: 2036px; transform-style: preserve-3d; }
+    #f03-probleme-grid { position: absolute; inset: 0; transform-style: preserve-3d; transform: rotateZ(-12deg); }
+    /* PHONE_MACRO × 0.36: body 301×628, rim 10, radius 35 / screen 28, island 72×20 */
+    .f03-probleme-phone { position: absolute; width: 301px; height: 628px; border-radius: 35px; background: #111111; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.12), 0 22px 43px -11px rgba(0,0,0,0.65); }
+    .f03-probleme-scr { position: absolute; left: 10px; top: 10px; width: 281px; height: 608px; border-radius: 28px; overflow: hidden; background: #DCDCDC; filter: grayscale(0.75) brightness(0.88) contrast(1.05); }
+    .f03-probleme-page { position: absolute; left: 0; top: 0; width: 281px; height: 3595px; background: url('assets/screens/endro-shop/collection-serums.png') 0 0 / 281px auto no-repeat; }
+    .f03-probleme-island { position: absolute; left: 114.5px; top: 19px; width: 72px; height: 20px; border-radius: 10px; background: #000000; }
+    .f03-probleme-shadow { position: absolute; left: 90.5px; top: 262px; width: 120px; height: 120px; border-radius: 50%; background: radial-gradient(closest-side, rgba(0,0,0,0.6), rgba(0,0,0,0)); }
+    .f03-probleme-avatar { position: absolute; left: 258px; top: -14px; width: 50px; height: 50px; border-radius: 50%; overflow: hidden; box-shadow: 0 0 0 4px #1B1718, 0 6px 14px rgba(0,0,0,0.5); }
+    .f03-probleme-avatar svg { display: block; width: 50px; height: 50px; }
+    /* « ? » pins: lifted 57 px along the plane normal and counter-rotated so they face the camera */
+    .f03-probleme-pin { position: absolute; width: 72px; height: 72px; transform: translateZ(57px) rotateZ(12deg) rotateX(-60deg); }
+    .f03-probleme-bub { position: absolute; left: 0; top: 0; width: 72px; height: 72px; }
+    /* the plane's own floor: a perspective grid that fades out, so the whip never lands on an empty frame */
+    #f03-probleme-floor { position: absolute; left: -620px; top: -560px; width: 3001px; height: 3156px; background-color: rgba(255,255,255,0.025);
+      background-image: linear-gradient(to right, rgba(255,255,255,0.09) 2px, transparent 2px), linear-gradient(to bottom, rgba(255,255,255,0.09) 2px, transparent 2px);
+      background-size: 88px 88px; background-position: 30px 22px;
+      -webkit-mask-image: radial-gradient(closest-side, #000 52%, transparent 100%); mask-image: radial-gradient(closest-side, #000 52%, transparent 100%); }
+    /* iris that closes on the central « ? » during the dive: the cut lands in the dark */
+    #f03-probleme-iris { position: absolute; inset: 0; pointer-events: none; opacity: 0; --ix: 960px; --iy: 470px; --ir: 1500px;
+      background: radial-gradient(circle at var(--ix) var(--iy), rgba(22,18,19,0) 0px, rgba(22,18,19,0) calc(var(--ir) * 0.62), rgba(22,18,19,0.97) var(--ir)); }
+    .f03-probleme-bubin { width: 72px; height: 72px; border-radius: 50%; background: #2A2526; box-shadow: inset 0 0 0 2px rgba(255,255,255,0.14), 0 14px 28px -8px rgba(0,0,0,0.6); font: 700 44px/72px "Lufga", sans-serif; color: #F2EFEC; text-align: center; }
+  </style>
+
+  <div id="root" data-composition-id="f03-probleme" data-fps="60" data-start="0" data-duration="6.90" data-width="1920" data-height="1080">
+    <div id="f03-probleme-bg" class="clip" data-start="0" data-duration="6.90" data-track-index="0"></div>
+    <div id="f03-probleme-layer" class="clip" data-start="0" data-duration="6.90" data-track-index="1">
+      <img id="f03-probleme-preload" src="assets/screens/endro-shop/collection-serums.png" alt="">
+      <div id="f03-probleme-shake">
+        <div id="f03-probleme-rig" data-layout-allow-overflow>
+          <div id="f03-probleme-drift" data-layout-allow-overflow>
+            <div id="f03-probleme-head">
+              <div id="f03-probleme-lineA" class="f03-probleme-line"></div>
+              <div id="f03-probleme-lineB" class="f03-probleme-line"></div>
+            </div>
+            <div id="f03-probleme-card">
+              <div id="f03-probleme-tilt">
+                <div id="f03-probleme-title"><i></i>Trafic</div>
+                <div id="f03-probleme-sub">Visites / mois</div>
+                <svg id="f03-probleme-chart" viewBox="0 0 1088 292" aria-hidden="true">
+                  <defs>
+                    <linearGradient id="f03-probleme-areagrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F2EFEC" stop-opacity="0.16"/><stop offset="1" stop-color="#F2EFEC" stop-opacity="0"/></linearGradient>
+                    <clipPath id="f03-probleme-areaclip"><rect id="f03-probleme-cliprect" x="-10" y="-60" width="0" height="400"/></clipPath>
+                  </defs>
+                  <g stroke="rgba(255,255,255,0.07)" stroke-width="2" stroke-dasharray="6 10"><line x1="0" y1="22" x2="1088" y2="22"/><line x1="0" y1="105" x2="1088" y2="105"/><line x1="0" y1="188" x2="1088" y2="188"/><line x1="0" y1="271" x2="1088" y2="271"/></g>
+                  <path id="f03-probleme-area" fill="url(#f03-probleme-areagrad)" clip-path="url(#f03-probleme-areaclip)" d="M0 0"/>
+                  <path id="f03-probleme-line" fill="none" stroke="#F2EFEC" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" d="M0 0"/>
+                  <circle id="f03-probleme-halo" r="22" fill="#F2EFEC" fill-opacity="0.14"/>
+                  <circle id="f03-probleme-dot" r="9" fill="#F2EFEC"/>
+                </svg>
+                <div id="f03-probleme-badge" data-hf-motion-blur='{"shutterAngle":360,"samplesPerFrame":12}'><svg viewBox="0 0 72 72" aria-hidden="true"><path d="M22 37.5l9.5 9.5L51 27.5" fill="none" stroke="#FFFFFF" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              </div>
+            </div>
+            <div id="f03-probleme-wall">
+              <div id="f03-probleme-plane">
+                <div id="f03-probleme-grid"><div id="f03-probleme-floor"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="f03-probleme-lens"></div>
+      <div id="f03-probleme-iris"></div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <script src="lib/motionkit.js"></script>
+  <script>
+    (function () {
+      var ID = "f03-probleme", DUR = 6.90, MK = window.MK, F = MK.F;
+      var MB = '{"shutterAngle":360,"samplesPerFrame":12}';
+      var $ = function (s) { return document.getElementById(ID + "-" + s); };
+      var tl = gsap.timeline({ paused: true });
+      var layer = $("layer"), rig = $("rig"), drift = $("drift"), grid = $("grid"), plane = $("plane"), lens = $("lens");
+      var bfCard = MK.blurFilter(layer, ID + "-blur-card"), bfRig = MK.blurFilter(layer, ID + "-blur-rig");
+
+      // ── never frozen: drift for the whole scene ──
+      var SEED = 3;
+      MK.drift(tl, drift, 0, DUR, { seed: SEED });
+
+      // ════ Scene 1 (0.00–2.30) · ENTRY launched UP + « Le problème, ce n'est pas votre trafic. » ════
+      MK.enter(tl, $("card"), 0, { dir: "up", dist: 900, frames: 38, blur: bfCard });
+      MK.enter(tl, $("head"), 0, { dir: "up", dist: 560, frames: 38 });          // the first words rise with the card (parallax)
+      gsap.set($("tilt"), { transformPerspective: 2200 });
+      tl.fromTo($("tilt"), { rotationX: 14, rotationY: -7 }, { rotationX: 2, rotationY: 5, duration: 2.3, ease: "sine.out" }, 0);
+
+      var spansA = MK.words(tl, $("lineA"), [{ w: "Le", t: 0.24 }, { w: "problème,", t: 0.35 }]);
+      spansA.forEach(function (s, i) {                                           // line A exits up, 12 frames expo.in (waterfall: 2-frame stagger)
+        s.setAttribute("data-hf-motion-blur", MB);
+        tl.to(s, { y: -130, autoAlpha: 0, duration: 12 * F, ease: "expo.in" }, 0.85 + i * 2 * F);
+      });
+      tl.fromTo($("lineB"), { autoAlpha: 0, y: 110 }, { autoAlpha: 1, y: 0, duration: 0.42, ease: "power2.out" }, 0.80);
+      var spansB = MK.words(tl, $("lineB"), [{ w: "ce", t: 0.91 }, { w: "n’est", t: 1.03 }, { w: "pas", t: 1.20 }, { w: "votre", t: 1.35 }, { w: "trafic.", t: 1.63, accent: true, letters: true }]);
+      spansB.forEach(function (s) {
+        if (s.classList.contains("mk-accent")) Array.prototype.forEach.call(s.children, function (l) { l.setAttribute("data-hf-motion-blur", MB); });
+        else s.setAttribute("data-hf-motion-blur", MB);
+      });
+
+      // line chart: 12 points rising with small dips, drawn 0.05 → 2.10, the steep last segment on « trafic » (1.63–2.10)
+      var V = [0.06, 0.14, 0.10, 0.21, 0.28, 0.24, 0.35, 0.42, 0.37, 0.49, 0.56, 0.93];
+      var P = V.map(function (v, i) { return [i * 1050 / 11, 272 - v * 250]; }), segs = [], i, k;
+      for (i = 0; i < P.length - 1; i++) {                                         // Catmull-Rom → cubic Bézier
+        var p0 = P[Math.max(0, i - 1)], p1 = P[i], p2 = P[i + 1], p3 = P[Math.min(P.length - 1, i + 2)];
+        segs.push([p1, [p1[0] + (p2[0] - p0[0]) / 6, p1[1] + (p2[1] - p0[1]) / 6], [p2[0] - (p3[0] - p1[0]) / 6, p2[1] - (p3[1] - p1[1]) / 6], p2]);
+      }
+      var fx = function (q) { return q[0].toFixed(2) + "," + q[1].toFixed(2); };
+      var d = "M" + fx(P[0]) + segs.map(function (s) { return "C" + fx(s[1]) + " " + fx(s[2]) + " " + fx(s[3]); }).join("");
+      var tab = [[P[0][0], P[0][1], 0]], acc = 0, segEnd = [];
+      segs.forEach(function (s) {                                                  // arc-length table (deterministic, no layout read)
+        for (k = 1; k <= 48; k++) {
+          var u = k / 48, a = 1 - u, b0 = a * a * a, b1 = 3 * a * a * u, b2 = 3 * a * u * u, b3 = u * u * u;
+          var x = b0 * s[0][0] + b1 * s[1][0] + b2 * s[2][0] + b3 * s[3][0], y = b0 * s[0][1] + b1 * s[1][1] + b2 * s[2][1] + b3 * s[3][1];
+          var pr = tab[tab.length - 1]; acc += Math.sqrt((x - pr[0]) * (x - pr[0]) + (y - pr[1]) * (y - pr[1])); tab.push([x, y, acc]);
+        }
+        segEnd.push(acc);
+      });
+      var L = acc, L10 = segEnd[9], line = $("line"), dot = $("dot"), halo = $("halo"), clip = $("cliprect");
+      line.setAttribute("d", d);
+      $("area").setAttribute("d", d + "L" + fx(P[11]) + "L1050.00,292.00L0.00,292.00Z");
+      line.style.strokeDasharray = L.toFixed(2) + " " + (L + 20).toFixed(2);
+      function at(u) {
+        if (u <= 0) return tab[0]; if (u >= L) return tab[tab.length - 1];
+        var lo = 0, hi = tab.length - 1;
+        while (hi - lo > 1) { var m = (lo + hi) >> 1; if (tab[m][2] < u) lo = m; else hi = m; }
+        var A = tab[lo], B = tab[hi], f = (u - A[2]) / ((B[2] - A[2]) || 1);
+        return [A[0] + (B[0] - A[0]) * f, A[1] + (B[1] - A[1]) * f];
+      }
+      var drawP = { u: 0 };
+      function draw() {
+        var q = at(drawP.u);
+        line.style.strokeDashoffset = (L - drawP.u).toFixed(2);
+        dot.setAttribute("cx", q[0].toFixed(2)); dot.setAttribute("cy", q[1].toFixed(2));
+        halo.setAttribute("cx", q[0].toFixed(2)); halo.setAttribute("cy", q[1].toFixed(2));
+        clip.setAttribute("width", (q[0] + 10).toFixed(2));
+      }
+      draw();
+      tl.fromTo(drawP, { u: 0 }, { u: L10, duration: 1.63 - 0.05, ease: "sine.inOut", onUpdate: draw, immediateRender: false }, 0.05);
+      tl.fromTo(drawP, { u: L10 }, { u: L, duration: 2.10 - 1.63, ease: "power2.out", onUpdate: draw, immediateRender: false }, 1.63);
+      MK.pop(tl, $("badge"), 2.10, { over: 0.25 });                                // green check at the line's end
+
+      // ════ Scene 2 (2.30–2.60) · WHIP DOWN to the wall below ════
+      MK.pan(tl, rig, 2.30, { y: -1080, frames: 18, blur: bfRig, axis: "y" });
+      tl.to(lens, { opacity: 0.85, duration: 0.45, ease: "sine.inOut" }, 2.36);
+
+      // ════ Scene 3 (2.44–4.70) · the wall: 15 identical phones, same scroll ════
+      var PW = 301, PH = 628, GX = 64, GY = 76, phones = [], pages = [], bubs = [], bubins = [], shadows = [];
+      var AV = '<svg viewBox="0 0 36 36" aria-hidden="true"><rect width="36" height="36" fill="#3A3435"/><circle cx="18" cy="14" r="6.4" fill="#8C8580"/><path d="M5.5 33c1.7-6.9 6.6-10.2 12.5-10.2S28.8 26.1 30.5 33z" fill="#8C8580"/></svg>';
+      for (i = 0; i < 15; i++) {
+        var r = Math.floor(i / 5), c = i % 5, ph = document.createElement("div");
+        ph.className = "f03-probleme-phone";
+        ph.style.left = c * (PW + GX) + "px"; ph.style.top = r * (PH + GY) + "px";
+        if (r !== 1) ph.style.filter = r === 2 ? "blur(3px)" : "blur(2px)";       // depth of field: the middle row is in focus
+        ph.innerHTML = '<div class="f03-probleme-scr"><div class="f03-probleme-page"></div></div><div class="f03-probleme-island"></div><div class="f03-probleme-shadow"></div><div class="f03-probleme-avatar">' + AV + '</div>';
+        grid.appendChild(ph); phones.push(ph);
+        pages.push(ph.querySelector(".f03-probleme-page")); shadows.push(ph.querySelector(".f03-probleme-shadow"));
+      }
+      for (i = 0; i < 15; i++) {                                                   // pins after the phones: they sit in front
+        var pin = document.createElement("div");
+        pin.className = "f03-probleme-pin";
+        pin.style.left = ((i % 5) * (PW + GX) + PW / 2 - 36) + "px"; pin.style.top = (Math.floor(i / 5) * (PH + GY) + PH / 2 - 36) + "px";
+        pin.innerHTML = '<div class="f03-probleme-bub"><div class="f03-probleme-bubin">?</div></div>';
+        grid.appendChild(pin); bubs.push(pin.firstChild); bubins.push(pin.firstChild.firstChild);
+      }
+      gsap.set(plane, { rotationX: 60 });
+      gsap.set($("wall"), { autoAlpha: 0 });                                      // the wall waits below, unseen, until the whip
+      tl.set($("wall"), { autoAlpha: 1 }, 2.28);
+      gsap.set(shadows, { autoAlpha: 0 });
+      gsap.set(bubs, { autoAlpha: 0 });
+      // the camera flies over the plane and ends with the central phone at (960, 520)
+      tl.fromTo(plane, { x: 120, y: -300 }, { x: 0, y: 0, duration: 2.5, ease: "sine.inOut" }, 2.30);
+      // phones pop in a diagonal order (near-left → far-right), 4-frame offsets from 2.50
+      var order = phones.map(function (p, j) { return j; }).sort(function (a, b) {
+        var da = (2 - Math.floor(a / 5)) + a % 5, db = (2 - Math.floor(b / 5)) + b % 5;
+        return da - db || Math.floor(b / 5) - Math.floor(a / 5);
+      });
+      order.forEach(function (j, n) { MK.pop(tl, phones[j], 2.50 + n * 4 * F, { over: 0.2, inner: phones[j].querySelector(".f03-probleme-avatar") }); });
+      // « même chose » (4.05): every screen scrolls in perfect sync, −420 source px (× 0.36)
+      tl.to(pages, { y: -151.3, duration: 24 * F, ease: "power3.inOut" }, 4.05);
+
+      // ════ Scene 4 (4.75–6.60) · « ? » over every phone, nobody answers ════
+      tl.fromTo(plane, { scale: 1 }, { scale: 1.1, duration: 6.60 - 4.75, ease: "sine.inOut", immediateRender: false }, 4.75);
+      var bOrder = phones.map(function (p, j) { return j; }).sort(function (a, b) {   // ripple out from the central phone
+        var ra = Math.hypot((a % 5 - 2) * 365, (Math.floor(a / 5) - 1) * 704), rb = Math.hypot((b % 5 - 2) * 365, (Math.floor(b / 5) - 1) * 704);
+        return ra - rb || Math.atan2(Math.floor(a / 5) - 1, a % 5 - 2) - Math.atan2(Math.floor(b / 5) - 1, b % 5 - 2);
+      });
+      bOrder.forEach(function (j, n) {
+        var t = 4.95 + n * 4 * F;
+        MK.pop(tl, bubs[j], t, { over: 0.25 });
+        tl.fromTo(shadows[j], { scale: 0.2, autoAlpha: 0 }, { scale: 1, autoAlpha: 1, duration: 10 * F, ease: "power2.out", immediateRender: false }, t);
+        MK.legs(tl, bubins[j], "rotation", t + 6 * F, DUR - t - 6 * F, 0.9, 6, 101 + j * 7, 0.6);   // wobble ±6°
+        MK.legs(tl, bubins[j], "y", t + 6 * F, DUR - t - 6 * F, 1.3, 4, 211 + j * 5, 0.5);         // and float
+      });
+
+      // ════ Scene 5 (6.60–6.90) · EXIT: zoom-through into the central « ? » ════
+      // The central « ? » sits at drift-local (960, 1550) = the drift's transform-origin, so only the drift's x/y
+      // legs move it: replicate MK.legs (same hash, same sine.inOut) to aim the dive at its true position.
+      function legAt(t, t0, dur, period, amp, seed, first) {
+        var tt = t0, n = 0, end = t0 + dur, prev = 0;
+        while (tt < end - 0.02) {
+          var dd = Math.min((n === 0 ? first : 1) * period * (0.85 + 0.3 * MK.hash(seed + n * 3)), end - tt);
+          var v = (MK.hash(seed * 7 + n * 5 + 2) - 0.5) * 2 * amp;
+          if (t < tt + dd) return prev + (v - prev) * (0.5 - 0.5 * Math.cos(Math.PI * (t - tt) / dd));
+          prev = v; tt += dd; n++;
+        }
+        return prev;
+      }
+      var T_OUT = DUR - 18 * F;
+      var ox = 960 + legAt(T_OUT, 0, DUR, 2.1, 26, SEED + 1, 1), oy = 1550 + legAt(T_OUT, 0, DUR, 2.1 * 1.43, 26 * 0.62, SEED + 11, 0.5);
+      MK.zoomThrough(tl, rig, T_OUT, { origin: ox.toFixed(1) + "px " + oy.toFixed(1) + "px", to: 9, frames: 18, blur: bfRig, blurMax: 9 });
+      var iris = $("iris");
+      gsap.set(iris, { "--ix": ox.toFixed(1) + "px", "--iy": (oy - 1080).toFixed(1) + "px" });  // the « ? » on screen at the dive start
+      tl.fromTo(iris, { "--ir": "1500px", opacity: 0 }, { "--ir": "150px", opacity: 1, duration: 18 * F, ease: "power2.in", immediateRender: false }, T_OUT);
+      tl.to(lens, { opacity: 1, duration: 18 * F, ease: "power2.in" }, T_OUT);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines[ID] = tl;
+    })();
+  </script>
+</template>

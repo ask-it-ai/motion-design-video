@@ -1,0 +1,282 @@
+<template>
+  <style>
+    @font-face { font-family: 'Lufga'; src: url('assets/fonts/Lufga-Medium.woff2') format('woff2'); font-weight: 500; font-style: normal; font-display: block; }
+    @font-face { font-family: 'Lufga'; src: url('assets/fonts/Lufga-SemiBold.woff2') format('woff2'); font-weight: 600; font-style: normal; font-display: block; }
+    @font-face { font-family: 'DM Sans'; src: url('assets/fonts/DMSans-normal-latin.woff2') format('woff2'); font-weight: 300 800; font-style: normal; font-display: block; }
+    @font-face { font-family: 'Archivo'; src: url('assets/fonts/Archivo-normal-latin.woff2') format('woff2'); font-weight: 400 900; font-style: normal; font-display: block; }
+
+    #root { position: absolute; inset: 0; width: 1920px; height: 1080px; overflow: hidden; font-family: 'Lufga', sans-serif; color: #241F20; }
+
+    /* ground: grid-bg */
+    #f08-recommandation-bg { position: absolute; inset: 0; overflow: hidden; background: #FDFCFC; }
+    #f08-recommandation-mesh { position: absolute; left: -80px; top: -60px; width: 2080px; height: 1200px;
+      background: radial-gradient(60% 60% at 27% 23%, rgba(248,87,31,0.22) 0%, rgba(248,87,31,0) 60%), radial-gradient(55% 55% at 78% 30%, rgba(172,204,233,0.55) 0%, rgba(172,204,233,0) 62%), radial-gradient(60% 60% at 55% 85%, rgba(167,171,221,0.45) 0%, rgba(167,171,221,0) 65%); }
+    #f08-recommandation-grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(36,31,32,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(36,31,32,0.05) 1px, transparent 1px); background-size: 44px 44px; }
+
+    /* skeleton: stage(clip) > shake > rig (camera) > drift > [p3d planes | stat | float layer]; hud beside the rig */
+    #f08-recommandation-stage { position: absolute; inset: 0; overflow: hidden; }
+    .f08-recommandation-full { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+    #f08-recommandation-rig { transform-origin: 1567px 540px; }
+    #f08-recommandation-drift, #f08-recommandation-float { transform-origin: 1040px 470px; }
+    #f08-recommandation-hud { transform-origin: 960px 540px; }
+    #f08-recommandation-p3d { perspective: 2200px; perspective-origin: 820px 540px; }
+
+    /* Claire's real result page on a plane */
+    #f08-recommandation-plane, #f08-recommandation-planez { position: absolute; width: 780px; height: 2300px; transform-origin: 390px 1650px; }
+    #f08-recommandation-plane { left: 310px; top: 40px; }
+    #f08-recommandation-planez { left: 0; top: 0; }
+    #f08-recommandation-page { position: absolute; left: 0; top: 0; width: 780px; height: 2300px; border-radius: 40px; overflow: hidden; background: #fff; transform-origin: 390px 500px;
+      box-shadow: 0 60px 120px -30px rgba(36,31,32,0.35), 0 20px 40px -20px rgba(36,31,32,0.25); }
+    #f08-recommandation-scroll { position: absolute; left: 0; top: 0; width: 780px; height: 18528px; }
+    #f08-recommandation-scroll img { display: block; width: 780px; height: 18528px; }
+    #f08-recommandation-pfx { position: absolute; left: 0; top: 0; width: 780px; height: 1500px; pointer-events: none; }
+
+    /* other visitors' pages (rebuilt Endro result header) */
+    .f08-recommandation-side { position: absolute; left: 310px; top: 40px; width: 780px; height: 2300px; border-radius: 40px; overflow: hidden; background: #fff; transform-origin: 390px 600px;
+      box-shadow: 0 60px 120px -30px rgba(36,31,32,0.35), 0 20px 40px -20px rgba(36,31,32,0.25); }
+    .f08-recommandation-shead { position: absolute; left: 0; top: 0; width: 780px; height: 190px; overflow: hidden; }
+    .f08-recommandation-shead img { display: block; width: 780px; height: auto; }
+    #f08-recommandation-sheadR { background: url('assets/screens/endro-diag/17-resultat.png') 0 0 / 780px auto no-repeat; }
+    .f08-recommandation-shero { position: absolute; left: 0; top: 190px; width: 780px; height: 1236px; overflow: hidden; }
+    .f08-recommandation-shero img { position: absolute; left: 0; top: 0; width: 780px; height: 1236px; object-fit: cover; }
+    .f08-recommandation-sshade { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(8,14,24,0.06) 0%, rgba(8,14,24,0.22) 50%, rgba(8,14,24,0.5) 100%); }
+    .f08-recommandation-scircle { position: absolute; left: 230px; top: 160px; width: 320px; height: 320px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 24px 50px rgba(0,0,0,0.35); font: 800 46px 'Archivo', sans-serif; color: #fff; letter-spacing: 0.01em; }
+    .f08-recommandation-stitle { position: absolute; left: 0; top: 548px; width: 780px; text-align: center; font: 800 46px 'Archivo', sans-serif; color: #fff; text-transform: uppercase; letter-spacing: -0.01em; }
+
+    /* « 100 % » */
+    #f08-recommandation-stat { position: absolute; left: 820px; top: 360px; width: 800px; height: 320px; display: flex; align-items: baseline; justify-content: center; gap: 10px;
+      padding-top: 22px; box-sizing: border-box; font-family: 'DM Sans', sans-serif; font-weight: 700; color: #241F20; }
+    #f08-recommandation-s100 { font-size: 280px; line-height: 1; letter-spacing: -0.05em; }
+    #f08-recommandation-spct { font-size: 200px; line-height: 1; color: #F8571F; letter-spacing: -0.02em; }
+
+    /* routine cards (no prices) */
+    .f08-recommandation-card { position: absolute; width: 300px; height: 380px; border-radius: 22px; background: #fff; box-sizing: border-box; text-align: center;
+      border: 1.5px solid rgba(36,31,32,0.10); box-shadow: 0 34px 64px -26px rgba(36,31,32,0.34), 0 2px 6px rgba(36,31,32,0.06); }
+    .f08-recommandation-pack { position: absolute; left: 40px; top: 26px; width: 220px; height: 220px; border-radius: 16px; overflow: hidden; }
+    .f08-recommandation-pack img { display: block; width: 220px; height: 220px; object-fit: cover; }
+    .f08-recommandation-step { position: absolute; left: 0; top: 266px; width: 300px; font: 600 26px/32px 'Lufga', sans-serif; letter-spacing: -0.01em; white-space: nowrap; }
+    .f08-recommandation-step b { font-weight: 600; color: #F8571F; }
+    .f08-recommandation-pname { position: absolute; left: 0; top: 304px; width: 300px; font: 500 21px/28px 'Lufga', sans-serif; color: #6C6560; white-space: nowrap; }
+
+    /* total pill */
+    .f08-recommandation-cw { position: absolute; display: flex; justify-content: center; }
+    #f08-recommandation-total { height: 76px; padding: 0 34px; border-radius: 999px; background: #241F20; display: flex; align-items: center; gap: 18px; white-space: nowrap;
+      box-shadow: 0 40px 80px -24px rgba(36,31,32,0.32), 0 8px 24px -8px rgba(36,31,32,0.16); }
+    #f08-recommandation-tlab { font: 500 28px 'Lufga', sans-serif; color: rgba(255,255,255,0.72); }
+    #f08-recommandation-tnum { display: flex; align-items: baseline; font: 700 40px 'DM Sans', sans-serif; color: #fff; letter-spacing: -0.01em; transform-origin: 30% 60%; }
+    .f08-recommandation-sd { display: inline-block; width: 0.6em; text-align: center; }
+    .f08-recommandation-ss { display: inline-block; width: 0.26em; text-align: center; }
+
+    /* reassurance badges */
+    .f08-recommandation-badge { height: 72px; padding: 0 30px 0 20px; border-radius: 999px; background: #fff; box-sizing: border-box; border: 1.5px solid rgba(36,31,32,0.10);
+      box-shadow: 0 24px 48px -20px rgba(36,31,32,0.30), 0 2px 6px rgba(36,31,32,0.06); display: flex; align-items: center; gap: 12px;
+      font: 500 28px 'Lufga', sans-serif; color: #241F20; white-space: nowrap; }
+    .f08-recommandation-badge svg { width: 34px; height: 34px; flex: none; }
+    .f08-recommandation-badge em { font: 700 30px 'DM Sans', sans-serif; font-style: normal; letter-spacing: -0.01em; }
+    .f08-recommandation-soft { color: #6C6560; }
+    .f08-recommandation-coral { color: #F8571F; }
+    #f08-recommandation-seal { position: absolute; left: 1012px; top: 78px; width: 150px; height: auto; filter: drop-shadow(0 12px 18px rgba(36,31,32,0.30)); }
+
+    /* HUD: STEP_CHIP */
+    #f08-recommandation-step { position: absolute; left: 96px; top: 72px; height: 64px; padding: 0 26px 0 10px; box-sizing: border-box; border-radius: 999px; background: #fff;
+      border: 1.5px solid rgba(36,31,32,0.10); display: flex; align-items: center; gap: 12px; transform-origin: 20% 50%;
+      box-shadow: 0 18px 40px -18px rgba(36,31,32,0.22), 0 2px 6px rgba(36,31,32,0.05); }
+    #f08-recommandation-stepn { width: 44px; height: 44px; border-radius: 50%; background: #F8571F; color: #fff; display: flex; align-items: center; justify-content: center;
+      font: 700 20px 'DM Sans', sans-serif; }
+    #f08-recommandation-stept { font: 600 28px 'Lufga', sans-serif; color: #241F20; letter-spacing: -0.01em; white-space: nowrap; }
+  </style>
+
+  <div id="root" data-composition-id="f08-recommandation" data-start="0" data-duration="6.80" data-fps="60" data-width="1920" data-height="1080">
+    <div id="f08-recommandation-bg" class="clip" data-start="0" data-duration="6.80" data-track-index="0">
+      <div id="f08-recommandation-mesh"></div>
+      <div id="f08-recommandation-grid"></div>
+    </div>
+
+    <div id="f08-recommandation-stage" class="clip" data-start="0" data-duration="6.80" data-track-index="1">
+      <div id="f08-recommandation-shake" class="f08-recommandation-full">
+        <div id="f08-recommandation-rig" class="f08-recommandation-full">
+          <div id="f08-recommandation-drift" class="f08-recommandation-full">
+
+            <div id="f08-recommandation-p3d" class="f08-recommandation-full">
+              <div id="f08-recommandation-sideL" class="f08-recommandation-side">
+                <div class="f08-recommandation-shead"><img src="assets/screens/endro-diag/17-resultat.png" alt=""></div>
+                <div class="f08-recommandation-shero"><img src="assets/endro/diag/ocean.webp" alt="">
+                  <div class="f08-recommandation-sshade"></div>
+                  <div class="f08-recommandation-scircle" style="background:#2C4A6E">OCÉAN01</div>
+                  <div class="f08-recommandation-stitle">Votre profil OCÉAN01</div>
+                </div>
+              </div>
+              <div id="f08-recommandation-sideR" class="f08-recommandation-side">
+                <div id="f08-recommandation-sheadR" class="f08-recommandation-shead"></div>
+                <div class="f08-recommandation-shero"><img src="assets/endro/diag/ambre.webp" alt="">
+                  <div class="f08-recommandation-sshade"></div>
+                  <div class="f08-recommandation-scircle" style="background:#B8732E">AMBRE02</div>
+                  <div class="f08-recommandation-stitle">Votre profil AMBRE02</div>
+                </div>
+              </div>
+              <div id="f08-recommandation-plane">
+                <div id="f08-recommandation-planez">
+                  <div id="f08-recommandation-page">
+                    <div id="f08-recommandation-scroll">
+                      <img src="assets/screens/endro-diag/17-resultat-full.png" alt="">
+                      <div id="f08-recommandation-pfx"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div id="f08-recommandation-stat" data-hf-motion-blur='{"shutterAngle":360,"samplesPerFrame":12}'><span id="f08-recommandation-s100">100</span><span id="f08-recommandation-spct">%</span></div>
+
+            <div id="f08-recommandation-float" class="f08-recommandation-full">
+              <div id="f08-recommandation-c1" class="f08-recommandation-card" style="left:1150px;top:50px" data-hf-motion-blur='{"shutterAngle":360,"samplesPerFrame":12}'>
+                <div class="f08-recommandation-pack"><img src="assets/endro/products/gelee-nettoyante.jpg" alt=""></div>
+                <div class="f08-recommandation-step"><b>Étape 1</b> · Nettoyer</div><div class="f08-recommandation-pname">Gelée Nettoyante</div>
+              </div>
+              <div id="f08-recommandation-c2" class="f08-recommandation-card" style="left:1474px;top:50px" data-hf-motion-blur='{"shutterAngle":360,"samplesPerFrame":12}'>
+                <div class="f08-recommandation-pack"><img src="assets/endro/products/gommage-visage-eclat.jpg" alt=""></div>
+                <div class="f08-recommandation-step"><b>Étape 2</b> · Exfolier</div><div class="f08-recommandation-pname">Gommage Visage Éclat</div>
+              </div>
+              <div id="f08-recommandation-c3" class="f08-recommandation-card" style="left:1150px;top:454px" data-hf-motion-blur='{"shutterAngle":360,"samplesPerFrame":12}'>
+                <div class="f08-recommandation-pack"><img src="assets/endro/products/serum-bonne-mine.jpg" alt=""></div>
+                <div class="f08-recommandation-step"><b>Étape 3</b> · Traiter</div><div class="f08-recommandation-pname">Sérum Bonne Mine</div>
+              </div>
+              <div id="f08-recommandation-c4" class="f08-recommandation-card" style="left:1474px;top:454px" data-hf-motion-blur='{"shutterAngle":360,"samplesPerFrame":12}'>
+                <div class="f08-recommandation-pack"><img src="assets/endro/products/creme-bonne-mine.jpg" alt=""></div>
+                <div class="f08-recommandation-step"><b>Étape 4</b> · Hydrater</div><div class="f08-recommandation-pname">Crème Bonne Mine</div>
+              </div>
+
+              <div class="f08-recommandation-cw" style="left:1162px;top:794px;width:600px">
+                <div id="f08-recommandation-total"><span id="f08-recommandation-tlab">Total routine</span><span id="f08-recommandation-tnum"></span></div>
+              </div>
+
+              <div class="f08-recommandation-cw" style="left:200px;top:220px;width:600px">
+                <div id="f08-recommandation-b1" class="f08-recommandation-badge">
+                  <svg viewBox="0 0 24 24"><path fill="#F8571F" d="M12 2.2l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.1l-5.9 3.2 1.3-6.6-4.9-4.6 6.6-.8z"/></svg>
+                  <em>4,7/5</em><span class="f08-recommandation-soft">· <em>3 158</em> avis</span>
+                </div>
+              </div>
+              <div class="f08-recommandation-cw" style="left:230px;top:484px;width:600px">
+                <div id="f08-recommandation-b2" class="f08-recommandation-badge">
+                  <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#1F8A4C"/><path d="M7 12.4l3.2 3.1L17.2 8.6" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  <span>Validé par un dermatologue</span>
+                </div>
+              </div>
+              <img id="f08-recommandation-seal" src="assets/endro/diag/meilleur-pharma-2026.png" alt="">
+              <div class="f08-recommandation-cw" style="left:170px;top:764px;width:600px">
+                <div id="f08-recommandation-b4" class="f08-recommandation-badge">
+                  <svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.6" fill="#F8571F"/><path d="M2.5 19.5c.6-3.6 3.2-5.6 6.5-5.6s5.9 2 6.5 5.6z" fill="#F8571F"/><circle cx="17" cy="9" r="2.8" fill="#F8571F" opacity="0.45"/><path d="M14.8 14.2c.7-.3 1.4-.4 2.2-.4 2.6 0 4.6 1.6 5 4.4h-5.2" fill="#F8571F" opacity="0.45"/></svg>
+                  <span>Comme <em class="f08-recommandation-coral">6 %</em> des Endroïstes</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div id="f08-recommandation-hud" class="f08-recommandation-full">
+          <div id="f08-recommandation-step"><div id="f08-recommandation-stepn">02</div><div id="f08-recommandation-stept">Recommandation</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <script src="lib/motionkit.js"></script>
+  <script>
+    (function () {
+      var ID = "f08-recommandation", DUR = 6.80, MK = window.MK, F = MK.F;
+      var $ = function (s) { return document.getElementById(ID + "-" + s); };
+      var shake = $("shake"), rig = $("rig"), plane = $("plane"), planez = $("planez"), page = $("page"), scroll = $("scroll");
+      var sideL = $("sideL"), sideR = $("sideR"), stat = $("stat");
+      var tl = gsap.timeline({ paused: true });
+
+      // initial states (immediate): the page lies on a plane tilted rotateX 58° / rotateZ −12° at ×1.3
+      gsap.set(plane, { rotationX: 58, scale: 1.3, y: -1090 });
+      gsap.set(planez, { rotation: -12 });
+      gsap.set([sideL, sideR], { scale: 0.85 });
+      gsap.set($("seal"), { rotation: -8 });
+
+      // total counter: fixed-width digit slots (DM Sans digits are proportional)
+      var tnum = $("tnum"), slots = [];
+      ["d", "d", ",", "d", "d", " €"].forEach(function (k) {
+        var s = document.createElement("span");
+        if (k === "d") { s.className = ID + "-sd"; slots.push(s); } else if (k === ",") { s.className = ID + "-ss"; s.textContent = ","; } else { s.textContent = "€"; s.style.marginLeft = "0.2em"; }
+        tnum.appendChild(s);
+      });
+      var renderTotal = function (v) {
+        var c = Math.round(v * 100), str = (c < 1000 ? " " : "") + String(Math.floor(c / 100)) + String(c % 100).padStart(2, "0");
+        for (var i = 0; i < 4; i++) slots[i].textContent = str[i] === " " ? "" : str[i];
+      };
+
+      // ground + never frozen: drift for the whole scene; floating cards/badges drift ×1.4 (same seed, +40 %)
+      tl.fromTo($("mesh"), { x: 0, y: 0, scale: 1 }, { x: -44, y: 22, scale: 1.06, duration: DUR, ease: "sine.inOut" }, 0);
+      MK.drift(tl, $("drift"), 0, DUR, { seed: 83 });
+      MK.drift(tl, $("float"), 0, DUR, { seed: 83, zoom: 0.024, float: 10.4, rot: 0.16 });
+
+      // ---- Scene 1 (0.00–1.05): launched left on the tilted plane, flying over her routine ----
+      var bfPlane = MK.blurFilter($("stage"), ID + "-blur1");
+      gsap.set(plane, { filter: bfPlane.ref }); bfPlane.node.setAttribute("stdDeviation", "16 0");   // frame 0 is already smeared
+      MK.enter(tl, plane, 0, { dir: "left", dist: 1000, frames: 38, blur: bfPlane });
+      tl.fromTo(scroll, { y: -300 }, { y: -1700, duration: 1.05, ease: "power1.out" }, 0);
+      MK.pop(tl, $("step"), 0.22);
+
+      // ---- Scene 2 (1.05–2.05): the plane straightens while the page scrolls back to the top → CORAIL02 header at 1:1 (1.55) ----
+      tl.to(plane, { rotationX: 0, scale: 1, y: 0, duration: 30 * F, ease: "power3.inOut" }, 1.05);
+      tl.to(planez, { rotation: 0, duration: 30 * F, ease: "power3.inOut" }, 1.05);
+      tl.to(scroll, { y: 0, duration: 30 * F, ease: "power3.inOut" }, 1.05);
+      var bfScroll = MK.blurFilter($("stage"), ID + "-blur2");
+      bfScroll.ramp(tl, page, 1.13, 10 * F, 0, 9, "y", "power2.in");
+      bfScroll.ramp(tl, page, 1.13 + 10 * F, 12 * F, 9, 0, "y", "power2.out");
+      bfScroll.clear(tl, page, 1.13 + 22 * F);
+      MK.ring(tl, $("pfx"), 1.58, { x: 390, y: 510, r0: 160, r1: 290, color: "#F8571F", width: 6 });
+
+      // ---- Scene 3 (2.03–2.90): « 100 % » — the page defocuses 5 frames before the slam, impact on 2.26 ----
+      tl.fromTo(page, { filter: "blur(0px)" }, { filter: "blur(10px)", duration: 8 * F, ease: "power2.out", immediateRender: false }, 2.03);
+      MK.slam(tl, stat, 2.11, { shakeEl: shake });                              // impact 2.26
+
+      // ---- Scene 4 (2.85–3.70): « personnalisée » — pull back, two other visitors' pages fan out ----
+      MK.suck(tl, stat, 2.85);
+      MK.snapZoom(tl, rig, 2.92, { from: 1, to: 0.7, origin: "1567px 540px" });
+      tl.to(page, { filter: "blur(0px)", duration: 10 * F, ease: "power2.out" }, 2.95);
+      tl.set(page, { filter: "none" }, 2.95 + 10 * F);
+      [[sideL, -629, 18, 3.00], [sideR, 628, -18, 3.00 + 4 * F]].forEach(function (s) {
+        tl.fromTo(s[0], { autoAlpha: 0 }, { autoAlpha: 1, duration: F, ease: "none" }, s[3]);
+        tl.fromTo(s[0], { x: 0, rotationY: 0 }, { x: s[1], rotationY: s[2], duration: 22 * F, ease: "expo.out" }, s[3]);
+      });
+
+      // ---- Scene 5 (3.70–5.10): « sa routine sur mesure » — the routine bursts out as cards, the total counts ----
+      MK.exit(tl, sideL, 3.70, { dir: "left", dist: 1300, frames: 14 });
+      MK.exit(tl, sideR, 3.70, { dir: "right", dist: 1300, frames: 14 });
+      tl.set([sideL, sideR], { autoAlpha: 0 }, 3.70 + 14 * F);                  // gone for good (the final suction must not pull them back in)
+      MK.snapZoom(tl, rig, 3.75, { from: 0.7, to: 1, origin: "1567px 540px" });
+      tl.to(scroll, { y: -1500, duration: 20 * F, ease: "power3.inOut" }, 3.80);
+      tl.fromTo(page, { filter: "blur(0px)" }, { filter: "blur(6px)", duration: 8 * F, ease: "power2.out", immediateRender: false }, 3.82);
+      MK.anticipate(tl, page, 3.90, { to: 0.94 });
+      tl.to(page, { scale: 1, duration: 16 * F, ease: "back.out(2.2)" }, 3.90);
+      [["c1", -660, 180, -170, -10], ["c2", -924, 280, -190, -6], ["c3", -660, -24, -120, 8], ["c4", -924, 76, -140, 12]].forEach(function (c, i) {
+        MK.fly(tl, $(c[0]), 3.90 + i * 4 * F, { dx: c[1], dy: c[2], arc: c[3], rotation: c[4], frames: 26 });
+      });
+      MK.pop(tl, $("total"), 4.30, { over: 0.16 });
+      renderTotal(0);
+      var fin = MK.count(tl, 4.40, { from: 0, to: 72.5, dur: 0.5, penultimate: 72.4, holdFrames: 10, render: renderTotal });   // final ≈ 5.07
+      tl.to($("tnum"), { scale: 1.14, duration: 3 * F, ease: "power2.out" }, fin);
+      tl.to($("tnum"), { scale: 1, duration: 14 * F, ease: "power2.inOut" }, fin + 3 * F);
+
+      // ---- Scene 6 (5.20–6.50): « et les arguments qui la rassurent » — badges pop, then pulse together on « rassurent » ----
+      var badges = [$("b1"), $("b2"), $("seal"), $("b4")];
+      MK.each(badges, 5.46, 4, function (b, t) { MK.pop(tl, b, t); });
+      tl.to(badges, { scale: 1.04, duration: 5 * F, ease: "power2.out" }, 6.12);
+      tl.to(badges, { scale: 1, duration: 14 * F, ease: "power2.inOut" }, 6.12 + 5 * F);
+
+      // ---- Scene 7 (6.50–6.80): SUCTION — the whole stage shrinks to 55 %, accelerating, and fades ----
+      tl.set(rig, { transformOrigin: "960px 540px" }, 6.50);                  // rig scale is exactly 1 here: no jump
+      MK.suck(tl, rig, 6.50, { to: 0.55, frames: 18 });
+      MK.suck(tl, $("hud"), 6.50, { to: 0.55, frames: 18 });
+
+      tl.set({}, {}, DUR);
+      window.__timelines = window.__timelines || {};
+      window.__timelines[ID] = tl;
+    })();
+  </script>
+</template>

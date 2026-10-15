@@ -1,0 +1,397 @@
+<template>
+  <style>
+    @font-face { font-family: "Lufga"; src: url('assets/fonts/Lufga-Regular.woff2') format('woff2'); font-weight: 400; font-style: normal; font-display: block; }
+    @font-face { font-family: "Lufga"; src: url('assets/fonts/Lufga-Medium.woff2') format('woff2'); font-weight: 500; font-style: normal; font-display: block; }
+    @font-face { font-family: "Lufga"; src: url('assets/fonts/Lufga-SemiBold.woff2') format('woff2'); font-weight: 600; font-style: normal; font-display: block; }
+    @font-face { font-family: "Lufga"; src: url('assets/fonts/Lufga-Bold.woff2') format('woff2'); font-weight: 700; font-style: normal; font-display: block; }
+    @font-face { font-family: "DM Sans"; src: url('assets/fonts/DMSans-normal-latin.woff2') format('woff2'); font-weight: 300 800; font-style: normal; font-display: block; }
+
+    #root { position: relative; width: 1920px; height: 1080px; overflow: hidden; font-family: "Lufga", sans-serif; color: #241F20; }
+    #root * { box-sizing: border-box; }
+
+    /* ---------- ground: grid-bg (seen at the window edge and during the exit) ---------- */
+    #f11-insights-bg { position: absolute; inset: 0; overflow: hidden; background: #FDFCFC; }
+    #f11-insights-mesh { position: absolute; left: -192px; top: -108px; width: 2304px; height: 1296px;
+      background: radial-gradient(60% 60% at 27% 23%, rgba(248,87,31,0.22) 0%, transparent 60%), radial-gradient(55% 55% at 78% 30%, rgba(172,204,233,0.55) 0%, transparent 62%), radial-gradient(60% 60% at 55% 85%, rgba(167,171,221,0.45) 0%, transparent 65%); }
+    #f11-insights-grid { position: absolute; inset: 0; background-size: 44px 44px;
+      background-image: linear-gradient(rgba(36,31,32,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(36,31,32,0.05) 1px, transparent 1px); }
+
+    /* ---------- scene skeleton: .shake > tilt > .rig > .drift > content ---------- */
+    #f11-insights-stage { position: absolute; inset: 0; overflow: hidden; }
+    #f11-insights-shake, #f11-insights-tilt, #f11-insights-rig, #f11-insights-drift { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+    #f11-insights-tilt { transform-origin: 960px 540px; }
+    #f11-insights-drift { transform-origin: 960px 1000px; }
+
+    /* ---------- the dashboard world (macro: the v3 dashboard at x2.4) ---------- */
+    #f11-insights-scroll { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+    #f11-insights-app { position: absolute; left: -900px; top: -1700px; width: 2900px; height: 4300px; background: #F5F5F7; border-radius: 0 44px 44px 0;
+      border-right: 1.5px solid rgba(36,31,32,0.10); box-shadow: 0 60px 120px -30px rgba(36,31,32,0.28), 0 12px 32px -10px rgba(36,31,32,0.12); }
+    .f11-insights-card { position: absolute; background: #FFFFFF; border: 1.5px solid rgba(36,31,32,0.08); border-radius: 30px;
+      box-shadow: 0 2px 4px rgba(36,31,32,0.04), 0 26px 60px -30px rgba(36,31,32,0.24); }
+    .f11-insights-ctitle { position: absolute; left: 56px; top: 44px; font: 600 42px/1.1 "Lufga", sans-serif; letter-spacing: -0.015em; white-space: nowrap; }
+    .f11-insights-orb { border-radius: 50%; background: radial-gradient(circle at 32% 28%, #DCE6FF 0%, #8FA6F0 28%, #4A5FC1 62%, #2B3A8F 100%);
+      box-shadow: inset 0 -4px 10px rgba(20,30,90,0.35), 0 6px 14px rgba(74,95,193,0.35); }
+
+    /* revenue card (above: where frame 10 left the camera) */
+    #f11-insights-rev { left: 310px; top: -650px; width: 1300px; height: 780px; overflow: hidden; }
+    #f11-insights-revlab { position: absolute; left: 56px; top: 48px; font: 500 34px/1.2 "Lufga", sans-serif; color: #6C6560; white-space: nowrap; }
+    #f11-insights-revnum { position: absolute; left: 50px; top: 100px; font: 700 150px/1 "DM Sans", sans-serif; letter-spacing: -0.03em; white-space: nowrap; }
+    #f11-insights-chart { position: absolute; left: 0; top: 330px; width: 1300px; height: 406px; overflow: visible; }
+    #f11-insights-tipwrap { position: absolute; left: 757px; top: 270px; width: 400px; display: flex; justify-content: center; }
+    #f11-insights-tip { height: 70px; padding: 0 30px; border-radius: 999px; background: #241F20; color: #fff; display: flex; align-items: center; gap: 14px; white-space: nowrap;
+      font: 500 30px/1 "Lufga", sans-serif; box-shadow: 0 18px 40px -16px rgba(36,31,32,0.5); }
+    #f11-insights-tip span { color: rgba(255,255,255,0.68); }
+    #f11-insights-tip b { font: 700 34px/1 "DM Sans", sans-serif; }
+
+    /* personas card */
+    #f11-insights-per { left: 310px; top: 190px; width: 1300px; height: 520px; }
+    #f11-insights-percol { position: absolute; right: 56px; top: 58px; font: 600 24px/1 "Lufga", sans-serif; letter-spacing: 0.14em; text-transform: uppercase; color: #A39C95; }
+    .f11-insights-row { position: absolute; left: 28px; width: 1244px; height: 118px; border-radius: 24px; }
+    #f11-insights-hl { position: absolute; left: 0; top: 0; width: 1244px; height: 118px; border-radius: 24px; background: #FDEEE7; box-shadow: inset 0 0 0 2px rgba(248,87,31,0.38); }
+    #f11-insights-hlbar { position: absolute; left: 12px; top: 27px; width: 8px; height: 64px; border-radius: 4px; background: #F8571F; transform-origin: 50% 50%; }
+    .f11-insights-av { position: absolute; left: 34px; top: 11px; width: 96px; height: 96px; border-radius: 50%; overflow: hidden; background: #DDD7CD;
+      box-shadow: 0 0 0 6px #FFFFFF, 0 8px 20px rgba(36,31,32,0.22); }
+    .f11-insights-av img { display: block; width: 100%; height: 100%; object-fit: cover; }
+    .f11-insights-name { position: absolute; left: 168px; top: 16px; font: 600 40px/1.1 "Lufga", sans-serif; letter-spacing: -0.01em; white-space: nowrap; }
+    .f11-insights-desc { position: absolute; left: 168px; top: 66px; font: 500 28px/1.2 "Lufga", sans-serif; color: #6C6560; white-space: nowrap; }
+    .f11-insights-track { position: absolute; left: 610px; top: 50px; width: 260px; height: 18px; border-radius: 9px; background: #F0EDE9; overflow: hidden; }
+    .f11-insights-fill { height: 100%; border-radius: 9px; background: #F8571F; transform-origin: 0% 50%; }
+    .f11-insights-pct { position: absolute; left: 880px; top: 36px; width: 112px; text-align: right; font: 600 38px/1.2 "DM Sans", sans-serif; white-space: nowrap; }
+    .f11-insights-amt { position: absolute; left: 1006px; top: 33px; width: 210px; text-align: right; font: 700 42px/1.2 "DM Sans", sans-serif; letter-spacing: -0.01em; white-space: nowrap; }
+
+    /* funnel card */
+    #f11-insights-fun { left: 310px; top: 770px; width: 1300px; height: 700px; }
+    #f11-insights-base { position: absolute; left: 70px; top: 590px; width: 1160px; height: 2px; background: #E6E2DD; }
+    .f11-insights-bar { position: absolute; width: 200px; border-radius: 22px 22px 6px 6px; background: linear-gradient(180deg, #E2DCD3 0%, #D3CBBF 100%); transform-origin: 50% 100%; }
+    .f11-insights-fnum { position: absolute; width: 300px; display: flex; justify-content: center; font: 700 46px/1 "DM Sans", sans-serif; letter-spacing: -0.01em; }
+    .f11-insights-sd { display: inline-block; width: 0.58em; text-align: center; }
+    .f11-insights-ss { display: inline-block; width: 0.3em; }
+    .f11-insights-flab { position: absolute; top: 612px; width: 300px; text-align: center; font: 500 28px/1.2 "Lufga", sans-serif; color: #6C6560; white-space: nowrap; }
+    #f11-insights-zone { position: absolute; left: 0; top: 0; width: 1300px; height: 700px; overflow: visible; }
+    #f11-insights-lead { position: absolute; left: 351px; top: 180px; width: 3px; height: 108px; border-radius: 2px; background: #241F20; transform-origin: 50% 0%; }
+    #f11-insights-alwrap { position: absolute; left: 0; top: 112px; width: 706px; height: 66px; display: flex; justify-content: center; }
+    #f11-insights-alert { height: 66px; padding: 0 30px 0 26px; border-radius: 999px; background: #241F20; color: #FFFFFF; display: flex; align-items: center; gap: 16px; white-space: nowrap;
+      font: 500 30px/1 "Lufga", sans-serif; box-shadow: 0 18px 36px -14px rgba(36,31,32,0.55); transform-origin: 50% 50%; }
+    #f11-insights-alert span { color: rgba(255,255,255,0.66); }
+    #f11-insights-adot { position: relative; width: 16px; height: 16px; border-radius: 50%; background: #F8571F; flex: none; }
+    .f11-insights-pulse { position: absolute; left: -3px; top: -3px; width: 22px; height: 22px; border-radius: 50%; border: 2.5px solid #F8571F; }
+
+    /* Aski teaser card (below the funnel) */
+    #f11-insights-askcard { left: 310px; top: 1530px; width: 1300px; height: 420px; }
+    #f11-insights-askname { position: absolute; left: 164px; top: 58px; font: 600 44px/1.1 "Lufga", sans-serif; }
+    #f11-insights-asksub { position: absolute; left: 164px; top: 112px; font: 500 30px/1.2 "Lufga", sans-serif; color: #4A5FC1; }
+    .f11-insights-sugg { position: absolute; left: 56px; height: 40px; border-radius: 20px; background: #EEF0FA; }
+
+    #f11-insights-scrim { position: absolute; left: -900px; top: -1700px; width: 2900px; height: 4300px; background: rgba(36,31,32,0.08); }
+    #f11-insights-rfx { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+
+    /* ---------- Aski panel (launched in from the right) ---------- */
+    #f11-insights-panel { position: absolute; left: 1033px; top: 735px; width: 745px; height: 855px; border-radius: 32px; background: #FFFFFF;
+      border: 1.5px solid rgba(36,31,32,0.08); box-shadow: -40px 0 80px -40px rgba(36,31,32,0.35), 0 30px 70px -30px rgba(36,31,32,0.35); }
+    #f11-insights-phead { position: absolute; left: 0; top: 0; width: 745px; height: 96px; border-bottom: 1.5px solid rgba(36,31,32,0.08); }
+    #f11-insights-porb { position: absolute; left: 34px; top: 28px; width: 40px; height: 40px; }
+    #f11-insights-pname { position: absolute; left: 90px; top: 30px; font: 600 32px/36px "Lufga", sans-serif; color: #4A5FC1; }
+    #f11-insights-pclose { position: absolute; right: 34px; top: 35px; width: 26px; height: 26px; }
+    #f11-insights-dots { position: absolute; left: 34px; top: 128px; width: 132px; height: 66px; border-radius: 8px 30px 30px 30px; background: #EEF0FA; }
+    .f11-insights-dot { position: absolute; top: 27px; width: 12px; height: 12px; border-radius: 50%; background: #4A5FC1; opacity: 0.6; }
+    #f11-insights-bubble { position: absolute; left: 34px; top: 128px; width: 677px; padding: 26px 30px; border-radius: 8px 30px 30px 30px; background: #EEF0FA; transform-origin: 0% 0%;
+      font: 500 31px/1.4 "Lufga", sans-serif; color: #241F20; }
+    #f11-insights-ghost { visibility: hidden; }
+    #f11-insights-typed { position: absolute; left: 30px; top: 26px; width: 617px; }
+    #f11-insights-campwrap { position: absolute; left: 34px; top: 340px; width: 677px; height: 236px; transform-origin: 80% 70%; }
+    #f11-insights-camp { position: absolute; left: 0; top: 0; width: 677px; height: 236px; border-radius: 26px; background: #FFFFFF; border: 1.5px solid rgba(36,31,32,0.10);
+      box-shadow: 0 24px 50px -24px rgba(36,31,32,0.28), 0 3px 8px rgba(36,31,32,0.06); transform-origin: 50% 30%; }
+    #f11-insights-campok { position: absolute; left: -1.5px; top: -1.5px; width: 677px; height: 236px; border-radius: 26px; box-shadow: 0 0 0 3px #1F8A4C, 0 18px 40px -16px rgba(31,138,76,0.45); }
+    #f11-insights-cav { position: absolute; left: 28px; top: 30px; width: 88px; height: 88px; border-radius: 50%; overflow: hidden; box-shadow: 0 0 0 4px #FFFFFF, 0 6px 14px rgba(36,31,32,0.2); }
+    #f11-insights-cav img { display: block; width: 100%; height: 100%; object-fit: cover; }
+    #f11-insights-cbadge { position: absolute; left: 86px; top: 88px; width: 38px; height: 38px; border-radius: 50%; background: #F8571F; box-shadow: 0 0 0 3px #FFFFFF; display: flex; align-items: center; justify-content: center; }
+    #f11-insights-cbadge svg { width: 22px; height: 22px; display: block; }
+    #f11-insights-cname { position: absolute; left: 146px; top: 36px; font: 600 33px/1.15 "Lufga", sans-serif; letter-spacing: -0.01em; white-space: nowrap; }
+    #f11-insights-csub { position: absolute; left: 146px; top: 82px; font: 500 25px/1.2 "Lufga", sans-serif; color: #6C6560; white-space: nowrap; }
+    .f11-insights-st { position: absolute; left: 28px; top: 162px; height: 50px; display: flex; align-items: center; gap: 12px; font: 600 26px/1 "Lufga", sans-serif; white-space: nowrap; }
+    #f11-insights-stoff { color: #A39C95; }
+    #f11-insights-stoff i { width: 12px; height: 12px; border-radius: 50%; background: #C9C2B8; }
+    #f11-insights-ston { left: 20px; padding: 0 16px 0 20px; border-radius: 999px; background: #E9F5EE; color: #1F8A4C; transform-origin: 0% 50%; }
+    #f11-insights-ston svg { width: 28px; height: 28px; display: block; }
+    #f11-insights-tog { position: absolute; left: 545px; top: 158px; width: 104px; height: 58px; border-radius: 29px; background: #DDD7CD; }
+    #f11-insights-togon { position: absolute; left: 0; top: 0; width: 104px; height: 58px; border-radius: 29px; background: #1F8A4C; }
+    #f11-insights-knob { position: absolute; left: 6px; top: 6px; width: 46px; height: 46px; border-radius: 50%; background: #FFFFFF; box-shadow: 0 3px 8px rgba(0,0,0,0.25); }
+    #f11-insights-input { position: absolute; left: 34px; top: 741px; width: 677px; height: 80px; border-radius: 40px; background: #F5F5F7; display: flex; align-items: center; padding: 0 11px 0 32px;
+      font: 500 27px/1 "Lufga", sans-serif; color: #A39C95; white-space: nowrap; }
+    #f11-insights-send { margin-left: auto; width: 58px; height: 58px; border-radius: 50%; background: #F8571F; display: flex; align-items: center; justify-content: center; }
+    #f11-insights-send svg { width: 26px; height: 26px; display: block; }
+
+    /* ---------- click overlay (dashes, touch) ---------- */
+    #f11-insights-fx { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+    #f11-insights-touch { position: absolute; left: 0; top: 0; width: 54px; height: 54px; margin-left: -27px; margin-top: -27px; border-radius: 50%;
+      background: rgba(255,255,255,0.55); box-shadow: 0 0 0 2px rgba(36,31,32,0.25), 0 8px 18px rgba(36,31,32,0.25); }
+  </style>
+
+  <div id="root" data-composition-id="f11-insights" data-fps="60" data-start="0" data-duration="4.30" data-width="1920" data-height="1080">
+    <div id="f11-insights-bg" class="clip" data-start="0" data-duration="4.30" data-track-index="0">
+      <div id="f11-insights-mesh"></div>
+      <div id="f11-insights-grid"></div>
+    </div>
+
+    <div id="f11-insights-stage" class="clip" data-start="0" data-duration="4.30" data-track-index="1" data-layout-allow-overflow data-layout-allow-overlap data-layout-allow-occlusion>
+      <div id="f11-insights-shake">
+        <div id="f11-insights-tilt">
+          <div id="f11-insights-rig">
+            <div id="f11-insights-drift" data-layout-allow-overflow>
+
+              <!-- the dashboard, scrolled: launched UP at the cut (continues frame 10's scroll) -->
+              <div id="f11-insights-scroll" data-layout-allow-overflow>
+                <div id="f11-insights-app"></div>
+
+                <div id="f11-insights-rev" class="f11-insights-card">
+                  <div id="f11-insights-revlab">Chiffre d'affaires généré par le diagnostic</div>
+                  <div id="f11-insights-revnum">78&#160;343&#160;€</div>
+                  <svg id="f11-insights-chart" viewBox="0 150 640 200">
+                    <defs><linearGradient id="f11-insights-grad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F8571F" stop-opacity="0.26"/><stop offset="1" stop-color="#F8571F" stop-opacity="0"/></linearGradient></defs>
+                    <g stroke="#EFECE8" stroke-width="1"><line x1="28" y1="186" x2="612" y2="186" stroke-dasharray="3 6"/><line x1="28" y1="232" x2="612" y2="232" stroke-dasharray="3 6"/><line x1="28" y1="278" x2="612" y2="278" stroke-dasharray="3 6"/></g>
+                    <line x1="28" y1="322" x2="612" y2="322" stroke="#E6E2DD" stroke-width="1.5"/>
+                    <path fill="url(#f11-insights-grad)" d="M28.0,304.6 C31.4,305.2 41.2,308.8 48.1,308.3 C55.0,307.8 61.4,302.8 68.3,301.8 C75.2,300.8 81.5,303.6 88.4,302.6 C95.3,301.6 101.7,296.6 108.6,295.8 C115.5,295.0 121.9,297.2 128.7,297.7 C135.5,298.2 141.9,300.1 148.8,299.0 C155.7,297.9 162.1,293.1 169.0,291.3 C175.9,289.5 182.3,288.4 189.1,288.4 C195.9,288.4 202.3,291.6 209.2,291.3 C216.1,291.0 222.5,287.0 229.4,286.5 C236.3,286.0 242.6,289.3 249.5,288.1 C256.4,286.9 262.8,280.3 269.7,279.3 C276.6,278.3 283.0,282.6 289.8,282.2 C296.6,281.8 303.0,277.4 309.9,277.1 C316.8,276.8 323.2,281.3 330.1,280.7 C337.0,280.1 343.4,275.5 350.2,273.7 C357.0,271.9 363.4,270.4 370.3,270.3 C377.2,270.2 383.6,273.4 390.5,273.1 C397.4,272.8 403.7,269.3 410.6,268.5 C417.5,267.7 423.9,269.1 430.8,268.6 C437.7,268.1 444.1,281.4 450.9,265.3 C457.7,249.2 464.1,174.9 471.0,173.9 C477.9,172.9 484.3,244.9 491.2,259.6 C498.1,274.3 504.5,261.2 511.3,260.3 C518.1,259.4 524.5,254.7 531.4,254.3 C538.3,253.9 544.7,258.4 551.6,258.0 C558.5,257.6 564.8,253.1 571.7,252.0 C578.6,250.9 585.0,252.2 591.9,251.8 C598.8,251.4 608.6,249.8 612.0,249.4 L612.0,322 L28.0,322 Z"/>
+                    <path fill="none" stroke="#F8571F" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" d="M28.0,304.6 C31.4,305.2 41.2,308.8 48.1,308.3 C55.0,307.8 61.4,302.8 68.3,301.8 C75.2,300.8 81.5,303.6 88.4,302.6 C95.3,301.6 101.7,296.6 108.6,295.8 C115.5,295.0 121.9,297.2 128.7,297.7 C135.5,298.2 141.9,300.1 148.8,299.0 C155.7,297.9 162.1,293.1 169.0,291.3 C175.9,289.5 182.3,288.4 189.1,288.4 C195.9,288.4 202.3,291.6 209.2,291.3 C216.1,291.0 222.5,287.0 229.4,286.5 C236.3,286.0 242.6,289.3 249.5,288.1 C256.4,286.9 262.8,280.3 269.7,279.3 C276.6,278.3 283.0,282.6 289.8,282.2 C296.6,281.8 303.0,277.4 309.9,277.1 C316.8,276.8 323.2,281.3 330.1,280.7 C337.0,280.1 343.4,275.5 350.2,273.7 C357.0,271.9 363.4,270.4 370.3,270.3 C377.2,270.2 383.6,273.4 390.5,273.1 C397.4,272.8 403.7,269.3 410.6,268.5 C417.5,267.7 423.9,269.1 430.8,268.6 C437.7,268.1 444.1,281.4 450.9,265.3 C457.7,249.2 464.1,174.9 471.0,173.9 C477.9,172.9 484.3,244.9 491.2,259.6 C498.1,274.3 504.5,261.2 511.3,260.3 C518.1,259.4 524.5,254.7 531.4,254.3 C538.3,253.9 544.7,258.4 551.6,258.0 C558.5,257.6 564.8,253.1 571.7,252.0 C578.6,250.9 585.0,252.2 591.9,251.8 C598.8,251.4 608.6,249.8 612.0,249.4"/>
+                    <circle cx="471" cy="174" r="12" fill="#F8571F" opacity="0.18"/><circle cx="471" cy="174" r="6" fill="#fff" stroke="#F8571F" stroke-width="3"/>
+                    <text x="28" y="342" font-family="Lufga, sans-serif" font-weight="500" font-size="12" fill="#A39C95">J-30</text><text x="612" y="342" text-anchor="end" font-family="Lufga, sans-serif" font-weight="500" font-size="12" fill="#A39C95">Aujourd'hui</text>
+                  </svg>
+                  <div id="f11-insights-tipwrap"><div id="f11-insights-tip"><span>Record ·</span><b>8&#160;250&#160;€</b></div></div>
+                </div>
+
+                <!-- « qui sont vos meilleurs personas » -->
+                <div id="f11-insights-per" class="f11-insights-card">
+                  <div class="f11-insights-ctitle">Vos meilleurs personas</div>
+                  <div id="f11-insights-percol">Part du CA</div>
+                  <div id="f11-insights-r1" class="f11-insights-row" style="top:124px">
+                    <div id="f11-insights-hl"><div id="f11-insights-hlbar"></div></div>
+                    <div id="f11-insights-av1" class="f11-insights-av"><img src="assets/personas/claire.webp" alt=""></div>
+                    <div class="f11-insights-name">Claire</div><div class="f11-insights-desc">Teint terne · peau mixte</div>
+                    <div class="f11-insights-track"><div class="f11-insights-fill" style="width:234px"></div></div>
+                    <div class="f11-insights-pct">36&#160;%</div><div class="f11-insights-amt">28&#160;203&#160;€</div>
+                  </div>
+                  <div id="f11-insights-r2" class="f11-insights-row" style="top:248px">
+                    <div class="f11-insights-av"><img src="assets/personas/julie.webp" alt=""></div>
+                    <div class="f11-insights-name">Julie</div><div class="f11-insights-desc">Peau sèche</div>
+                    <div class="f11-insights-track"><div class="f11-insights-fill" style="width:156px"></div></div>
+                    <div class="f11-insights-pct">24&#160;%</div><div class="f11-insights-amt">18&#160;802&#160;€</div>
+                  </div>
+                  <div id="f11-insights-r3" class="f11-insights-row" style="top:372px">
+                    <div class="f11-insights-av"><img src="assets/personas/ines.webp" alt=""></div>
+                    <div class="f11-insights-name">Inès</div><div class="f11-insights-desc">Peau sensible</div>
+                    <div class="f11-insights-track"><div class="f11-insights-fill" style="width:124px"></div></div>
+                    <div class="f11-insights-pct">19&#160;%</div><div class="f11-insights-amt">14&#160;885&#160;€</div>
+                  </div>
+                </div>
+
+                <!-- « où votre tunnel bloque » -->
+                <div id="f11-insights-fun" class="f11-insights-card">
+                  <div class="f11-insights-ctitle">Parcours du diagnostic</div>
+                  <div id="f11-insights-base"></div>
+                  <div id="f11-insights-b1" class="f11-insights-bar" style="left:104px;top:290px;height:300px"></div>
+                  <div id="f11-insights-b2" class="f11-insights-bar" style="left:401px;top:310.5px;height:279.5px"></div>
+                  <div id="f11-insights-b3" class="f11-insights-bar" style="left:698px;top:334.5px;height:255.5px"></div>
+                  <div id="f11-insights-b4" class="f11-insights-bar" style="left:995px;top:554.5px;height:35.5px"></div>
+                  <svg id="f11-insights-zone" viewBox="0 0 1300 700">
+                    <defs><pattern id="f11-insights-hatch" width="16" height="16" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="16" height="16" fill="#FDEEE7"/><rect width="6" height="16" fill="#F8571F" opacity="0.55"/></pattern></defs>
+                    <path d="M304 290 L601 290 L601 310.5 L401 310.5 L401 590 L304 590 Z" fill="url(#f11-insights-hatch)" stroke="#F8571F" stroke-width="3" stroke-linejoin="round"/>
+                  </svg>
+                  <div id="f11-insights-n1" class="f11-insights-fnum" style="left:54px;top:228px"></div>
+                  <div id="f11-insights-n2" class="f11-insights-fnum" style="left:351px;top:228px"></div>
+                  <div id="f11-insights-n3" class="f11-insights-fnum" style="left:648px;top:272px"></div>
+                  <div id="f11-insights-n4" class="f11-insights-fnum" style="left:945px;top:492px"></div>
+                  <div class="f11-insights-flab" style="left:54px">Commencés</div><div class="f11-insights-flab" style="left:351px">Arrivées au contact</div>
+                  <div class="f11-insights-flab" style="left:648px">Terminés</div><div class="f11-insights-flab" style="left:945px">Achats</div>
+                  <div id="f11-insights-lead"></div>
+                  <div id="f11-insights-alwrap">
+                    <div id="f11-insights-alert" data-hf-motion-blur='{"shutterAngle":360,"samplesPerFrame":12}'>
+                      <div id="f11-insights-adot"><div class="f11-insights-pulse"></div><div class="f11-insights-pulse"></div><div class="f11-insights-pulse"></div></div>
+                      <div><span>Frein détecté&#160;:</span> l’écran de contact</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div id="f11-insights-askcard" class="f11-insights-card">
+                  <div class="f11-insights-orb" style="position:absolute;left:56px;top:52px;width:84px;height:84px"></div>
+                  <div id="f11-insights-askname">Aski</div><div id="f11-insights-asksub">Votre assistant IA</div>
+                  <div class="f11-insights-sugg" style="top:196px;width:640px"></div><div class="f11-insights-sugg" style="top:258px;width:520px"></div><div class="f11-insights-sugg" style="top:320px;width:440px"></div>
+                </div>
+
+                <div id="f11-insights-scrim"></div>
+                <div id="f11-insights-rfx"></div>
+              </div>
+
+              <!-- « quelle publicité lancer ensuite » -->
+              <div id="f11-insights-panel">
+                <div id="f11-insights-phead">
+                  <div id="f11-insights-porb" class="f11-insights-orb"></div>
+                  <div id="f11-insights-pname">Aski</div>
+                  <svg id="f11-insights-pclose" viewBox="0 0 18 18"><path d="M4 4l10 10M14 4L4 14" stroke="#A39C95" stroke-width="1.8" stroke-linecap="round"/></svg>
+                </div>
+                <div id="f11-insights-dots"><div class="f11-insights-dot" style="left:30px"></div><div class="f11-insights-dot" style="left:60px"></div><div class="f11-insights-dot" style="left:90px"></div></div>
+                <div id="f11-insights-bubble"><div id="f11-insights-ghost"></div><div id="f11-insights-typed"></div></div>
+                <div id="f11-insights-campwrap">
+                  <div id="f11-insights-camp" data-hf-motion-blur='{"shutterAngle":360,"samplesPerFrame":12}'>
+                    <div id="f11-insights-campok"></div>
+                    <div id="f11-insights-cav"><img src="assets/personas/claire.webp" alt=""></div>
+                    <div id="f11-insights-cbadge"><svg viewBox="0 0 24 24"><path d="M3.5 10v4a1 1 0 0 0 1 1h2.2l5.3 4.2V4.8L6.7 9H4.5a1 1 0 0 0-1 1z" fill="#FFFFFF"/><path d="M15.6 8.6a4.8 4.8 0 0 1 0 6.8M18.2 6.2a8.2 8.2 0 0 1 0 11.6" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"/></svg></div>
+                    <div id="f11-insights-cname">Campagne · Teint terne</div>
+                    <div id="f11-insights-csub">Meta · audience 30–44 ans</div>
+                    <div id="f11-insights-stoff" class="f11-insights-st"><i></i>Inactive</div>
+                    <div id="f11-insights-ston" class="f11-insights-st">Campagne activée<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="#1F8A4C"/><path d="M6.8 12.4l3.4 3.3 7-7.2" fill="none" stroke="#FFFFFF" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                    <div id="f11-insights-tog"><div id="f11-insights-togon"></div><div id="f11-insights-knob"></div></div>
+                  </div>
+                </div>
+                <div id="f11-insights-input">Écrivez à Aski…<div id="f11-insights-send"><svg viewBox="0 0 16 16"><path d="M8 13V3.5M4.5 7L8 3.5 11.5 7" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
+              </div>
+
+              <div id="f11-insights-fx">
+                <div id="f11-insights-touch" data-hf-motion-blur='{"shutterAngle":360,"samplesPerFrame":12}'></div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <script src="lib/motionkit.js"></script>
+  <script>
+    (function () {
+      var ID = "f11-insights", DUR = 4.30;
+      var MK = window.MK, F = MK.F;
+      var $ = function (s) { return document.getElementById(ID + "-" + s); };
+      var tl = gsap.timeline({ paused: true });
+
+      var stage = $("stage"), shake = $("shake"), tilt = $("tilt"), rig = $("rig"), drift = $("drift");
+      var scroll = $("scroll"), panel = $("panel"), fx = $("fx"), rfx = $("rfx"), touch = $("touch");
+
+      /* one directional-blur filter per moving layer */
+      var bfScroll = MK.blurFilter(stage, ID + "-blur-scroll");
+      var bfRig = MK.blurFilter(stage, ID + "-blur-rig");
+      var bfPanel = MK.blurFilter(stage, ID + "-blur-panel");
+
+      /* ---------- build-time content (synchronous, deterministic) ---------- */
+      // fixed-width digit slots (DM Sans digits are proportional): centred counters do not jiggle
+      function makeCounter(el, finalStr) {
+        var slots = [];
+        Array.from(finalStr).forEach(function (ch) {
+          var s = document.createElement("span");
+          if (/\d/.test(ch)) { s.className = ID + "-sd"; slots.push(s); } else { s.className = ID + "-ss"; s.textContent = " "; }
+          el.appendChild(s);
+        });
+        return function (v) {
+          var d = String(Math.round(v));
+          for (var i = 0; i < slots.length; i++) { var k = d.length - slots.length + i; slots[i].textContent = k >= 0 ? d[k] : ""; }
+        };
+      }
+      var FUN = [11395, 10617, 9705, 1347], FUNS = ["11 395", "10 617", "9 705", "1 347"];
+      var setters = FUN.map(function (v, i) { return makeCounter($("n" + (i + 1)), FUNS[i]); });
+      var MSG = "Lancez une campagne Meta sur l’audience « Teint terne · 30–44 ans »";
+      $("ghost").textContent = MSG;
+
+      /* intentional layering for the layout audit: the Aski panel sits over the dashboard */
+      [panel, $("scrim")].forEach(function (el) {
+        el.setAttribute("data-layout-allow-overlap", ""); el.setAttribute("data-layout-allow-occlusion", "");
+        el.querySelectorAll("*").forEach(function (n) { n.setAttribute("data-layout-allow-overlap", ""); n.setAttribute("data-layout-allow-occlusion", ""); });
+      });
+
+      /* late elements start hidden (set at build and at t=0 so any seek order agrees) */
+      var late = [panel, $("scrim"), $("bubble"), $("ston"), $("togon"), $("campok"), touch, $("alert")];
+      gsap.set(late, { autoAlpha: 0 });
+      tl.set(late, { autoAlpha: 0 }, 0);
+
+      /* ---------- camera life for the whole scene ---------- */
+      MK.drift(tl, drift, 0, DUR, { seed: 11 });
+      tl.fromTo(tilt, { rotationX: 2.4, rotationY: -2.6, transformPerspective: 2200 }, { rotationX: -1.4, rotationY: 3.4, duration: DUR, ease: "sine.inOut" }, 0);
+      tl.fromTo($("mesh"), { x: -30, y: 16, scale: 1 }, { x: 30, y: -18, scale: 1.06, duration: DUR, ease: "none" }, 0);
+
+      /* ---------- Scene 1 (0.00–0.80): ENTRY — the dashboard scroll is launched UP, the personas card brakes ---------- */
+      MK.enter(tl, scroll, 0, { dir: "up", dist: 900, frames: 38, blur: bfScroll });
+      // share bars: scaleX 0 -> 1.04 -> 1, 4-frame offsets from 0.05
+      var fills = Array.prototype.slice.call($("per").getElementsByClassName(ID + "-fill"));
+      MK.each(fills, 0.05, 4, function (el, t) {
+        tl.fromTo(el, { scaleX: 0 }, { scaleX: 1.04, duration: 12 * F, ease: "power3.out" }, t);
+        tl.to(el, { scaleX: 1, duration: 10 * F, ease: "power2.inOut" }, t + 12 * F);
+      });
+      // camera snaps +10 % toward Claire's row (S-curve)
+      MK.snapZoom(tl, rig, 0.12, { from: 1, to: 1.1, origin: "960px 373px" });
+      // « personas » (0.19): Claire's row turns coral-tint, ring around her avatar
+      tl.fromTo($("hl"), { autoAlpha: 0 }, { autoAlpha: 1, duration: 3 * F, ease: "none" }, 0.19);
+      tl.fromTo($("hlbar"), { scaleY: 0 }, { scaleY: 1, duration: 8 * F, ease: "power3.out" }, 0.19);
+      MK.ring(tl, rfx, 0.19, { x: 414, y: 373, r0: 56, r1: 120, width: 5, frames: 24 });
+      tl.to($("av1"), { scale: 1.1, duration: 5 * F, ease: "power2.out" }, 0.19);
+      tl.to($("av1"), { scale: 1, duration: 16 * F, ease: "power2.inOut" }, 0.19 + 5 * F);
+
+      /* ---------- Scene 2 (0.80–2.00): « où votre tunnel bloque » ---------- */
+      MK.pan(tl, rig, 0.80, { y: -700, frames: 20, blur: bfRig, axis: "y" });
+      var bars = [$("b1"), $("b2"), $("b3"), $("b4")], nums = [$("n1"), $("n2"), $("n3"), $("n4")];
+      var RISE = [300, 300, 255.5, 35.5];
+      MK.each(bars, 1.00, 4, function (el, t, i) {
+        tl.fromTo(el, { scaleY: 0 }, { scaleY: 1.06, duration: 14 * F, ease: "power3.out" }, t);
+        tl.to(el, { scaleY: 1, duration: 12 * F, ease: "power2.inOut" }, t + 14 * F);
+        tl.fromTo(nums[i], { y: RISE[i], autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 14 * F, ease: "power3.out" }, t);
+        MK.count(tl, t, { from: 0, to: FUN[i], dur: 0.42, render: setters[i] });
+      });
+      // friction alert slammed: impact on « bloque » (1.61)
+      var impact = MK.slam(tl, $("alert"), 1.46, { from: 2.2, shakeEl: shake, shakePx: 10 });
+      tl.fromTo($("zone"), { clipPath: "inset(0% 0% 100% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 7 * F, ease: "power3.out" }, impact);
+      tl.fromTo($("lead"), { scaleY: 0 }, { scaleY: 1, duration: 6 * F, ease: "power2.out" }, impact + 2 * F);
+      var pulses = Array.prototype.slice.call($("adot").children);
+      tl.set(pulses, { autoAlpha: 0 }, 0);
+      for (var k = 0; k < 7; k++) {
+        tl.fromTo(pulses[k % 3], { scale: 1, autoAlpha: 0.95 }, { scale: 3.4, autoAlpha: 0, duration: 0.5, ease: "power1.out", immediateRender: false }, impact + k * 0.32);
+      }
+      tl.fromTo($("adot"), { scale: 1 }, { scale: 1.35, duration: 4 * F, ease: "power2.out", immediateRender: false }, impact);
+      tl.to($("adot"), { scale: 1, duration: 12 * F, ease: "power2.inOut" }, impact + 4 * F);
+
+      /* ---------- Scene 3 (2.06–3.40): « et quelle publicité lancer » ---------- */
+      // depth of field: the dashboard goes out of focus 5 frames before the gesture
+      tl.fromTo(scroll, { filter: "blur(0px)" }, { filter: "blur(7px)", duration: 14 * F, ease: "power2.out", immediateRender: false }, 2.06 - 5 * F);
+      tl.fromTo($("scrim"), { autoAlpha: 0 }, { autoAlpha: 1, duration: 14 * F, ease: "power1.out", immediateRender: false }, 2.06 - 5 * F);
+      // the Aski panel is launched in from the right
+      tl.set(panel, { autoAlpha: 1 }, 2.06);
+      MK.enter(tl, panel, 2.06, { dir: "left", dist: 800, frames: 30, blur: bfPanel });
+      // typing dots while the panel brakes, then the reply streams (70 cps from 2.25)
+      var dots = Array.prototype.slice.call($("dots").children);
+      MK.each(dots, 2.08, 3, function (el, t) {
+        tl.fromTo(el, { y: 0 }, { y: -9, duration: 4 * F, ease: "sine.out", immediateRender: false }, t);
+        tl.to(el, { y: 0, duration: 4 * F, ease: "sine.in" }, t + 4 * F);
+      });
+      tl.set($("dots"), { autoAlpha: 0 }, 2.25);
+      tl.set($("bubble"), { autoAlpha: 1 }, 2.25);
+      tl.fromTo($("bubble"), { scale: 0.92 }, { scale: 1, duration: 10 * F, ease: "back.out(2)", immediateRender: false }, 2.25);
+      MK.type(tl, $("typed"), MSG, 2.25, { cps: 70 });
+      // campaign card pops at 3.10 (OFF toggle)
+      MK.pop(tl, $("camp"), 3.10, { over: 0.16 });
+
+      /* ---------- Scene 4 (3.44–4.00): « ensuite » — the toggle is clicked ---------- */
+      var TOG = { x: 1033 + 34 + 545 + 52, y: 735 + 340 + 158 + 29 };   // toggle centre in world px
+      // the touch arrives already moving (from below-right) and decelerates onto the toggle
+      tl.set(touch, { autoAlpha: 1 }, 3.10);
+      tl.fromTo(touch, { x: TOG.x + 300, y: TOG.y + 470 }, { x: TOG.x + 4, y: TOG.y + 6, duration: 17 * F, ease: "power2.out", immediateRender: false }, 3.10);
+      tl.to(touch, { x: TOG.x, y: TOG.y, duration: 4 * F, ease: "sine.inOut" }, 3.10 + 17 * F);
+      // the snap zoom re-centres on the toggle: keep the frame still at the origin swap (rig is at x1.1)
+      var O1 = { x: 960, y: 373 }, S1 = 1.1;
+      tl.set(rig, { transformOrigin: TOG.x + "px " + TOG.y + "px", x: (S1 - 1) * (TOG.x - O1.x), y: -700 + (S1 - 1) * (TOG.y - O1.y) }, 3.44);
+      MK.click(tl, { t: 3.44, x: TOG.x, y: TOG.y, layer: fx, component: $("campwrap"), shakeEl: shake, touch: touch, rig: rig, snap: 0.15, rigScale: S1,
+        dashLen: 40, dashW: 7, r0: 44, r1: 116 });
+      MK.ring(tl, fx, 3.44, { x: TOG.x, y: TOG.y, r0: 20, r1: 84, width: 3, color: "rgba(36,31,32,0.45)", alpha: 0.8, frames: 20 });
+      // instant state change on the click frame
+      tl.set($("togon"), { autoAlpha: 1 }, 3.44);
+      tl.set($("knob"), { x: 46 }, 3.44);
+      tl.set($("stoff"), { autoAlpha: 0 }, 3.44);
+      tl.set($("campok"), { autoAlpha: 1 }, 3.44);
+      MK.pop(tl, $("ston"), 3.44, { from: 0.85, over: 0.1 });
+      // the touch lifts away after the lock
+      tl.to(touch, { x: TOG.x + 170, y: TOG.y + 260, autoAlpha: 0, duration: 20 * F, ease: "power2.in" }, 3.70);
+
+      /* ---------- Scene 5 (4.00–4.30): EXIT — push left, last frame = fastest ---------- */
+      MK.exit(tl, rig, 4.00, { dir: "left", dist: 1600, frames: 18, blur: bfRig });
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines[ID] = tl;
+    })();
+  </script>
+</template>

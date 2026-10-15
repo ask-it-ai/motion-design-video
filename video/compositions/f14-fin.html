@@ -1,0 +1,198 @@
+<template>
+  <style>
+    @font-face { font-family: "Lufga"; src: url('assets/fonts/Lufga-Regular.woff2') format('woff2'); font-weight: 400; font-style: normal; font-display: block; }
+    @font-face { font-family: "Lufga"; src: url('assets/fonts/Lufga-Medium.woff2') format('woff2'); font-weight: 500; font-style: normal; font-display: block; }
+    @font-face { font-family: "Lufga"; src: url('assets/fonts/Lufga-SemiBold.woff2') format('woff2'); font-weight: 600; font-style: normal; font-display: block; }
+    @font-face { font-family: "DM Sans"; src: url('assets/fonts/DMSans-normal-latin.woff2') format('woff2'); font-weight: 300 800; font-style: normal; font-display: block; }
+
+    #root { position: relative; width: 1920px; height: 1080px; overflow: hidden; font-family: "Lufga", sans-serif; color: #241F20; }
+    #root * { box-sizing: border-box; }
+    .f14-fin-full { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+
+    /* grid-bg: canvas + 44 px grid + brand mesh */
+    #f14-fin-bg { position: absolute; inset: 0; overflow: hidden; background: #FDFCFC; }
+    #f14-fin-mesh { position: absolute; inset: -8%; background: radial-gradient(60% 60% at 27% 23%, rgba(248,87,31,0.22) 0%, transparent 60%), radial-gradient(55% 55% at 78% 30%, rgba(172,204,233,0.55) 0%, transparent 62%), radial-gradient(60% 60% at 55% 85%, rgba(167,171,221,0.45) 0%, transparent 65%); }
+    #f14-fin-grid { position: absolute; inset: 0; background-image: linear-gradient(to right, rgba(36,31,32,0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(36,31,32,0.05) 1px, transparent 1px); background-size: 44px 44px; }
+    #f14-fin-stage { position: absolute; inset: 0; overflow: hidden; }
+    #f14-fin-rig { transform-origin: 960px 500px; }
+
+    /* world (rig space): GRID_100 at x5 around Claire so that rig 0.2 reads as 40 px dots, pitch 62 */
+    #f14-fin-glow { position: absolute; left: 410px; top: -50px; width: 1100px; height: 1100px; border-radius: 50%; background: radial-gradient(closest-side, rgba(248,87,31,0.85) 0%, rgba(248,87,31,0.32) 45%, rgba(248,87,31,0) 100%); opacity: 0.2; }
+    .f14-fin-dot { position: absolute; width: 200px; height: 200px; border-radius: 50%; background: rgba(36,31,32,0.15); }
+    .f14-fin-lit { position: absolute; width: 200px; height: 200px; border-radius: 50%; background: #F8571F; }
+    #f14-fin-av { position: absolute; left: 822px; top: 362px; width: 276px; height: 276px; }
+    #f14-fin-avpop { position: absolute; inset: 0; }
+    #f14-fin-avring { position: absolute; inset: 0; border-radius: 50%; background: #FFFFFF; box-shadow: 0 30px 60px -20px rgba(36,31,32,0.35), 0 6px 16px -6px rgba(36,31,32,0.18); }
+    #f14-fin-avphoto { position: absolute; left: 8px; top: 8px; width: 260px; height: 260px; border-radius: 50%; overflow: hidden; background: #E9E6E3; }
+    #f14-fin-avphoto img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    #f14-fin-avcoral { position: absolute; inset: 0; background: #F8571F; opacity: 0; }
+    #f14-fin-avcheck { position: absolute; left: 200px; top: 200px; width: 64px; height: 64px; border-radius: 50%; background: #1F8A4C; border: 4px solid #FFFFFF; box-shadow: 0 10px 22px -8px rgba(31,138,76,0.55); display: flex; align-items: center; justify-content: center; }
+    #f14-fin-avcheck svg { width: 30px; height: 30px; display: block; }
+
+    /* end card (rig space = frame space after the reset at 5.30) */
+    #f14-fin-endglow { position: absolute; left: 360px; top: 80px; width: 1200px; height: 800px; border-radius: 50%; background: radial-gradient(closest-side, rgba(248,87,31,0.55) 0%, rgba(248,87,31,0.20) 40%, rgba(167,171,221,0.22) 70%, rgba(167,171,221,0) 100%); visibility: hidden; opacity: 0; }
+    #f14-fin-lockrow { position: absolute; left: 0; top: 345px; width: 1920px; height: 150px; display: flex; justify-content: center; align-items: center; }
+    #f14-fin-lockup { display: flex; align-items: center; gap: 46px; }
+    #f14-fin-mark { width: 106px; height: 106px; display: block; margin-top: -2px; }
+    #f14-fin-word { display: flex; align-items: baseline; font-size: 150px; line-height: 150px; letter-spacing: -0.03em; white-space: nowrap; }
+    .f14-fin-ch { display: inline-block; font-weight: 600; color: #241F20; transform-origin: 50% 100%; }
+    .f14-fin-ch.f14-fin-light { font-weight: 400; }
+    #f14-fin-ctarow { position: absolute; left: 0; top: 580px; width: 1920px; height: 120px; display: flex; justify-content: center; }
+    #f14-fin-cta { height: 120px; display: flex; align-items: center; gap: 22px; padding: 0 62px; background: #241F20; color: #FFFFFF; border-radius: 999px; font-weight: 600; font-size: 44px; letter-spacing: -0.01em; white-space: nowrap; box-shadow: 0 26px 50px -20px rgba(36,31,32,0.55), 0 6px 14px -6px rgba(36,31,32,0.25); }
+    #f14-fin-cta svg { width: 40px; height: 26px; display: block; }
+    #f14-fin-labelrow { position: absolute; left: 0; top: 728px; width: 1920px; height: 40px; display: flex; justify-content: center; }
+    #f14-fin-label { font-weight: 500; font-size: 30px; line-height: 40px; letter-spacing: 0.02em; color: #A39C95; }
+    #f14-fin-cursorgrp { position: absolute; left: 0; top: 0; width: 0; height: 0; visibility: hidden; opacity: 0; }
+    #f14-fin-cursor { position: absolute; left: -5px; top: -4px; width: 46px; height: 58px; transform-origin: 5px 4px; filter: drop-shadow(0 8px 12px rgba(36,31,32,0.28)); }
+    #f14-fin-cursor svg { display: block; }
+
+    /* HUD (frame space): the stat and its words */
+    #f14-fin-statw, #f14-fin-wordsw { transform-origin: 960px 420px; }
+    #f14-fin-stat { position: absolute; left: 940px; top: 350px; width: 800px; height: 300px; display: flex; align-items: center; justify-content: center; font-family: "DM Sans", sans-serif; font-weight: 700; font-size: 300px; line-height: 1; letter-spacing: -0.05em; color: #F8571F; white-space: nowrap; }
+    #f14-fin-words { position: absolute; left: 940px; top: 640px; width: 800px; height: 70px; text-align: center; font-weight: 500; font-size: 56px; line-height: 70px; letter-spacing: -0.01em; color: #6C6560; white-space: nowrap; }
+  </style>
+
+  <div id="root" data-composition-id="f14-fin" data-fps="60" data-start="0" data-duration="9.50" data-width="1920" data-height="1080">
+    <div id="f14-fin-bg" class="clip" data-start="0" data-duration="9.50" data-track-index="0"><div id="f14-fin-mesh"></div><div id="f14-fin-grid"></div></div>
+
+    <div id="f14-fin-stage" class="clip" data-start="0" data-duration="9.50" data-track-index="1">
+      <div id="f14-fin-shake" class="f14-fin-full">
+        <div id="f14-fin-rig" class="f14-fin-full">
+          <div id="f14-fin-drift" class="f14-fin-full">
+            <div id="f14-fin-world" class="f14-fin-full">
+              <div id="f14-fin-wdrift" class="f14-fin-full">
+                <div id="f14-fin-glow"></div>
+                <div id="f14-fin-dots" class="f14-fin-full"></div>
+                <div id="f14-fin-av" data-hf-motion-blur='{"shutterAngle":360,"samplesPerFrame":12}'>
+                  <div id="f14-fin-avpop">
+                    <div id="f14-fin-avring"></div>
+                    <div id="f14-fin-avphoto"><img src="assets/personas/claire.webp" alt="" /><div id="f14-fin-avcoral"></div></div>
+                    <div id="f14-fin-avcheck"><svg viewBox="0 0 30 30"><path d="M6.5 15.5 L12.5 21.5 L23.5 9" fill="none" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                  </div>
+                </div>
+                <div id="f14-fin-wfx" class="f14-fin-full"></div>
+              </div>
+            </div>
+            <div id="f14-fin-card" class="f14-fin-full">
+              <div id="f14-fin-endglow"></div>
+              <div id="f14-fin-lockrow"><div id="f14-fin-lockup"><img id="f14-fin-mark" src="assets/askit/askit-logo-mark.svg" alt="" data-hf-motion-blur='{"shutterAngle":360,"samplesPerFrame":12}' /><div id="f14-fin-word"></div></div></div>
+              <div id="f14-fin-ctarow"><div id="f14-fin-cta"><span>Réserver une démo</span><svg viewBox="0 0 40 26"><path d="M3 13 H35 M24.5 3.5 L35.5 13 L24.5 22.5" fill="none" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
+              <div id="f14-fin-labelrow"><div id="f14-fin-label" data-hf-motion-blur='{"shutterAngle":360,"samplesPerFrame":12}'>ask-it.ai</div></div>
+              <div id="f14-fin-cfx" class="f14-fin-full"></div>
+              <div id="f14-fin-cursorgrp" data-hf-motion-blur='{"shutterAngle":360,"samplesPerFrame":12}'><div id="f14-fin-cursor"><svg width="46" height="58" viewBox="0 0 46 58"><path d="M5 4 L5 46 L15.6 36.4 L22.4 52.6 L29.6 49.6 L22.8 33.6 L37 33.6 Z" fill="#241F20" stroke="#FFFFFF" stroke-width="3" stroke-linejoin="round"/></svg></div></div>
+            </div>
+          </div>
+        </div>
+        <div id="f14-fin-hud" class="f14-fin-full">
+          <div id="f14-fin-statw" class="f14-fin-full"><div id="f14-fin-stat" data-hf-motion-blur='{"shutterAngle":360,"samplesPerFrame":12}'>70&nbsp;%</div></div>
+          <div id="f14-fin-wordsw" class="f14-fin-full"><div id="f14-fin-words"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <script src="lib/motionkit.js"></script>
+  <script>
+    (function () {
+      var ID = "f14-fin", P = ID + "-", D = 9.5, MK = window.MK, F = MK.F;
+      var $ = function (s) { return document.getElementById(P + s); };
+      var tl = gsap.timeline({ paused: true });
+      var SHAKE = $("shake"), RIG = $("rig"), WORLD = $("world"), WFX = $("wfx"), CFX = $("cfx"), CTA = $("cta");
+      var BF = MK.blurFilter($("stage"), P + "blur1");
+      var HX = 960, HY = 500, PITCH = 310, HER = 35;   // her dot = r3 c5, at the avatar centre (rig space)
+
+      /* a pop for an element that is already on screen: MK.pop's spring without its alpha fade-in */
+      function popFrom(el, t, over) {
+        tl.to(el, { scale: 1, duration: 4 * F, ease: "power2.out" }, t);
+        tl.to(el, { scale: 1 + over, duration: 4 * F, ease: "sine.out" }, t + 4 * F);
+        tl.to(el, { scale: 1, duration: 18 * F, ease: "power2.inOut" }, t + 8 * F);
+      }
+
+      /* continuous life: calm drift on everything, extra drift on the world while it is on screen, mesh glide */
+      MK.drift(tl, $("drift"), 0, D, { seed: 41, calm: 0.5 });
+      MK.drift(tl, $("wdrift"), 0, 5.3, { seed: 7, calm: 0.8 });
+      tl.fromTo($("mesh"), { x: 30, y: -20, scale: 1.02 }, { x: -36, y: 24, scale: 1.09, duration: D, ease: "sine.inOut" }, 0);
+
+      /* Scene 1 (0-2.25) - Claire arrives big and brakes; « restée »: anticipation, pop, ring, coral glow */
+      MK.enterBig(tl, $("av"), 0, { from: 1.5, frames: 40 });
+      MK.enterBig(tl, $("glow"), 0, { from: 1.5, frames: 40 });
+      tl.fromTo(RIG, { scale: 1 }, { scale: 1.06, duration: 2.30, ease: "none" }, 0);
+      MK.anticipate(tl, $("avpop"), 1.24, { to: 0.75 });
+      popFrom($("avpop"), 1.24, 0.22);
+      MK.pop(tl, $("avcheck"), 1.24, { over: 0.25 });
+      MK.ring(tl, WFX, 1.24, { x: HX, y: HY, r1: 300, width: 5 });
+      tl.to($("glow"), { opacity: 0.6, duration: 0.35, ease: "power2.out" }, 1.24);
+      tl.to($("glow"), { scale: 1.08, duration: 0.6, ease: "sine.inOut" }, 1.70);
+      MK.ring(tl, WFX, 1.95, { x: HX, y: HY, r1: 230, width: 3, alpha: 0.5, frames: 30 });
+
+      /* Scene 2 (2.30-3.30) - the camera snaps out: she becomes one dot of GRID_100, then the grid pans to x = 600 */
+      var dotsHost = $("dots"), lit = [], dist = [];
+      for (var i = 0; i < 100; i++) {
+        var r = Math.floor(i / 10), c = i % 10, x = HX + (c - 5) * PITCH, y = HY + (r - 3) * PITCH;
+        dist.push(Math.sqrt((r - 3) * (r - 3) + (c - 5) * (c - 5)));
+        if (i === HER) { lit.push(null); continue; }
+        var d = document.createElement("div"); d.className = P + "dot"; d.style.left = (x - 100) + "px"; d.style.top = (y - 100) + "px";
+        var l = document.createElement("div"); l.className = P + "lit"; l.style.left = (x - 100) + "px"; l.style.top = (y - 100) + "px";
+        dotsHost.appendChild(d); dotsHost.appendChild(l); lit.push(l);
+        tl.fromTo(d, { autoAlpha: 0, scale: 0.6 }, { autoAlpha: 1, scale: 1, duration: 8 * F, ease: "power2.out" }, 2.37 + (dist[i] / 7.3) * 0.24 + MK.hash(i) * 2 * F);
+      }
+      MK.snapZoom(tl, RIG, 2.30, { from: 1.06, to: 0.2, origin: HX + "px " + HY + "px" });
+      tl.to($("avcheck"), { scale: 0, autoAlpha: 0, duration: 6 * F, ease: "power2.in" }, 2.30);
+      tl.to($("avphoto"), { scale: 200 / 260, duration: 12 * F, ease: "power2.inOut" }, 2.34);
+      tl.to($("avring"), { scale: 230 / 276, duration: 12 * F, ease: "power2.inOut" }, 2.34);
+      tl.to($("avcoral"), { opacity: 1, duration: 10 * F, ease: "power1.in" }, 2.36);
+      tl.to($("glow"), { opacity: 0.4, duration: 0.4, ease: "power1.inOut" }, 2.40);
+      var PX = 600 + 0.5 * 62 - HX, PY = 540 - 1.5 * 62 - HY;   // her dot -> (631, 447): grid centred on x = 600, y = 540
+      MK.pan(tl, RIG, 2.75, { x: PX, y: PY, frames: 21, blur: BF, axis: "x", blurMax: 6 });
+
+      /* Scene 3 (3.19-5.00) - « 70 % » slams; 69 more dots light up coral from her dot; « de vos visiteurs » */
+      var impact = MK.slam(tl, $("stat"), 3.19, { shakeEl: SHAKE });
+      MK.ring(tl, WFX, impact, { x: HX, y: HY, r1: 430, width: 16 });
+      var pool = [];
+      for (var k = 0; k < 100; k++) if (k !== HER) pool.push(k);
+      pool.sort(function (a, b) { return MK.hash(a * 7 + 3) - MK.hash(b * 7 + 3); });
+      var chosen = pool.slice(0, 69).sort(function (a, b) { return (dist[a] + 0.7 * MK.hash(a + 101)) - (dist[b] + 0.7 * MK.hash(b + 101)); });
+      MK.each(chosen, impact, 1, function (idx, t) { MK.pop(tl, lit[idx], t, { over: 0.25 }); });
+      MK.words(tl, $("words"), [{ w: "de", t: 4.19 }, { w: "vos", t: 4.26 }, { w: "visiteurs", t: 4.39 }], { lead: 0.1 });
+
+      /* Scene 4 (5.00-6.40) - everything is sucked to the centre; the lockup builds; the CTA pops */
+      var wo = [HX + (960 - PX - HX) / 0.2, HY + (420 - PY - HY) / 0.2];   // rig point that sits at frame (960, 420)
+      gsap.set(WORLD, { transformOrigin: wo[0] + "px " + wo[1] + "px" });
+      MK.suck(tl, [WORLD, $("statw"), $("wordsw")], 5.00);
+      tl.set(RIG, { x: 0, y: 0, scale: 1, transformOrigin: "960px 540px" }, 5.30);
+      tl.set($("endglow"), { autoAlpha: 1 }, 5.30);
+      tl.fromTo($("endglow"), { opacity: 0, scale: 0.75 }, { opacity: 0.55, scale: 1, duration: 0.9, ease: "power2.out", immediateRender: false }, 5.30);
+      MK.pop(tl, $("mark"), 5.32);
+      var word = $("word"), CH = ["a", "s", "k", "-", "i", "t", ".ai"];
+      CH.forEach(function (ch) {
+        var s = document.createElement("span"); s.className = P + "ch" + (ch === ".ai" ? " " + P + "light" : ""); s.textContent = ch;
+        s.setAttribute("data-hf-motion-blur", '{"shutterAngle":360,"samplesPerFrame":12}');
+        word.appendChild(s);
+      });
+      MK.each(word.children, 5.32 + 2 * F, 4, function (s, t) {
+        tl.fromTo(s, { y: 46, scaleY: 0.25, autoAlpha: 0 }, { y: 0, scaleY: 1, autoAlpha: 1, duration: 6 * F, ease: "power2.out" }, t);
+      });
+      MK.pop(tl, CTA, 5.95, { over: 0.2 });
+
+      /* Scene 5 (6.30-7.40) - the cursor glides in; CLICK 6.81: the pill turns coral; « ask-it.ai » pops under it */
+      var CX = 1084, CY = 652;
+      tl.set($("cursorgrp"), { autoAlpha: 1 }, 6.30);
+      tl.fromTo($("cursorgrp"), { x: 1780, y: 1200 }, { x: CX, y: CY, duration: 0.4, ease: "power2.inOut" }, 6.30);
+      tl.set(RIG, { transformOrigin: CX + "px " + CY + "px" }, 6.81);
+      MK.click(tl, { t: 6.81, x: CX, y: CY, layer: CFX, component: CTA, shakeEl: SHAKE, shakePx: 6, touch: $("cursor"), rig: RIG, snap: 0.05, rigScale: 1 });
+      tl.set(CTA, { backgroundColor: "#F8571F" }, 6.81);
+      MK.pop(tl, $("label"), 6.95, { over: 0.2 });
+      tl.to($("cursorgrp"), { x: CX + 70, y: CY + 46, duration: 0.6, ease: "sine.inOut" }, 7.02);
+      tl.to($("cursorgrp"), { x: CX + 560, y: CY + 520, duration: 0.7, ease: "power2.in" }, 7.70);
+
+      /* Scene 6 (7.40-9.50) - END CARD: no exit, a slow push, the glow breathing, the drift never stops */
+      tl.to(RIG, { scale: 1.05 * 1.02, duration: 2.1, ease: "sine.inOut" }, 7.40);
+      tl.to($("endglow"), { opacity: 0.42, scale: 1.05, duration: 1.05, ease: "sine.inOut" }, 7.40);
+      tl.to($("endglow"), { opacity: 0.52, scale: 1.02, duration: 1.05, ease: "sine.inOut" }, 8.45);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines[ID] = tl;
+    })();
+  </script>
+</template>

@@ -1,0 +1,13 @@
+{
+  "scene": "f09-chiffres",
+  "duration_s": 5.25,
+  "rules": ["MK.enterBig", "MK.pop", "MK.words", "MK.slam", "MK.shake", "MK.suck", "MK.exit", "MK.blurFilter", "MK.drift", "local drop (gravity fall power2.in from y-500 + squash; MK.toss without its rise)"],
+  "exit": {
+    "vector": "left: rig x -746 -> -1091 px over the last frame (-345 px/frame = -20 700 px/s, expo.in, 18 frames from 4.95, ends at 5.25), directional SVG blur ramping 0 -> 18 px over the last 8 frames; « +36 % » / cart / « À la clé : » sliding out left",
+    "still_moving": true
+  },
+  "entry": {
+    "vector": "oversized entry braking: rig scale 1.400 -> 1.336 on the first frame (-3.8 /s about the frame centre, frame edges moving inward ~61 px/frame = ~3 700 px/s), expo.out to 1.0 by 0.65 s; « À la clé : » rising 40 px from alpha 0.12, key badge popping from frame 0",
+    "from_rest": false
+  }
+}
